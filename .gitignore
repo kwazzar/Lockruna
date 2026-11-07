@@ -1,0 +1,95 @@
+# ---------------------------------------------------------------------------
+# macOS / editors
+# ---------------------------------------------------------------------------
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+Thumbs.db
+
+.idea/
+.fleet/
+.vscode/
+*.iml
+*.ipr
+*.iws
+out/
+
+# ---------------------------------------------------------------------------
+# Gradle / Kotlin Multiplatform
+# ---------------------------------------------------------------------------
+.gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+!gradle/wrapper/gradle-wrapper.jar
+local.properties
+gradle-app.setting
+.gradletasknamecache
+
+# Kotlin/Native compiler caches
+.konan/
+.kotlin/
+
+# JVM crash dumps
+*.hprof
+hs_err_pid*
+replay_pid*
+
+# ---------------------------------------------------------------------------
+# Android
+# ---------------------------------------------------------------------------
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+
+# ---------------------------------------------------------------------------
+# Xcode / Swift Package Manager
+# ---------------------------------------------------------------------------
+DerivedData/
+xcuserdata/
+*.xcuserstate
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+.swiftpm/
+.build/
+
+# CocoaPods (only if enabled for the Kotlin framework)
+Pods/
+iosApp/Pods/
+
+# ---------------------------------------------------------------------------
+# Secrets and signing material — never commit
+# ---------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.mobileprovision
+*.pem
+*.key
+secrets/
+
+# ---------------------------------------------------------------------------
+# Logs, coverage, temp files
+# ---------------------------------------------------------------------------
+*.log
+logs/
+coverage/
+*.exec
+*.orig
+*.rej
+*.tmp
+*.swp
+*~
