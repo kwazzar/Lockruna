@@ -43,9 +43,10 @@ architecture instead of inventing a new one every time.
 
 ### Stack
 
-- Kotlin Multiplatform core in `shared/`: `domain`, `application`, `data`.
-- Native UI: Swift/SwiftUI in `iosApp/`, Android UI in `androidApp/`. Swift
-  stays thin and holds no domain rules.
+- Kotlin Multiplatform core in `shared/`: `domain`, `application`, `data`,
+  `presentation`; `api-contract/` holds the DTOs shared with the server.
+- Native UI: Swift/SwiftUI in `iosApp/`, Jetpack Compose in `androidApp/`.
+  Swift stays thin and holds no domain rules.
 - Persistence: SQLDelight. The local DB holds sealed records only — no
   SQLCipher.
 - DI: Koin only.
@@ -98,8 +99,8 @@ Hard rules:
 - **Use case** — `<Verb><Noun>` with a single `operator fun invoke`, returning
   `Result<T, AppError>`.
 - **MVI** — `<Screen>Store` / `<Screen>State` / `<Screen>Intent` /
-  `<Screen>Effect`. "Store" is reserved for MVI screens, never for
-  persistence.
+  `<Screen>Effect` in `shared/presentation`. "Store" is reserved for MVI
+  screens, never for persistence.
 - **`AppError`** — sealed hierarchy, one branch per context.
 - **`CryptoService` + Argon2 port** — the only crypto entry points; ADR-003
   owns parameters, labels and AAD.

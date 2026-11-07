@@ -1,0 +1,640 @@
+openapi: 3.0.3
+info:
+  title: PassKeeper API
+  version: 0.1.0
+  description: |
+    Zero-knowledge API. Сервер бачить лише шифротекст, authKey і recoveryAuthKey.
+    Усі бінарні поля передаються як base64.
+    Усі записи сховища змінюються тільки через POST /sync/push.
+servers:
+  - url: https://api.passkeeper.example/v1
+security:
+  - bearerAuth: []
+tags:
+  - name: auth
+  - name: devices
+  - name: sync
+
+paths:
+  /auth/prelogin:
+    post:
+      tags: [auth]
+      security: []
+      summary: KDF-параметри для email
+      description: |
+        Для неіснуючого email повертає детерміновані фіктивні salt і params
+        (HMAC від email із серверним секретом), щоб відповідь не розкривала акаунт.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PreloginRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PreloginResponse'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /auth/register:
+    post:
+      tags: [auth]
+      security: []
+      summary: Реєстрація
+      description: |
+        Для існуючого email повертає 409. Розкриття існування акаунта тут
+        прийнятий ризик, який стримується rate limiting.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Акаунт створено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '409':
+          $ref: '#/components/responses/Problem'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /auth/login:
+    post:
+      tags: [auth]
+      security: []
+      summary: Вхід
+      description: |
+        Невірний пароль і неіснуючий email дають ідентичну 401 (текст і час).
+        Ліміт: 5 невдалих спроб за 15 хв на пару email+IP, далі 429.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /auth/refresh:
+    post:
+      tags: [auth]
+      security: []
+      summary: Ротація токенів
+      description: |
+        Refresh-токен одноразовий. Повторне використання вже використаного
+        токена відкликає всю сім'ю токенів пристрою.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refreshToken]
+              properties:
+                refreshToken:
+                  type: string
+      responses:
+        '200':
+          description: Нова пара токенів
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenPair'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /auth/logout:
+    post:
+      tags: [auth]
+      summary: Вихід (відкликає токени поточного пристрою)
+      responses:
+        '204':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /auth/recovery/start:
+    post:
+      tags: [auth]
+      security: []
+      summary: Отримати recovery-обгортку ключа
+      description: |
+        Для неіснуючого email повертає фіктивні дані такої ж форми
+        (userId і обгортка виводяться з HMAC від email із серверним секретом).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PreloginRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecoveryStartResponse'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /auth/recovery/complete:
+    post:
+      tags: [auth]
+      security: []
+      summary: Встановити новий майстер-пароль через recovery key
+      description: |
+        Сервер перевіряє HMAC(pepper, recoveryAuthKey), замінює ключові матеріали
+        й відкликає всі пристрої, окрім поточного.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecoveryCompleteRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /devices:
+    get:
+      tags: [devices]
+      summary: Список пристроїв
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Device'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /devices/{deviceId}:
+    delete:
+      tags: [devices]
+      summary: Відкликати пристрій
+      description: Ставить revoked_at; токени пристрою перестають діяти негайно.
+      parameters:
+        - name: deviceId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/Problem'
+
+  /sync:
+    get:
+      tags: [sync]
+      summary: Отримати зміни після курсора
+      description: |
+        Без cursor повертає повний стан (включно з видаленими як tombstone).
+        Курсор непрозорий; сервер кодує в ньому останній sync_seq користувача.
+      parameters:
+        - name: cursor
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 500
+            default: 100
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyncPage'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /sync/push:
+    post:
+      tags: [sync]
+      summary: Відправити локальні зміни
+      description: |
+        Єдиний шлях запису. Для кожної зміни сервер перевіряє baseVersion
+        (0 для нового запису). Збіг: версія стає baseVersion+1.
+        Розбіжність: зміна потрапляє в conflicts разом із серверною версією,
+        клієнт застосовує last-write-wins і зберігає програшну версію в історії.
+        Повтор із тим самим Idempotency-Key і тим самим тілом повертає збережену відповідь.
+      parameters:
+        - name: Idempotency-Key
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushRequest'
+      responses:
+        '200':
+          description: Результат по кожній зміні
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushResult'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          description: Idempotency-Key уже використано з іншим тілом
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '413':
+          $ref: '#/components/responses/Problem'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  responses:
+    Unauthorized:
+      description: Автентифікація не пройдена (однакова відповідь для всіх причин)
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    TooManyRequests:
+      description: Перевищено ліміт
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    Problem:
+      description: Помилка
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+
+  schemas:
+    Problem:
+      type: object
+      required: [type, title, status]
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        code:
+          type: string
+
+    ItemType:
+      type: string
+      enum: [login, card, note, folder]
+
+    KdfParams:
+      type: object
+      required: [alg, m, t, p]
+      properties:
+        alg:
+          type: string
+          enum: [argon2id]
+        m:
+          type: integer
+          description: "Пам'ять у KiB"
+        t:
+          type: integer
+        p:
+          type: integer
+          enum: [1]
+
+    DeviceInfo:
+      type: object
+      required: [name, platform]
+      properties:
+        deviceId:
+          type: string
+          format: uuid
+          description: Для повторного входу з відомого пристрою
+        name:
+          type: string
+          maxLength: 100
+        platform:
+          type: string
+          enum: [ios, android]
+
+    Device:
+      type: object
+      required: [id, name, platform, current]
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        platform:
+          type: string
+          enum: [ios, android]
+        lastSeen:
+          type: string
+          format: date-time
+          nullable: true
+        current:
+          type: boolean
+
+    PreloginRequest:
+      type: object
+      required: [email]
+      properties:
+        email:
+          type: string
+          format: email
+
+    PreloginResponse:
+      type: object
+      required: [kdfSalt, kdfParams]
+      properties:
+        kdfSalt:
+          type: string
+          format: byte
+          description: 16 байт
+        kdfParams:
+          $ref: '#/components/schemas/KdfParams'
+
+    RecoveryStartResponse:
+      type: object
+      required: [userId, recoveryWrappedVaultKey]
+      properties:
+        userId:
+          type: string
+          format: uuid
+          description: Потрібен клієнту як AAD для розгортання ключа
+        recoveryWrappedVaultKey:
+          type: string
+          format: byte
+
+    RegisterRequest:
+      type: object
+      required:
+        - email
+        - authKey
+        - recoveryAuthKey
+        - kdfSalt
+        - kdfParams
+        - wrappedVaultKey
+        - recoveryWrappedVaultKey
+        - device
+      properties:
+        email:
+          type: string
+          format: email
+        authKey:
+          type: string
+          format: byte
+        recoveryAuthKey:
+          type: string
+          format: byte
+        kdfSalt:
+          type: string
+          format: byte
+        kdfParams:
+          $ref: '#/components/schemas/KdfParams'
+        wrappedVaultKey:
+          type: string
+          format: byte
+        recoveryWrappedVaultKey:
+          type: string
+          format: byte
+        device:
+          $ref: '#/components/schemas/DeviceInfo'
+
+    LoginRequest:
+      type: object
+      required: [email, authKey, device]
+      properties:
+        email:
+          type: string
+          format: email
+        authKey:
+          type: string
+          format: byte
+        device:
+          $ref: '#/components/schemas/DeviceInfo'
+
+    RecoveryCompleteRequest:
+      type: object
+      required:
+        - email
+        - recoveryAuthKey
+        - newAuthKey
+        - newKdfSalt
+        - newKdfParams
+        - newWrappedVaultKey
+        - device
+      properties:
+        email:
+          type: string
+          format: email
+        recoveryAuthKey:
+          type: string
+          format: byte
+        newAuthKey:
+          type: string
+          format: byte
+        newKdfSalt:
+          type: string
+          format: byte
+        newKdfParams:
+          $ref: '#/components/schemas/KdfParams'
+        newWrappedVaultKey:
+          type: string
+          format: byte
+        device:
+          $ref: '#/components/schemas/DeviceInfo'
+
+    TokenPair:
+      type: object
+      required: [accessToken, refreshToken, expiresIn]
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+        expiresIn:
+          type: integer
+          description: Секунди (900)
+
+    AuthResponse:
+      allOf:
+        - $ref: '#/components/schemas/TokenPair'
+        - type: object
+          required: [userId, deviceId, kdfSalt, kdfParams, wrappedVaultKey]
+          properties:
+            userId:
+              type: string
+              format: uuid
+            deviceId:
+              type: string
+              format: uuid
+            kdfSalt:
+              type: string
+              format: byte
+            kdfParams:
+              $ref: '#/components/schemas/KdfParams'
+            wrappedVaultKey:
+              type: string
+              format: byte
+
+    EncryptedItem:
+      type: object
+      required: [id, type, version, updatedAt]
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          $ref: '#/components/schemas/ItemType'
+        ciphertext:
+          type: string
+          format: byte
+          nullable: true
+          description: null для tombstone
+        nonce:
+          type: string
+          format: byte
+          nullable: true
+        version:
+          type: integer
+          format: int64
+        deletedAt:
+          type: string
+          format: date-time
+          nullable: true
+        updatedAt:
+          type: string
+          format: date-time
+
+    SyncPage:
+      type: object
+      required: [items, nextCursor, hasMore]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/EncryptedItem'
+        nextCursor:
+          type: string
+        hasMore:
+          type: boolean
+
+    Change:
+      type: object
+      required: [id, type, baseVersion]
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Генерується клієнтом
+        type:
+          $ref: '#/components/schemas/ItemType'
+        ciphertext:
+          type: string
+          format: byte
+          maxLength: 87400
+          description: "Обов'язкове, якщо deleted = false (до 64 KiB у бінарному вигляді)"
+        nonce:
+          type: string
+          format: byte
+        baseVersion:
+          type: integer
+          format: int64
+          minimum: 0
+        deleted:
+          type: boolean
+          default: false
+
+    PushRequest:
+      type: object
+      required: [changes]
+      properties:
+        changes:
+          type: array
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/Change'
+
+    PushResult:
+      type: object
+      required: [applied, conflicts]
+      properties:
+        applied:
+          type: array
+          items:
+            type: object
+            required: [id, version, updatedAt]
+            properties:
+              id:
+                type: string
+                format: uuid
+              version:
+                type: integer
+                format: int64
+              updatedAt:
+                type: string
+                format: date-time
+        conflicts:
+          type: array
+          items:
+            type: object
+            required: [id, server]
+            properties:
+              id:
+                type: string
+                format: uuid
+              server:
+                $ref: '#/components/schemas/EncryptedItem'
