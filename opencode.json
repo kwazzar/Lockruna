@@ -33,5 +33,22 @@
     "skill": {
       "android-jetpack-compose-m3": "deny"
     }
+  },
+  "agent": {
+    "build": {
+      "permission": {
+        "bash": {
+          "git push*": "ask"
+        }
+      }
+    },
+    "plan": {
+      "permission": {
+        "bash": {
+          "git push*": "deny",
+          "git commit*": "deny"
+        }
+      }
+    }
   }
 }
