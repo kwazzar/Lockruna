@@ -7,8 +7,8 @@ disagree, stop and ask; never change either silently.
 
 ## graphify
 
-This project has a knowledge graph at graphify-out/ with god nodes, community
-structure, and cross-file relationships.
+When a graph exists at graphify-out/, it has god nodes, community structure,
+and cross-file relationships.
 
 When the user types `/graphify`, use the installed graphify skill or
 instructions before doing anything else.
@@ -19,11 +19,12 @@ Rules:
   relationships and `graphify explain "<concept>"` for focused concepts. These
   return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw
   grep output.
-- **Two graphs:** root `graphify-out/` = iOS/Swift side; `Android/graphify-out/`
-  = Android/Kotlin side (Compose UI, stores, JNI probes, tests, Gradle). For
-  Android-focused questions run query/path/explain from inside `Android/`
-  (`cd Android` or set the tool workdir) with the same commands. After modifying
-  Android code, run `graphify update .` inside `Android/`.
+- **Two graphs:** root `graphify-out/` = iOS/Swift side (`iosApp/`);
+  `androidApp/graphify-out/` = Android/Kotlin side (Compose UI, stores, tests,
+  Gradle). For Android-focused questions run query/path/explain from inside
+  `androidApp/` (`cd androidApp` or set the tool workdir) with the same
+  commands. After modifying Android code, run `graphify update .` inside
+  `androidApp/`.
 - Dirty graphify-out/ files are expected after hooks or incremental updates;
   dirty graph files are not a reason to skip graphify. Only skip graphify if the
   task is about stale or incorrect graph output, or the user explicitly says not
@@ -101,8 +102,6 @@ replacement. Run from the repo root.
 - Lint / format: `./gradlew ktlintCheck detekt` / `./gradlew ktlintFormat`
 - Secrets scan: `gitleaks detect --source . --no-banner`
 - Full verify: `scripts/verify.sh` (`--ios` adds simulator tests)
-- If graphify-out/graph.json exists, `graphify query "<question>"` before
-  grepping; `graphify update .` after code changes.
 
 ## Done means
 - You ran the command and read its output; never say "done" or "passing"
