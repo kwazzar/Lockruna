@@ -1,0 +1,38 @@
+-- Sealed vault records: only ciphertext, nonce and sync metadata are stored locally (ADR-005).
+CREATE TABLE vault_item (
+    id               TEXT NOT NULL PRIMARY KEY,
+    type             TEXT NOT NULL,
+    ciphertext       BLOB,
+    nonce            BLOB,
+    version          INTEGER NOT NULL,
+    sync_seq         INTEGER NOT NULL,
+    deleted          INTEGER AS kotlin.Boolean NOT NULL DEFAULT 0,
+    dirty            INTEGER AS kotlin.Boolean NOT NULL DEFAULT 0,
+    max_seen_version INTEGER NOT NULL,
+    updated_at       INTEGER NOT NULL
+);
+
+-- Losing versions kept for conflict resolution, also sealed.
+CREATE TABLE item_history (
+    item_id    TEXT NOT NULL,
+    version    INTEGER NOT NULL,
+    ciphertext BLOB NOT NULL,
+    nonce      BLOB NOT NULL,
+    updated_at INTEGER NOT NULL,
+    PRIMARY KEY (item_id, version)
+);
+
+CREATE TABLE sync_state (
+    id           TEXT NOT NULL PRIMARY KEY,
+    cursor       TEXT,
+    last_sync_at INTEGER
+);
+
+CREATE TABLE outbox (
+    idempotency_key TEXT NOT NULL PRIMARY KEY,
+    body             TEXT NOT NULL,
+    created_at       INTEGER NOT NULL
+);
+
+CREATE INDEX idx_vault_item_sync ON vault_item (sync_seq);
+CREATE INDEX idx_item_history_item ON item_history (item_id, version);

@@ -7,14 +7,14 @@ exposed = "1.6.1"
 flyway = "13.12.1"
 hikari = "7.1.0"
 koin = "4.2.2"
-kotlin = "2.4.21"
+kotlin = "2.4.20"
 ktor = "3.6.1"
 lettuce = "7.9.0.RELEASE"
 lifecycle = "2.11.0"
 micrometer = "1.17.2"
 postgresql = "42.7.14"
 serialization = "1.12.0"
-skie = "0.10.16"
+skie = "0.10.15"
 sqldelight = "2.4.1"
 testcontainers = "2.0.5"
 
@@ -39,6 +39,7 @@ koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
+sqldelight-driver-native = { module = "app.cash.sqldelight:native-driver", version.ref = "sqldelight" }
 sqldelight-driver-sqlite = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
@@ -59,13 +60,13 @@ hikaricp = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
 lettuce-core = { module = "io.lettuce:lettuce-core", version.ref = "lettuce" }
 micrometer-core = { module = "io.micrometer:micrometer-core", version.ref = "micrometer" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
-testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "testcontainers" }
-testcontainers-mongodb = { module = "org.testcontainers:mongodb", version.ref = "testcontainers" }
-testcontainers-junit = { module = "org.testcontainers:junit-jupiter", version.ref = "testcontainers" }
+testcontainers-postgresql = { module = "org.testcontainers:testcontainers-postgresql", version.ref = "testcontainers" }
+testcontainers-mongodb = { module = "org.testcontainers:testcontainers-mongodb", version.ref = "testcontainers" }
+testcontainers-junit = { module = "org.testcontainers:testcontainers-junit-jupiter", version.ref = "testcontainers" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
-androidLibrary = { id = "com.android.library", version.ref = "agp" }
+androidKmpLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
