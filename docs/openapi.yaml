@@ -48,6 +48,7 @@ paths:
       description: |
         Для існуючого email повертає 409. Розкриття існування акаунта тут
         прийнятий ризик, який стримується rate limiting.
+        Ліміти: 3 спроби на годину на email, 10 спроб на годину на IP.
       requestBody:
         required: true
         content:
@@ -98,8 +99,10 @@ paths:
       security: []
       summary: Ротація токенів
       description: |
-        Refresh-токен одноразовий. Повторне використання вже використаного
-        токена відкликає всю сім'ю токенів пристрою.
+        Refresh-токен одноразовий і живе 30 днів; кожна ротація видає новий
+        на 30 днів. Абсолютний ліміт сім'ї токенів — 90 днів від її створення.
+        Повторне використання вже використаного токена відкликає всю сім'ю
+        токенів пристрою.
       requestBody:
         required: true
         content:
@@ -138,6 +141,7 @@ paths:
       description: |
         Для неіснуючого email повертає фіктивні дані такої ж форми
         (userId і обгортка виводяться з HMAC від email із серверним секретом).
+        Ліміт: 5 спроб за 15 хв на пару email+IP.
       requestBody:
         required: true
         content:
@@ -162,6 +166,7 @@ paths:
       description: |
         Сервер перевіряє HMAC(pepper, recoveryAuthKey), замінює ключові матеріали
         й відкликає всі пристрої, окрім поточного.
+        Ліміт: 5 спроб за 15 хв на пару email+IP.
       requestBody:
         required: true
         content:
@@ -179,6 +184,31 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '429':
           $ref: '#/components/responses/TooManyRequests'
+
+  /account:
+    delete:
+      tags: [auth]
+      summary: Видалити акаунт і всі дані
+      description: |
+        Необоротна операція: каскадно видаляє записи, пристрої, токени
+        й ключові матеріали. Вимагає повторного підтвердження майстер-паролем —
+        клієнт надсилає authKey, сервер порівнює HMAC(pepper, authKey) у сталому часі.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [authKey]
+              properties:
+                authKey:
+                  type: string
+                  format: byte
+      responses:
+        '204':
+          description: Акаунт видалено
+        '401':
+          $ref: '#/components/responses/Unauthorized'
 
   /devices:
     get:
