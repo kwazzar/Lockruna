@@ -20,7 +20,7 @@ private const val U_BUFFER_OVERFLOW_ERROR: Int = -15
  * implementation byte for byte.
  */
 actual class PlatformNormalizer actual constructor() : PasswordNormalizer {
-    override fun normalize(raw: String): String {
+    actual override fun normalize(raw: String): String {
         if (raw.isEmpty()) return raw
         val source = UShortArray(raw.length) { raw[it].code.toUShort() }
         var capacity = source.size * 3 + 8

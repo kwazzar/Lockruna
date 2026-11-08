@@ -20,13 +20,13 @@ private const val GCM_TAG_SIZE: Int = GCM_TAG_BITS / Byte.SIZE_BITS
 actual class PlatformCrypto actual constructor() : CryptoService {
     private val secureRandom = SecureRandom()
 
-    override fun hkdfSha256(inputKey: ByteArray, salt: ByteArray?, info: String, length: Int): ByteArray {
+    actual override fun hkdfSha256(inputKey: ByteArray, salt: ByteArray?, info: String, length: Int): ByteArray {
         val generator = HKDFBytesGenerator(SHA256Digest())
         generator.init(HKDFParameters(inputKey, salt, info.encodeToByteArray()))
         return ByteArray(length).also { generator.generateBytes(it, 0, length) }
     }
 
-    override fun encryptGcm(key: ByteArray, plaintext: ByteArray, aad: ByteArray): GcmCiphertext {
+    actual override fun encryptGcm(key: ByteArray, plaintext: ByteArray, aad: ByteArray): GcmCiphertext {
         require(key.size == GCM_KEY_SIZE) { "AES-256-GCM key must be $GCM_KEY_SIZE bytes" }
         val nonce = randomBytes(GCM_NONCE_SIZE)
         val cipher = GCMBlockCipher.newInstance(AESEngine.newInstance())
@@ -44,7 +44,7 @@ actual class PlatformCrypto actual constructor() : CryptoService {
         )
     }
 
-    override fun decryptGcm(key: ByteArray, ciphertext: GcmCiphertext, aad: ByteArray): ByteArray {
+    actual override fun decryptGcm(key: ByteArray, ciphertext: GcmCiphertext, aad: ByteArray): ByteArray {
         require(key.size == GCM_KEY_SIZE) { "AES-256-GCM key must be $GCM_KEY_SIZE bytes" }
         val cipher = GCMBlockCipher.newInstance(AESEngine.newInstance())
         cipher.init(false, AEADParameters(KeyParameter(key), GCM_TAG_BITS, ciphertext.nonce, aad))
@@ -61,5 +61,5 @@ actual class PlatformCrypto actual constructor() : CryptoService {
         }
     }
 
-    override fun randomBytes(size: Int): ByteArray = ByteArray(size).also(secureRandom::nextBytes)
+    actual override fun randomBytes(size: Int): ByteArray = ByteArray(size).also(secureRandom::nextBytes)
 }

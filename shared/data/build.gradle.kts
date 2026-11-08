@@ -50,7 +50,8 @@ kotlin {
         common {
             group("jvmAndAndroid") {
                 withJvm()
-                withAndroidTarget()
+                // The Android KMP plugin does not use the KGP Android target type.
+                withCompilations { compilation -> compilation.target.name == "android" }
             }
         }
     }
@@ -84,6 +85,12 @@ kotlin {
         getByName("jvmAndAndroidMain").dependencies {
             implementation(libs.bouncycastle)
         }
+
+        // The iOS sources use cinterop packages (libsodium, ICU), which the shared
+        // native metadata compilation cannot resolve, so they are compiled per target.
+        getByName("iosMain").kotlin.setSrcDirs(emptyList<File>())
+        getByName("iosArm64Main").kotlin.srcDir("src/iosMain/kotlin")
+        getByName("iosSimulatorArm64Main").kotlin.srcDir("src/iosMain/kotlin")
     }
 }
 

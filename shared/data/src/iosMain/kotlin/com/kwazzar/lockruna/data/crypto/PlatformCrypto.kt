@@ -18,7 +18,7 @@ private const val GCM_TAG_SIZE: Int = 16
 private const val HKDF_PRF_SIZE: Int = 32
 
 actual class PlatformCrypto actual constructor() : CryptoService {
-    override fun hkdfSha256(inputKey: ByteArray, salt: ByteArray?, info: String, length: Int): ByteArray {
+    actual override fun hkdfSha256(inputKey: ByteArray, salt: ByteArray?, info: String, length: Int): ByteArray {
         val prk = UByteArray(HKDF_PRF_SIZE)
         val saltSize = salt?.size ?: 0
         val extractResult = withCBytes(inputKey) { keyPointer ->
@@ -53,7 +53,7 @@ actual class PlatformCrypto actual constructor() : CryptoService {
         return output.asByteArray()
     }
 
-    override fun encryptGcm(key: ByteArray, plaintext: ByteArray, aad: ByteArray): GcmCiphertext {
+    actual override fun encryptGcm(key: ByteArray, plaintext: ByteArray, aad: ByteArray): GcmCiphertext {
         require(key.size == GCM_KEY_SIZE) { "AES-256-GCM key must be $GCM_KEY_SIZE bytes" }
         val nonce = randomBytes(GCM_NONCE_SIZE)
         val output = UByteArray(plaintext.size + GCM_TAG_SIZE)
@@ -87,7 +87,7 @@ actual class PlatformCrypto actual constructor() : CryptoService {
         )
     }
 
-    override fun decryptGcm(key: ByteArray, ciphertext: GcmCiphertext, aad: ByteArray): ByteArray {
+    actual override fun decryptGcm(key: ByteArray, ciphertext: GcmCiphertext, aad: ByteArray): ByteArray {
         require(key.size == GCM_KEY_SIZE) { "AES-256-GCM key must be $GCM_KEY_SIZE bytes" }
         val combined = ciphertext.ciphertext + ciphertext.tag
         val output = UByteArray(ciphertext.ciphertext.size)
@@ -118,7 +118,7 @@ actual class PlatformCrypto actual constructor() : CryptoService {
         return output.asByteArray()
     }
 
-    override fun randomBytes(size: Int): ByteArray {
+    actual override fun randomBytes(size: Int): ByteArray {
         val bytes = ByteArray(size)
         withCBytes(bytes) { pointer ->
             randombytes_buf(pointer, size.toULong())
