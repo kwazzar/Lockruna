@@ -1,5 +1,11 @@
 package com.kwazzar.lockruna.data.crypto
 
+/** One Argon2id reference case: the password, the salt and the expected hash. */
+data class Argon2Case(val password: String, val salt: ByteArray, val expected: ByteArray)
+
+/** One NFKC reference case: the raw input and the expected normalized output. */
+data class NormalizationCase(val raw: String, val expected: String)
+
 fun String.hexToByteArray(): ByteArray {
     check(length % 2 == 0) { "Hex string must have an even length" }
     return ByteArray(length / 2) { i ->
@@ -41,4 +47,43 @@ object CryptoVectors {
     val gcmAes256ZeroAad: ByteArray = ByteArray(0)
     val gcmAes256ZeroCiphertext: ByteArray = "cea7403d4d606b6e074ec5d3baf39d18".hexToByteArray()
     val gcmAes256ZeroTag: ByteArray = "d0d1c8a799996bf0265b98b5d48ab919".hexToByteArray()
+
+    // Argon2id (m = 65536 KiB, t = 3, p = 1, salt 16 bytes, output 32 bytes),
+    // generated with the reference C implementation (argon2-cffi).
+    val argon2Cases: List<Argon2Case> = listOf(
+        Argon2Case(
+            password = "correct horse battery staple",
+            salt = "000102030405060708090a0b0c0d0e0f".hexToByteArray(),
+            expected = "0d1a3c6523c8f06e4e0af9c515aa5b5448cfebd6838f2d52c3d8b6ef8ddc3c2e".hexToByteArray(),
+        ),
+        Argon2Case(
+            password = "correct horse battery staple",
+            salt = "101112131415161718191a1b1c1d1e1f".hexToByteArray(),
+            expected = "1a563099620be88a73c7bd53da0b313e98060493b58ba22254a065c3d7db26c3".hexToByteArray(),
+        ),
+        Argon2Case(
+            password = "correct horse battery staple",
+            salt = "a1b2c3d4e5f60718293a4b5c6d7e8f90".hexToByteArray(),
+            expected = "79c663db87eebd2abf49fb5435689f6a9a87e4cde90de3fa375b529b05ffc7f6".hexToByteArray(),
+        ),
+        // Non-ASCII password: pins the UTF-8 encoding of the password on both platforms.
+        Argon2Case(
+            password = "пароль-测试",
+            salt = "000102030405060708090a0b0c0d0e0f".hexToByteArray(),
+            expected = "1ff0681253591582cd2fd999184800ed9a6bb8d8ab879168352f8008d08b1c57".hexToByteArray(),
+        ),
+    )
+
+    // NFKC, per the Unicode standard.
+    val normalizationCases: List<NormalizationCase> = listOf(
+        NormalizationCase(raw = "пароль", expected = "пароль"),
+        NormalizationCase(raw = "e\u0301", expected = "é"),
+        NormalizationCase(raw = "ﬁ", expected = "fi"),
+        NormalizationCase(raw = "Ａ", expected = "A"),
+        // U+1E9E has no compatibility decomposition, so NFKC keeps it as is.
+        NormalizationCase(raw = "ẞ", expected = "ẞ"),
+        NormalizationCase(raw = "１２３", expected = "123"),
+        NormalizationCase(raw = "①", expected = "1"),
+        NormalizationCase(raw = "ｶﾞ", expected = "ガ"),
+    )
 }

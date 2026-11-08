@@ -23,8 +23,22 @@ kotlin {
         }
     }
 
-    iosArm64()
-    iosSimulatorArm64()
+    iosArm64 {
+        compilations.getByName("main").cinterops {
+            create("icu") {
+                definitionFile.set(project.file("src/iosMain/cinterop/icu.def"))
+                includeDirs(project.file("src/iosMain/cinterop"))
+            }
+        }
+    }
+    iosSimulatorArm64 {
+        compilations.getByName("main").cinterops {
+            create("icu") {
+                definitionFile.set(project.file("src/iosMain/cinterop/icu.def"))
+                includeDirs(project.file("src/iosMain/cinterop"))
+            }
+        }
+    }
 
     compilerOptions {
         freeCompilerArgs.add("-Xexpect-actual-classes")
@@ -52,6 +66,7 @@ kotlin {
         }
         commonTest.dependencies {
             implementation(kotlin("test"))
+            implementation(libs.kotlinx.coroutines.test)
         }
         jvmMain.dependencies {
             implementation(libs.ktor.client.okhttp)
