@@ -3,6 +3,7 @@ package com.kwazzar.lockruna.domain.identity
 import com.kwazzar.lockruna.domain.core.Result
 import com.kwazzar.lockruna.domain.error.AppError
 import com.kwazzar.lockruna.domain.error.WeakPasswordReason
+import kotlin.jvm.JvmInline
 
 /**
  * Master password with its validity rule baked in.

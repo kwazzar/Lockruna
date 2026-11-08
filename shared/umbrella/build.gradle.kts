@@ -8,6 +8,7 @@ kotlin {
         target.binaries.framework {
             baseName = "Shared"
             isStatic = true
+            binaryOption("bundleId", "com.kwazzar.lockruna.shared")
         }
     }
 
