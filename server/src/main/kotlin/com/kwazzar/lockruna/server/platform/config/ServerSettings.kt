@@ -14,10 +14,12 @@ data class ServerSettings(
     val jwtActiveKey: String,
     val jwtPreviousKey: String?,
     val pepper: ByteArray,
+    val authFakeSecret: ByteArray,
 ) {
     companion object {
         private const val PEPPER_BYTES = 32
         private const val HEX_SHIFT = 4
+        private const val JWT_KEY_MIN_BYTES = 32
         private const val DEFAULT_HOST = "0.0.0.0"
         private const val DEFAULT_PORT = 8080
 
@@ -28,9 +30,10 @@ data class ServerSettings(
             redisUrl = env.required("REDIS_URL"),
             jwtIssuer = env.required("JWT_ISSUER"),
             jwtAudience = env.required("JWT_AUDIENCE"),
-            jwtActiveKey = env.required("JWT_ACTIVE_KEY"),
-            jwtPreviousKey = env["JWT_PREVIOUS_KEY"]?.takeIf { it.isNotBlank() },
+            jwtActiveKey = env.required("JWT_ACTIVE_KEY").toJwtKey(),
+            jwtPreviousKey = env["JWT_PREVIOUS_KEY"]?.takeIf { it.isNotBlank() }?.toJwtKey(),
             pepper = env.required("PEPPER").toPepper(),
+            authFakeSecret = env.required("AUTH_FAKE_SECRET").toByteArray(),
         )
 
         private fun Map<String, String>.required(name: String): String =
@@ -46,6 +49,13 @@ data class ServerSettings(
                 bytes[index] = ((high shl HEX_SHIFT) or low).toByte()
             }
             return bytes
+        }
+
+        private fun String.toJwtKey(): String {
+            if (encodeToByteArray().size < JWT_KEY_MIN_BYTES) {
+                error("JWT key must be at least $JWT_KEY_MIN_BYTES bytes")
+            }
+            return this
         }
     }
 }

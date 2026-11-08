@@ -37,6 +37,7 @@ dependencies {
 
     implementation(libs.koin.core)
     implementation(libs.koin.ktor)
+    implementation(libs.java.jwt)
     implementation(libs.exposed.core)
     implementation(libs.exposed.jdbc)
     implementation(libs.exposed.java.time)

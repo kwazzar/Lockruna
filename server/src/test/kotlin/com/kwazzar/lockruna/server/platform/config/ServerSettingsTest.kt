@@ -13,7 +13,7 @@ class ServerSettingsTest {
             requiredEnvironment + mapOf(
                 "HOST" to "127.0.0.1",
                 "PORT" to "9000",
-                "JWT_PREVIOUS_KEY" to "previous-key",
+                "JWT_PREVIOUS_KEY" to PREVIOUS_KEY,
             ),
         )
 
@@ -23,9 +23,10 @@ class ServerSettingsTest {
         assertEquals("redis://localhost:6379", settings.redisUrl)
         assertEquals("passkeeper", settings.jwtIssuer)
         assertEquals("passkeeper-clients", settings.jwtAudience)
-        assertEquals("active-key", settings.jwtActiveKey)
-        assertEquals("previous-key", settings.jwtPreviousKey)
+        assertEquals(ACTIVE_KEY, settings.jwtActiveKey)
+        assertEquals(PREVIOUS_KEY, settings.jwtPreviousKey)
         assertContentEquals(pepperBytes, settings.pepper)
+        assertContentEquals("fake-secret".toByteArray(), settings.authFakeSecret)
     }
 
     @Test
@@ -45,7 +46,15 @@ class ServerSettingsTest {
 
     @Test
     fun `refuses to start without a required secret`() {
-        listOf("DATABASE_URL", "REDIS_URL", "JWT_ISSUER", "JWT_AUDIENCE", "JWT_ACTIVE_KEY", "PEPPER").forEach { key ->
+        listOf(
+            "DATABASE_URL",
+            "REDIS_URL",
+            "JWT_ISSUER",
+            "JWT_AUDIENCE",
+            "JWT_ACTIVE_KEY",
+            "AUTH_FAKE_SECRET",
+            "PEPPER",
+        ).forEach { key ->
             assertFailsWith<IllegalStateException>("missing $key must stop the server") {
                 ServerSettings.fromEnv(requiredEnvironment - key)
             }
@@ -59,15 +68,28 @@ class ServerSettingsTest {
         }
     }
 
+    @Test
+    fun `refuses to start when a jwt key is shorter than 32 bytes`() {
+        assertFailsWith<IllegalStateException> {
+            ServerSettings.fromEnv(requiredEnvironment + ("JWT_ACTIVE_KEY" to "short-key"))
+        }
+        assertFailsWith<IllegalStateException> {
+            ServerSettings.fromEnv(requiredEnvironment + ("JWT_PREVIOUS_KEY" to "short-key"))
+        }
+    }
+
     private companion object {
         val pepperBytes = ByteArray(32) { 0xab.toByte() }
         val pepperHex = pepperBytes.joinToString("") { "%02x".format(it) }
+        const val ACTIVE_KEY = "active-key-0123456789abcdef0123456789"
+        const val PREVIOUS_KEY = "previous-key-0123456789abcdef0123456"
         val requiredEnvironment = mapOf(
             "DATABASE_URL" to "jdbc:postgresql://localhost:5432/passkeeper",
             "REDIS_URL" to "redis://localhost:6379",
             "JWT_ISSUER" to "passkeeper",
             "JWT_AUDIENCE" to "passkeeper-clients",
-            "JWT_ACTIVE_KEY" to "active-key",
+            "JWT_ACTIVE_KEY" to ACTIVE_KEY,
+            "AUTH_FAKE_SECRET" to "fake-secret",
             "PEPPER" to pepperHex,
         )
     }

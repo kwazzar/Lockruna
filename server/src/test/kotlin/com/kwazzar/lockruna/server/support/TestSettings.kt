@@ -13,7 +13,8 @@ fun testSettings(databaseUrl: String = "jdbc:postgresql://localhost:5432/passkee
         redisUrl = "redis://localhost:6379",
         jwtIssuer = "passkeeper-test",
         jwtAudience = "passkeeper-test-clients",
-        jwtActiveKey = "test-active-key",
+        jwtActiveKey = "test-active-key-0123456789abcdef",
         jwtPreviousKey = null,
         pepper = ByteArray(32) { 0xab.toByte() },
+        authFakeSecret = "test-fake-secret".toByteArray(),
     )

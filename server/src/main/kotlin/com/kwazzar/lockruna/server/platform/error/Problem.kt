@@ -10,6 +10,7 @@ data class Problem(val status: Int, val code: String, val title: String, val typ
 
 /**
  * Thrown by use cases and routes to produce a problem response. The message carries the title only,
- * never request data.
+ * never request data. `headers` carries response headers such as `Retry-After`.
  */
-class ProblemException(val problem: Problem) : RuntimeException(problem.title)
+class ProblemException(val problem: Problem, val headers: Map<String, String> = emptyMap(), cause: Throwable? = null) :
+    RuntimeException(problem.title, cause)

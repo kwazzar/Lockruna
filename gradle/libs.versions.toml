@@ -7,6 +7,7 @@ detekt = "2.0.0-alpha.6"
 exposed = "1.6.1"
 flyway = "13.12.1"
 hikari = "7.1.0"
+java-jwt = "4.6.0"
 koin = "4.2.2"
 konsist = "1.0.0-beta.1"
 kotlin = "2.4.20"
@@ -44,6 +45,8 @@ ktor-serialization-json = { module = "io.ktor:ktor-serialization-kotlinx-json-jv
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+
+java-jwt = { module = "com.auth0:java-jwt", version.ref = "java-jwt" }
 
 sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }

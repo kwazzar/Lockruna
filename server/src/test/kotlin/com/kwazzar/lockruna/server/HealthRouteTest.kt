@@ -1,5 +1,6 @@
 package com.kwazzar.lockruna.server
 
+import com.kwazzar.lockruna.server.support.PostgresTest
 import com.kwazzar.lockruna.server.support.testSettings
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
@@ -11,7 +12,7 @@ import kotlin.test.assertEquals
 class HealthRouteTest {
     @Test
     fun `health endpoint reports ok`() = testApplication {
-        application { module(testSettings()) }
+        application { module(testSettings(), PostgresTest.dataSource) }
 
         val response = client.get("/health")
 
