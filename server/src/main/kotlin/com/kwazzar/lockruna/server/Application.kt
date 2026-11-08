@@ -11,6 +11,7 @@ import com.kwazzar.lockruna.server.platform.error.installStatusPages
 import com.kwazzar.lockruna.server.platform.logging.installSafeCallLogging
 import com.kwazzar.lockruna.server.platform.redis.RedisDeviceDenylist
 import com.kwazzar.lockruna.server.platform.redis.RedisRateLimiter
+import com.kwazzar.lockruna.server.sync.api.syncRoutes
 import io.ktor.http.ContentType
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
@@ -60,5 +61,6 @@ fun Application.module(
         }
         identityRoutes()
         deviceRoutes()
+        syncRoutes()
     }
 }

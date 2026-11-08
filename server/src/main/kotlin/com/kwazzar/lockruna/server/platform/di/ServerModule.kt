@@ -22,6 +22,12 @@ import com.kwazzar.lockruna.server.platform.config.ServerSettings
 import com.kwazzar.lockruna.server.platform.db.DatabaseFactory
 import com.kwazzar.lockruna.server.platform.db.ExposedTransactionRunner
 import com.kwazzar.lockruna.server.platform.db.TransactionRunner
+import com.kwazzar.lockruna.server.sync.application.PullChanges
+import com.kwazzar.lockruna.server.sync.application.PushChanges
+import com.kwazzar.lockruna.server.sync.domain.IdempotencyRepository
+import com.kwazzar.lockruna.server.sync.domain.VaultItemRepository
+import com.kwazzar.lockruna.server.sync.infrastructure.ExposedIdempotencyRepository
+import com.kwazzar.lockruna.server.sync.infrastructure.ExposedVaultItemRepository
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.koin.core.module.Module
 import org.koin.dsl.module
@@ -53,4 +59,8 @@ fun serverModule(
     single { RevokeDevice(get(), get(), get()) }
     single { ListDevices(get()) }
     single { LogoutSession(get()) }
+    single<VaultItemRepository> { ExposedVaultItemRepository(get()) }
+    single<IdempotencyRepository> { ExposedIdempotencyRepository(get()) }
+    single { PullChanges(get()) }
+    single { PushChanges(get(), get(), get()) }
 }

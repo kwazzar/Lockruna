@@ -22,4 +22,11 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+    // Konsist scans the sources of the other modules, so they are inputs of this task:
+    // without them the build cache can restore a stale result and the guard sees stale code.
+    val scannedSources = listOf("server/src/main/kotlin", "api-contract/src") +
+        rootProject.file("shared").listFiles().orEmpty()
+            .filter { module -> module.isDirectory }
+            .map { module -> module.resolve("src") }
+    inputs.files(scannedSources.map { path -> rootProject.fileTree(path) })
 }

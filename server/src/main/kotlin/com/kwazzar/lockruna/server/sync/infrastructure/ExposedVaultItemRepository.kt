@@ -107,9 +107,23 @@ class ExposedVaultItemRepository(private val transactions: TransactionRunner) : 
         if (updated > 0) return ApplyResult.Applied(change.baseVersion + 1, updatedAt)
 
         val server = findItem(userId, change.id)
-            ?: error("item ${change.id} vanished during update")
-        return ApplyResult.Conflict(server)
+        return ApplyResult.Conflict(server ?: absentItem(userId, change, updatedAt))
     }
+
+    /**
+     * The server has no such item for this user: the client asked for a version that never existed here.
+     */
+    private fun absentItem(userId: String, change: ChangeRecord, updatedAt: Instant) = SealedItemRecord(
+        userId = userId,
+        id = change.id,
+        type = change.type,
+        ciphertext = null,
+        nonce = null,
+        version = 0,
+        syncSeq = 0,
+        deletedAt = null,
+        updatedAt = updatedAt,
+    )
 
     private fun findItem(userId: String, itemId: String): SealedItemRecord? = VaultItems.selectAll()
         .where { (VaultItems.userId eq userId.toUuid()) and (VaultItems.id eq itemId.toUuid()) }

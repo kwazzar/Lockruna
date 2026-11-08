@@ -81,7 +81,7 @@ class IdentityClient(private val builder: ApplicationTestBuilder) {
         }
 }
 
-private fun io.ktor.client.request.HttpRequestBuilder.bearer(accessToken: String) {
+internal fun io.ktor.client.request.HttpRequestBuilder.bearer(accessToken: String) {
     header(HttpHeaders.Authorization, "Bearer $accessToken")
 }
 
