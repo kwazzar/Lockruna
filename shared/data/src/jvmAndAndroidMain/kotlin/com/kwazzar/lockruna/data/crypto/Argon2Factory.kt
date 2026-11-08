@@ -10,7 +10,7 @@ actual object Argon2Factory {
 }
 
 private class Argon2BouncyCastle : Argon2 {
-    override suspend fun hash(password: ByteArray, salt: ByteArray, params: KdfParams): ByteArray {
+    override suspend fun hash(password: String, salt: ByteArray, params: KdfParams): ByteArray {
         require(salt.size == params.saltLength) { "Salt must be exactly ${params.saltLength} bytes" }
         val generator = Argon2BytesGenerator()
         generator.init(
@@ -22,6 +22,6 @@ private class Argon2BouncyCastle : Argon2 {
                 .withParallelism(params.parallelism)
                 .build(),
         )
-        return ByteArray(params.outputLength).also { generator.generateBytes(password, it) }
+        return ByteArray(params.outputLength).also { generator.generateBytes(password.encodeToByteArray(), it) }
     }
 }

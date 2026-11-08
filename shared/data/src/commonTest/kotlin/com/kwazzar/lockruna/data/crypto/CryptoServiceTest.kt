@@ -10,14 +10,25 @@ class CryptoServiceTest {
     private val crypto = PlatformCrypto()
 
     @Test
-    fun `hkdfSha256 matches RFC 5869 test case 1`() {
+    fun `hkdfSha256 matches the reference vector with a domain label`() {
         val okm = crypto.hkdfSha256(
-            inputKey = CryptoVectors.rfc5869Case1Ikm,
-            salt = CryptoVectors.rfc5869Case1Salt,
-            info = CryptoVectors.rfc5869Case1Info,
-            length = CryptoVectors.RFC5869_CASE1_L,
+            inputKey = CryptoVectors.hkdfLabelIkm,
+            salt = CryptoVectors.hkdfLabelSalt,
+            info = CryptoVectors.HKDF_LABEL_INFO,
+            length = CryptoVectors.HKDF_LABEL_L,
         )
-        assertContentEquals(CryptoVectors.rfc5869Case1Okm, okm)
+        assertContentEquals(CryptoVectors.hkdfLabelOkm, okm)
+    }
+
+    @Test
+    fun `hkdfSha256 matches the reference vector with a non-ascii label`() {
+        val okm = crypto.hkdfSha256(
+            inputKey = CryptoVectors.hkdfCyrillicIkm,
+            salt = CryptoVectors.hkdfCyrillicSalt,
+            info = CryptoVectors.HKDF_CYRILLIC_INFO,
+            length = CryptoVectors.HKDF_CYRILLIC_L,
+        )
+        assertContentEquals(CryptoVectors.hkdfCyrillicOkm, okm)
     }
 
     @Test
@@ -25,25 +36,10 @@ class CryptoServiceTest {
         val okm = crypto.hkdfSha256(
             inputKey = CryptoVectors.rfc5869Case3Ikm,
             salt = null,
-            info = CryptoVectors.rfc5869Case3Info,
+            info = CryptoVectors.RFC5869_CASE3_INFO,
             length = CryptoVectors.RFC5869_CASE3_L,
         )
         assertContentEquals(CryptoVectors.rfc5869Case3Okm, okm)
-    }
-
-    @Test
-    fun `decryptGcm matches the GCM specification test case 13`() {
-        val ciphertext = GcmCiphertext(
-            ciphertext = CryptoVectors.gcmCase13Aes128Ciphertext,
-            nonce = CryptoVectors.gcmCase13Aes128Iv,
-            tag = CryptoVectors.gcmCase13Aes128Tag,
-        )
-        val decrypted = crypto.decryptGcm(
-            key = CryptoVectors.gcmCase13Aes128Key,
-            ciphertext = ciphertext,
-            aad = CryptoVectors.gcmCase13Aes128Aad,
-        )
-        assertContentEquals(CryptoVectors.gcmCase13Aes128Plaintext, decrypted)
     }
 
     @Test
@@ -59,6 +55,13 @@ class CryptoServiceTest {
             aad = CryptoVectors.gcmAes256ZeroAad,
         )
         assertContentEquals(CryptoVectors.gcmAes256ZeroPlaintext, decrypted)
+    }
+
+    @Test
+    fun `gcm rejects a key that is not 256 bits`() {
+        assertFailsWith<IllegalArgumentException> {
+            crypto.encryptGcm(ByteArray(16), ByteArray(0), ByteArray(0))
+        }
     }
 
     @Test

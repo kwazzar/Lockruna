@@ -12,6 +12,7 @@ import org.bouncycastle.crypto.params.HKDFParameters
 import org.bouncycastle.crypto.params.KeyParameter
 import java.security.SecureRandom
 
+private const val GCM_KEY_SIZE: Int = 32
 private const val GCM_NONCE_SIZE: Int = 12
 private const val GCM_TAG_BITS: Int = 128
 private const val GCM_TAG_SIZE: Int = GCM_TAG_BITS / Byte.SIZE_BITS
@@ -19,13 +20,14 @@ private const val GCM_TAG_SIZE: Int = GCM_TAG_BITS / Byte.SIZE_BITS
 actual class PlatformCrypto actual constructor() : CryptoService {
     private val secureRandom = SecureRandom()
 
-    override fun hkdfSha256(inputKey: ByteArray, salt: ByteArray?, info: ByteArray, length: Int): ByteArray {
+    override fun hkdfSha256(inputKey: ByteArray, salt: ByteArray?, info: String, length: Int): ByteArray {
         val generator = HKDFBytesGenerator(SHA256Digest())
-        generator.init(HKDFParameters(inputKey, salt, info))
+        generator.init(HKDFParameters(inputKey, salt, info.encodeToByteArray()))
         return ByteArray(length).also { generator.generateBytes(it, 0, length) }
     }
 
     override fun encryptGcm(key: ByteArray, plaintext: ByteArray, aad: ByteArray): GcmCiphertext {
+        require(key.size == GCM_KEY_SIZE) { "AES-256-GCM key must be $GCM_KEY_SIZE bytes" }
         val nonce = randomBytes(GCM_NONCE_SIZE)
         val cipher = GCMBlockCipher.newInstance(AESEngine.newInstance())
         cipher.init(true, AEADParameters(KeyParameter(key), GCM_TAG_BITS, nonce, aad))
@@ -43,6 +45,7 @@ actual class PlatformCrypto actual constructor() : CryptoService {
     }
 
     override fun decryptGcm(key: ByteArray, ciphertext: GcmCiphertext, aad: ByteArray): ByteArray {
+        require(key.size == GCM_KEY_SIZE) { "AES-256-GCM key must be $GCM_KEY_SIZE bytes" }
         val cipher = GCMBlockCipher.newInstance(AESEngine.newInstance())
         cipher.init(false, AEADParameters(KeyParameter(key), GCM_TAG_BITS, ciphertext.nonce, aad))
         // BouncyCastle verifies the tag in doFinal, so the tag travels with the ciphertext.

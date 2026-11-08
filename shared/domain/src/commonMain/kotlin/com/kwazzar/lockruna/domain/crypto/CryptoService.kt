@@ -22,7 +22,8 @@ data class GcmCiphertext(val ciphertext: ByteArray, val nonce: ByteArray, val ta
 }
 
 interface CryptoService {
-    fun hkdfSha256(inputKey: ByteArray, salt: ByteArray?, info: ByteArray, length: Int = 32): ByteArray
+    /** HKDF-SHA256 (RFC 5869); [info] is the domain label, encoded as UTF-8. */
+    fun hkdfSha256(inputKey: ByteArray, salt: ByteArray?, info: String, length: Int = 32): ByteArray
     fun encryptGcm(key: ByteArray, plaintext: ByteArray, aad: ByteArray): GcmCiphertext
     fun decryptGcm(key: ByteArray, ciphertext: GcmCiphertext, aad: ByteArray): ByteArray
     fun randomBytes(size: Int): ByteArray

@@ -30,5 +30,6 @@ data class KdfParams(
 }
 
 interface Argon2 {
-    suspend fun hash(password: ByteArray, salt: ByteArray, params: KdfParams): ByteArray
+    /** Argon2id over the UTF-8 encoding of [password]. */
+    suspend fun hash(password: String, salt: ByteArray, params: KdfParams): ByteArray
 }

@@ -1,6 +1,6 @@
 package com.kwazzar.lockruna.domain.crypto
 
 interface PasswordNormalizer {
-    /** NFKC, потім UTF-8. */
-    fun normalize(raw: String): ByteArray
+    /** NFKC. The UTF-8 encoding happens in the KDF. */
+    fun normalize(raw: String): String
 }
