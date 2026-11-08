@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinJvm)
+    alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.ktor)
     application
 }
@@ -29,9 +30,13 @@ dependencies {
     implementation(libs.ktor.server.auth)
     implementation(libs.ktor.server.auth.jwt)
     implementation(libs.ktor.server.content.negotiation)
+    implementation(libs.ktor.server.status.pages)
+    implementation(libs.ktor.server.call.logging)
     implementation(libs.ktor.serialization.json)
+    implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.koin.core)
+    implementation(libs.koin.ktor)
     implementation(libs.exposed.core)
     implementation(libs.exposed.jdbc)
     implementation(libs.flyway.core)
@@ -42,6 +47,7 @@ dependencies {
     implementation(libs.postgresql)
 
     testImplementation(kotlin("test"))
+    testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.testcontainers.postgresql)
     testImplementation(libs.testcontainers.mongodb)
     testImplementation(libs.testcontainers.junit)
