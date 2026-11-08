@@ -24,4 +24,7 @@ object AuthKeys {
     fun emailKey(email: String): String = MessageDigest.getInstance(SHA_256)
         .digest(email.lowercase().toByteArray())
         .joinToString("") { "%02x".format(it) }
+
+    /** Only the hash of a refresh token is stored. */
+    fun tokenHash(token: String): ByteArray = MessageDigest.getInstance(SHA_256).digest(token.toByteArray())
 }

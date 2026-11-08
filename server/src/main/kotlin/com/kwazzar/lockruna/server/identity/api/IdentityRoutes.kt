@@ -4,11 +4,16 @@ import com.kwazzar.lockruna.contract.AuthResponseDto
 import com.kwazzar.lockruna.contract.LoginRequest
 import com.kwazzar.lockruna.contract.PreloginRequest
 import com.kwazzar.lockruna.contract.PreloginResponse
+import com.kwazzar.lockruna.contract.RefreshRequest
 import com.kwazzar.lockruna.contract.RegisterRequest
+import com.kwazzar.lockruna.contract.TokenPairDto
 import com.kwazzar.lockruna.server.identity.application.AuthSession
+import com.kwazzar.lockruna.server.identity.application.AuthenticateSession
 import com.kwazzar.lockruna.server.identity.application.LoginCommand
 import com.kwazzar.lockruna.server.identity.application.LoginUser
+import com.kwazzar.lockruna.server.identity.application.LogoutSession
 import com.kwazzar.lockruna.server.identity.application.PreloginUser
+import com.kwazzar.lockruna.server.identity.application.RefreshSession
 import com.kwazzar.lockruna.server.identity.application.RegisterCommand
 import com.kwazzar.lockruna.server.identity.application.RegisterUser
 import com.kwazzar.lockruna.server.platform.error.Problem
@@ -31,6 +36,9 @@ fun Route.identityRoutes() {
     val preloginUser by inject<PreloginUser>()
     val registerUser by inject<RegisterUser>()
     val loginUser by inject<LoginUser>()
+    val refreshSession by inject<RefreshSession>()
+    val logoutSession by inject<LogoutSession>()
+    val authenticate by inject<AuthenticateSession>()
 
     route("/auth") {
         post("/prelogin") {
@@ -44,20 +52,7 @@ fun Route.identityRoutes() {
         post("/register") {
             val request = call.receive<RegisterRequest>()
 
-            val session = registerUser(
-                RegisterCommand(
-                    email = request.email,
-                    authKey = request.authKey.fromBase64(),
-                    recoveryAuthKey = request.recoveryAuthKey.fromBase64(),
-                    kdfSalt = request.kdfSalt.fromBase64(),
-                    kdfParams = request.kdfParams,
-                    wrappedVaultKey = request.wrappedVaultKey.fromBase64(),
-                    recoveryWrappedVaultKey = request.recoveryWrappedVaultKey.fromBase64(),
-                    deviceName = request.device.name,
-                    devicePlatform = request.device.platform.requirePlatform(),
-                    clientIp = call.clientIp(),
-                ),
-            )
+            val session = registerUser(request.toCommand(call.clientIp()))
 
             call.respond(HttpStatusCode.Created, session.toResponse())
         }
@@ -65,21 +60,56 @@ fun Route.identityRoutes() {
         post("/login") {
             val request = call.receive<LoginRequest>()
 
-            val session = loginUser(
-                LoginCommand(
-                    email = request.email,
-                    authKey = request.authKey.fromBase64(),
-                    deviceId = request.device.deviceId,
-                    deviceName = request.device.name,
-                    devicePlatform = request.device.platform.requirePlatform(),
-                    clientIp = call.clientIp(),
-                ),
-            )
+            val session = loginUser(request.toCommand(call.clientIp()))
 
             call.respond(session.toResponse())
         }
+
+        post("/refresh") {
+            val request = call.receive<RefreshRequest>()
+
+            val pair = refreshSession(request.refreshToken)
+
+            call.respond(
+                TokenPairDto(
+                    accessToken = pair.accessToken,
+                    refreshToken = pair.refreshToken,
+                    expiresIn = pair.expiresIn,
+                ),
+            )
+        }
+
+        post("/logout") {
+            val claims = call.requireSession(authenticate)
+
+            logoutSession(claims.userId, claims.deviceId)
+
+            call.respond(HttpStatusCode.NoContent)
+        }
     }
 }
+
+private fun RegisterRequest.toCommand(clientIp: String) = RegisterCommand(
+    email = email,
+    authKey = authKey.fromBase64(),
+    recoveryAuthKey = recoveryAuthKey.fromBase64(),
+    kdfSalt = kdfSalt.fromBase64(),
+    kdfParams = kdfParams,
+    wrappedVaultKey = wrappedVaultKey.fromBase64(),
+    recoveryWrappedVaultKey = recoveryWrappedVaultKey.fromBase64(),
+    deviceName = device.name,
+    devicePlatform = device.platform.requirePlatform(),
+    clientIp = clientIp,
+)
+
+private fun LoginRequest.toCommand(clientIp: String) = LoginCommand(
+    email = email,
+    authKey = authKey.fromBase64(),
+    deviceId = device.deviceId,
+    deviceName = device.name,
+    devicePlatform = device.platform.requirePlatform(),
+    clientIp = clientIp,
+)
 
 private fun AuthSession.toResponse() = AuthResponseDto(
     accessToken = accessToken,

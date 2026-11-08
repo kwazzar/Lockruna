@@ -7,11 +7,11 @@ import com.auth0.jwt.interfaces.DecodedJWT
 import com.auth0.jwt.interfaces.JWTVerifier
 import com.kwazzar.lockruna.server.identity.domain.ACCESS_TOKEN_SECONDS
 import com.kwazzar.lockruna.server.identity.domain.AccessTokenClaims
+import com.kwazzar.lockruna.server.identity.domain.AuthKeys
 import com.kwazzar.lockruna.server.identity.domain.RefreshTokenRecord
 import com.kwazzar.lockruna.server.identity.domain.RefreshTokenRepository
 import com.kwazzar.lockruna.server.identity.domain.TokenService
 import com.kwazzar.lockruna.server.platform.config.ServerSettings
-import java.security.MessageDigest
 import java.security.SecureRandom
 import java.time.Clock
 import java.time.Duration
@@ -57,7 +57,7 @@ class JwtTokenService(
                 deviceId = deviceId,
                 userId = userId,
                 familyId = familyId,
-                tokenHash = sha256(token.toByteArray()),
+                tokenHash = AuthKeys.tokenHash(token),
                 expiresAt = clock.instant().plus(REFRESH_TOKEN_LIFETIME),
                 familyCreatedAt = familyCreatedAt,
                 usedAt = null,
@@ -67,12 +67,14 @@ class JwtTokenService(
         return token
     }
 
-    override fun verifyAccessToken(token: String): AccessTokenClaims {
-        val decoded = verify(token)
-        return AccessTokenClaims(
-            userId = decoded.subject,
-            deviceId = decoded.getClaim(DEVICE_ID_CLAIM).asString(),
-        )
+    override fun verifyAccessToken(token: String): AccessTokenClaims? {
+        val decoded = try {
+            verify(token)
+        } catch (ignored: JWTVerificationException) {
+            return null
+        }
+        val deviceId = decoded.getClaim(DEVICE_ID_CLAIM).asString() ?: return null
+        return AccessTokenClaims(userId = decoded.subject, deviceId = deviceId)
     }
 
     private fun verify(token: String): DecodedJWT = try {
@@ -86,8 +88,6 @@ class JwtTokenService(
         .withIssuer(settings.jwtIssuer)
         .withAudience(settings.jwtAudience)
         .build()
-
-    private fun sha256(value: ByteArray): ByteArray = MessageDigest.getInstance("SHA-256").digest(value)
 
     private companion object {
         const val DEVICE_ID_CLAIM = "deviceId"

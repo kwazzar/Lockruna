@@ -27,6 +27,9 @@ data class RegisterRequest(
 data class LoginRequest(val email: String, val authKey: String, val device: DeviceInfoDto)
 
 @Serializable
+data class RefreshRequest(val refreshToken: String)
+
+@Serializable
 data class TokenPairDto(val accessToken: String, val refreshToken: String, val expiresIn: Int)
 
 @Serializable

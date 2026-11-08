@@ -1,12 +1,15 @@
 package com.kwazzar.lockruna.server
 
+import com.kwazzar.lockruna.server.identity.api.deviceRoutes
 import com.kwazzar.lockruna.server.identity.api.identityRoutes
+import com.kwazzar.lockruna.server.identity.domain.DeviceDenylist
 import com.kwazzar.lockruna.server.identity.domain.RateLimiter
 import com.kwazzar.lockruna.server.platform.config.ServerSettings
 import com.kwazzar.lockruna.server.platform.db.DatabaseFactory
 import com.kwazzar.lockruna.server.platform.di.serverModule
 import com.kwazzar.lockruna.server.platform.error.installStatusPages
 import com.kwazzar.lockruna.server.platform.logging.installSafeCallLogging
+import com.kwazzar.lockruna.server.platform.redis.RedisDeviceDenylist
 import com.kwazzar.lockruna.server.platform.redis.RedisRateLimiter
 import io.ktor.http.ContentType
 import io.ktor.serialization.kotlinx.json.json
@@ -34,6 +37,7 @@ fun Application.module(
     settings: ServerSettings = ServerSettings.fromEnv(),
     dataSource: DataSource? = null,
     rateLimiter: RateLimiter? = null,
+    denylist: DeviceDenylist? = null,
 ) {
     val source = dataSource ?: DatabaseFactory.createDataSource(settings.databaseUrl).also { owned ->
         monitor.subscribe(ApplicationStopped) { owned.close() }
@@ -41,16 +45,20 @@ fun Application.module(
     val limiter = rateLimiter ?: RedisRateLimiter(settings.redisUrl).also { owned ->
         monitor.subscribe(ApplicationStopped) { owned.close() }
     }
+    val blocked = denylist ?: RedisDeviceDenylist(settings.redisUrl).also { owned ->
+        monitor.subscribe(ApplicationStopped) { owned.close() }
+    }
 
     install(ContentNegotiation) { json() }
     installStatusPages()
     installSafeCallLogging()
-    install(Koin) { modules(serverModule(settings, source, limiter)) }
+    install(Koin) { modules(serverModule(settings, source, limiter, blocked)) }
 
     routing {
         get("/health") {
             call.respondText("""{"status":"ok"}""", ContentType.Application.Json)
         }
         identityRoutes()
+        deviceRoutes()
     }
 }

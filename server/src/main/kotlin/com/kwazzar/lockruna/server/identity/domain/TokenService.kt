@@ -10,7 +10,8 @@ interface TokenService {
 
     suspend fun issueRefreshToken(userId: String, deviceId: String, familyId: String, familyCreatedAt: Instant): String
 
-    fun verifyAccessToken(token: String): AccessTokenClaims
+    /** `null` when the token is not valid: wrong signature, expired or malformed. */
+    fun verifyAccessToken(token: String): AccessTokenClaims?
 }
 
 data class AccessTokenClaims(val userId: String, val deviceId: String)

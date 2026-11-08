@@ -14,3 +14,7 @@ data class Problem(val status: Int, val code: String, val title: String, val typ
  */
 class ProblemException(val problem: Problem, val headers: Map<String, String> = emptyMap(), cause: Throwable? = null) :
     RuntimeException(problem.title, cause)
+
+/** The answer for a missing, malformed or revoked access token. */
+fun unauthorized(): ProblemException =
+    ProblemException(problem = Problem(status = 401, code = "unauthorized", title = "Unauthorized"))

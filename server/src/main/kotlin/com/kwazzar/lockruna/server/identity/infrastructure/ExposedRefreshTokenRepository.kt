@@ -11,6 +11,7 @@ import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.inList
+import org.jetbrains.exposed.v1.core.isNull
 import org.jetbrains.exposed.v1.jdbc.insert
 import org.jetbrains.exposed.v1.jdbc.select
 import org.jetbrains.exposed.v1.jdbc.selectAll
@@ -65,6 +66,20 @@ class ExposedRefreshTokenRepository(private val transactions: TransactionRunner)
 
             RefreshTokens.update({
                 (RefreshTokens.familyId eq familyId.toUuid()) and (RefreshTokens.deviceId inList deviceIds)
+            }) {
+                it[RefreshTokens.revokedAt] = revokedAt.toColumn()
+            }
+        }
+
+    override suspend fun revokeDeviceTokens(userId: String, deviceId: String, revokedAt: Instant): Int =
+        transactions.transaction {
+            val owner = Devices.selectAll()
+                .where { Devices.id eq deviceId.toUuid() }
+                .firstOrNull() ?: return@transaction 0
+            if (owner[Devices.userId].toString() != userId) return@transaction 0
+
+            RefreshTokens.update({
+                (RefreshTokens.deviceId eq deviceId.toUuid()) and RefreshTokens.revokedAt.isNull()
             }) {
                 it[RefreshTokens.revokedAt] = revokedAt.toColumn()
             }
