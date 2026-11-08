@@ -30,6 +30,17 @@ kotlin {
         freeCompilerArgs.add("-Xexpect-actual-classes")
     }
 
+    // A custom group keeps the JVM and Android sources shared without disabling the
+    // default hierarchy template: explicit dependsOn edges would detach iosMain.
+    applyDefaultHierarchyTemplate {
+        common {
+            group("jvmAndAndroid") {
+                withJvm()
+                withAndroidTarget()
+            }
+        }
+    }
+
     sourceSets {
         commonMain.dependencies {
             api(project(":shared:application"))
@@ -51,18 +62,13 @@ kotlin {
             implementation(libs.sqldelight.driver.android)
         }
         iosMain.dependencies {
+            implementation(libs.ionspin.libsodium)
             implementation(libs.ktor.client.darwin)
             implementation(libs.sqldelight.driver.native)
         }
-
-        val jvmAndAndroidMain by creating {
-            dependsOn(commonMain.get())
-            dependencies {
-                implementation(libs.bouncycastle)
-            }
+        getByName("jvmAndAndroidMain").dependencies {
+            implementation(libs.bouncycastle)
         }
-        jvmMain.get().dependsOn(jvmAndAndroidMain)
-        androidMain.get().dependsOn(jvmAndAndroidMain)
     }
 }
 
