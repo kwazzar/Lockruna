@@ -6,6 +6,5 @@ import com.kwazzar.lockruna.domain.identity.MasterPassword
 
 /** Validates the master password against the domain policy. */
 class ValidateMasterPassword {
-    operator fun invoke(password: String): Result<MasterPassword, AppError> =
-        MasterPassword.of(password)
+    operator fun invoke(password: String): Result<MasterPassword, AppError> = MasterPassword.of(password)
 }

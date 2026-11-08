@@ -16,6 +16,7 @@ dependencyResolutionManagement {
 }
 
 include(":api-contract")
+include(":architecture-tests")
 include(":shared:domain")
 include(":shared:application")
 include(":shared:data")

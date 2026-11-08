@@ -81,12 +81,16 @@ copying it into Stores or use cases lets it drift.
 - If a requirement, trade-off or layer is unclear, ask; do not guess.
 
 ## Commands
-UNVERIFIED until the skeleton exists; replace with exact working commands
-after the first successful run. If one fails, report it; do not invent a
+Verified against the scaffold; if one fails, report it; do not invent a
 replacement. Run from the repo root.
+- JDK: the build needs JDK 25. On macOS use the Android Studio runtime:
+  `export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"`.
 - Services: `docker compose up -d`; reset: `docker compose down -v`
-- Shared tests: `./gradlew :shared:domain:allTests :shared:application:allTests :shared:data:allTests`
-- iOS simulator tests (slow): `./gradlew :shared:data:iosSimulatorArm64Test`
+- Shared tests: `./gradlew :api-contract:jvmTest :shared:domain:jvmTest :shared:application:jvmTest :shared:presentation:jvmTest :shared:data:jvmTest`
+  (`allTests` also runs the native targets and therefore needs macOS)
+- Architecture tests (Konsist): `./gradlew :architecture-tests:test`
+- iOS simulator tests (slow, macOS): `./gradlew :shared:data:iosSimulatorArm64Test`
+- Shared framework for iOS: `./gradlew :shared:umbrella:assemble`
 - Server tests (needs Docker): `./gradlew :server:test`
 - Android build: `./gradlew :androidApp:assembleDebug`
 - iOS build and tests: XcodeBuildMCP only, never raw xcodebuild

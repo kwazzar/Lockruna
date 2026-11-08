@@ -1,0 +1,30 @@
+# Overrides on top of the detekt defaults; the file only lists what this project changes.
+config:
+  validation: true
+  warningsAsErrors: false
+
+complexity:
+  LongParameterList:
+    active: true
+    allowedFunctionParameters: 6
+    allowedConstructorParameters: 8
+  TooManyFunctions:
+    active: true
+    allowedFunctionsPerFile: 20
+    allowedFunctionsPerClass: 20
+    allowedFunctionsPerInterface: 20
+    allowedFunctionsPerObject: 20
+    allowedFunctionsPerEnum: 20
+    ignoreDeprecated: true
+    ignoreOverridden: true
+
+style:
+  MagicNumber:
+    active: true
+    ignoreNumbers: ['-1', '0', '1', '2']
+  MaxLineLength:
+    active: true
+    maxLineLength: 120
+  ReturnCount:
+    active: true
+    max: 4

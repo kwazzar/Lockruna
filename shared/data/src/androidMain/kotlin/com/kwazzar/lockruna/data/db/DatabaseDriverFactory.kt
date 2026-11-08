@@ -11,6 +11,5 @@ actual class DatabaseDriverFactory {
         this.context = context
     }
 
-    actual fun create(): SqlDriver =
-        AndroidSqliteDriver(PassKeeperDatabase.Schema, context, "passkeeper.db")
+    actual fun create(): SqlDriver = AndroidSqliteDriver(PassKeeperDatabase.Schema, context, "passkeeper.db")
 }

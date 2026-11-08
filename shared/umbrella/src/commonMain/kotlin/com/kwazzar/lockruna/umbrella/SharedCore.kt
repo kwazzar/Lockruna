@@ -8,5 +8,5 @@ package com.kwazzar.lockruna.umbrella
  */
 object SharedCore {
     /** Version of the shared Kotlin core. */
-    val version: String = "0.1.0"
+    const val VERSION: String = "0.1.0"
 }

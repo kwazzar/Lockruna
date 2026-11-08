@@ -1,0 +1,262 @@
+{
+  ".opencode/plugins/graphify.js": {
+    "mtime": 1794072055.2298894,
+    "ast_hash": "3ea725724bc8ebe483c9f13d6aa1124f",
+    "semantic_hash": ""
+  },
+  "androidApp/build.gradle.kts": {
+    "mtime": 1794087986.8533142,
+    "ast_hash": "7996f0bfa205aa0685e808b39db1f127",
+    "semantic_hash": ""
+  },
+  "androidApp/src/main/kotlin/com/kwazzar/lockruna/MainActivity.kt": {
+    "mtime": 1794084594.8375118,
+    "ast_hash": "de5f8d0e1e35c490d8018c49b0c00e93",
+    "semantic_hash": ""
+  },
+  "api-contract/build.gradle.kts": {
+    "mtime": 1794087986.792191,
+    "ast_hash": "e2841bc21afd9ef477fd3f8a0b575db0",
+    "semantic_hash": ""
+  },
+  "api-contract/src/commonMain/kotlin/com/kwazzar/lockruna/contract/ItemTypeDto.kt": {
+    "mtime": 1794082794.1236079,
+    "ast_hash": "9321806f869bde31f7e1a48866e8cf7e",
+    "semantic_hash": ""
+  },
+  "api-contract/src/commonMain/kotlin/com/kwazzar/lockruna/contract/KdfParamsDto.kt": {
+    "mtime": 1794082794.1236956,
+    "ast_hash": "4884039f59ab135122f9c4a516fb3a0d",
+    "semantic_hash": ""
+  },
+  "api-contract/src/commonTest/kotlin/com/kwazzar/lockruna/contract/KdfParamsDtoTest.kt": {
+    "mtime": 1794082794.1236045,
+    "ast_hash": "2da180782af8f15b3bd4dc2b022ae5ac",
+    "semantic_hash": ""
+  },
+  "architecture-tests/build.gradle.kts": {
+    "mtime": 1794100912.3976884,
+    "ast_hash": "4bbefe4dbc78d4351ab92dc8239de957",
+    "semantic_hash": ""
+  },
+  "architecture-tests/src/test/kotlin/com/kwazzar/lockruna/architecture/LayerDependencyTest.kt": {
+    "mtime": 1794106984.1892061,
+    "ast_hash": "ed09725430e0ac232a32b40852c00fa6",
+    "semantic_hash": ""
+  },
+  "build.gradle.kts": {
+    "mtime": 1794114518.1051192,
+    "ast_hash": "c9d6f9b9a919ae5305012723f60f1e68",
+    "semantic_hash": ""
+  },
+  "gradlew": {
+    "mtime": 1794081727.1885052,
+    "ast_hash": "a43be8432bac3ffd05b3769aa42fe996",
+    "semantic_hash": ""
+  },
+  "iosApp/Lockruna/ContentView.swift": {
+    "mtime": 1794113773.8830304,
+    "ast_hash": "ea6c23fc729fd7b3514d4e582fba4e59",
+    "semantic_hash": ""
+  },
+  "iosApp/Lockruna/LockrunaApp.swift": {
+    "mtime": 1794099074.5140226,
+    "ast_hash": "382e26d5823d35c55fccdbe7dfad2c65",
+    "semantic_hash": ""
+  },
+  "opencode.json": {
+    "mtime": 1794073917.9292827,
+    "ast_hash": "d5050f0c536897dcd5c84cb14c5b79dc",
+    "semantic_hash": ""
+  },
+  "scripts/verify.sh": {
+    "mtime": 1794114025.881072,
+    "ast_hash": "52f7a1141d3be177ceac79e692408786",
+    "semantic_hash": ""
+  },
+  "server/build.gradle.kts": {
+    "mtime": 1794084594.8376458,
+    "ast_hash": "29606fce36563885c26eb8bce4d7fce9",
+    "semantic_hash": ""
+  },
+  "server/src/main/kotlin/com/kwazzar/lockruna/server/Application.kt": {
+    "mtime": 1794084702.8154256,
+    "ast_hash": "922169cf94b5ae51d8c5f83132d55953",
+    "semantic_hash": ""
+  },
+  "server/src/main/kotlin/com/kwazzar/lockruna/server/ServerConfig.kt": {
+    "mtime": 1794107651.358175,
+    "ast_hash": "6df303a8b31160753e57d7953efc26c8",
+    "semantic_hash": ""
+  },
+  "server/src/test/kotlin/com/kwazzar/lockruna/server/ServerConfigTest.kt": {
+    "mtime": 1794084702.8174348,
+    "ast_hash": "e84ecce0939dd8437e2f2bfa3626c1e2",
+    "semantic_hash": ""
+  },
+  "settings.gradle.kts": {
+    "mtime": 1794114442.6351683,
+    "ast_hash": "8acfcdafbc11343982b5ad90b22bf51d",
+    "semantic_hash": ""
+  },
+  "shared/application/build.gradle.kts": {
+    "mtime": 1794087986.8192663,
+    "ast_hash": "9a81313a7d129face366f4035ed29054",
+    "semantic_hash": ""
+  },
+  "shared/application/src/commonMain/kotlin/com/kwazzar/lockruna/application/identity/ValidateMasterPassword.kt": {
+    "mtime": 1794107651.0165348,
+    "ast_hash": "1548ec8d1487addd51d6593ba173b3a8",
+    "semantic_hash": ""
+  },
+  "shared/data/build.gradle.kts": {
+    "mtime": 1794087986.842171,
+    "ast_hash": "faae3eb495a3727752a34f025e9ce7b4",
+    "semantic_hash": ""
+  },
+  "shared/data/src/androidMain/kotlin/com/kwazzar/lockruna/data/db/DatabaseDriverFactory.kt": {
+    "mtime": 1794107651.1583767,
+    "ast_hash": "a881673699e86e03e2953ec401f78b16",
+    "semantic_hash": ""
+  },
+  "shared/data/src/commonMain/kotlin/com/kwazzar/lockruna/data/db/DatabaseDriverFactory.kt": {
+    "mtime": 1794111399.4707158,
+    "ast_hash": "8a9be72ff35c553ed675cae15fd16abc",
+    "semantic_hash": ""
+  },
+  "shared/data/src/iosMain/kotlin/com/kwazzar/lockruna/data/db/DatabaseDriverFactory.kt": {
+    "mtime": 1794107651.9762676,
+    "ast_hash": "779097ad1eb406856e8bde1ffde0f9f3",
+    "semantic_hash": ""
+  },
+  "shared/data/src/jvmMain/kotlin/com/kwazzar/lockruna/data/db/DatabaseDriverFactory.kt": {
+    "mtime": 1794107651.2137973,
+    "ast_hash": "a4d1adc2272e1cb3d2ac28df6b72b940",
+    "semantic_hash": ""
+  },
+  "shared/domain/build.gradle.kts": {
+    "mtime": 1794087986.806948,
+    "ast_hash": "7b7d18d0d8f9dc2476a90d910238f20e",
+    "semantic_hash": ""
+  },
+  "shared/domain/src/commonMain/kotlin/com/kwazzar/lockruna/domain/core/Result.kt": {
+    "mtime": 1794082997.679918,
+    "ast_hash": "b20d8ad53c1d6138556e32144f64d965",
+    "semantic_hash": ""
+  },
+  "shared/domain/src/commonMain/kotlin/com/kwazzar/lockruna/domain/error/AppError.kt": {
+    "mtime": 1794082997.6829615,
+    "ast_hash": "d552009e6018cc4fab91d5f8698e976a",
+    "semantic_hash": ""
+  },
+  "shared/domain/src/commonMain/kotlin/com/kwazzar/lockruna/domain/identity/MasterPassword.kt": {
+    "mtime": 1794112361.8183079,
+    "ast_hash": "d5f3988c52d59a7fbcd76c609a0a49c8",
+    "semantic_hash": ""
+  },
+  "shared/domain/src/commonMain/kotlin/com/kwazzar/lockruna/domain/vault/VaultItemType.kt": {
+    "mtime": 1794083344.2036476,
+    "ast_hash": "278cb4105a238481f6c7a43c11cc11b5",
+    "semantic_hash": ""
+  },
+  "shared/domain/src/commonTest/kotlin/com/kwazzar/lockruna/domain/identity/MasterPasswordTest.kt": {
+    "mtime": 1794082997.6850882,
+    "ast_hash": "0333bd64533caed1dae34bbff4662266",
+    "semantic_hash": ""
+  },
+  "shared/presentation/build.gradle.kts": {
+    "mtime": 1794087986.8310184,
+    "ast_hash": "890bd55b03a3e64554fb3f4d76eb4973",
+    "semantic_hash": ""
+  },
+  "shared/presentation/src/commonMain/kotlin/com/kwazzar/lockruna/presentation/vault/ItemUi.kt": {
+    "mtime": 1794083500.8654904,
+    "ast_hash": "7e269958c67dd91c4156e08c67e5e0ed",
+    "semantic_hash": ""
+  },
+  "shared/umbrella/build.gradle.kts": {
+    "mtime": 1794099538.2480736,
+    "ast_hash": "7eb792ffe102338199cff951294c12ee",
+    "semantic_hash": ""
+  },
+  "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/umbrella/SharedCore.kt": {
+    "mtime": 1794113700.0266871,
+    "ast_hash": "7f47529dcdafc78582e298c859d1626f",
+    "semantic_hash": ""
+  },
+  ".github/workflows/ci.yml": {
+    "mtime": 1794113927.286195,
+    "ast_hash": "73d231d4b38a41a163a0dfa67aa120b7",
+    "semantic_hash": ""
+  },
+  ".github/workflows/ios.yml": {
+    "mtime": 1794113938.675045,
+    "ast_hash": "7b8fc99e69050c92f97b14f75a96a0c5",
+    "semantic_hash": ""
+  },
+  ".github/workflows/security.yml": {
+    "mtime": 1794113992.0537107,
+    "ast_hash": "ead89847f8521c7715dabd59694528c8",
+    "semantic_hash": ""
+  },
+  ".opencode/skills/ddd-audit/SKILL.md": {
+    "mtime": 1794072509.6374242,
+    "ast_hash": "4e1425ce246c21d526e4bc5131255646",
+    "semantic_hash": ""
+  },
+  ".opencode/skills/new-aggregate/SKILL.md": {
+    "mtime": 1794072509.6374514,
+    "ast_hash": "3488ae9587ede31a6a8fd360edf136af",
+    "semantic_hash": ""
+  },
+  "AGENTS.md": {
+    "mtime": 1794114093.6129386,
+    "ast_hash": "2fbd852844ccd96f5655c8263ef8e1f2",
+    "semantic_hash": ""
+  },
+  "config/detekt/detekt.yml": {
+    "mtime": 1794113545.7475572,
+    "ast_hash": "b570c4382064e1b7f2c9596e66679702",
+    "semantic_hash": ""
+  },
+  "docs/adr/001-kmp-native-ui.md": {
+    "mtime": 1794073123.9069977,
+    "ast_hash": "0916ef06716ef74970feaf0351888988",
+    "semantic_hash": ""
+  },
+  "docs/adr/002-clean-architecture-mvi.md": {
+    "mtime": 1794073123.9073496,
+    "ast_hash": "a4da931b202d86480ae68b74fa65e5af",
+    "semantic_hash": ""
+  },
+  "docs/adr/003-cryptography.md": {
+    "mtime": 1794079256.6932042,
+    "ast_hash": "8bde85135b9de16b2e785b56a3127057",
+    "semantic_hash": ""
+  },
+  "docs/adr/004-backend.md": {
+    "mtime": 1794080430.5312412,
+    "ast_hash": "074385808b5d03d6c1f45165a5233692",
+    "semantic_hash": ""
+  },
+  "docs/adr/005-client-shared.md": {
+    "mtime": 1794080717.6532907,
+    "ast_hash": "b0a043f7a2ced047cac69ae8f0f46ed5",
+    "semantic_hash": ""
+  },
+  "docs/openapi.yaml": {
+    "mtime": 1794079933.9410067,
+    "ast_hash": "b3c43a9c1a79f2756f6b6fd6a83e5fb9",
+    "semantic_hash": ""
+  },
+  "docs/requirements.md": {
+    "mtime": 1794080160.8127553,
+    "ast_hash": "dedf868b364094c66729c2673e4b8771",
+    "semantic_hash": ""
+  },
+  "docs/threat-model.md": {
+    "mtime": 1794079933.9409726,
+    "ast_hash": "52ba38bc2c774a202b342de757e3c5df",
+    "semantic_hash": ""
+  }
+}
