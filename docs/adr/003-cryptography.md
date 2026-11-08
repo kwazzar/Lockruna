@@ -15,7 +15,7 @@ PassKeeper це zero-knowledge менеджер паролів. Сервер з�
 - **KDF:** Argon2id, m = 64 MiB (65536 KiB), t = 3, p = 1, salt 16 байт, вихід 32 байти. Параметри зберігаються в `users.kdf_params`. Клієнт має вбудований мінімум і відмовляється працювати з нижчими параметрами (захист від даунгрейду з боку сервера).
 - **Розділення ключів:** HKDF-SHA256 з різними info-рядками (див. нижче).
 - **Шифрування:** AES-256-GCM, випадковий 96-бітний nonce на кожну операцію, тег 128 біт.
-- **Пароль:** перед KDF нормалізується NFKC і кодується в UTF-8. Правило живе в `domain` як порт `PasswordNormalizer`, примітиви — у платформних реалізаціях: Android `java.text.Normalizer` (NFKC), iOS — системний ICU4C (`unorm2`) через тонкий C-шім. Результат має бути однаковим на iOS і Android (тест-вектори з кирилицею та комбінованими символами).
+- **Пароль:** перед KDF нормалізується NFKC і кодується в UTF-8. Правило живе в `domain` як порт `PasswordNormalizer`, примітиви — у платформних реалізаціях `shared/data`: Android `java.text.Normalizer` (NFKC), iOS — системний ICU4C (`unorm2`) через cinterop-шим над `libicucore` з iOS SDK. Нормалізатор повертає текст, кодування UTF-8 виконує KDF. Результат має бути однаковим на iOS і Android (тест-вектори з кирилицею та комбінованими символами). `NSString.precomposedStringWithCompatibilityMapping` не використовується: Foundation не компонує U+30AB + U+3099 у U+30AC, тоді як ICU і Java це роблять, тому одна й та сама пароль давала б різні ключі на iOS і Android. Параметри KDF, HKDF-рядки та AAD не змінені.
 - Власні криптопримітиви не пишуться, усе проходить через `CryptoService` і порт `Argon2`.
 
 ### 2. Ієрархія ключів
@@ -44,10 +44,10 @@ PassKeeper це zero-knowledge менеджер паролів. Сервер з�
 
 ### 5. Argon2id: гібрид за портом `Argon2`
 
-- iOS: ionspin libsodium bindings (`crypto_pwhash`). Android: Bouncy Castle (`Argon2BytesGenerator`).
+- iOS: ionspin libsodium bindings (`crypto_pwhash`), версія 0.9.2. Android: Bouncy Castle (`Argon2BytesGenerator`).
 - Обмеження libsodium: `p = 1`, salt рівно 16 байт, без `secret` та associated data. Вони закріплені в порту й у `kdf_params`.
-- Збіг результатів перевіряє спільний тест із еталонними векторами, згенерованими референсною C-реалізацією (`argon2` CLI, p = 1, без secret/AD). Вектори RFC 9106 напряму не підходять, бо використовують secret, AD і p > 1.
-- Використовується лише `crypto_pwhash` і генератор випадкових чисел; версію ionspin зафіксовано.
+- Збіг результатів перевіряє спільний тест із еталонними векторами, згенерованими референсною C-реалізацією (argon2-cffi, p = 1, без secret/AD). Вектори RFC 9106 напряму не підходять, бо використовують secret, AD і p > 1.
+- Використовується лише `crypto_pwhash` і генератор випадкових чисел; версію ionspin зафіксовано. HKDF-SHA256 на iOS будується з `crypto_kdf_hkdf_sha256_extract` та `crypto_kdf_hkdf_sha256_expand`, бо libsodium не має одно-вимірного HKDF.
 - **Апгрейд параметрів:** у MVP `kdf_params` фіксуються під час реєстрації й не змінюються. Коли дефолт піднімають, це новий ADR, новий ендпоінт `POST /auth/kdf/upgrade` (перевиведення `authKey`/`kek`, перезагортання `vaultKey`) і міграція наявних акаунтів.
 
 ### 6. Біометрія
