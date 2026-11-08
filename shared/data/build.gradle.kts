@@ -54,6 +54,15 @@ kotlin {
             implementation(libs.ktor.client.darwin)
             implementation(libs.sqldelight.driver.native)
         }
+
+        val jvmAndAndroidMain by creating {
+            dependsOn(commonMain.get())
+            dependencies {
+                implementation(libs.bouncycastle)
+            }
+        }
+        jvmMain.get().dependsOn(jvmAndAndroidMain)
+        androidMain.get().dependsOn(jvmAndAndroidMain)
     }
 }
 
