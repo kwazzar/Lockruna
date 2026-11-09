@@ -1,54 +1,68 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": [
-    ".opencode/plugins/graphify.js",
-    "@dietrichgebert/ponytail",
-    "opencode-caveman"
+  "plugins": [
+    "@dietrichgebert/ponytail@5.3.3"
   ],
   "mcp": {
-    "XcodeBuildMCP": {
-      "type": "local",
-      "command": [
-        "npx",
-        "-y",
-        "xcodebuildmcp@latest",
-        "mcp"
-      ],
-      "environment": {
-        "XCODEBUILDMCP_ENABLED_WORKFLOWS": "simulator,project-discovery",
-        "XCODEBUILDMCP_SENTRY_DISABLED": "true"
-      }
-    },
-    "mobile-mcp": {
-      "type": "local",
-      "command": [
-        "npx",
-        "-y",
-        "@mobilenext/mobile-mcp@latest"
-      ],
-      "enabled": true
-    }
-  },
-  "permission": {
-    "skill": {
-      "android-jetpack-compose-m3": "deny"
-    }
-  },
-  "agent": {
-    "build": {
-      "permission": {
-        "bash": {
-          "git push*": "ask"
+    "servers": {
+      "XcodeBuildMCP": {
+        "type": "local",
+        "command": [
+          "npx",
+          "-y",
+          "xcodebuildmcp@latest",
+          "mcp"
+        ],
+        "environment": {
+          "XCODEBUILDMCP_ENABLED_WORKFLOWS": "simulator,project-discovery",
+          "XCODEBUILDMCP_SENTRY_DISABLED": "true"
         }
+      },
+      "mobile-mcp": {
+        "type": "local",
+        "command": [
+          "npx",
+          "-y",
+          "@mobilenext/mobile-mcp@latest"
+        ]
       }
+    }
+  },
+  "permissions": [
+    {
+      "action": "external_directory",
+      "resource": "*",
+      "effect": "ask"
+    },
+    {
+      "action": "skill",
+      "resource": "android-jetpack-compose-m3",
+      "effect": "deny"
+    }
+  ],
+  "agents": {
+    "build": {
+      "permissions": [
+        {
+          "action": "shell",
+          "resource": "git push *",
+          "effect": "ask"
+        }
+      ]
     },
     "plan": {
-      "permission": {
-        "bash": {
-          "git push*": "deny",
-          "git commit*": "deny"
+      "permissions": [
+        {
+          "action": "shell",
+          "resource": "git push *",
+          "effect": "deny"
+        },
+        {
+          "action": "shell",
+          "resource": "git commit *",
+          "effect": "deny"
         }
-      }
+      ]
     }
   }
 }
