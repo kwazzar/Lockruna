@@ -1,7 +1,7 @@
 {
   ".opencode/plugins/graphify.js": {
-    "mtime": 1794072055.2298894,
-    "ast_hash": "3ea725724bc8ebe483c9f13d6aa1124f",
+    "mtime": 1794125271.4955971,
+    "ast_hash": "022fcd43db7f749153f3ca93cba98fbf",
     "semantic_hash": ""
   },
   "androidApp/build.gradle.kts": {
@@ -65,8 +65,8 @@
     "semantic_hash": ""
   },
   "opencode.json": {
-    "mtime": 1794073917.9292827,
-    "ast_hash": "d5050f0c536897dcd5c84cb14c5b79dc",
+    "mtime": 1794125269.548231,
+    "ast_hash": "0080c054e07db63a7b578128864c1733",
     "semantic_hash": ""
   },
   "scripts/verify.sh": {
@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "shared/data/build.gradle.kts": {
-    "mtime": 1794087986.842171,
-    "ast_hash": "faae3eb495a3727752a34f025e9ce7b4",
+    "mtime": 1794212257.92054,
+    "ast_hash": "d3f58c6a0ae3de70bc196dc041ac7386",
     "semantic_hash": ""
   },
   "shared/data/src/androidMain/kotlin/com/kwazzar/lockruna/data/db/DatabaseDriverFactory.kt": {
@@ -230,8 +230,8 @@
     "semantic_hash": ""
   },
   "docs/adr/003-cryptography.md": {
-    "mtime": 1794079256.6932042,
-    "ast_hash": "8bde85135b9de16b2e785b56a3127057",
+    "mtime": 1794212257.9177961,
+    "ast_hash": "839d6eb9117bc281023c514c9d24a592",
     "semantic_hash": ""
   },
   "docs/adr/004-backend.md": {
@@ -240,8 +240,8 @@
     "semantic_hash": ""
   },
   "docs/adr/005-client-shared.md": {
-    "mtime": 1794080717.6532907,
-    "ast_hash": "b0a043f7a2ced047cac69ae8f0f46ed5",
+    "mtime": 1794212257.9181356,
+    "ast_hash": "61d9b075ad9ab94d546b4939eab96d71",
     "semantic_hash": ""
   },
   "docs/openapi.yaml": {
@@ -257,6 +257,136 @@
   "docs/threat-model.md": {
     "mtime": 1794079933.9409726,
     "ast_hash": "52ba38bc2c774a202b342de757e3c5df",
+    "semantic_hash": ""
+  },
+  "architecture-tests/src/test/kotlin/com/kwazzar/lockruna/architecture/CryptoLayerTest.kt": {
+    "mtime": 1794212257.917123,
+    "ast_hash": "1c5b38424c6234f7092dfef2ca9dfd69",
+    "semantic_hash": ""
+  },
+  "shared/data/src/commonMain/kotlin/com/kwazzar/lockruna/data/crypto/CryptoServiceFactory.kt": {
+    "mtime": 1794212257.9208257,
+    "ast_hash": "a9fd0cf922f9b5d71bd0dea5ce149033",
+    "semantic_hash": ""
+  },
+  "shared/data/src/commonTest/kotlin/com/kwazzar/lockruna/data/crypto/Argon2VectorsTest.kt": {
+    "mtime": 1794212257.9214323,
+    "ast_hash": "a67036b9d42c2e2bd957df2baf4a9417",
+    "semantic_hash": ""
+  },
+  "shared/data/src/commonTest/kotlin/com/kwazzar/lockruna/data/crypto/CryptoServiceTest.kt": {
+    "mtime": 1794212257.9217513,
+    "ast_hash": "a9d544b0cfcacbc97059518a3cc8d471",
+    "semantic_hash": ""
+  },
+  "shared/data/src/commonTest/kotlin/com/kwazzar/lockruna/data/crypto/CryptoVectors.kt": {
+    "mtime": 1794212257.9219112,
+    "ast_hash": "03c3c9a2bbe7cd04dd9eb3abbd405e86",
+    "semantic_hash": ""
+  },
+  "shared/data/src/commonTest/kotlin/com/kwazzar/lockruna/data/crypto/KeyHierarchyTest.kt": {
+    "mtime": 1794212257.9220958,
+    "ast_hash": "1e0fbb774ba3c13c9a6c64aa1183e8a9",
+    "semantic_hash": ""
+  },
+  "shared/data/src/commonTest/kotlin/com/kwazzar/lockruna/data/crypto/NormalizationVectorsTest.kt": {
+    "mtime": 1794212257.9223146,
+    "ast_hash": "67cc704279235ed25bd3508357aeab9a",
+    "semantic_hash": ""
+  },
+  "shared/data/src/iosMain/cinterop/icu_shim.h": {
+    "mtime": 1794212257.9226465,
+    "ast_hash": "21e396eaee232562c37d381669b6530b",
+    "semantic_hash": ""
+  },
+  "shared/data/src/iosMain/kotlin/com/kwazzar/lockruna/data/crypto/Argon2Factory.kt": {
+    "mtime": 1794212257.9229333,
+    "ast_hash": "92092def77eb5cbe22ca6797e9b5bd9a",
+    "semantic_hash": ""
+  },
+  "shared/data/src/iosMain/kotlin/com/kwazzar/lockruna/data/crypto/NativeBytes.kt": {
+    "mtime": 1794212257.9231226,
+    "ast_hash": "be226f97ec4e8cd4e57934d3b7d8086f",
+    "semantic_hash": ""
+  },
+  "shared/data/src/iosMain/kotlin/com/kwazzar/lockruna/data/crypto/PlatformCrypto.kt": {
+    "mtime": 1794212257.923308,
+    "ast_hash": "ed01aad2a3bc4fa6fe4d4c61c5fc794b",
+    "semantic_hash": ""
+  },
+  "shared/data/src/iosMain/kotlin/com/kwazzar/lockruna/data/crypto/PlatformNormalizer.kt": {
+    "mtime": 1794212257.9235208,
+    "ast_hash": "a797e294906aa1ad85c2631a77f4932f",
+    "semantic_hash": ""
+  },
+  "shared/data/src/jvmAndAndroidMain/kotlin/com/kwazzar/lockruna/data/crypto/Argon2Factory.kt": {
+    "mtime": 1794212257.9238582,
+    "ast_hash": "b697adfde6eeae1db95f8ac882ecdb7b",
+    "semantic_hash": ""
+  },
+  "shared/data/src/jvmAndAndroidMain/kotlin/com/kwazzar/lockruna/data/crypto/PlatformCrypto.kt": {
+    "mtime": 1794212257.923964,
+    "ast_hash": "2dba1f29b1c9b5e15606add5bbe90078",
+    "semantic_hash": ""
+  },
+  "shared/data/src/jvmAndAndroidMain/kotlin/com/kwazzar/lockruna/data/crypto/PlatformNormalizer.kt": {
+    "mtime": 1794212257.9240663,
+    "ast_hash": "d7aaa5e71328eebbfa521849485bdd0a",
+    "semantic_hash": ""
+  },
+  "shared/data/src/jvmTest/kotlin/com/kwazzar/lockruna/data/crypto/Argon2DispatchTest.kt": {
+    "mtime": 1794212257.9245484,
+    "ast_hash": "422d7b80f395eac8a36208108886b03e",
+    "semantic_hash": ""
+  },
+  "shared/domain/src/commonMain/kotlin/com/kwazzar/lockruna/domain/crypto/Argon2.kt": {
+    "mtime": 1794212257.9249456,
+    "ast_hash": "b149d95085b00dd2fdde6f60ad203220",
+    "semantic_hash": ""
+  },
+  "shared/domain/src/commonMain/kotlin/com/kwazzar/lockruna/domain/crypto/CryptoService.kt": {
+    "mtime": 1794212257.925241,
+    "ast_hash": "33b06b9664feabf4e3bf40bdaf16dd5d",
+    "semantic_hash": ""
+  },
+  "shared/domain/src/commonMain/kotlin/com/kwazzar/lockruna/domain/crypto/HkdfLabels.kt": {
+    "mtime": 1794212257.925438,
+    "ast_hash": "17168cc54fa5d52ef18bf0e50661188a",
+    "semantic_hash": ""
+  },
+  "shared/domain/src/commonMain/kotlin/com/kwazzar/lockruna/domain/crypto/PasswordNormalizer.kt": {
+    "mtime": 1794212257.925639,
+    "ast_hash": "52a8d8a23bd99d8977bfacac6680da1c",
+    "semantic_hash": ""
+  },
+  "shared/domain/src/commonTest/kotlin/com/kwazzar/lockruna/domain/crypto/KdfParamsTest.kt": {
+    "mtime": 1794212257.9258854,
+    "ast_hash": "c9bfc28e1a55f536419f2f46eb5e2290",
+    "semantic_hash": ""
+  },
+  ".opencode/commands/caveman-commit.md": {
+    "mtime": 1794125281.419602,
+    "ast_hash": "0fff04bfc03846ea7041228dc88e7ff9",
+    "semantic_hash": ""
+  },
+  ".opencode/commands/caveman-review.md": {
+    "mtime": 1794125283.1400127,
+    "ast_hash": "067e797c0573b307451b55dbcdd02b3d",
+    "semantic_hash": ""
+  },
+  ".opencode/commands/caveman.md": {
+    "mtime": 1794125280.7844226,
+    "ast_hash": "c87619249bc6de871c736ebffd457964",
+    "semantic_hash": ""
+  },
+  ".opencode/skills/caveman/SKILL.md": {
+    "mtime": 1794125279.6695552,
+    "ast_hash": "85e8faca362849e3de85fd4d469cb957",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-11-08-crypto-core.md": {
+    "mtime": 1794212257.918474,
+    "ast_hash": "64219cd8d9bf84586f754751652f2a60",
     "semantic_hash": ""
   }
 }

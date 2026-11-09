@@ -41,5 +41,19 @@
   "39": "data/build.gradle.kts",
   "40": "domain/build.gradle.kts",
   "41": "presentation/build.gradle.kts",
-  "42": "umbrella/build.gradle.kts"
+  "42": "umbrella/build.gradle.kts",
+  "43": "KdfParams",
+  "44": "PasswordNormalizer",
+  "45": "Крипто-ядро клієнта (Crypto Core) — Implementation Plan",
+  "46": "withCBytes",
+  "47": "CryptoVectors.kt",
+  "48": "CryptoLayerTest",
+  "49": "caveman/SKILL.md",
+  "50": "KeyHierarchyTest",
+  "51": "NormalizationVectorsTest",
+  "52": "HkdfLabels.kt",
+  "53": "caveman.md",
+  "54": "caveman-commit.md",
+  "55": "caveman-review.md",
+  "56": "icu_shim.h"
 }

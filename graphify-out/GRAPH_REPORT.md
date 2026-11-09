@@ -1,16 +1,16 @@
-# Graph Report - Lockruna  (2026-11-08)
+# Graph Report - Lockruna  (2026-11-09)
 
 ## Corpus Check
-- 47 files · ~13,308 words
+- 73 files · ~19,552 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 281 nodes · 249 edges · 43 communities (31 shown, 12 thin omitted)
-- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 1 edges (avg confidence: 0.8)
+- 408 nodes · 402 edges · 57 communities (41 shown, 16 thin omitted)
+- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 12 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d36a76f7`
+- Built from commit: `cc284fec`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -46,33 +46,49 @@
 - verify.sh
 - ItemUi.kt
 - SharedCore.kt
+- KdfParams
+- PasswordNormalizer
+- Крипто-ядро клієнта (Crypto Core) — Implementation Plan
+- withCBytes
+- CryptoVectors.kt
+- CryptoLayerTest
+- caveman/SKILL.md
+- KeyHierarchyTest
+- NormalizationVectorsTest
+- HkdfLabels.kt
 
 ## God Nodes (most connected - your core abstractions)
 1. `PassKeeper: вимоги до MVP` - 15 edges
-2. `DDD audit — Lockruna` - 12 edges
-3. `AppError` - 11 edges
-4. `Рішення` - 11 edges
+2. `GcmCiphertext` - 13 edges
+3. `DDD audit — Lockruna` - 12 edges
+4. `AppError` - 11 edges
 5. `Рішення` - 11 edges
-6. `PassKeeper: модель загроз (STRIDE)` - 10 edges
-7. `Adding an aggregate — Lockruna` - 9 edges
-8. `Рішення` - 8 edges
-9. `ADR-004: Архітектура бекенду` - 8 edges
-10. `6. STRIDE по компонентах` - 7 edges
+6. `Рішення` - 11 edges
+7. `CryptoServiceTest` - 10 edges
+8. `KdfParams` - 10 edges
+9. `PassKeeper: модель загроз (STRIDE)` - 10 edges
+10. `Adding an aggregate — Lockruna` - 9 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `of()` --references--> `Result`  [EXTRACTED]
-  shared/domain/src/commonMain/kotlin/com/kwazzar/lockruna/domain/identity/MasterPassword.kt → shared/domain/src/commonMain/kotlin/com/kwazzar/lockruna/domain/core/Result.kt
-- `of()` --references--> `AppError`  [EXTRACTED]
-  shared/domain/src/commonMain/kotlin/com/kwazzar/lockruna/domain/identity/MasterPassword.kt → shared/domain/src/commonMain/kotlin/com/kwazzar/lockruna/domain/error/AppError.kt
+- `PlatformCrypto` --implements--> `CryptoService`  [EXTRACTED]
+  shared/data/src/iosMain/kotlin/com/kwazzar/lockruna/data/crypto/PlatformCrypto.kt → shared/domain/src/commonMain/kotlin/com/kwazzar/lockruna/domain/crypto/CryptoService.kt
+- `PlatformCrypto` --implements--> `CryptoService`  [EXTRACTED]
+  shared/data/src/commonMain/kotlin/com/kwazzar/lockruna/data/crypto/CryptoServiceFactory.kt → shared/domain/src/commonMain/kotlin/com/kwazzar/lockruna/domain/crypto/CryptoService.kt
+- `PlatformNormalizer` --implements--> `PasswordNormalizer`  [EXTRACTED]
+  shared/data/src/commonMain/kotlin/com/kwazzar/lockruna/data/crypto/CryptoServiceFactory.kt → shared/domain/src/commonMain/kotlin/com/kwazzar/lockruna/domain/crypto/PasswordNormalizer.kt
+- `Argon2Libsodium` --implements--> `Argon2`  [EXTRACTED]
+  shared/data/src/iosMain/kotlin/com/kwazzar/lockruna/data/crypto/Argon2Factory.kt → shared/domain/src/commonMain/kotlin/com/kwazzar/lockruna/domain/crypto/Argon2.kt
+- `PlatformNormalizer` --implements--> `PasswordNormalizer`  [EXTRACTED]
+  shared/data/src/iosMain/kotlin/com/kwazzar/lockruna/data/crypto/PlatformNormalizer.kt → shared/domain/src/commonMain/kotlin/com/kwazzar/lockruna/domain/crypto/PasswordNormalizer.kt
 
 ## Import Cycles
 - None detected.
 
-## Communities (43 total, 12 thin omitted)
+## Communities (57 total, 16 thin omitted)
 
 ### Community 0 - "AppError"
 Cohesion: 0.09
-Nodes (20): E, ValidateMasterPassword, Failure, Result, Success, AppError, InvalidCredentials, ItemCorrupted (+12 more)
+Nodes (20): E, ValidateMasterPassword, Failure, T, Result, Success, AppError, InvalidCredentials (+12 more)
 
 ### Community 1 - "Рішення"
 Cohesion: 0.09
@@ -83,8 +99,8 @@ Cohesion: 0.12
 Nodes (16): 1. Обсяг, 2. Припущення (поза межами моделі), 3. Активи, 4. Межі довіри, 5. Зловмисники, 6.1 `/auth`: реєстрація, вхід, токени, 6.2 `/auth/recovery/*`, 6.3 `/sync` і `/devices` (+8 more)
 
 ### Community 3 - "opencode.json"
-Cohesion: 0.12
-Nodes (16): agent, build, plan, git commit*, git push*, permission, permission, bash (+8 more)
+Cohesion: 0.08
+Nodes (8): ByteArray, PlatformCrypto, CryptoServiceTest, ByteArray, PlatformCrypto, CryptoService, GcmCiphertext, ByteArray
 
 ### Community 4 - "Рішення"
 Cohesion: 0.12
@@ -95,8 +111,8 @@ Cohesion: 0.12
 Nodes (15): PassKeeper: вимоги до MVP, US-01 Реєстрація і майстер-пароль, US-02 Вхід, US-03 Recovery key і відновлення доступу, US-04 Створення запису, US-05 Редагування і видалення, US-06 Перегляд і копіювання, US-07 Біометричне розблокування (+7 more)
 
 ### Community 6 - "command"
-Cohesion: 0.14
-Nodes (16): XCODEBUILDMCP_ENABLED_WORKFLOWS, XCODEBUILDMCP_SENTRY_DISABLED, mcp, mobile-mcp, XcodeBuildMCP, command, enabled, type (+8 more)
+Cohesion: 0.08
+Nodes (25): agents, build, plan, permissions, XCODEBUILDMCP_ENABLED_WORKFLOWS, XCODEBUILDMCP_SENTRY_DISABLED, mcp, servers (+17 more)
 
 ### Community 7 - "Рішення"
 Cohesion: 0.14
@@ -146,18 +162,44 @@ Nodes (3): MainActivity, Bundle, ComponentActivity
 Cohesion: 0.83
 Nodes (3): gradlew script, die(), warn()
 
+### Community 43 - "KdfParams"
+Cohesion: 0.09
+Nodes (13): Argon2VectorsTest, Argon2Factory, Argon2Libsodium, ByteArray, Argon2BouncyCastle, Argon2Factory, ByteArray, Argon2DispatchTest (+5 more)
+
+### Community 44 - "PasswordNormalizer"
+Cohesion: 0.14
+Nodes (5): Argon2Factory, PlatformNormalizer, PlatformNormalizer, PlatformNormalizer, PasswordNormalizer
+
+### Community 45 - "Крипто-ядро клієнта (Crypto Core) — Implementation Plan"
+Cohesion: 0.15
+Nodes (12): Global Constraints, Review Focus, Task 1: Доменні порти, KDF-параметри та HKDF-рядки, Task 2: Реалізація для JVM і Android (BouncyCastle), Task 3: Реалізація для iOS (libsodium через ionspin), Task 4: Спільні KAT-вектори й збіжність платформ, Task 5: Ієрархія ключів, архітектурний тест і правка ADR, Власність файлів (паралельна робота) (+4 more)
+
+### Community 46 - "withCBytes"
+Cohesion: 0.31
+Nodes (5): ByteArray, T, withCBytes(), ByteArray, PlatformCrypto
+
+### Community 47 - "CryptoVectors.kt"
+Cohesion: 0.43
+Nodes (5): Argon2Case, CryptoVectors, hexToByteArray(), ByteArray, NormalizationCase
+
+### Community 49 - "caveman/SKILL.md"
+Cohesion: 0.33
+Nodes (5): Auto-Clarity, Boundaries, Intensity, Persistence, Rules
+
 ## Knowledge Gaps
-- **142 isolated node(s):** `LOGIN`, `CARD`, `NOTE`, `FOLDER`, `Shared` (+137 more)
+- **155 isolated node(s):** `LOGIN`, `CARD`, `NOTE`, `FOLDER`, `Shared` (+150 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **12 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **16 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `mcp` connect `command` to `opencode.json`?**
-  _High betweenness centrality (0.007) - this node is a cross-community bridge._
+- **Why does `GcmCiphertext` connect `opencode.json` to `withCBytes`?**
+  _High betweenness centrality (0.020) - this node is a cross-community bridge._
+- **Why does `withCBytes()` connect `withCBytes` to `KdfParams`?**
+  _High betweenness centrality (0.017) - this node is a cross-community bridge._
 - **What connects `LOGIN`, `CARD`, `NOTE` to the rest of the system?**
-  _142 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _155 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `AppError` be split into smaller, more focused modules?**
   _Cohesion score 0.09 - nodes in this community are weakly interconnected._
 - **Should `Рішення` be split into smaller, more focused modules?**
@@ -165,6 +207,4 @@ _Questions this graph is uniquely positioned to answer:_
 - **Should `PassKeeper: модель загроз (STRIDE)` be split into smaller, more focused modules?**
   _Cohesion score 0.11764705882352941 - nodes in this community are weakly interconnected._
 - **Should `opencode.json` be split into smaller, more focused modules?**
-  _Cohesion score 0.125 - nodes in this community are weakly interconnected._
-- **Should `Рішення` be split into smaller, more focused modules?**
-  _Cohesion score 0.125 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08403361344537816 - nodes in this community are weakly interconnected._
