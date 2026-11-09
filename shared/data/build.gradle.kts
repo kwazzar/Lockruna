@@ -23,11 +23,37 @@ kotlin {
         }
     }
 
-    iosArm64()
-    iosSimulatorArm64()
+    iosArm64 {
+        compilations.getByName("main").cinterops {
+            create("icu") {
+                definitionFile.set(project.file("src/iosMain/cinterop/icu.def"))
+                includeDirs(project.file("src/iosMain/cinterop"))
+            }
+        }
+    }
+    iosSimulatorArm64 {
+        compilations.getByName("main").cinterops {
+            create("icu") {
+                definitionFile.set(project.file("src/iosMain/cinterop/icu.def"))
+                includeDirs(project.file("src/iosMain/cinterop"))
+            }
+        }
+    }
 
     compilerOptions {
         freeCompilerArgs.add("-Xexpect-actual-classes")
+    }
+
+    // A custom group keeps the JVM and Android sources shared without disabling the
+    // default hierarchy template: explicit dependsOn edges would detach iosMain.
+    applyDefaultHierarchyTemplate {
+        common {
+            group("jvmAndAndroid") {
+                withJvm()
+                // The Android KMP plugin does not use the KGP Android target type.
+                withCompilations { compilation -> compilation.target.name == "android" }
+            }
+        }
     }
 
     sourceSets {
@@ -41,6 +67,7 @@ kotlin {
         }
         commonTest.dependencies {
             implementation(kotlin("test"))
+            implementation(libs.kotlinx.coroutines.test)
         }
         jvmMain.dependencies {
             implementation(libs.ktor.client.okhttp)
@@ -51,9 +78,19 @@ kotlin {
             implementation(libs.sqldelight.driver.android)
         }
         iosMain.dependencies {
+            implementation(libs.ionspin.libsodium)
             implementation(libs.ktor.client.darwin)
             implementation(libs.sqldelight.driver.native)
         }
+        getByName("jvmAndAndroidMain").dependencies {
+            implementation(libs.bouncycastle)
+        }
+
+        // The iOS sources use cinterop packages (libsodium, ICU), which the shared
+        // native metadata compilation cannot resolve, so they are compiled per target.
+        getByName("iosMain").kotlin.setSrcDirs(emptyList<File>())
+        getByName("iosArm64Main").kotlin.srcDir("src/iosMain/kotlin")
+        getByName("iosSimulatorArm64Main").kotlin.srcDir("src/iosMain/kotlin")
     }
 }
 

@@ -1,0 +1,4 @@
+package = icu
+headers = icu_shim.h
+includeDirs = .
+linkerOpts = -licucore

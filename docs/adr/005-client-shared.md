@@ -30,7 +30,7 @@ androidApp/  iosApp/
 - **Агрегати:** `VaultItem` (value objects `ItemId`, `Title`, `Secret`, `Url`), `Folder`, `VaultSession` (стан Locked/Unlocked, тримає `VaultKey` у пам'яті), `SyncState` (курсор і максимальна бачена `version` кожного запису).
 - **Порти:** `CryptoService`, `Argon2`, `PasswordNormalizer`, `VaultRepository`, `SyncStateStore`, `SecureKeyStore` (Keychain/Keystore), `BiometricGate`, `Clipboard`, `Clock`, `IdGenerator`.
 - `BiometricGate` реалізується в `androidApp`/`iosApp` (потрібні Activity і ViewController) та інжектиться.
-- **Нормалізація NFKC:** у common Kotlin її немає. Правило живе в `domain` (порт `PasswordNormalizer`), примітив — у платформній реалізації: Android `java.text.Normalizer`, iOS — системний ICU4C (`unorm2`) через тонкий C-шім у `iosApp`. Обов'язкові тест-вектори з кирилицею та комбінованими символами, однакові на обох платформах.
+- **Нормалізація NFKC:** у common Kotlin її немає. Правило живе в `domain` (порт `PasswordNormalizer`), примітив — у реалізаціях `shared/data`: Android `java.text.Normalizer`, iOS — системний ICU4C (`unorm2`) через cinterop-шим над `libicucore` з iOS SDK (не в `iosApp`, бо порт реалізує shared-модуль). Нормалізатор повертає текст, кодування UTF-8 виконує KDF. Обов'язкові тест-вектори з кирилицею та комбінованими символами, однакові на обох платформах.
 
 ### 3. Application: use cases
 
@@ -101,7 +101,7 @@ Crash-звіти: Sentry з opt-in (користувач вмикає явно),
 
 ### 10. Тестування
 
-Domain і application у `commonTest` з фейками (`InMemory<X>Repository`). Еталонні вектори Argon2id, AES-GCM, HKDF, нормалізації пароля, кодування BIP39 для recovery key і zxcvbn для оцінки стійкості. Тест sync-рушія проти фейкового сервера (конфлікти, rollback, повтор з тим самим `Idempotency-Key`), пізніше проти реального. Konsist для перевірки залежностей.
+Domain і application у `commonTest` з фейками (`InMemory<X>Repository`). Еталонні вектори Argon2id, AES-GCM, HKDF, нормалізації пароля, кодування BIP39 для recovery key і zxcvbn для оцінки стійкості. BIP39-кодування recovery key винесено за межі етапу крипто-ядра: вектори Argon2id, AES-GCM, HKDF і NFKC уже спільні для JVM та iOS. Тест sync-рушія проти фейкового сервера (конфлікти, rollback, повтор з тим самим `Idempotency-Key`), пізніше проти реального. Konsist для перевірки залежностей.
 
 ## Наслідки
 
