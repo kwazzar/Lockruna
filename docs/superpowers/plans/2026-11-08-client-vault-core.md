@@ -23,7 +23,7 @@
 - Код, коментарі, повідомлення комітів — англійською. `docs/` — українською.
 - JDK 25: `export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"`.
 - Точка входу для перевірки: `./scripts/verify.sh`.
-- `gradle/libs.versions.toml` **не** редагується: нових залежностей у цьому плані немає.
+- `gradle/libs.versions.toml` **не** редагується: нових залежностей у цьому плані немає (крім `kotlinx-coroutines-core` для domain/application і `kotlinx-serialization-json` + `sqldelight-coroutines` для data — вони вже в каталозі, лише підключаються в build-файлах модулів).
 
 ## Залежність від інших планів (і правило злиття)
 
@@ -41,6 +41,8 @@ interface CryptoService {
     fun randomBytes(size: Int): ByteArray
 }
 ```
+
+**Рішення про GCM-тег:** `crypto-core` конкатенує `ciphertext || tag` у одне поле `ciphertext` при записі на диск/в мережу; `GcmCiphertext.tag` лишається у API для ясності, але в `vault_item`/`item_history`/`openapi` тегу окремо немає. `decryptGcm` очікує `ciphertext` у форматі `ciphertext||tag` і сам розділяє. Схема і ADR не змінюються.
 
 Якщо файлу `shared/domain/src/commonMain/kotlin/com/kwazzar/lockruna/domain/crypto/CryptoService.kt` ще немає в гілці — створити його з наведеним кодом (без `KdfParams`, він не потрібен). Під час злиття з `feature/crypto-core` залишити **версію з `crypto-core`**; злиття add/add вирішується вручну.
 
@@ -523,8 +525,8 @@ data class AutoLockPolicy(val timeoutMillis: Long) {
 
 `AutoLockPolicyTest.kt`:
 
-- `ApplyAutoLockPolicy` з `ONE_MINUTE`: якщо мон��тонний час після згортання ще менше за таймаут → `false` (сесія не заблокована).
-- Якщо мон��тонний час перевищив таймаут → `true` і сесія заблокована.
+- `ApplyAutoLockPolicy` з `ONE_MINUTE`: якщо монотонний час після згортання ще менше за таймаут → `false` (сесія не заблокована).
+- Якщо монотонний час перевищив таймаут → `true` і сесія заблокована.
 - **Зміна системного годинника не впливає**: `FakeClock.wallMillis` змінити на ±1 день, `monotonicMillis` не змінюємо → блокування **не** спрацьовує.
 
 `VaultCycleTest.kt` (інтеграція з `InMemoryVaultItemRepository`):

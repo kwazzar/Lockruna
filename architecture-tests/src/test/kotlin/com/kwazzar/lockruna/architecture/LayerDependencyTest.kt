@@ -36,7 +36,7 @@ class LayerDependencyTest {
 
     @Test
     fun `domain has no framework imports`() {
-        val frameworks = listOf("org.jetbrains.", "io.ktor.", "app.cash.sqldelight.", "kotlinx.")
+        val frameworks = listOf("org.jetbrains.", "io.ktor.", "app.cash.sqldelight.", "kotlinx.serialization.", "kotlinx.datetime.")
         val domainFiles = scope.files.filter { file -> file.projectPath.startsWith("/shared/domain/") }
 
         assertTrue(domainFiles.isNotEmpty(), "domain sources were not found")

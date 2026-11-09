@@ -12,6 +12,8 @@ sealed interface AppError {
 
     data object ItemCorrupted : AppError
 
+    data class InvalidItem(val reason: String) : AppError
+
     data class WeakKdfParams(val actual: String) : AppError
 
     data class RateLimited(val retryAfterSeconds: Int) : AppError
