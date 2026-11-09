@@ -1,5 +1,6 @@
 package com.kwazzar.lockruna.server.identity.infrastructure
 
+import com.kwazzar.lockruna.server.identity.domain.EmailAlreadyRegisteredException
 import com.kwazzar.lockruna.server.identity.domain.UserRecord
 import com.kwazzar.lockruna.server.support.PostgresTest
 import kotlinx.coroutines.runBlocking
@@ -8,6 +9,7 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
@@ -35,6 +37,16 @@ class UserRepositoryTest {
     @Test
     fun `returns null for an unknown email`() = runBlocking {
         assertNull(repository.findByEmail("nobody@example.com"))
+    }
+
+    @Test
+    fun `creating a duplicate email is reported as already registered`() = runBlocking {
+        repository.create(userRecord())
+
+        assertFailsWith<EmailAlreadyRegisteredException> {
+            repository.create(userRecord())
+        }
+        Unit
     }
 
     @Test

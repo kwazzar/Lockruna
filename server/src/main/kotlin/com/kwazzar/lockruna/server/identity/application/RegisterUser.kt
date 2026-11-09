@@ -5,11 +5,13 @@ import com.kwazzar.lockruna.server.identity.domain.ACCESS_TOKEN_SECONDS
 import com.kwazzar.lockruna.server.identity.domain.AuthKeys
 import com.kwazzar.lockruna.server.identity.domain.DeviceRecord
 import com.kwazzar.lockruna.server.identity.domain.DeviceRepository
+import com.kwazzar.lockruna.server.identity.domain.EmailAlreadyRegisteredException
 import com.kwazzar.lockruna.server.identity.domain.RateLimiter
 import com.kwazzar.lockruna.server.identity.domain.TokenService
 import com.kwazzar.lockruna.server.identity.domain.UserRecord
 import com.kwazzar.lockruna.server.identity.domain.UserRepository
 import com.kwazzar.lockruna.server.platform.config.ServerSettings
+import com.kwazzar.lockruna.server.platform.db.TransactionRunner
 import com.kwazzar.lockruna.server.platform.error.Problem
 import com.kwazzar.lockruna.server.platform.error.ProblemException
 import kotlinx.serialization.json.Json
@@ -18,13 +20,14 @@ import java.time.Duration
 import java.util.UUID
 
 /**
- * Creates the account, its first device and the session tokens.
+ * Creates the account, its first device and the session tokens in one transaction.
  */
 class RegisterUser(
     private val users: UserRepository,
     private val devices: DeviceRepository,
     private val tokens: TokenService,
     private val rateLimiter: RateLimiter,
+    private val transactions: TransactionRunner,
     private val settings: ServerSettings,
     private val clock: Clock = Clock.systemUTC(),
 ) {
@@ -32,51 +35,57 @@ class RegisterUser(
         val email = command.email.trim().lowercase()
         rateLimiter.requireAllowed("register:email", AuthKeys.emailKey(email), REGISTER_EMAIL_LIMIT, REGISTER_WINDOW)
         rateLimiter.requireAllowed("register:ip", command.clientIp, REGISTER_IP_LIMIT, REGISTER_WINDOW)
-        if (users.findByEmail(email) != null) {
-            throw ProblemException(
-                problem = Problem(status = 409, code = "email_already_registered", title = "Email already registered"),
-            )
+        if (users.findByEmail(email) != null) throw alreadyRegistered()
+
+        return try {
+            transactions.transaction {
+                val now = clock.instant()
+                val user = users.create(
+                    UserRecord(
+                        id = UUID.randomUUID().toString(),
+                        email = email,
+                        authHash = AuthKeys.hash(settings.pepper, command.authKey),
+                        recoveryAuthHash = AuthKeys.hash(settings.pepper, command.recoveryAuthKey),
+                        kdfSalt = command.kdfSalt,
+                        kdfParams = Json.encodeToString(KdfParamsDto.serializer(), command.kdfParams),
+                        wrappedVaultKey = command.wrappedVaultKey,
+                        recoveryWrappedVaultKey = command.recoveryWrappedVaultKey,
+                        syncSeq = 0,
+                    ),
+                )
+                val device = devices.create(
+                    DeviceRecord(
+                        id = UUID.randomUUID().toString(),
+                        userId = user.id,
+                        name = command.deviceName,
+                        platform = command.devicePlatform,
+                        createdAt = now,
+                        lastSeen = now,
+                        revokedAt = null,
+                    ),
+                )
+                val accessToken = tokens.issueAccessToken(user.id, device.id)
+                val refreshToken = tokens.issueRefreshToken(user.id, device.id, UUID.randomUUID().toString(), now)
+
+                AuthSession(
+                    userId = user.id,
+                    deviceId = device.id,
+                    accessToken = accessToken,
+                    refreshToken = refreshToken,
+                    expiresIn = ACCESS_TOKEN_SECONDS,
+                    kdfSalt = user.kdfSalt,
+                    kdfParams = command.kdfParams,
+                    wrappedVaultKey = user.wrappedVaultKey,
+                )
+            }
+        } catch (ignored: EmailAlreadyRegisteredException) {
+            throw alreadyRegistered()
         }
-
-        val now = clock.instant()
-        val user = users.create(
-            UserRecord(
-                id = UUID.randomUUID().toString(),
-                email = email,
-                authHash = AuthKeys.hash(settings.pepper, command.authKey),
-                recoveryAuthHash = AuthKeys.hash(settings.pepper, command.recoveryAuthKey),
-                kdfSalt = command.kdfSalt,
-                kdfParams = Json.encodeToString(KdfParamsDto.serializer(), command.kdfParams),
-                wrappedVaultKey = command.wrappedVaultKey,
-                recoveryWrappedVaultKey = command.recoveryWrappedVaultKey,
-                syncSeq = 0,
-            ),
-        )
-        val device = devices.create(
-            DeviceRecord(
-                id = UUID.randomUUID().toString(),
-                userId = user.id,
-                name = command.deviceName,
-                platform = command.devicePlatform,
-                createdAt = now,
-                lastSeen = now,
-                revokedAt = null,
-            ),
-        )
-        val accessToken = tokens.issueAccessToken(user.id, device.id)
-        val refreshToken = tokens.issueRefreshToken(user.id, device.id, UUID.randomUUID().toString(), now)
-
-        return AuthSession(
-            userId = user.id,
-            deviceId = device.id,
-            accessToken = accessToken,
-            refreshToken = refreshToken,
-            expiresIn = ACCESS_TOKEN_SECONDS,
-            kdfSalt = user.kdfSalt,
-            kdfParams = command.kdfParams,
-            wrappedVaultKey = user.wrappedVaultKey,
-        )
     }
+
+    private fun alreadyRegistered() = ProblemException(
+        problem = Problem(status = 409, code = "email_already_registered", title = "Email already registered"),
+    )
 }
 
 data class RegisterCommand(

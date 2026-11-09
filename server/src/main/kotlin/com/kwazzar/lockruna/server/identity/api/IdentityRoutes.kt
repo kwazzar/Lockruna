@@ -18,14 +18,17 @@ import com.kwazzar.lockruna.server.identity.application.RegisterCommand
 import com.kwazzar.lockruna.server.identity.application.RegisterUser
 import com.kwazzar.lockruna.server.platform.error.Problem
 import com.kwazzar.lockruna.server.platform.error.ProblemException
+import com.kwazzar.lockruna.server.platform.web.receiveTextLimited
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.plugins.origin
-import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
+import kotlinx.serialization.SerializationException
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import org.koin.ktor.ext.inject
 import java.util.Base64
 
@@ -42,15 +45,15 @@ fun Route.identityRoutes() {
 
     route("/auth") {
         post("/prelogin") {
-            val request = call.receive<PreloginRequest>()
+            val request = call.receiveJson<PreloginRequest>()
 
-            val result = preloginUser(request.email)
+            val result = preloginUser(request.email, call.clientIp())
 
             call.respond(PreloginResponse(kdfSalt = result.kdfSalt.toBase64(), kdfParams = result.kdfParams))
         }
 
         post("/register") {
-            val request = call.receive<RegisterRequest>()
+            val request = call.receiveJson<RegisterRequest>()
 
             val session = registerUser(request.toCommand(call.clientIp()))
 
@@ -58,7 +61,7 @@ fun Route.identityRoutes() {
         }
 
         post("/login") {
-            val request = call.receive<LoginRequest>()
+            val request = call.receiveJson<LoginRequest>()
 
             val session = loginUser(request.toCommand(call.clientIp()))
 
@@ -66,7 +69,7 @@ fun Route.identityRoutes() {
         }
 
         post("/refresh") {
-            val request = call.receive<RefreshRequest>()
+            val request = call.receiveJson<RefreshRequest>()
 
             val pair = refreshSession(request.refreshToken)
 
@@ -141,3 +144,17 @@ private fun String.requirePlatform(): String {
 }
 
 private fun ApplicationCall.clientIp(): String = request.origin.remoteHost
+
+private suspend inline fun <reified T> ApplicationCall.receiveJson(): T {
+    val body = receiveTextLimited(IDENTITY_BODY_LIMIT)
+    return try {
+        Json.decodeFromString<T>(body)
+    } catch (invalid: SerializationException) {
+        throw ProblemException(
+            problem = Problem(status = 400, code = "invalid_request", title = "Invalid request"),
+            cause = invalid,
+        )
+    }
+}
+
+private const val IDENTITY_BODY_LIMIT = 64L * 1024

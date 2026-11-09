@@ -1,5 +1,6 @@
 package com.kwazzar.lockruna.server.identity.infrastructure
 
+import com.kwazzar.lockruna.server.identity.domain.EmailAlreadyRegisteredException
 import com.kwazzar.lockruna.server.identity.domain.UserRecord
 import com.kwazzar.lockruna.server.identity.domain.UserRepository
 import com.kwazzar.lockruna.server.platform.db.TransactionRunner
@@ -8,6 +9,7 @@ import com.kwazzar.lockruna.server.platform.db.toUuid
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.lowerCase
+import org.jetbrains.exposed.v1.exceptions.ExposedSQLException
 import org.jetbrains.exposed.v1.jdbc.insert
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.update
@@ -21,16 +23,21 @@ class ExposedUserRepository(private val transactions: TransactionRunner) : UserR
     }
 
     override suspend fun create(user: UserRecord): UserRecord = transactions.transaction {
-        Users.insert {
-            it[id] = user.id.toUuid()
-            it[email] = user.email
-            it[authHash] = user.authHash
-            it[recoveryAuthHash] = user.recoveryAuthHash
-            it[kdfSalt] = user.kdfSalt
-            it[kdfParams] = user.kdfParams
-            it[wrappedVaultKey] = user.wrappedVaultKey
-            it[recoveryWrappedVaultKey] = user.recoveryWrappedVaultKey
-            it[syncSeq] = user.syncSeq
+        try {
+            Users.insert {
+                it[id] = user.id.toUuid()
+                it[email] = user.email
+                it[authHash] = user.authHash
+                it[recoveryAuthHash] = user.recoveryAuthHash
+                it[kdfSalt] = user.kdfSalt
+                it[kdfParams] = user.kdfParams
+                it[wrappedVaultKey] = user.wrappedVaultKey
+                it[recoveryWrappedVaultKey] = user.recoveryWrappedVaultKey
+                it[syncSeq] = user.syncSeq
+            }
+        } catch (duplicate: ExposedSQLException) {
+            if (duplicate.sqlState == UNIQUE_VIOLATION) throw EmailAlreadyRegisteredException()
+            throw duplicate
         }
         user
     }
@@ -55,6 +62,10 @@ class ExposedUserRepository(private val transactions: TransactionRunner) : UserR
             it[Users.kdfSalt] = kdfSalt
             it[Users.wrappedVaultKey] = wrappedVaultKey
         } > 0
+    }
+
+    private companion object {
+        const val UNIQUE_VIOLATION = "23505"
     }
 
     private fun ResultRow.toRecord() = UserRecord(

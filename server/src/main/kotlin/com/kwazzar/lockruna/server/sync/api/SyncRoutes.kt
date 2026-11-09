@@ -4,6 +4,7 @@ import com.kwazzar.lockruna.contract.AppliedChangeDto
 import com.kwazzar.lockruna.contract.ChangeDto
 import com.kwazzar.lockruna.contract.ConflictDto
 import com.kwazzar.lockruna.contract.EncryptedItemDto
+import com.kwazzar.lockruna.contract.ItemTypeDto
 import com.kwazzar.lockruna.contract.PushRequestDto
 import com.kwazzar.lockruna.contract.PushResultDto
 import com.kwazzar.lockruna.contract.SyncPageDto
@@ -11,6 +12,7 @@ import com.kwazzar.lockruna.server.identity.application.AuthenticateSession
 import com.kwazzar.lockruna.server.platform.error.Problem
 import com.kwazzar.lockruna.server.platform.error.ProblemException
 import com.kwazzar.lockruna.server.platform.web.bearerToken
+import com.kwazzar.lockruna.server.platform.web.receiveTextLimited
 import com.kwazzar.lockruna.server.sync.application.AppliedChange
 import com.kwazzar.lockruna.server.sync.application.Conflict
 import com.kwazzar.lockruna.server.sync.application.PullChanges
@@ -22,7 +24,6 @@ import com.kwazzar.lockruna.server.sync.domain.Cursor
 import com.kwazzar.lockruna.server.sync.domain.SealedItemRecord
 import io.ktor.http.ContentType
 import io.ktor.server.application.ApplicationCall
-import io.ktor.server.request.receiveText
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.Route
@@ -56,7 +57,7 @@ fun Route.syncRoutes() {
         post("/push") {
             val claims = authenticate(call.bearerToken())
             val key = call.idempotencyKey()
-            val body = call.receiveText()
+            val body = call.receiveTextLimited(PUSH_BODY_LIMIT)
             val request = parse(body)
 
             val response = pushChanges(
@@ -102,14 +103,22 @@ private fun parse(body: String): PushRequestDto = try {
 private fun bodyHash(body: String): ByteArray =
     MessageDigest.getInstance("SHA-256").digest(body.toByteArray(Charsets.UTF_8))
 
-private fun ChangeDto.toRecord() = ChangeRecord(
-    id = id,
-    type = type,
-    ciphertext = ciphertext?.fromBase64(),
-    nonce = nonce?.fromBase64(),
-    baseVersion = baseVersion,
-    deleted = deleted,
-)
+private fun ChangeDto.toRecord(): ChangeRecord {
+    if (id.asUuid() == null) throw invalidRequest()
+    if (!deleted && (ciphertext == null || nonce == null)) throw invalidRequest()
+    return ChangeRecord(
+        id = id,
+        type = type.requireItemType(),
+        ciphertext = ciphertext?.fromBase64(),
+        nonce = nonce?.fromBase64(),
+        baseVersion = baseVersion,
+        deleted = deleted,
+    )
+}
+
+private fun String.requireItemType(): String =
+    ItemTypeDto.entries.firstOrNull { it.name.equals(this, ignoreCase = true) }?.name?.lowercase()
+        ?: throw invalidRequest()
 
 private fun String.fromBase64(): ByteArray = try {
     Base64.getDecoder().decode(this)
@@ -161,3 +170,4 @@ private fun invalidRequest() = ProblemException(
 
 private const val DEFAULT_LIMIT = 100
 private const val MAX_LIMIT = 500
+private const val PUSH_BODY_LIMIT = 10L * 1024 * 1024

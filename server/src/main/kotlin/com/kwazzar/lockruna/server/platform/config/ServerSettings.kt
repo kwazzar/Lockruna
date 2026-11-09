@@ -20,6 +20,7 @@ data class ServerSettings(
         private const val PEPPER_BYTES = 32
         private const val HEX_SHIFT = 4
         private const val JWT_KEY_MIN_BYTES = 32
+        private const val FAKE_SECRET_MIN_BYTES = 32
         private const val DEFAULT_HOST = "0.0.0.0"
         private const val DEFAULT_PORT = 8080
 
@@ -33,7 +34,7 @@ data class ServerSettings(
             jwtActiveKey = env.required("JWT_ACTIVE_KEY").toJwtKey(),
             jwtPreviousKey = env["JWT_PREVIOUS_KEY"]?.takeIf { it.isNotBlank() }?.toJwtKey(),
             pepper = env.required("PEPPER").toPepper(),
-            authFakeSecret = env.required("AUTH_FAKE_SECRET").toByteArray(),
+            authFakeSecret = env.required("AUTH_FAKE_SECRET").toFakeSecret(),
         )
 
         private fun Map<String, String>.required(name: String): String =
@@ -47,6 +48,14 @@ data class ServerSettings(
                 val low = Character.digit(this[index * 2 + 1], 16)
                 if (high < 0 || low < 0) error("PEPPER must be a hex string")
                 bytes[index] = ((high shl HEX_SHIFT) or low).toByte()
+            }
+            return bytes
+        }
+
+        private fun String.toFakeSecret(): ByteArray {
+            val bytes = encodeToByteArray()
+            if (bytes.size < FAKE_SECRET_MIN_BYTES) {
+                error("AUTH_FAKE_SECRET must be at least $FAKE_SECRET_MIN_BYTES bytes")
             }
             return bytes
         }

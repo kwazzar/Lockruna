@@ -11,6 +11,8 @@ import com.kwazzar.lockruna.server.support.randomBytes
 import com.kwazzar.lockruna.server.support.testSettings
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.testApplication
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.serialization.json.int
 import kotlinx.serialization.json.jsonPrimitive
 import java.security.MessageDigest
@@ -46,6 +48,27 @@ class TokenFlowTest {
         assertNotNull(usedAt(refreshToken))
 
         assertEquals(HttpStatusCode.Unauthorized, client.refresh(refreshToken).status)
+        assertEquals(HttpStatusCode.Unauthorized, client.refresh(newToken).status)
+    }
+
+    @Test
+    fun `two concurrent refreshes of one token succeed once and revoke the family`() = testApplication {
+        application { module(settings, PostgresTest.dataSource, InMemoryRateLimiter(), InMemoryDeviceDenylist()) }
+        val client = IdentityClient(this)
+        val authKey = randomBytes(32)
+        client.register("user@example.com", authKey)
+        val refreshToken = client.login("user@example.com", authKey).json()["refreshToken"]!!.jsonPrimitive.content
+
+        val responses = coroutineScope {
+            val first = async { client.refresh(refreshToken) }
+            val second = async { client.refresh(refreshToken) }
+            listOf(first.await(), second.await())
+        }
+
+        assertEquals(1, responses.count { it.status == HttpStatusCode.OK })
+        assertEquals(1, responses.count { it.status == HttpStatusCode.Unauthorized })
+        val rotated = responses.single { it.status == HttpStatusCode.OK }.json()
+        val newToken = rotated["refreshToken"]!!.jsonPrimitive.content
         assertEquals(HttpStatusCode.Unauthorized, client.refresh(newToken).status)
     }
 

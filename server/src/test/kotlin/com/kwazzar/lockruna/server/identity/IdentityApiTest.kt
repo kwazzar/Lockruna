@@ -19,12 +19,15 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.server.testing.ApplicationTestBuilder
 import io.ktor.server.testing.testApplication
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.int
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import java.security.SecureRandom
+import java.time.Instant
 import java.util.Base64
 import java.util.UUID
 import javax.crypto.Mac
@@ -35,6 +38,7 @@ import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 class IdentityApiTest {
     private val settings = testSettings()
@@ -164,6 +168,70 @@ class IdentityApiTest {
         assertNotNull(blocked.headers["Retry-After"])
     }
 
+    @Test
+    fun `login updates the last seen time of the device`() = testApplication {
+        application { module(settings, PostgresTest.dataSource, InMemoryRateLimiter()) }
+        val authKey = randomBytes(32)
+        val deviceId = register("user@example.com", authKey = authKey).body()["deviceId"]!!.jsonPrimitive.content
+        ageLastSeen(deviceId)
+        val before = lastSeen(deviceId)
+
+        login("user@example.com", authKey, deviceId)
+
+        val after = lastSeen(deviceId)
+        assertNotNull(before)
+        assertNotNull(after)
+        assertTrue(after.isAfter(before))
+    }
+
+    @Test
+    fun `a prelogin body of more than 64 kibibytes is rejected`() = testApplication {
+        application { module(settings, PostgresTest.dataSource, InMemoryRateLimiter()) }
+
+        val response = client.post("/auth/prelogin") {
+            contentType(ContentType.Application.Json)
+            setBody("""{"email":"${"a".repeat(70 * 1024)}"}""")
+        }
+
+        assertEquals(HttpStatusCode.PayloadTooLarge, response.status)
+    }
+
+    @Test
+    fun `the thirty first prelogin for one email is blocked`() = testApplication {
+        application { module(settings, PostgresTest.dataSource, InMemoryRateLimiter()) }
+
+        repeat(30) { assertEquals(HttpStatusCode.OK, prelogin("user@example.com").status) }
+
+        val blocked = prelogin("user@example.com")
+
+        assertEquals(HttpStatusCode.TooManyRequests, blocked.status)
+        assertNotNull(blocked.headers["Retry-After"])
+    }
+
+    @Test
+    fun `the one hundred twenty first prelogin from one address is blocked`() = testApplication {
+        application { module(settings, PostgresTest.dataSource, InMemoryRateLimiter()) }
+
+        repeat(120) { index -> assertEquals(HttpStatusCode.OK, prelogin("user$index@example.com").status) }
+
+        assertEquals(HttpStatusCode.TooManyRequests, prelogin("last@example.com").status)
+    }
+
+    @Test
+    fun `two concurrent registrations of one email create one account`() = testApplication {
+        application { module(settings, PostgresTest.dataSource, InMemoryRateLimiter()) }
+
+        val responses = coroutineScope {
+            val first = async { register("race@example.com") }
+            val second = async { register("race@example.com") }
+            listOf(first.await(), second.await())
+        }
+
+        assertEquals(1, responses.count { it.status == HttpStatusCode.Created })
+        val rejected = responses.single { it.status == HttpStatusCode.Conflict }
+        assertEquals("email_already_registered", rejected.body()["code"]!!.jsonPrimitive.content)
+    }
+
     private suspend fun ApplicationTestBuilder.prelogin(email: String): HttpResponse = client.post("/auth/prelogin") {
         contentType(ContentType.Application.Json)
         setBody(json.encodeToString(PreloginRequest.serializer(), PreloginRequest(email)))
@@ -221,6 +289,24 @@ class IdentityApiTest {
         connection.prepareStatement("SELECT auth_hash FROM users WHERE email = ?").use { statement ->
             statement.setString(1, email)
             statement.executeQuery().use { rows -> if (rows.next()) rows.getBytes(1) else null }
+        }
+    }
+
+    private fun ageLastSeen(deviceId: String) {
+        PostgresTest.dataSource.connection.use { connection ->
+            connection.prepareStatement(
+                "UPDATE devices SET last_seen = now() - interval '1 hour' WHERE id = ?::uuid",
+            ).use { statement ->
+                statement.setString(1, deviceId)
+                statement.executeUpdate()
+            }
+        }
+    }
+
+    private fun lastSeen(deviceId: String): Instant? = PostgresTest.dataSource.connection.use { connection ->
+        connection.prepareStatement("SELECT last_seen FROM devices WHERE id = ?::uuid").use { statement ->
+            statement.setString(1, deviceId)
+            statement.executeQuery().use { rows -> if (rows.next()) rows.getTimestamp(1)?.toInstant() else null }
         }
     }
 

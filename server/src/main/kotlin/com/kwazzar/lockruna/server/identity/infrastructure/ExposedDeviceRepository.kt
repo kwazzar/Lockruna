@@ -12,6 +12,7 @@ import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.jdbc.insert
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.update
+import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 
@@ -46,6 +47,12 @@ class ExposedDeviceRepository(private val transactions: TransactionRunner) : Dev
             .where { (Devices.userId eq userId.toUuid()) and (Devices.id eq deviceId.toUuid()) }
             .firstOrNull()
             ?.toRecord()
+    }
+
+    override suspend fun touch(userId: String, deviceId: String, seenAt: Instant): Boolean = transactions.transaction {
+        Devices.update({ (Devices.userId eq userId.toUuid()) and (Devices.id eq deviceId.toUuid()) }) {
+            it[Devices.lastSeen] = seenAt.toColumn()
+        } > 0
     }
 
     private fun ResultRow.toRecord() = DeviceRecord(

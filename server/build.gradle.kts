@@ -49,8 +49,10 @@ dependencies {
     implementation(libs.lettuce.core)
     implementation(libs.micrometer.core)
     implementation(libs.postgresql)
+    runtimeOnly(libs.logback.classic)
 
     testImplementation(kotlin("test"))
+    testImplementation(libs.logback.classic)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.testcontainers.postgresql)
     testImplementation(libs.testcontainers.mongodb)

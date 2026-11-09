@@ -9,6 +9,7 @@ import com.kwazzar.lockruna.server.support.InMemoryDeviceDenylist
 import com.kwazzar.lockruna.server.support.InMemoryRateLimiter
 import com.kwazzar.lockruna.server.support.PostgresTest
 import com.kwazzar.lockruna.server.support.SyncClient
+import com.kwazzar.lockruna.server.support.bearer
 import com.kwazzar.lockruna.server.support.json
 import com.kwazzar.lockruna.server.support.randomBytes
 import com.kwazzar.lockruna.server.support.testSettings
@@ -16,8 +17,13 @@ import com.kwazzar.lockruna.server.sync.application.PushChanges
 import com.kwazzar.lockruna.server.sync.domain.ChangeRecord
 import com.kwazzar.lockruna.server.sync.infrastructure.ExposedIdempotencyRepository
 import com.kwazzar.lockruna.server.sync.infrastructure.ExposedVaultItemRepository
+import io.ktor.client.request.header
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
+import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.contentType
 import io.ktor.server.testing.ApplicationTestBuilder
 import io.ktor.server.testing.testApplication
 import kotlinx.coroutines.async
@@ -214,6 +220,107 @@ class SyncApiTest {
     }
 
     @Test
+    fun `a change with a non-uuid id is rejected`() = testApplication {
+        application { module(settings, PostgresTest.dataSource, InMemoryRateLimiter(), InMemoryDeviceDenylist()) }
+        val client = SyncClient(this)
+        val token = registerUser("user@example.com")
+
+        val response = client.push(token, UUID.randomUUID().toString(), listOf(change(id = "not-a-uuid")))
+
+        assertEquals(HttpStatusCode.BadRequest, response.status)
+        assertEquals("invalid_request", response.json()["code"]!!.jsonPrimitive.content)
+    }
+
+    @Test
+    fun `a change with an unknown type is rejected`() = testApplication {
+        application { module(settings, PostgresTest.dataSource, InMemoryRateLimiter(), InMemoryDeviceDenylist()) }
+        val client = SyncClient(this)
+        val token = registerUser("user@example.com")
+
+        val response = client.push(token, UUID.randomUUID().toString(), listOf(change(type = "bogus")))
+
+        assertEquals(HttpStatusCode.BadRequest, response.status)
+    }
+
+    @Test
+    fun `a live change without ciphertext or nonce is rejected`() = testApplication {
+        application { module(settings, PostgresTest.dataSource, InMemoryRateLimiter(), InMemoryDeviceDenylist()) }
+        val client = SyncClient(this)
+        val token = registerUser("user@example.com")
+
+        val withoutCiphertext = client.push(
+            token,
+            UUID.randomUUID().toString(),
+            listOf(change().copy(ciphertext = null)),
+        )
+        val withoutNonce = client.push(token, UUID.randomUUID().toString(), listOf(change().copy(nonce = null)))
+
+        assertEquals(HttpStatusCode.BadRequest, withoutCiphertext.status)
+        assertEquals(HttpStatusCode.BadRequest, withoutNonce.status)
+    }
+
+    @Test
+    fun `a push body of more than ten mebibytes is rejected`() = testApplication {
+        application { module(settings, PostgresTest.dataSource, InMemoryRateLimiter(), InMemoryDeviceDenylist()) }
+        val token = registerUser("user@example.com")
+        val body = """{"changes":[]}""" + " ".repeat(11 * 1024 * 1024)
+
+        val response = client.post("/sync/push") {
+            contentType(ContentType.Application.Json)
+            bearer(token)
+            header("Idempotency-Key", UUID.randomUUID().toString())
+            setBody(body)
+        }
+
+        assertEquals(HttpStatusCode.PayloadTooLarge, response.status)
+    }
+
+    @Test
+    fun `the sixty first push within a minute is blocked`() = testApplication {
+        application { module(settings, PostgresTest.dataSource, InMemoryRateLimiter(), InMemoryDeviceDenylist()) }
+        val client = SyncClient(this)
+        val token = registerUser("user@example.com")
+        val key = UUID.randomUUID().toString()
+        val changes = listOf(change())
+
+        repeat(60) { assertEquals(HttpStatusCode.OK, client.push(token, key, changes).status) }
+
+        val blocked = client.push(token, key, changes)
+
+        assertEquals(HttpStatusCode.TooManyRequests, blocked.status)
+        assertNotNull(blocked.headers["Retry-After"])
+    }
+
+    @Test
+    fun `two concurrent updates of the same version apply once`() = testApplication {
+        application { module(settings, PostgresTest.dataSource, InMemoryRateLimiter(), InMemoryDeviceDenylist()) }
+        val client = SyncClient(this)
+        val identity = IdentityClient(this)
+        val authKey = randomBytes(32)
+        identity.register("user@example.com", authKey)
+        val firstToken = identity.login("user@example.com", authKey).json()["accessToken"]!!.jsonPrimitive.content
+        val secondToken = identity.login("user@example.com", authKey).json()["accessToken"]!!.jsonPrimitive.content
+        val item = change()
+        client.push(firstToken, UUID.randomUUID().toString(), listOf(item))
+
+        val responses = coroutineScope {
+            val first = async {
+                client.push(firstToken, UUID.randomUUID().toString(), listOf(item.copy(baseVersion = 1)))
+            }
+            val second = async {
+                client.push(secondToken, UUID.randomUUID().toString(), listOf(item.copy(baseVersion = 1)))
+            }
+            listOf(first.await(), second.await())
+        }
+
+        val results = responses.map { Json.decodeFromString<PushResultDto>(it.bodyAsText()) }
+        assertEquals(1, results.count { it.applied.isNotEmpty() })
+        assertEquals(2L, results.single { it.applied.isNotEmpty() }.applied.single().version)
+        assertEquals(1, results.count { it.conflicts.isNotEmpty() })
+        assertEquals(2L, results.single { it.conflicts.isNotEmpty() }.conflicts.single().server.version)
+    }
+
+    @Test
     fun `a push that cannot answer applies nothing`() = testApplication {
         application { module(settings, PostgresTest.dataSource, InMemoryRateLimiter(), InMemoryDeviceDenylist()) }
         val userId = registerUserId("user@example.com")
@@ -222,6 +329,7 @@ class SyncApiTest {
             vaultItems,
             ExposedIdempotencyRepository(PostgresTest.transactions),
             PostgresTest.transactions,
+            InMemoryRateLimiter(),
         )
 
         assertFailsWith<IllegalStateException> {
@@ -250,12 +358,15 @@ private fun record(id: String = UUID.randomUUID().toString()): ChangeRecord = Ch
     deleted = false,
 )
 
-private fun change(id: String = UUID.randomUUID().toString(), ciphertext: ByteArray = randomBytes(32)): ChangeDto =
-    ChangeDto(
-        id = id,
-        type = "login",
-        ciphertext = Base64.getEncoder().encodeToString(ciphertext),
-        nonce = Base64.getEncoder().encodeToString(randomBytes(12)),
-        baseVersion = 0,
-        deleted = false,
-    )
+private fun change(
+    id: String = UUID.randomUUID().toString(),
+    type: String = "login",
+    ciphertext: ByteArray = randomBytes(32),
+): ChangeDto = ChangeDto(
+    id = id,
+    type = type,
+    ciphertext = Base64.getEncoder().encodeToString(ciphertext),
+    nonce = Base64.getEncoder().encodeToString(randomBytes(12)),
+    baseVersion = 0,
+    deleted = false,
+)

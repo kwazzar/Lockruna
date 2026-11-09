@@ -16,5 +16,5 @@ fun testSettings(databaseUrl: String = "jdbc:postgresql://localhost:5432/passkee
         jwtActiveKey = "test-active-key-0123456789abcdef",
         jwtPreviousKey = null,
         pepper = ByteArray(32) { 0xab.toByte() },
-        authFakeSecret = "test-fake-secret".toByteArray(),
+        authFakeSecret = "test-fake-secret-0123456789abcdef".toByteArray(),
     )

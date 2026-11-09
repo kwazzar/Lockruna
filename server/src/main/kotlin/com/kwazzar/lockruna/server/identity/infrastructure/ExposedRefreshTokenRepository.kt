@@ -52,7 +52,11 @@ class ExposedRefreshTokenRepository(private val transactions: TransactionRunner)
             .firstOrNull() ?: return@transaction false
         if (owner[Devices.userId].toString() != userId) return@transaction false
 
-        RefreshTokens.update({ RefreshTokens.id eq id.toUuid() }) {
+        RefreshTokens.update({
+            (RefreshTokens.id eq id.toUuid()) and
+                RefreshTokens.usedAt.isNull() and
+                RefreshTokens.revokedAt.isNull()
+        }) {
             it[RefreshTokens.usedAt] = usedAt.toColumn()
         } > 0
     }

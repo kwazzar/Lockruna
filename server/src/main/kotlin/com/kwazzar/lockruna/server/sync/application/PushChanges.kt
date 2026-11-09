@@ -1,5 +1,7 @@
 package com.kwazzar.lockruna.server.sync.application
 
+import com.kwazzar.lockruna.server.identity.application.requireAllowed
+import com.kwazzar.lockruna.server.identity.domain.RateLimiter
 import com.kwazzar.lockruna.server.platform.db.TransactionRunner
 import com.kwazzar.lockruna.server.platform.error.Problem
 import com.kwazzar.lockruna.server.platform.error.ProblemException
@@ -11,6 +13,7 @@ import com.kwazzar.lockruna.server.sync.domain.StoredResponse
 import com.kwazzar.lockruna.server.sync.domain.VaultItemRepository
 import java.security.MessageDigest
 import java.time.Clock
+import java.time.Duration
 import java.time.Instant
 
 /**
@@ -21,6 +24,7 @@ class PushChanges(
     private val vaultItems: VaultItemRepository,
     private val idempotency: IdempotencyRepository,
     private val transactions: TransactionRunner,
+    private val rateLimiter: RateLimiter,
     private val clock: Clock = Clock.systemUTC(),
 ) {
     suspend operator fun invoke(
@@ -30,6 +34,7 @@ class PushChanges(
         changes: List<ChangeRecord>,
         render: (PushOutcome) -> String,
     ): String {
+        rateLimiter.requireAllowed("sync:push", userId, PUSH_LIMIT, PUSH_WINDOW)
         checkLimits(changes)
 
         return transactions.transaction {
@@ -81,6 +86,8 @@ class PushChanges(
     private companion object {
         const val MAX_CHANGES = 100
         const val MAX_CIPHERTEXT_BYTES = 64 * 1024
+        const val PUSH_LIMIT = 60
+        val PUSH_WINDOW: Duration = Duration.ofMinutes(1)
     }
 }
 

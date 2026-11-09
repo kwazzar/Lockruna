@@ -51,16 +51,16 @@ fun serverModule(
     single<RateLimiter> { rateLimiter }
     single<DeviceDenylist> { denylist }
     single<TokenService> { JwtTokenService(get(), settings) }
-    single { PreloginUser(get(), settings.authFakeSecret) }
-    single { RegisterUser(get(), get(), get(), get(), settings) }
+    single { PreloginUser(get(), get(), settings.authFakeSecret) }
+    single { RegisterUser(get(), get(), get(), get(), get(), settings) }
     single { LoginUser(get(), get(), get(), get(), settings) }
     single { AuthenticateSession(get(), get()) }
-    single { RefreshSession(get(), get()) }
+    single { RefreshSession(get(), get(), get()) }
     single { RevokeDevice(get(), get(), get()) }
     single { ListDevices(get()) }
     single { LogoutSession(get()) }
     single<VaultItemRepository> { ExposedVaultItemRepository(get()) }
     single<IdempotencyRepository> { ExposedIdempotencyRepository(get()) }
     single { PullChanges(get()) }
-    single { PushChanges(get(), get(), get()) }
+    single { PushChanges(get(), get(), get(), get()) }
 }

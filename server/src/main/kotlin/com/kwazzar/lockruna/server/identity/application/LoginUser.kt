@@ -67,6 +67,7 @@ class LoginUser(
                         problem = Problem(status = 401, code = "device_revoked", title = "Device revoked"),
                     )
                 }
+                devices.touch(user.id, existing.id, clock.instant())
                 return existing
             }
         }

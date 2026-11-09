@@ -26,7 +26,7 @@ class ServerSettingsTest {
         assertEquals(ACTIVE_KEY, settings.jwtActiveKey)
         assertEquals(PREVIOUS_KEY, settings.jwtPreviousKey)
         assertContentEquals(pepperBytes, settings.pepper)
-        assertContentEquals("fake-secret".toByteArray(), settings.authFakeSecret)
+        assertContentEquals(FAKE_SECRET.toByteArray(), settings.authFakeSecret)
     }
 
     @Test
@@ -69,6 +69,13 @@ class ServerSettingsTest {
     }
 
     @Test
+    fun `refuses to start when the fake secret is shorter than 32 bytes`() {
+        assertFailsWith<IllegalStateException> {
+            ServerSettings.fromEnv(requiredEnvironment + ("AUTH_FAKE_SECRET" to "short-secret"))
+        }
+    }
+
+    @Test
     fun `refuses to start when a jwt key is shorter than 32 bytes`() {
         assertFailsWith<IllegalStateException> {
             ServerSettings.fromEnv(requiredEnvironment + ("JWT_ACTIVE_KEY" to "short-key"))
@@ -83,13 +90,14 @@ class ServerSettingsTest {
         val pepperHex = pepperBytes.joinToString("") { "%02x".format(it) }
         const val ACTIVE_KEY = "active-key-0123456789abcdef0123456789"
         const val PREVIOUS_KEY = "previous-key-0123456789abcdef0123456"
+        const val FAKE_SECRET = "fake-secret-0123456789abcdef012345"
         val requiredEnvironment = mapOf(
             "DATABASE_URL" to "jdbc:postgresql://localhost:5432/passkeeper",
             "REDIS_URL" to "redis://localhost:6379",
             "JWT_ISSUER" to "passkeeper",
             "JWT_AUDIENCE" to "passkeeper-clients",
             "JWT_ACTIVE_KEY" to ACTIVE_KEY,
-            "AUTH_FAKE_SECRET" to "fake-secret",
+            "AUTH_FAKE_SECRET" to FAKE_SECRET,
             "PEPPER" to pepperHex,
         )
     }

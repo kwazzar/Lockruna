@@ -11,15 +11,17 @@ import javax.sql.DataSource
  * Postgres wiring: connection pool, schema migrations and the Exposed database handle.
  */
 object DatabaseFactory {
-    fun createDataSource(url: String, user: String? = null, password: String? = null): HikariDataSource {
-        val config = HikariConfig().apply {
-            jdbcUrl = url
-            this.username = user.orEmpty()
-            this.password = password.orEmpty()
-            maximumPoolSize = 10
-            poolName = "lockruna-server"
-        }
-        return HikariDataSource(config)
+    private const val POOL_SIZE = 10
+
+    fun createDataSource(url: String, user: String? = null, password: String? = null): HikariDataSource =
+        HikariDataSource(hikariConfig(url, user, password))
+
+    fun hikariConfig(url: String, user: String? = null, password: String? = null): HikariConfig = HikariConfig().apply {
+        jdbcUrl = url
+        if (user != null) username = user
+        if (password != null) this.password = password
+        maximumPoolSize = POOL_SIZE
+        poolName = "lockruna-server"
     }
 
     fun migrate(dataSource: DataSource) {
