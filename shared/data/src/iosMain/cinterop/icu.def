@@ -1,5 +1,4 @@
 package = icu
 headers = icu_shim.h
-sources = icu_shim.c
 includeDirs = .
 linkerOpts = -licucore

@@ -85,5 +85,10 @@ object CryptoVectors {
         NormalizationCase(raw = "１２３", expected = "123"),
         NormalizationCase(raw = "①", expected = "1"),
         NormalizationCase(raw = "ｶﾞ", expected = "ガ"),
+        // U+FDFA expands to 18 code units, so it overflows the initial ICU buffer.
+        NormalizationCase(
+            raw = "\uFDFA",
+            expected = "صلى الله عليه وسلم",
+        ),
     )
 }

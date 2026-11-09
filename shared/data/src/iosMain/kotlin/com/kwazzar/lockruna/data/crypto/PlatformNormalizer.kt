@@ -13,7 +13,8 @@ import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.usePinned
 
 private const val U_ZERO_ERROR: Int = 0
-private const val U_BUFFER_OVERFLOW_ERROR: Int = -15
+private const val U_BUFFER_OVERFLOW_ERROR: Int = 15
+private const val U_STRING_NOT_TERMINATED_WARNING: Int = -124
 
 /**
  * NFKC via the system ICU4C normalizer, so the result matches the Android
@@ -43,7 +44,9 @@ actual class PlatformNormalizer actual constructor() : PasswordNormalizer {
                     }
                 }
                 when (status[0]) {
-                    U_ZERO_ERROR -> return buildString {
+                    // ICU normalizes into the buffer and warns when it had no room
+                    // for the null terminator; the normalized length is still valid.
+                    U_ZERO_ERROR, U_STRING_NOT_TERMINATED_WARNING -> return buildString {
                         for (index in 0 until length) append(target[index].toInt().toChar())
                     }
                     U_BUFFER_OVERFLOW_ERROR -> capacity = length

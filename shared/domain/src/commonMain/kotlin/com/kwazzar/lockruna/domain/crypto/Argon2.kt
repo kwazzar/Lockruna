@@ -20,6 +20,13 @@ data class KdfParams(
         const val MIN_ITERATIONS: Int = 3
         const val MIN_PARALLELISM: Int = 1
 
+        /**
+         * The parameter set every platform can derive with. libsodium fixes the
+         * Argon2id parameters, so a different set would give different keys on
+         * iOS and Android.
+         */
+        val SUPPORTED: KdfParams = KdfParams()
+
         fun isAcceptable(params: KdfParams): Boolean = params.alg == DEFAULT_ALG &&
             params.memoryKiB >= MIN_MEMORY_KIB &&
             params.iterations >= MIN_ITERATIONS &&
