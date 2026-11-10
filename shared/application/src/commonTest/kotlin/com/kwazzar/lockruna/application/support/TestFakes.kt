@@ -1,6 +1,19 @@
 package com.kwazzar.lockruna.application.support
 
+import com.kwazzar.lockruna.domain.auth.AuthApi
+import com.kwazzar.lockruna.domain.auth.AuthStateStore
+import com.kwazzar.lockruna.domain.auth.AuthTokens
+import com.kwazzar.lockruna.domain.auth.AuthenticatedUser
+import com.kwazzar.lockruna.domain.auth.BiometricPolicyStore
+import com.kwazzar.lockruna.domain.auth.DeviceIdentity
+import com.kwazzar.lockruna.domain.auth.DevicePlatform
+import com.kwazzar.lockruna.domain.auth.PreLoginData
+import com.kwazzar.lockruna.domain.auth.SealedBlob
 import com.kwazzar.lockruna.domain.core.Result
+import com.kwazzar.lockruna.domain.crypto.Argon2
+import com.kwazzar.lockruna.domain.crypto.CryptoService
+import com.kwazzar.lockruna.domain.crypto.GcmCiphertext
+import com.kwazzar.lockruna.domain.crypto.KdfParams
 import com.kwazzar.lockruna.domain.error.AppError
 import com.kwazzar.lockruna.domain.session.Clock
 import com.kwazzar.lockruna.domain.session.IdGenerator
@@ -59,3 +72,100 @@ class FakeIdGenerator : IdGenerator {
         return uuid
     }
 }
+
+class FakeAuthApi(
+    private val preloginResult: Result<PreLoginData, AppError> = Result.Success(PreLoginData(ByteArray(16), KdfParams.SUPPORTED)),
+    private val registerResult: Result<AuthenticatedUser, AppError>? = null,
+    private val loginResult: Result<AuthenticatedUser, AppError>? = null,
+    private val refreshResult: Result<AuthTokens, AppError>? = null,
+    private val logoutResult: Result<Unit, AppError> = Result.Success(Unit)
+) : AuthApi {
+    var lastPreloginEmail: String? = null
+    var lastRegisterEmail: String? = null
+    var lastLoginEmail: String? = null
+
+    override suspend fun prelogin(email: String): Result<PreLoginData, AppError> {
+        lastPreloginEmail = email
+        return preloginResult
+    }
+
+    override suspend fun register(
+        email: String,
+        authKey: ByteArray,
+        recoveryAuthKey: ByteArray,
+        kdfSalt: ByteArray,
+        kdfParams: KdfParams,
+        wrappedVaultKey: ByteArray,
+        recoveryWrappedVaultKey: ByteArray,
+        device: DeviceIdentity
+    ): Result<AuthenticatedUser, AppError> {
+        lastRegisterEmail = email
+        return registerResult ?: Result.Failure(AppError.InvalidCredentials)
+    }
+
+    override suspend fun login(email: String, authKey: ByteArray, device: DeviceIdentity): Result<AuthenticatedUser, AppError> {
+        lastLoginEmail = email
+        return loginResult ?: Result.Failure(AppError.InvalidCredentials)
+    }
+
+    override suspend fun refresh(refreshToken: String): Result<AuthTokens, AppError> {
+        return refreshResult ?: Result.Failure(AppError.Unauthorized)
+    }
+
+    override suspend fun logout(): Result<Unit, AppError> {
+        return logoutResult
+    }
+}
+
+class FakeAuthStateStore : AuthStateStore {
+    private var session: AuthenticatedUser? = null
+
+    override suspend fun saveSession(user: AuthenticatedUser) {
+        session = user
+    }
+
+    override suspend fun loadSession(): AuthenticatedUser? {
+        return session
+    }
+
+    override suspend fun clear() {
+        session = null
+    }
+}
+
+class FakeBiometricPolicyStore : BiometricPolicyStore {
+    private var failureCount = 0
+    private var lastSuccess: Long? = null
+
+    override suspend fun failures(): Int = failureCount
+
+    override suspend fun recordFailure() {
+        failureCount++
+    }
+
+    override suspend fun resetFailures() {
+        failureCount = 0
+    }
+
+    override suspend fun setLastSuccessfulUnlock(millis: Long) {
+        lastSuccess = millis
+    }
+
+    override suspend fun lastSuccessfulUnlock(): Long? = lastSuccess
+}
+
+/**
+ * Deterministic Argon2 fake for use-case tests: hash = HKDF(password || salt, empty).
+ * NOT for security use.
+ */
+class FakeArgon2 : Argon2 {
+    override suspend fun hash(password: String, salt: ByteArray, params: KdfParams): ByteArray {
+        val bytes = (password + salt.toHexString()).toByteArray()
+        val result = ByteArray(32)
+        val copyLen = minOf(bytes.size, 32)
+        bytes.copyInto(result, 0, 0, copyLen)
+        return result
+    }
+}
+
+private fun ByteArray.toHexString(): String = joinToString("") { "%02x".format(it) }

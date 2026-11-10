@@ -21,6 +21,8 @@ sealed interface AppError {
     data class RateLimited(val retryAfterSeconds: Int) : AppError
 
     data class WeakMasterPassword(val reason: WeakPasswordReason) : AppError
+
+    data object EmailAlreadyRegistered : AppError
 }
 
 enum class WeakPasswordReason {
