@@ -10,9 +10,7 @@ class InMemoryAuthStateStore : AuthStateStore {
         session = user
     }
 
-    override suspend fun loadSession(): AuthenticatedUser? {
-        return session
-    }
+    override suspend fun loadSession(): AuthenticatedUser? = session
 
     override suspend fun clear() {
         session = null

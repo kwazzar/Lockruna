@@ -2,13 +2,10 @@ package com.kwazzar.lockruna.domain.auth
 
 import com.kwazzar.lockruna.domain.crypto.KdfParams as DomainKdfParams
 
-import com.kwazzar.lockruna.domain.crypto.KdfParams
+private const val NONCE_SIZE = 12
+private const val AES_GCM_TAG_SIZE = 16
 
-data class AuthTokens(
-    val accessToken: String,
-    val refreshToken: String,
-    val expiresInSeconds: Int
-) {
+data class AuthTokens(val accessToken: String, val refreshToken: String, val expiresInSeconds: Int) {
     override fun toString() = "AuthTokens(redacted)"
 }
 
@@ -19,15 +16,12 @@ data class AuthenticatedUser(
     val keyNonce: ByteArray,
     val kdfSalt: ByteArray,
     val kdfParams: DomainKdfParams,
-    val tokens: AuthTokens
+    val tokens: AuthTokens,
 ) {
     override fun toString() = "AuthenticatedUser(userId=$userId)"
 }
 
-data class PreLoginData(
-    val kdfSalt: ByteArray,
-    val kdfParams: DomainKdfParams
-)
+data class PreLoginData(val kdfSalt: ByteArray, val kdfParams: DomainKdfParams)
 
 /**
  * Wire format for wrapped keys: nonce(12) || ciphertext || tag (AES-GCM 128-bit tag).
@@ -35,15 +29,15 @@ data class PreLoginData(
 data class SealedBlob(val nonce: ByteArray, val payload: ByteArray) {
     companion object {
         fun pack(nonce: ByteArray, ciphertext: ByteArray): ByteArray {
-            require(nonce.size == 12) { "nonce must be 12 bytes" }
+            require(nonce.size == NONCE_SIZE) { "nonce must be $NONCE_SIZE bytes" }
             return nonce + ciphertext
         }
 
         fun unpack(bytes: ByteArray): SealedBlob {
-            require(bytes.size >= 12) { "blob too short" }
+            require(bytes.size >= NONCE_SIZE) { "blob too short" }
             return SealedBlob(
-                nonce = bytes.copyOfRange(0, 12),
-                payload = bytes.copyOfRange(12, bytes.size)
+                nonce = bytes.copyOfRange(0, NONCE_SIZE),
+                payload = bytes.copyOfRange(NONCE_SIZE, bytes.size),
             )
         }
     }

@@ -5,11 +5,7 @@ import com.kwazzar.lockruna.application.support.FakeAuthStateStore
 import com.kwazzar.lockruna.application.support.FakeBiometricPolicyStore
 import com.kwazzar.lockruna.domain.auth.AuthTokens
 import com.kwazzar.lockruna.domain.auth.AuthenticatedUser
-import com.kwazzar.lockruna.domain.auth.DeviceIdentity
-import com.kwazzar.lockruna.domain.auth.DevicePlatform
-import com.kwazzar.lockruna.domain.auth.PreLoginData
 import com.kwazzar.lockruna.domain.auth.SealedBlob
-import com.kwazzar.lockruna.domain.core.Result
 import com.kwazzar.lockruna.domain.crypto.KdfParams
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
@@ -32,17 +28,15 @@ class AuthStateStoreTest {
         assertNull(fakeStore.loadSession())
     }
 
-    private fun createUser(): AuthenticatedUser {
-        return AuthenticatedUser(
-            userId = "user-1",
-            deviceId = "device-1",
-            wrappedVaultKey = SealedBlob.pack(ByteArray(12), ByteArray(32)),
-            keyNonce = ByteArray(12),
-            kdfSalt = ByteArray(16),
-            kdfParams = KdfParams.SUPPORTED,
-            tokens = AuthTokens("access", "refresh", 3600)
-        )
-    }
+    private fun createUser(): AuthenticatedUser = AuthenticatedUser(
+        userId = "user-1",
+        deviceId = "device-1",
+        wrappedVaultKey = SealedBlob.pack(ByteArray(12), ByteArray(32)),
+        keyNonce = ByteArray(12),
+        kdfSalt = ByteArray(16),
+        kdfParams = KdfParams.SUPPORTED,
+        tokens = AuthTokens("access", "refresh", 3600),
+    )
 }
 
 class BiometricPolicyStoreTest {

@@ -9,7 +9,7 @@ import com.kwazzar.lockruna.domain.session.VaultSession
 class Logout(
     private val authApi: AuthApi,
     private val authStateStore: AuthStateStore,
-    private val session: VaultSession
+    private val session: VaultSession,
 ) {
     suspend operator fun invoke(): Result<Unit, AppError> {
         val logoutResult = authApi.logout()

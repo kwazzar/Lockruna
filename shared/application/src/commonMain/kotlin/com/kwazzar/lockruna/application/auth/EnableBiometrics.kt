@@ -1,6 +1,5 @@
 package com.kwazzar.lockruna.application.auth
 
-import com.kwazzar.lockruna.domain.auth.BiometricPolicyStore
 import com.kwazzar.lockruna.domain.core.Result
 import com.kwazzar.lockruna.domain.error.AppError
 import com.kwazzar.lockruna.domain.session.BiometricGate
@@ -10,7 +9,7 @@ import com.kwazzar.lockruna.domain.session.VaultSession
 class EnableBiometrics(
     private val biometricGate: BiometricGate,
     private val secureKeyStore: SecureKeyStore,
-    private val session: VaultSession
+    private val session: VaultSession,
 ) {
     suspend operator fun invoke(reason: String): Result<Unit, AppError> {
         val isAvailable = biometricGate.isAvailable()

@@ -9,18 +9,12 @@ import com.kwazzar.lockruna.application.support.FakeClock
 import com.kwazzar.lockruna.application.support.FakeCryptoService
 import com.kwazzar.lockruna.application.support.FakeIdGenerator
 import com.kwazzar.lockruna.application.support.FakePasswordNormalizer
-import com.kwazzar.lockruna.domain.auth.AuthenticatedUser
 import com.kwazzar.lockruna.domain.auth.AuthTokens
-import com.kwazzar.lockruna.domain.auth.BiometricPolicyStore
-import com.kwazzar.lockruna.domain.auth.DeviceIdentity
-import com.kwazzar.lockruna.domain.auth.DevicePlatform
+import com.kwazzar.lockruna.domain.auth.AuthenticatedUser
 import com.kwazzar.lockruna.domain.auth.SealedBlob
 import com.kwazzar.lockruna.domain.core.Result
-import com.kwazzar.lockruna.domain.crypto.CryptoService
 import com.kwazzar.lockruna.domain.crypto.KdfParams
 import com.kwazzar.lockruna.domain.error.AppError
-import com.kwazzar.lockruna.domain.session.Clock
-import com.kwazzar.lockruna.domain.session.IdGenerator
 import com.kwazzar.lockruna.domain.session.VaultKey
 import com.kwazzar.lockruna.domain.session.VaultSession
 import kotlinx.coroutines.runBlocking
@@ -62,7 +56,7 @@ class LoginTest {
 
         // Setup prelogin response
         authApi.preloginResult = Result.Success(
-            com.kwazzar.lockruna.domain.auth.PreLoginData(salt, KdfParams.SUPPORTED)
+            com.kwazzar.lockruna.domain.auth.PreLoginData(salt, KdfParams.SUPPORTED),
         )
 
         // Setup login response
@@ -74,7 +68,7 @@ class LoginTest {
             keyNonce = ByteArray(12),
             kdfSalt = salt,
             kdfParams = KdfParams.SUPPORTED,
-            tokens = AuthTokens("access-token", "refresh-token", 3600)
+            tokens = AuthTokens("access-token", "refresh-token", 3600),
         )
         authApi.loginResult = Result.Success(user)
 
@@ -83,7 +77,7 @@ class LoginTest {
         argon2.hashResult = masterKey
         crypto.hkdfResults = mapOf(
             "passkeeper/auth/v1" to authKey,
-            "passkeeper/kek/v1" to kek
+            "passkeeper/kek/v1" to kek,
         )
         crypto.decryptGcmResult = vaultKey
 
@@ -93,15 +87,17 @@ class LoginTest {
             normalizer = normalizer,
             crypto = crypto,
             authStateStore = authStateStore,
-            session = session
+            session = session,
         )
 
-        val result = login(CredentialsCommand(
-            email = email,
-            password = password,
-            deviceName = "Test Device",
-            deviceId = "device-1"
-        ))
+        val result = login(
+            CredentialsCommand(
+                email = email,
+                password = password,
+                deviceName = "Test Device",
+                deviceId = "device-1",
+            ),
+        )
 
         assertTrue(result.isSuccess)
         assertNotNull(session.currentVaultKey())
@@ -115,7 +111,7 @@ class LoginTest {
         val weakParams = KdfParams(memoryKiB = 1000, iterations = 1, parallelism = 1)
 
         authApi.preloginResult = Result.Success(
-            com.kwazzar.lockruna.domain.auth.PreLoginData(ByteArray(16), weakParams)
+            com.kwazzar.lockruna.domain.auth.PreLoginData(ByteArray(16), weakParams),
         )
 
         val login = Login(
@@ -124,15 +120,17 @@ class LoginTest {
             normalizer = normalizer,
             crypto = crypto,
             authStateStore = authStateStore,
-            session = session
+            session = session,
         )
 
-        val result = login(CredentialsCommand(
-            email = email,
-            password = "password123",
-            deviceName = "Test Device",
-            deviceId = "device-1"
-        ))
+        val result = login(
+            CredentialsCommand(
+                email = email,
+                password = "password123",
+                deviceName = "Test Device",
+                deviceId = "device-1",
+            ),
+        )
 
         assertTrue(result.isFailure)
         assertTrue(result.error is AppError.WeakKdfParams)
@@ -144,7 +142,7 @@ class LoginTest {
         val salt = "salt123456789012".toByteArray()
 
         authApi.preloginResult = Result.Success(
-            com.kwazzar.lockruna.domain.auth.PreLoginData(salt, KdfParams.SUPPORTED)
+            com.kwazzar.lockruna.domain.auth.PreLoginData(salt, KdfParams.SUPPORTED),
         )
         authApi.loginResult = Result.Failure(AppError.InvalidCredentials)
 
@@ -154,15 +152,17 @@ class LoginTest {
             normalizer = normalizer,
             crypto = crypto,
             authStateStore = authStateStore,
-            session = session
+            session = session,
         )
 
-        val result = login(CredentialsCommand(
-            email = email,
-            password = "password123",
-            deviceName = "Test Device",
-            deviceId = "device-1"
-        ))
+        val result = login(
+            CredentialsCommand(
+                email = email,
+                password = "password123",
+                deviceName = "Test Device",
+                deviceId = "device-1",
+            ),
+        )
 
         assertTrue(result.isFailure)
         assertEquals(AppError.InvalidCredentials, result.error)
@@ -174,7 +174,7 @@ class LoginTest {
         val salt = "salt123456789012".toByteArray()
 
         authApi.preloginResult = Result.Success(
-            com.kwazzar.lockruna.domain.auth.PreLoginData(salt, KdfParams.SUPPORTED)
+            com.kwazzar.lockruna.domain.auth.PreLoginData(salt, KdfParams.SUPPORTED),
         )
         authApi.loginResult = Result.Failure(AppError.RateLimited(60))
 
@@ -184,15 +184,17 @@ class LoginTest {
             normalizer = normalizer,
             crypto = crypto,
             authStateStore = authStateStore,
-            session = session
+            session = session,
         )
 
-        val result = login(CredentialsCommand(
-            email = email,
-            password = "password123",
-            deviceName = "Test Device",
-            deviceId = "device-1"
-        ))
+        val result = login(
+            CredentialsCommand(
+                email = email,
+                password = "password123",
+                deviceName = "Test Device",
+                deviceId = "device-1",
+            ),
+        )
 
         assertTrue(result.isFailure)
         assertEquals(AppError.RateLimited(60), result.error)
@@ -215,7 +217,7 @@ class LogoutTest {
             keyNonce = ByteArray(12),
             kdfSalt = ByteArray(16),
             kdfParams = KdfParams.SUPPORTED,
-            tokens = AuthTokens("access", "refresh", 3600)
+            tokens = AuthTokens("access", "refresh", 3600),
         )
         authStateStore.saveSession(user)
         session.unlock(VaultKey.from(ByteArray(32)))
@@ -255,7 +257,7 @@ class UnlockWithPasswordTest {
             keyNonce = ByteArray(12),
             kdfSalt = salt,
             kdfParams = KdfParams.SUPPORTED,
-            tokens = AuthTokens("access", "refresh", 3600)
+            tokens = AuthTokens("access", "refresh", 3600),
         )
         authStateStore.saveSession(user)
 
@@ -299,7 +301,7 @@ class UnlockWithPasswordTest {
             keyNonce = ByteArray(12),
             kdfSalt = salt,
             kdfParams = KdfParams.SUPPORTED,
-            tokens = AuthTokens("access", "refresh", 3600)
+            tokens = AuthTokens("access", "refresh", 3600),
         )
         authStateStore.saveSession(user)
         session.unlock(VaultKey.from(ByteArray(32) { 5 })) // Different key

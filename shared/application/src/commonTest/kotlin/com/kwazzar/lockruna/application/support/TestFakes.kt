@@ -6,13 +6,9 @@ import com.kwazzar.lockruna.domain.auth.AuthTokens
 import com.kwazzar.lockruna.domain.auth.AuthenticatedUser
 import com.kwazzar.lockruna.domain.auth.BiometricPolicyStore
 import com.kwazzar.lockruna.domain.auth.DeviceIdentity
-import com.kwazzar.lockruna.domain.auth.DevicePlatform
 import com.kwazzar.lockruna.domain.auth.PreLoginData
-import com.kwazzar.lockruna.domain.auth.SealedBlob
 import com.kwazzar.lockruna.domain.core.Result
 import com.kwazzar.lockruna.domain.crypto.Argon2
-import com.kwazzar.lockruna.domain.crypto.CryptoService
-import com.kwazzar.lockruna.domain.crypto.GcmCiphertext
 import com.kwazzar.lockruna.domain.crypto.KdfParams
 import com.kwazzar.lockruna.domain.crypto.PasswordNormalizer
 import com.kwazzar.lockruna.domain.error.AppError
@@ -78,11 +74,13 @@ class FakeIdGenerator : IdGenerator {
 }
 
 class FakeAuthApi(
-    var preloginResult: Result<PreLoginData, AppError> = Result.Success(PreLoginData(ByteArray(16), KdfParams.SUPPORTED)),
+    var preloginResult: Result<PreLoginData, AppError> = Result.Success(
+        PreLoginData(ByteArray(16), KdfParams.SUPPORTED),
+    ),
     var registerResult: Result<AuthenticatedUser, AppError>? = null,
     var loginResult: Result<AuthenticatedUser, AppError>? = null,
     var refreshResult: Result<AuthTokens, AppError>? = null,
-    var logoutResult: Result<Unit, AppError> = Result.Success(Unit)
+    var logoutResult: Result<Unit, AppError> = Result.Success(Unit),
 ) : AuthApi {
     var lastPreloginEmail: String? = null
     var lastRegisterEmail: String? = null
@@ -101,24 +99,25 @@ class FakeAuthApi(
         kdfParams: KdfParams,
         wrappedVaultKey: ByteArray,
         recoveryWrappedVaultKey: ByteArray,
-        device: DeviceIdentity
+        device: DeviceIdentity,
     ): Result<AuthenticatedUser, AppError> {
         lastRegisterEmail = email
         return registerResult ?: Result.Failure(AppError.InvalidCredentials)
     }
 
-    override suspend fun login(email: String, authKey: ByteArray, device: DeviceIdentity): Result<AuthenticatedUser, AppError> {
+    override suspend fun login(
+        email: String,
+        authKey: ByteArray,
+        device: DeviceIdentity,
+    ): Result<AuthenticatedUser, AppError> {
         lastLoginEmail = email
         return loginResult ?: Result.Failure(AppError.InvalidCredentials)
     }
 
-    override suspend fun refresh(refreshToken: String): Result<AuthTokens, AppError> {
-        return refreshResult ?: Result.Failure(AppError.Unauthorized)
-    }
+    override suspend fun refresh(refreshToken: String): Result<AuthTokens, AppError> =
+        refreshResult ?: Result.Failure(AppError.Unauthorized)
 
-    override suspend fun logout(): Result<Unit, AppError> {
-        return logoutResult
-    }
+    override suspend fun logout(): Result<Unit, AppError> = logoutResult
 }
 
 class FakeAuthStateStore : AuthStateStore {
@@ -128,9 +127,7 @@ class FakeAuthStateStore : AuthStateStore {
         session = user
     }
 
-    override suspend fun loadSession(): AuthenticatedUser? {
-        return session
-    }
+    override suspend fun loadSession(): AuthenticatedUser? = session
 
     override suspend fun clear() {
         session = null
@@ -165,14 +162,13 @@ class FakeBiometricPolicyStore : BiometricPolicyStore {
 class FakeArgon2 : Argon2 {
     var hashResult: ByteArray? = null
 
-    override suspend fun hash(password: String, salt: ByteArray, params: KdfParams): ByteArray =
-        hashResult ?: run {
-            val bytes = (password + salt.toHexString()).toByteArray()
-            val result = ByteArray(32)
-            val copyLen = minOf(bytes.size, 32)
-            bytes.copyInto(result, 0, 0, copyLen)
-            result
-        }
+    override suspend fun hash(password: String, salt: ByteArray, params: KdfParams): ByteArray = hashResult ?: run {
+        val bytes = (password + salt.toHexString()).toByteArray()
+        val result = ByteArray(32)
+        val copyLen = minOf(bytes.size, 32)
+        bytes.copyInto(result, 0, 0, copyLen)
+        result
+    }
 }
 
 class FakePasswordNormalizer : PasswordNormalizer {

@@ -4,19 +4,14 @@ import com.kwazzar.lockruna.application.support.FakeBiometricGate
 import com.kwazzar.lockruna.application.support.FakeBiometricPolicyStore
 import com.kwazzar.lockruna.application.support.FakeClock
 import com.kwazzar.lockruna.application.support.FakeSecureKeyStore
-import com.kwazzar.lockruna.domain.auth.BiometricPolicyStore
 import com.kwazzar.lockruna.domain.core.Result
 import com.kwazzar.lockruna.domain.error.AppError
-import com.kwazzar.lockruna.domain.session.BiometricGate
-import com.kwazzar.lockruna.domain.session.Clock
-import com.kwazzar.lockruna.domain.session.SecureKeyStore
 import com.kwazzar.lockruna.domain.session.VaultKey
 import com.kwazzar.lockruna.domain.session.VaultSession
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
-import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 private val <T, E> Result<T, E>.isSuccess: Boolean

@@ -1,7 +1,6 @@
 package com.kwazzar.lockruna.application.auth
 
 import com.kwazzar.lockruna.domain.auth.AuthStateStore
-import com.kwazzar.lockruna.domain.auth.AuthenticatedUser
 import com.kwazzar.lockruna.domain.core.Result
 import com.kwazzar.lockruna.domain.crypto.Argon2
 import com.kwazzar.lockruna.domain.crypto.CryptoService
@@ -15,7 +14,7 @@ class UnlockWithPassword(
     private val normalizer: PasswordNormalizer,
     private val crypto: CryptoService,
     private val authStateStore: AuthStateStore,
-    private val session: VaultSession
+    private val session: VaultSession,
 ) {
     suspend operator fun invoke(email: String, password: String): Result<Unit, AppError> {
         val user = authStateStore.loadSession() ?: return Result.Failure(AppError.Unauthorized)
@@ -24,7 +23,7 @@ class UnlockWithPassword(
             password,
             user.kdfSalt,
             argon2,
-            normalizer
+            normalizer,
         )
         val kek = KeyDerivation.kek(masterKey, crypto)
         val vaultKeyBytes = KeyDerivation.unwrapVaultKey(kek, user.wrappedVaultKey, email, crypto)

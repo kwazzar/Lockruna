@@ -13,19 +13,19 @@ class UnlockWithBiometrics(
     private val secureKeyStore: SecureKeyStore,
     private val biometricPolicyStore: BiometricPolicyStore,
     private val session: VaultSession,
-    private val clock: Clock
+    private val clock: Clock,
 ) {
-    suspend operator fun invoke(reason: String): Result<Unit, AppError> {
-        // Gate 1: 5 failed attempts in this process
-        if (biometricPolicyStore.failures() >= 5) {
-            return Result.Failure(AppError.InvalidCredentials)
-        }
+    private companion object {
+        private const val MAX_BIOMETRIC_FAILURES = 5
+        private const val SEVEN_DAYS_MS = 7L * 24 * 60 * 60 * 1000
+    }
 
-        // Gate 2: 7-day gate
+    suspend operator fun invoke(reason: String): Result<Unit, AppError> {
+        // Gates 1 & 2: Check failure count and 7-day gate
+        val failures = biometricPolicyStore.failures()
         val lastSuccess = biometricPolicyStore.lastSuccessfulUnlock()
         val now = clock.nowMillis()
-        val sevenDaysMs = 7L * 24 * 60 * 60 * 1000
-        if (lastSuccess == null || now - lastSuccess > sevenDaysMs) {
+        if (failures >= MAX_BIOMETRIC_FAILURES || lastSuccess == null || now - lastSuccess > SEVEN_DAYS_MS) {
             return Result.Failure(AppError.InvalidCredentials)
         }
 
@@ -37,7 +37,8 @@ class UnlockWithBiometrics(
         }
 
         // Gate 4: Load vault key from secure store
-        val vaultKey = secureKeyStore.loadVaultKey() ?: return Result.Failure(AppError.Unauthorized)
+        val vaultKey = secureKeyStore.loadVaultKey()
+            ?: return Result.Failure(AppError.Unauthorized)
 
         // Success: reset failures, update last success, unlock session
         biometricPolicyStore.resetFailures()

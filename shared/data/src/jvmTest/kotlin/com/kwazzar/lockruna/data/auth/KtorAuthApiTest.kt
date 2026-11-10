@@ -5,13 +5,10 @@ import com.kwazzar.lockruna.domain.auth.AuthenticatedUser
 import com.kwazzar.lockruna.domain.auth.SealedBlob
 import com.kwazzar.lockruna.domain.core.Result
 import com.kwazzar.lockruna.domain.crypto.KdfParams
-import com.kwazzar.lockruna.domain.error.AppError
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
 private val <T, E> Result<T, E>.isSuccess: Boolean
     get() = this is Result.Success
@@ -35,7 +32,7 @@ class InMemoryAuthStateStoreTest {
             keyNonce = ByteArray(12),
             kdfSalt = ByteArray(16),
             kdfParams = KdfParams.SUPPORTED,
-            tokens = AuthTokens("access", "refresh", 3600)
+            tokens = AuthTokens("access", "refresh", 3600),
         )
 
         store.saveSession(user)
@@ -60,7 +57,7 @@ class SessionAccessTokenProviderTest {
             keyNonce = ByteArray(12),
             kdfSalt = ByteArray(16),
             kdfParams = KdfParams.SUPPORTED,
-            tokens = AuthTokens("access-token", "refresh-token", 3600)
+            tokens = AuthTokens("access-token", "refresh-token", 3600),
         )
         authStateStore.saveSession(user)
 

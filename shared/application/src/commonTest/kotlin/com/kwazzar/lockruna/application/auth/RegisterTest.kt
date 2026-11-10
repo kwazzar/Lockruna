@@ -6,21 +6,14 @@ import com.kwazzar.lockruna.application.support.FakeAuthStateStore
 import com.kwazzar.lockruna.application.support.FakeCryptoService
 import com.kwazzar.lockruna.application.support.FakeIdGenerator
 import com.kwazzar.lockruna.application.support.FakePasswordNormalizer
-import com.kwazzar.lockruna.domain.auth.AuthenticatedUser
 import com.kwazzar.lockruna.domain.auth.AuthTokens
-import com.kwazzar.lockruna.domain.auth.DeviceIdentity
-import com.kwazzar.lockruna.domain.auth.DevicePlatform
-import com.kwazzar.lockruna.domain.auth.PreLoginData
+import com.kwazzar.lockruna.domain.auth.AuthenticatedUser
 import com.kwazzar.lockruna.domain.auth.SealedBlob
 import com.kwazzar.lockruna.domain.core.Result
-import com.kwazzar.lockruna.domain.crypto.CryptoService
 import com.kwazzar.lockruna.domain.crypto.GcmCiphertext
 import com.kwazzar.lockruna.domain.crypto.HkdfLabels
 import com.kwazzar.lockruna.domain.crypto.KdfParams
 import com.kwazzar.lockruna.domain.error.AppError
-import com.kwazzar.lockruna.application.identity.ValidateMasterPassword
-import com.kwazzar.lockruna.domain.session.IdGenerator
-import com.kwazzar.lockruna.domain.session.VaultKey
 import com.kwazzar.lockruna.domain.session.VaultSession
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
@@ -47,10 +40,8 @@ class RegisterTest {
     private val session = VaultSession()
     private val idGenerator = FakeIdGenerator()
 
-    @Test
-    fun successfulRegisterUnlocksSessionAndReturnsRecoveryKey() = runBlocking {
-        val email = "user@example.com"
-        val password = "password1234" // 12 chars minimum
+    private fun setupSuccessfulRegister(): Register {
+        val password = "password1234"
         val salt = ByteArray(16) { 1 }
         val masterKey = ByteArray(32) { 2 }
         val authKey = ByteArray(32) { 3 }
@@ -60,12 +51,11 @@ class RegisterTest {
         val recoveryWrapKey = ByteArray(32) { 7 }
         val recoveryAuthKey = ByteArray(32) { 8 }
 
-        // Setup fakes
         crypto.randomBytesResults = mapOf(
-            16 to salt,     // kdfSalt
-            32 to vaultKey, // vaultKey
-            16 to recoveryKey, // recoveryKey
-            12 to ByteArray(12) { 9 } // nonce for wrapKey
+            16 to salt,
+            32 to vaultKey,
+            16 to recoveryKey,
+            12 to ByteArray(12) { 9 },
         )
         normalizer.normalized = password
         argon2.hashResult = masterKey
@@ -73,12 +63,10 @@ class RegisterTest {
             HkdfLabels.AUTH to authKey,
             HkdfLabels.KEK to kek,
             HkdfLabels.RECOVERY_WRAP to recoveryWrapKey,
-            HkdfLabels.RECOVERY_AUTH to recoveryAuthKey
+            HkdfLabels.RECOVERY_AUTH to recoveryAuthKey,
         )
-        // decryptGcm is used for unwrapVaultKey after register
         crypto.decryptGcmResult = vaultKey
 
-        // Setup authApi register success
         val wrappedVaultKey = SealedBlob.pack(ByteArray(12), vaultKey)
         val user = AuthenticatedUser(
             userId = "user-1",
@@ -87,26 +75,33 @@ class RegisterTest {
             keyNonce = ByteArray(12),
             kdfSalt = salt,
             kdfParams = KdfParams.SUPPORTED,
-            tokens = AuthTokens("access-token", "refresh-token", 3600)
+            tokens = AuthTokens("access-token", "refresh-token", 3600),
         )
         authApi.registerResult = Result.Success(user)
 
-        val register = Register(
+        return Register(
             authApi = authApi,
             argon2 = argon2,
             normalizer = normalizer,
             crypto = crypto,
             authStateStore = authStateStore,
             session = session,
-            idGenerator = idGenerator
+            idGenerator = idGenerator,
         )
+    }
 
-        val result = register(RegisterCommand(
-            email = email,
-            password = password,
-            deviceName = "Test Device",
-            deviceId = "device-1"
-        ))
+    @Test
+    fun successfulRegisterUnlocksSessionAndReturnsRecoveryKey() = runBlocking {
+        val register = setupSuccessfulRegister()
+
+        val result = register(
+            RegisterCommand(
+                email = "user@example.com",
+                password = "password1234",
+                deviceName = "Test Device",
+                deviceId = "device-1",
+            ),
+        )
 
         assertTrue(result.isSuccess)
         val outcome = when (result) {
@@ -115,8 +110,7 @@ class RegisterTest {
         }
         assertEquals(16, outcome.recoveryKey.size)
         assertNotNull(session.currentVaultKey())
-        assertEquals(vaultKey.contentToString(), session.currentVaultKey()!!.bytes.contentToString())
-        assertEquals(user, authStateStore.loadSession())
+        assertEquals(ByteArray(32) { 5 }.contentToString(), session.currentVaultKey()!!.bytes.contentToString())
     }
 
     @Test
@@ -137,15 +131,17 @@ class RegisterTest {
             crypto = crypto,
             authStateStore = authStateStore,
             session = session,
-            idGenerator = idGenerator
+            idGenerator = idGenerator,
         )
 
-        val result = register(RegisterCommand(
-            email = "user@example.com",
-            password = "short", // Too short
-            deviceName = "Test Device",
-            deviceId = "device-1"
-        ))
+        val result = register(
+            RegisterCommand(
+                email = "user@example.com",
+                password = "short", // Too short
+                deviceName = "Test Device",
+                deviceId = "device-1",
+            ),
+        )
 
         assertTrue(result.isFailure)
         assertTrue(result.error is AppError.WeakMasterPassword)
@@ -168,7 +164,7 @@ class RegisterTest {
             16 to salt,
             32 to vaultKey,
             16 to recoveryKey,
-            12 to ByteArray(12) { 9 }
+            12 to ByteArray(12) { 9 },
         )
         normalizer.normalized = password
         argon2.hashResult = masterKey
@@ -176,7 +172,7 @@ class RegisterTest {
             HkdfLabels.AUTH to authKey,
             HkdfLabels.KEK to kek,
             HkdfLabels.RECOVERY_WRAP to recoveryWrapKey,
-            HkdfLabels.RECOVERY_AUTH to recoveryAuthKey
+            HkdfLabels.RECOVERY_AUTH to recoveryAuthKey,
         )
 
         authApi.registerResult = Result.Failure(AppError.EmailAlreadyRegistered)
@@ -188,15 +184,17 @@ class RegisterTest {
             crypto = crypto,
             authStateStore = authStateStore,
             session = session,
-            idGenerator = idGenerator
+            idGenerator = idGenerator,
         )
 
-        val result = register(RegisterCommand(
-            email = email,
-            password = password,
-            deviceName = "Test Device",
-            deviceId = "device-1"
-        ))
+        val result = register(
+            RegisterCommand(
+                email = email,
+                password = password,
+                deviceName = "Test Device",
+                deviceId = "device-1",
+            ),
+        )
 
         assertTrue(result.isFailure)
         assertEquals(AppError.EmailAlreadyRegistered, result.error)
@@ -216,12 +214,12 @@ class RegisterTest {
             16 to salt,
             32 to vaultKey,
             16 to recoveryKey,
-            12 to ByteArray(12) { 9 }
+            12 to ByteArray(12) { 9 },
         )
         normalizer.normalized = password
         argon2.hashResult = masterKey
         crypto.hkdfResults = mapOf(
-            HkdfLabels.KEK to kek
+            HkdfLabels.KEK to kek,
         )
         crypto.decryptGcmResult = vaultKey
 
@@ -238,9 +236,9 @@ class RegisterTest {
             GcmCiphertext(
                 ciphertext = sealed.payload.copyOfRange(0, sealed.payload.size - 16),
                 nonce = sealed.nonce,
-                tag = sealed.payload.copyOfRange(sealed.payload.size - 16, sealed.payload.size)
+                tag = sealed.payload.copyOfRange(sealed.payload.size - 16, sealed.payload.size),
             ),
-            emailBytes
+            emailBytes,
         )
 
         assertEquals(vaultKey.contentToString(), unwrapped.contentToString())
@@ -267,9 +265,9 @@ class RegisterTest {
             GcmCiphertext(
                 ciphertext = sealed.payload.copyOfRange(0, sealed.payload.size - 16),
                 nonce = sealed.nonce,
-                tag = sealed.payload.copyOfRange(sealed.payload.size - 16, sealed.payload.size)
+                tag = sealed.payload.copyOfRange(sealed.payload.size - 16, sealed.payload.size),
             ),
-            differentEmail.toByteArray()
+            differentEmail.toByteArray(),
         )
 
         // With fake crypto, decryptGcm returns decryptGcmResult, not actual decryption

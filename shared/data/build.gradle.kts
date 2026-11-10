@@ -77,10 +77,12 @@ kotlin {
         jvmMain.dependencies {
             implementation(libs.ktor.client.okhttp)
             implementation(libs.sqldelight.driver.sqlite)
+            implementation(libs.ktor.serialization.json)
         }
         androidMain.dependencies {
             implementation(libs.ktor.client.okhttp)
             implementation(libs.sqldelight.driver.android)
+            implementation(libs.ktor.serialization.json)
         }
         iosMain.dependencies {
             implementation(libs.ionspin.libsodium)

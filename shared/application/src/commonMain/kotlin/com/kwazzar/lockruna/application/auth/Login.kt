@@ -2,7 +2,6 @@ package com.kwazzar.lockruna.application.auth
 
 import com.kwazzar.lockruna.domain.auth.AuthApi
 import com.kwazzar.lockruna.domain.auth.AuthStateStore
-import com.kwazzar.lockruna.domain.auth.AuthenticatedUser
 import com.kwazzar.lockruna.domain.auth.DeviceIdentity
 import com.kwazzar.lockruna.domain.auth.DevicePlatform
 import com.kwazzar.lockruna.domain.core.Result
@@ -13,12 +12,7 @@ import com.kwazzar.lockruna.domain.error.AppError
 import com.kwazzar.lockruna.domain.session.VaultKey
 import com.kwazzar.lockruna.domain.session.VaultSession
 
-data class CredentialsCommand(
-    val email: String,
-    val password: String,
-    val deviceName: String,
-    val deviceId: String?
-)
+data class CredentialsCommand(val email: String, val password: String, val deviceName: String, val deviceId: String?)
 
 class Login(
     private val authApi: AuthApi,
@@ -26,7 +20,7 @@ class Login(
     private val normalizer: PasswordNormalizer,
     private val crypto: CryptoService,
     private val authStateStore: AuthStateStore,
-    private val session: VaultSession
+    private val session: VaultSession,
 ) {
     suspend operator fun invoke(command: CredentialsCommand): Result<Unit, AppError> {
         val preloginResult = authApi.prelogin(command.email)
@@ -42,14 +36,14 @@ class Login(
             command.password,
             preloginData.kdfSalt,
             argon2,
-            normalizer
+            normalizer,
         )
         val authKey = KeyDerivation.authKey(masterKey, crypto)
 
         val device = DeviceIdentity(
             deviceId = command.deviceId ?: "unknown",
             name = command.deviceName,
-            platform = DevicePlatform.ANDROID
+            platform = DevicePlatform.ANDROID,
         )
 
         val loginResult = authApi.login(command.email, authKey, device)

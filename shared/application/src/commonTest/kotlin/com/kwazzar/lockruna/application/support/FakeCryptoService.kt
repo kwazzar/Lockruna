@@ -14,9 +14,7 @@ class FakeCryptoService : CryptoService {
     override fun encryptGcm(key: ByteArray, plaintext: ByteArray, aad: ByteArray): GcmCiphertext =
         GcmCiphertext(ciphertext = plaintext, nonce = ByteArray(12), tag = ByteArray(16))
 
-    override fun decryptGcm(key: ByteArray, ciphertext: GcmCiphertext, aad: ByteArray): ByteArray =
-        decryptGcmResult
+    override fun decryptGcm(key: ByteArray, ciphertext: GcmCiphertext, aad: ByteArray): ByteArray = decryptGcmResult
 
-    override fun randomBytes(size: Int): ByteArray =
-        randomBytesResults[size] ?: ByteArray(size)
+    override fun randomBytes(size: Int): ByteArray = randomBytesResults[size] ?: ByteArray(size)
 }
