@@ -80,3 +80,66 @@ updateMaxSeenVersion:
 UPDATE vault_item
 SET max_seen_version = MAX(max_seen_version, ?)
 WHERE id = ?;
+
+-- Sync engine queries
+
+-- Upsert an item received from the server; the row is clean and keeps a local-only sync_seq.
+upsertRemoteItem:
+INSERT OR REPLACE INTO vault_item (id, type, ciphertext, nonce, version, sync_seq, deleted, dirty, max_seen_version, updated_at)
+VALUES (?, ?, ?, ?, ?, 0, ?, 0, ?, ?);
+
+-- Mark a pushed change as applied with the server version and timestamp.
+markItemApplied:
+UPDATE vault_item
+SET version = :version,
+    dirty = 0,
+    max_seen_version = MAX(max_seen_version, :max_seen_version),
+    updated_at = :updated_at
+WHERE id = :id;
+
+-- Dirty rows ready to push.
+selectDirtyItems:
+SELECT id, type, ciphertext, nonce, version, deleted
+FROM vault_item
+WHERE dirty = 1
+LIMIT ?;
+
+-- Keep the losing version of a conflict.
+insertLosingVersion:
+INSERT OR REPLACE INTO item_history (item_id, version, ciphertext, nonce, updated_at)
+VALUES (?, ?, ?, ?, ?);
+
+-- The single sync state row.
+selectSyncState:
+SELECT cursor, last_sync_at
+FROM sync_state
+WHERE id = 'single';
+
+upsertSyncState:
+INSERT OR REPLACE INTO sync_state (id, cursor, last_sync_at)
+VALUES ('single', ?, ?);
+
+-- The staged push batch.
+selectOutbox:
+SELECT idempotency_key, body
+FROM outbox
+LIMIT 1;
+
+insertOutbox:
+INSERT OR REPLACE INTO outbox (idempotency_key, body, created_at)
+VALUES (?, ?, 0);
+
+deleteOutbox:
+DELETE FROM outbox;
+
+-- Local reset for the stale vault gate.
+deleteAllVaultItems:
+DELETE FROM vault_item;
+
+deleteAllItemHistory:
+DELETE FROM item_history;
+
+clearSyncCursor:
+UPDATE sync_state
+SET cursor = NULL
+WHERE id = 'single';

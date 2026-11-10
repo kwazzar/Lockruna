@@ -15,6 +15,7 @@ data class PendingChange(
     val ciphertext: ByteArray?,
     val nonce: ByteArray?,
     val baseVersion: Long,
+    val deleted: Boolean = false,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -24,7 +25,8 @@ data class PendingChange(
             type == other.type &&
             ciphertext.contentEqualsOrNull(other.ciphertext) &&
             nonce.contentEqualsOrNull(other.nonce) &&
-            baseVersion == other.baseVersion
+            baseVersion == other.baseVersion &&
+            deleted == other.deleted
     }
 
     override fun hashCode(): Int {
@@ -33,6 +35,7 @@ data class PendingChange(
         result = 31 * result + (ciphertext?.contentHashCode() ?: 0)
         result = 31 * result + (nonce?.contentHashCode() ?: 0)
         result = 31 * result + baseVersion.hashCode()
+        result = 31 * result + deleted.hashCode()
         return result
     }
 
