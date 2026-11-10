@@ -24,7 +24,7 @@ PassKeeper це zero-knowledge менеджер паролів. Сервер з�
 2. `authKey = HKDF(masterKey, "passkeeper/auth/v1")`, надсилається серверу
 3. `kek = HKDF(masterKey, "passkeeper/kek/v1")`, не залишає клієнта
 4. `vaultKey`, випадковий, 32 байти, шифрує записи
-5. `wrapped_vault_key = AES-GCM(kek, vaultKey)`, AAD = `userId`
+5. `wrapped_vault_key = AES-GCM(kek, vaultKey)`, AAD = `email` (UTF-8 bytes)
 6. Сервер зберігає `HMAC(pepper, authKey)`, а не сам `authKey`. Достатньо швидкого хешу, бо `authKey` високоентропійний.
 
 Зміна пароля перезагортає лише `vaultKey`, записи не перешифровуються.
@@ -38,7 +38,7 @@ PassKeeper це zero-knowledge менеджер паролів. Сервер з�
 - Під час реєстрації клієнт генерує recovery key (128 біт ентропії) і показує його один раз як 12 слів BIP39: 4-бітний checksum дозволяє виявити помилку введення. Користувач підтверджує key повторним введенням; ключ не зберігається на пристрої.
 - `recoveryWrapKey = HKDF(recoveryKey, "passkeeper/recovery-wrap/v1")`
 - `recoveryAuthKey = HKDF(recoveryKey, "passkeeper/recovery-auth/v1")`
-- `recovery_wrapped_vault_key = AES-GCM(recoveryWrapKey, vaultKey)`, AAD = `userId`
+- `recovery_wrapped_vault_key = AES-GCM(recoveryWrapKey, vaultKey)`, AAD = `email` (UTF-8 bytes)
 - Сервер зберігає `HMAC(pepper, recoveryAuthKey)`. Скидання пароля вимагає `recoveryAuthKey`, а не лише email.
 - Відновлення: клієнт розгортає `vaultKey` через `recoveryWrapKey`, користувач задає новий майстер-пароль, клієнт генерує новий `kdf_salt`, виводить нові `authKey` і `kek`, перезагортає `vaultKey`. Сервер замінює ключовий матеріал і відкликає всі інші пристрої.
 

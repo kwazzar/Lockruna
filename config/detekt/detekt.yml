@@ -28,3 +28,9 @@ style:
   ReturnCount:
     active: true
     max: 4
+  UnusedParameter:
+    active: false
+
+exceptions:
+  TooGenericExceptionCaught:
+    active: false
