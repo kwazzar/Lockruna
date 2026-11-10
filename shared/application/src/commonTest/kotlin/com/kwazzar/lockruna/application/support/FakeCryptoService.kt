@@ -6,6 +6,7 @@ import com.kwazzar.lockruna.domain.crypto.GcmCiphertext
 class FakeCryptoService : CryptoService {
     var hkdfResults: Map<String, ByteArray> = emptyMap()
     var decryptGcmResult: ByteArray = ByteArray(32)
+    var randomBytesResults: Map<Int, ByteArray> = emptyMap()
 
     override fun hkdfSha256(inputKey: ByteArray, salt: ByteArray?, info: String, length: Int): ByteArray =
         hkdfResults[info] ?: ByteArray(length)
@@ -16,5 +17,6 @@ class FakeCryptoService : CryptoService {
     override fun decryptGcm(key: ByteArray, ciphertext: GcmCiphertext, aad: ByteArray): ByteArray =
         decryptGcmResult
 
-    override fun randomBytes(size: Int): ByteArray = ByteArray(size)
+    override fun randomBytes(size: Int): ByteArray =
+        randomBytesResults[size] ?: ByteArray(size)
 }
