@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.sync.Mutex
 
 class ItemEditStore(
     private val createItem: CreateItem,
@@ -22,6 +23,7 @@ class ItemEditStore(
     private val _effects = MutableSharedFlow<ItemEditEffect>(extraBufferCapacity = 0, replay = 0)
     private var draftSecret: String = ""
     private var secretDraftChanged: Boolean = false
+    private val saveMutex = Mutex()
 
     val state = _state.asStateFlow()
     val effects = _effects.asSharedFlow()
@@ -35,6 +37,7 @@ class ItemEditStore(
             is Result.Success -> parsed.value
             is Result.Failure -> {
                 clearDraft()
+                _state.value = ItemEditState(existingId = existingId)
                 return
             }
         }
@@ -73,22 +76,28 @@ class ItemEditStore(
     }
 
     private suspend fun save() {
-        if (_state.value.isSaving) return
-        _state.value = _state.value.copy(isSaving = true)
-        val result = when (val existingId = _state.value.existingId) {
-            null -> create()
-            else -> update(existingId)
-        }
-        when (result) {
-            is Result.Success -> {
-                _state.value = _state.value.copy(isSaving = false)
-                _effects.emit(ItemEditEffect.Saved(result.value.value))
+        if (!saveMutex.tryLock()) return
+        try {
+            _state.value = _state.value.copy(isSaving = true)
+            val result = when (val existingId = _state.value.existingId) {
+                null -> create()
+                else -> update(existingId)
             }
+            when (result) {
+                is Result.Success -> {
+                    draftSecret = ""
+                    secretDraftChanged = false
+                    _state.value = _state.value.copy(isSaving = false, hasSecretDraft = false)
+                    _effects.emit(ItemEditEffect.Saved(result.value.value))
+                }
 
-            is Result.Failure -> {
-                _state.value = _state.value.copy(isSaving = false)
-                _effects.emit(ItemEditEffect.ValidationError(result.error))
+                is Result.Failure -> {
+                    _state.value = _state.value.copy(isSaving = false)
+                    _effects.emit(ItemEditEffect.ValidationError(result.error))
+                }
             }
+        } finally {
+            saveMutex.unlock()
         }
     }
 
@@ -162,7 +171,9 @@ sealed interface ItemEditIntent {
 
     data class UsernameChanged(val value: String) : ItemEditIntent
 
-    data class SecretChanged(val value: String) : ItemEditIntent
+    data class SecretChanged(val value: String) : ItemEditIntent {
+        override fun toString(): String = "SecretChanged(value=<redacted>)"
+    }
 
     data class UrlChanged(val value: String) : ItemEditIntent
 

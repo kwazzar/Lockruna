@@ -27,6 +27,18 @@ class VaultSessionTest {
     }
 
     @Test
+    fun `state flow reports lock transitions`() {
+        val session = VaultSession()
+        assertEquals(VaultSession.State.Locked, session.stateFlow.value)
+
+        session.unlock(VaultKey.random(cryptoService))
+        assertEquals(VaultSession.State.Unlocked, session.stateFlow.value)
+
+        session.lock()
+        assertEquals(VaultSession.State.Locked, session.stateFlow.value)
+    }
+
+    @Test
     fun `lock closes the session and drops the key`() {
         val session = VaultSession()
         session.unlock(VaultKey.random(cryptoService))

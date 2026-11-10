@@ -47,6 +47,17 @@ class ItemDetailStoreTest {
     }
 
     @Test
+    fun `reveal without an effect collector does not mark the secret visible`() = runTest {
+        val item = createItem()
+        repository.save(item)
+        store.open(item.id.value)
+
+        store.dispatch(ItemDetailIntent.Reveal)
+
+        assertFalse(store.state.value.secretVisible)
+    }
+
+    @Test
     fun `reveal emits secret and marks it visible`() = runTest {
         val item = createItem()
         repository.save(item)

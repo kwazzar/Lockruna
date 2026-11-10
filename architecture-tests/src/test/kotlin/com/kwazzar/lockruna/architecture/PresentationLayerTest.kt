@@ -6,8 +6,8 @@ import kotlin.test.Test
 import kotlin.test.assertTrue
 
 /**
- * Guards presentation boundaries: stores use application use cases only, and
- * platform implementations remain outside the shared presentation layer.
+ * Guards presentation boundaries: stores use application use cases only, state
+ * carries the secret-free UI model, and platform implementations stay out.
  */
 class PresentationLayerTest {
     private val scope: KoScope = Konsist.scopeFromDirectories(listOf("shared"))
@@ -19,6 +19,9 @@ class PresentationLayerTest {
                 !file.projectPath.contains("/jvmTest/")
         }
 
+    private val storeFiles
+        get() = productionFiles.filter { file -> file.projectPath.endsWith("Store.kt") }
+
     @Test
     fun `presentation module exists`() {
         val moduleFiles = productionFiles.filter { file ->
@@ -29,13 +32,8 @@ class PresentationLayerTest {
     }
 
     @Test
-    fun `presentation sources do not import frameworks or repositories`() {
-        val forbidden = listOf(
-            "app.cash.sqldelight.",
-            "io.ktor.",
-            "androidx.",
-            "com.kwazzar.lockruna.domain.vault.VaultItemRepository",
-        )
+    fun `presentation sources do not import frameworks`() {
+        val forbidden = listOf("app.cash.sqldelight.", "io.ktor.", "androidx.")
         val presentationFiles = productionFiles
 
         assertTrue(presentationFiles.isNotEmpty(), "presentation sources were not found")
@@ -52,20 +50,54 @@ class PresentationLayerTest {
     }
 
     @Test
-    fun `stores do not depend on the data layer`() {
-        val storeFiles = productionFiles.filter { file ->
-            file.projectPath.endsWith("Store.kt")
-        }
+    fun `stores depend on application use cases only`() {
+        val forbidden = listOf(
+            "com.kwazzar.lockruna.data.",
+            "com.kwazzar.lockruna.domain.vault.VaultItemRepository",
+            "com.kwazzar.lockruna.domain.vault.Clipboard",
+            "app.cash.sqldelight.",
+            "io.ktor.",
+            "androidx.",
+        )
+        val stores = storeFiles
 
-        assertTrue(storeFiles.isNotEmpty(), "presentation stores were not found")
-        storeFiles.forEach { file ->
-            val dataImports = file.imports
-                .filter { declaration -> declaration.name.startsWith("com.kwazzar.lockruna.data.") }
+        assertTrue(stores.isNotEmpty(), "presentation stores were not found")
+        stores.forEach { file ->
+            val forbiddenImports = file.imports
+                .filter { declaration -> forbidden.any { declaration.name.startsWith(it) } }
                 .map { declaration -> declaration.name }
 
             assertTrue(
-                dataImports.isEmpty(),
-                "presentation store ${file.projectPath} imports data: $dataImports",
+                forbiddenImports.isEmpty(),
+                "presentation store ${file.projectPath} imports forbidden dependencies: $forbiddenImports",
+            )
+
+            val useCaseImports = file.imports
+                .filter { declaration -> declaration.name.startsWith("com.kwazzar.lockruna.application.") }
+
+            assertTrue(
+                useCaseImports.isNotEmpty(),
+                "presentation store ${file.projectPath} does not use application use cases",
+            )
+        }
+    }
+
+    @Test
+    fun `state never holds aggregates or secrets`() {
+        val forbiddenTypes = listOf("VaultItem", "Secret")
+        val states = scope.classesAndInterfacesAndObjects().filter { declaration ->
+            declaration.name.endsWith("State") && declaration.projectPath.contains("/presentation/")
+        }
+
+        assertTrue(states.isNotEmpty(), "presentation states were not found")
+        states.forEach { state ->
+            val forbiddenProperties = state.properties()
+                .map { property -> property.type?.name.orEmpty() }
+                .filter { typeName -> forbiddenTypes.any { typeName.contains(it) } }
+
+            assertTrue(
+                forbiddenProperties.isEmpty(),
+                "presentation state ${state.projectPath} holds forbidden types: $forbiddenProperties",
             )
         }
     }

@@ -25,6 +25,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class ItemEditStoreTest {
@@ -53,7 +54,7 @@ class ItemEditStoreTest {
         assertEquals("alice", saved.username)
         assertEquals("secret-value", saved.secret?.value)
         assertEquals("https://example.com", saved.url?.value)
-        assertTrue(store.state.value.hasSecretDraft)
+        assertFalse(store.state.value.hasSecretDraft)
         assertFalse(store.state.value.toString().contains("secret-value"))
     }
 
@@ -141,6 +142,43 @@ class ItemEditStoreTest {
         val validation = assertIs<ItemEditEffect.ValidationError>(effect.await())
         assertIs<AppError.InvalidItem>(validation.error)
         assertFalse(store.state.value.isSaving)
+    }
+
+    @Test
+    fun `secret intent does not expose the secret in toString`() {
+        val intent = ItemEditIntent.SecretChanged("secret-value")
+
+        assertFalse(intent.toString().contains("secret-value"))
+    }
+
+    @Test
+    fun `save clears the secret draft`() = runTest {
+        store.dispatch(ItemEditIntent.TitleChanged("GitHub"))
+        store.dispatch(ItemEditIntent.SecretChanged("secret-value"))
+        val effect = async(start = CoroutineStart.UNDISPATCHED) { store.effects.first() }
+
+        store.dispatch(ItemEditIntent.Save)
+
+        assertEquals(ItemEditEffect.Saved(itemId.value), effect.await())
+        assertFalse(store.state.value.hasSecretDraft)
+        val secondEffect = async(start = CoroutineStart.UNDISPATCHED) { store.effects.first() }
+        store.dispatch(ItemEditIntent.Save)
+        assertIs<ItemEditEffect.ValidationError>(secondEffect.await())
+        val saved = assertIs<Result.Success<VaultItem>>(repository.get(itemId)).value
+        assertEquals(0L, saved.version)
+    }
+
+    @Test
+    fun `an invalid existing id keeps edit mode and never creates an item`() = runTest {
+        store.begin("not-an-id")
+
+        assertEquals("not-an-id", store.state.value.existingId)
+        val effect = async(start = CoroutineStart.UNDISPATCHED) { store.effects.first() }
+        store.dispatch(ItemEditIntent.Save)
+
+        assertIs<ItemEditEffect.ValidationError>(effect.await())
+        val saved = assertIs<Result.Success<VaultItem?>>(repository.get(itemId)).value
+        assertNull(saved)
     }
 
     @Test

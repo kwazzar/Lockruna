@@ -1,14 +1,18 @@
 package com.kwazzar.lockruna.presentation.vault
 
 import com.kwazzar.lockruna.application.session.LockVault
+import com.kwazzar.lockruna.application.session.ObserveVaultState
 import com.kwazzar.lockruna.application.vault.CopySecret
 import com.kwazzar.lockruna.application.vault.ObserveItems
 import com.kwazzar.lockruna.application.vault.RevealSecret
 import com.kwazzar.lockruna.domain.core.Result
+import com.kwazzar.lockruna.domain.session.VaultSession
 import com.kwazzar.lockruna.domain.vault.ItemId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -16,7 +20,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class VaultListStore(
-    observeItems: ObserveItems,
+    private val observeItems: ObserveItems,
+    observeVaultState: ObserveVaultState,
     private val lockVault: LockVault,
     private val revealSecret: RevealSecret,
     private val copySecret: CopySecret,
@@ -25,18 +30,25 @@ class VaultListStore(
     private val observedItems = MutableStateFlow<List<ItemUi>>(emptyList())
     private val _state = MutableStateFlow(VaultListState(items = emptyList(), searchQuery = null, isLoading = true))
     private val _effects = MutableSharedFlow<VaultListEffect>(extraBufferCapacity = 0, replay = 0)
+    private var itemsJob: Job? = null
 
     val state = _state.asStateFlow()
     val effects = _effects.asSharedFlow()
 
     init {
         scope.launch {
-            observeItems().collect { items ->
-                val mapped = items.map { it.toItemUi() }
-                observedItems.value = mapped
-                updateItems()
+            observeVaultState().collect { vaultState ->
+                when (vaultState) {
+                    is VaultSession.State.Unlocked -> startObservingItems()
+                    is VaultSession.State.Locked -> clearItems()
+                }
             }
         }
+    }
+
+    /** Stops the observation; call it when the screen is disposed. */
+    fun close() {
+        scope.cancel()
     }
 
     suspend fun dispatch(intent: VaultListIntent) {
@@ -62,7 +74,7 @@ class VaultListStore(
             is Result.Failure -> return
         }
         val secret = when (val result = revealSecret(id)) {
-            is Result.Success -> result.value ?: return
+            is Result.Success -> result.value
             is Result.Failure -> return
         }
         _effects.emit(VaultListEffect.SecretRevealed(secret))
@@ -76,6 +88,24 @@ class VaultListStore(
         if (copySecret(id) is Result.Success) {
             _effects.emit(VaultListEffect.SecretCopied)
         }
+    }
+
+    private fun startObservingItems() {
+        itemsJob?.cancel()
+        _state.value = _state.value.copy(isLoading = true)
+        itemsJob = scope.launch {
+            observeItems().collect { items ->
+                observedItems.value = items.map { it.toItemUi() }
+                updateItems()
+            }
+        }
+    }
+
+    private fun clearItems() {
+        itemsJob?.cancel()
+        itemsJob = null
+        observedItems.value = emptyList()
+        _state.value = _state.value.copy(items = emptyList(), isLoading = false)
     }
 
     private fun updateItems() {

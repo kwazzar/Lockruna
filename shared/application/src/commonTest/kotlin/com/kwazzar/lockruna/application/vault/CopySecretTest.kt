@@ -49,6 +49,17 @@ class CopySecretTest {
         assertEquals(listOf("secret-value"), clipboard.values)
     }
 
+    @Test
+    fun `clipboard failure is propagated as an app error`() = runTest {
+        repository.save(createItem(VaultItemType.LOGIN, "secret-value"))
+
+        val result = CopySecret(repository, FailingClipboard())(
+            itemId("00000000-0000-4000-8000-000000000001"),
+        )
+
+        assertEquals(AppError.ClipboardUnavailable, (result as Result.Failure).error)
+    }
+
     private suspend fun createItem(type: VaultItemType, secret: String?): VaultItem {
         val result = VaultItem.create(
             id = itemId("00000000-0000-4000-8000-000000000001"),
@@ -68,8 +79,14 @@ class CopySecretTest {
     private class RecordingClipboard : Clipboard {
         val values = mutableListOf<String>()
 
-        override suspend fun copySecret(value: String) {
+        override suspend fun copySecret(value: String): Result<Unit, AppError> {
             values += value
+            return Result.Success(Unit)
         }
+    }
+
+    private class FailingClipboard : Clipboard {
+        override suspend fun copySecret(value: String): Result<Unit, AppError> =
+            Result.Failure(AppError.ClipboardUnavailable)
     }
 }

@@ -6,7 +6,7 @@ import com.kwazzar.lockruna.domain.vault.ItemId
 import com.kwazzar.lockruna.domain.vault.VaultItemRepository
 
 class RevealSecret(private val repository: VaultItemRepository) {
-    suspend operator fun invoke(id: ItemId): Result<String?, AppError> {
+    suspend operator fun invoke(id: ItemId): Result<String, AppError> {
         val item = when (val found = repository.get(id)) {
             is Result.Failure -> return Result.Failure(found.error)
             is Result.Success -> found.value ?: return Result.Failure(AppError.ItemNotFound)

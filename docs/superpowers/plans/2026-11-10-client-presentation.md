@@ -87,12 +87,12 @@ fun VaultItem.toItemUi(): ItemUi
 // domain/vault/Clipboard.kt
 interface Clipboard {
     /** Копіює з прапорцем sensitive; нативна реалізація очищає через 30 с. */
-    suspend fun copySecret(value: String)
+    suspend fun copySecret(value: String): Result<Unit, AppError>
 }
 
 // application/vault
 class RevealSecret(private val repository: VaultItemRepository) {
-    suspend operator fun invoke(id: ItemId): Result<String?, AppError>
+    suspend operator fun invoke(id: ItemId): Result<String, AppError>
 }
 
 class CopySecret(
@@ -103,8 +103,8 @@ class CopySecret(
 }
 ```
 
-- `RevealSecret` — запису немає → `Failure(ItemNotFound)`; є, але `secret == null` → `Failure(InvalidItem)`; інакше `Success(secret.value)`.
-- `CopySecret` — та сама валідація; далі `clipboard.copySecret(secret.value)` → `Success(Unit)`.
+- `RevealSecret` — запису немає → `Failure(ItemNotFound)`; є, але `secret == null` → `Failure(InvalidItem)`; інакше `Success(secret.value)`. Успіх завжди має значення (без `null`), щоб у Effect не потрапив «секрет без значення».
+- `CopySecret` — та сама валідація; далі `clipboard.copySecret(secret.value)` → `Success(Unit)`. Помилка буфера обміну повертається як `Failure(AppError.ClipboardUnavailable)`, а не виняток через межу застосунку.
 - Обидва беруть запис через `repository.get(id)` напряму — окремого GetItem-делегування всередині application не потрібне.
 
 - [x] **Step 1: Write the failing tests** (увага: три гілки кожного use case; фейковий `RecordingClipboard` у тесті).
@@ -132,6 +132,7 @@ class CopySecret(
 ```kotlin
 class VaultListStore(
     observeItems: ObserveItems,
+    observeVaultState: ObserveVaultState,
     lockVault: LockVault,
     revealSecret: RevealSecret,
     copySecret: CopySecret,
@@ -139,6 +140,7 @@ class VaultListStore(
     val state: StateFlow<VaultListState>
     val effects: SharedFlow<VaultListEffect>
     suspend fun dispatch(intent: VaultListIntent)   // Search теж через dispatch
+    fun close()                                      // скасовує спостереження (екран закрито)
 }
 
 data class VaultListState(
@@ -163,11 +165,12 @@ sealed interface VaultListEffect {
 ```
 
 - Пошук: title + username, `lowercase()` contains, trim; `null`/порожній → усе.
+- Спостереження слідує за сесією: `ObserveVaultState` (сесія віддає `StateFlow` стану) → під `Unlocked` store підписується на `observeItems()` з поточним ключем, під `Locked` скасовує підписку та чистить індекс у пам'яті (US-08). `close()` скасовує спостереження, коли екран закрито.
 - `RevealSecret`-Intent — виклик use case; успіх → effect `SecretRevealed`. Помилка (нешіснуючий id, запис без секрету) → effect НЕ emit (UI загального банера в цій хвилі немає).
 - Фікс-тест: секрет у `state` не з'являється поле-за-полем, і `SecretRevealed` з `replay == 0` не перевидається повторно при re-collect.
 - [x] **Step 1: Write failing tests:** emit списку (`isLoading` true→false після перших даних), фільтр регістр-незалежний, `Lock` викликає `LockVault`, Reveal → effect з секретом, Copy → `RecordingClipboard` + effect. Reveal для відсутнього id → без effect.
 - [x] **Step 2: verify fails** `./gradlew :shared:presentation:jvmTest --tests '*VaultListStoreTest*'` — FAIL.
-- [x] **Step 3: Implement.** У `init` — `observeItems.invoke()` collect у state (`isLoading = items.isEmpty()` не потрібен: порожній список валідний стан). Ефекти — приватний `MutableSharedFlow<VaultListEffect>(extraBufferCapacity = 0, replay = 0)`, відкритий як `SharedFlow`; send — `trySend`.
+- [x] **Step 3: Implement.** У `init` — collect `observeVaultState()`, а під ним `observeItems.invoke()` collect у state (`isLoading = items.isEmpty()` не потрібен: порожній список валідний стан). Ефекти — приватний `MutableSharedFlow<VaultListEffect>(extraBufferCapacity = 0, replay = 0)`, відкритий як `SharedFlow`; send — `emit` (у coroutines 1.11 `MutableSharedFlow` не має `trySend`, а `tryEmit` не доставляє буфер 0).
 - [x] **Step 4: verify passes.**
 - [x] **Step 5: Commit** `feat(presentation): vault list store with search and lock`
 
@@ -213,7 +216,7 @@ sealed interface ItemDetailEffect {
 }
 ```
 
-- Внутрішній transient var `revealedSecret: String?` — store тримає секрет лише поки `secretVisible == true`; `Hide` обнуляє. State НЕ містить його.
+- Секрет не кешується у store: `Reveal` віддає його одноразово через effect `SecretRevealed`, а State тримає лише прапор `secretVisible`. `Hide` скидає прапор.
 - `open(id)` — `GetItem` → state.item = `toItemUi()` або `null`.
 - `DeleteConfirmed` — `DeleteItem(id)` успіх → effect `Closed` + `state.item = null` (тест фіксує, що після видалення повторний Reveal не працює і без винятків).
 
@@ -308,17 +311,26 @@ data class ItemEditState(
 package com.kwazzar.lockruna.presentation.di
 
 val presentationModule = module {
-    single { VaultListStore(ObserveItems(get()), LockVault(get()), RevealSecret(get()), CopySecret(get())) }
-    single { ItemDetailStore(GetItem(get()), RevealSecret(get()), CopySecret(get()), DeleteItem(get())) }
-    single { ItemEditStore(CreateItem(get(), get(), get()), UpdateItem(get(), get()), GetItem(get())) }
+    factory {
+        VaultListStore(
+            ObserveItems(get()),
+            ObserveVaultState(get()),
+            LockVault(get()),
+            RevealSecret(get()),
+            CopySecret(get(), get()),
+        )
+    }
+    factory { ItemDetailStore(GetItem(get()), RevealSecret(get()), CopySecret(get(), get()), DeleteItem(get(), get())) }
+    factory { ItemEditStore(CreateItem(get(), get(), get()), UpdateItem(get(), get()), GetItem(get())) }
 }
 ```
 
-(`ObserveItems(get())` тощо — сигнатури див. в `shared/application/.../application/vault/*`; порядок параметрів — за їхніми конструкторами.)
+(`ObserveItems(get())` тощо — сигнатури див. в `shared/application/.../application/vault/*`; порядок параметрів — за їхніми конструкторами. `CopySecret` і `DeleteItem` потребують по два порти, тому два `get()`. Stores — `factory`: кожен екран має власний стан.)
 
 Konsist-тест `PresentationLayerTest`:
-- `shared/presentation/**` не імпортує `app.cash.sqldelight.`, `io.ktor.`, `androidx.`, `com.kwazzar.lockruna.domain.vault.VaultItemRepository` (прямі виклики репозиторію заборонені);
-- класи `*Store` не звертаються до `com.kwazzar.lockruna.data.`.
+- `shared/presentation/**` не імпортує `app.cash.sqldelight.`, `io.ktor.`, `androidx.`;
+- файли `*Store` не імпортують `com.kwazzar.lockruna.data.`, `VaultItemRepository`, `Clipboard` і мають імпортувати application use case;
+- `*State` не тримають у властивостях `VaultItem`/`Secret` — тільки `ItemUi` та прості типи.
 
 - [x] **Step 1: konsist тест RED** (не збирається — зʼявився файл) → run `./gradlew :architecture-tests:test` і зафіксувати FAIL на відсутність файлу.
 - [x] **Step 2: додати module + build dep** → GREEN.
@@ -331,3 +343,16 @@ Konsist-тест `PresentationLayerTest`:
 ## Порядок злиття
 
 - Хвиля незалежна від `client-sync` і `client-auth`, злиття в будь-якому порядку. Koin-композиція всіх модулів — окрема нативна хвиля.
+
+## Review волни (після Task 6)
+
+Фінальний review усієї гілки (`df40e3b..24e21a7`) дав 2 critical, 6 important і 4 minor зауваження. Внесено:
+
+- `ItemEditIntent.SecretChanged.toString()` редагує значення — секрет не друкується в логах/діагностиці.
+- Спостереження списку пов'язане з сесією: `VaultSession.stateFlow` → `ObserveVaultState` → store підписується на `observeItems()` з актуальним ключем після unlock і чистить індекс у пам'яті при lock (US-08); `close()` скасовує підписку.
+- `ItemDetailStore` більше не кешує секрет у приватному полі: значення йде одноразово через effect, у State лише прапор `secretVisible`; reveal без активного collector'а effect не змінює стан.
+- Чернетка секрету в `ItemEditStore` очищається після успішного збереження; некоректний `existingId` лишає режим редагування (не перетворює edit у create); гейт збереження атомарний (`Mutex.tryLock`).
+- Порт `Clipboard` повертає `Result<Unit, AppError>` — помилка буфера не перетинає межу застосунку винятком; `RevealSecret` повертає `Result<String, AppError>` без nullable-успіху.
+- Koin: stores зареєстровані як `factory` (окремий стан на екран), додано тест розв'язання графа; Konsist-guard перевіряє заборону data/repository/Clipboard у stores, наявність application use case та типи властивостей `*State`.
+
+Відхилено: підтримка створення `CARD`/`NOTE` (US-04) — доменний агрегат не моделює card/note-поля, лише `title/username/secret/url`; вибір типу без відповідних полів створював би неповні записи. Це окрема хвиля з доменними змінами.

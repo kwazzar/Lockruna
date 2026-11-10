@@ -19,7 +19,6 @@ class ItemDetailStore(
 ) {
     private val _state = MutableStateFlow(ItemDetailState(item = null, secretVisible = false))
     private val _effects = MutableSharedFlow<ItemDetailEffect>(extraBufferCapacity = 0, replay = 0)
-    private var revealedSecret: String? = null
 
     val state = _state.asStateFlow()
     val effects = _effects.asSharedFlow()
@@ -36,7 +35,6 @@ class ItemDetailStore(
             is Result.Success -> result.value
             is Result.Failure -> null
         }
-        revealedSecret = null
         _state.value = ItemDetailState(item = item?.toItemUi(), secretVisible = false)
     }
 
@@ -52,17 +50,16 @@ class ItemDetailStore(
 
     private suspend fun reveal() {
         val id = currentItemId() ?: return
+        if (_effects.subscriptionCount.value == 0) return
         val secret = when (val result = revealSecret(id)) {
-            is Result.Success -> result.value ?: return
+            is Result.Success -> result.value
             is Result.Failure -> return
         }
-        revealedSecret = secret
-        _state.value = _state.value.copy(secretVisible = true)
         _effects.emit(ItemDetailEffect.SecretRevealed(secret))
+        _state.value = _state.value.copy(secretVisible = true)
     }
 
     private fun hide() {
-        revealedSecret = null
         _state.value = _state.value.copy(secretVisible = false)
     }
 
@@ -95,7 +92,6 @@ class ItemDetailStore(
     }
 
     private fun clearItem() {
-        revealedSecret = null
         _state.value = ItemDetailState(item = null, secretVisible = false)
     }
 }

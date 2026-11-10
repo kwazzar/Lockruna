@@ -14,6 +14,8 @@ sealed interface AppError {
 
     data object ItemNotFound : AppError
 
+    data object ClipboardUnavailable : AppError
+
     data class InvalidItem(val reason: String) : AppError
 
     data class WeakKdfParams(val actual: String) : AppError

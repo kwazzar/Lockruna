@@ -13,7 +13,6 @@ class CopySecret(private val repository: VaultItemRepository, private val clipbo
             is Result.Success -> found.value ?: return Result.Failure(AppError.ItemNotFound)
         }
         val secret = item.secret ?: return Result.Failure(AppError.InvalidItem("Vault item has no secret"))
-        clipboard.copySecret(secret.value)
-        return Result.Success(Unit)
+        return clipboard.copySecret(secret.value)
     }
 }

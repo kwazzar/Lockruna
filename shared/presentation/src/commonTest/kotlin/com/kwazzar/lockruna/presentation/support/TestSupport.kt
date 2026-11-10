@@ -1,15 +1,18 @@
 package com.kwazzar.lockruna.presentation.support
 
+import com.kwazzar.lockruna.domain.core.Result
 import com.kwazzar.lockruna.domain.crypto.CryptoService
 import com.kwazzar.lockruna.domain.crypto.GcmCiphertext
+import com.kwazzar.lockruna.domain.error.AppError
 import com.kwazzar.lockruna.domain.session.Clock
 import com.kwazzar.lockruna.domain.vault.Clipboard
 
 class RecordingClipboard : Clipboard {
     val values = mutableListOf<String>()
 
-    override suspend fun copySecret(value: String) {
+    override suspend fun copySecret(value: String): Result<Unit, AppError> {
         values += value
+        return Result.Success(Unit)
     }
 }
 
