@@ -14,6 +14,7 @@ import com.kwazzar.lockruna.domain.crypto.Argon2
 import com.kwazzar.lockruna.domain.crypto.CryptoService
 import com.kwazzar.lockruna.domain.crypto.GcmCiphertext
 import com.kwazzar.lockruna.domain.crypto.KdfParams
+import com.kwazzar.lockruna.domain.crypto.PasswordNormalizer
 import com.kwazzar.lockruna.domain.error.AppError
 import com.kwazzar.lockruna.domain.session.Clock
 import com.kwazzar.lockruna.domain.session.IdGenerator
@@ -74,11 +75,11 @@ class FakeIdGenerator : IdGenerator {
 }
 
 class FakeAuthApi(
-    private val preloginResult: Result<PreLoginData, AppError> = Result.Success(PreLoginData(ByteArray(16), KdfParams.SUPPORTED)),
-    private val registerResult: Result<AuthenticatedUser, AppError>? = null,
-    private val loginResult: Result<AuthenticatedUser, AppError>? = null,
-    private val refreshResult: Result<AuthTokens, AppError>? = null,
-    private val logoutResult: Result<Unit, AppError> = Result.Success(Unit)
+    var preloginResult: Result<PreLoginData, AppError> = Result.Success(PreLoginData(ByteArray(16), KdfParams.SUPPORTED)),
+    var registerResult: Result<AuthenticatedUser, AppError>? = null,
+    var loginResult: Result<AuthenticatedUser, AppError>? = null,
+    var refreshResult: Result<AuthTokens, AppError>? = null,
+    var logoutResult: Result<Unit, AppError> = Result.Success(Unit)
 ) : AuthApi {
     var lastPreloginEmail: String? = null
     var lastRegisterEmail: String? = null
@@ -159,13 +160,21 @@ class FakeBiometricPolicyStore : BiometricPolicyStore {
  * NOT for security use.
  */
 class FakeArgon2 : Argon2 {
-    override suspend fun hash(password: String, salt: ByteArray, params: KdfParams): ByteArray {
-        val bytes = (password + salt.toHexString()).toByteArray()
-        val result = ByteArray(32)
-        val copyLen = minOf(bytes.size, 32)
-        bytes.copyInto(result, 0, 0, copyLen)
-        return result
-    }
+    var hashResult: ByteArray? = null
+
+    override suspend fun hash(password: String, salt: ByteArray, params: KdfParams): ByteArray =
+        hashResult ?: run {
+            val bytes = (password + salt.toHexString()).toByteArray()
+            val result = ByteArray(32)
+            val copyLen = minOf(bytes.size, 32)
+            bytes.copyInto(result, 0, 0, copyLen)
+            result
+        }
+}
+
+class FakePasswordNormalizer : PasswordNormalizer {
+    var normalized: String = ""
+    override fun normalize(input: String): String = normalized
 }
 
 private fun ByteArray.toHexString(): String = joinToString("") { "%02x".format(it) }
