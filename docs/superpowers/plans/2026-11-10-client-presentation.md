@@ -286,11 +286,11 @@ data class ItemEditState(
 - `begin(existingId != null)` — `GetItem` + наповнення полів; існуючий секрет у чернетку не копіюється (порожній, користувач друкує лише якщо змінює).
 - `Save` — існуючий → `UpdateItem`, новий → `CreateItem(type = LOGIN, ...)`; невдача → `ValidationError` + `isSaving = false`. Успіх → effect `Saved(id)`; secrets не в Effect (оновлення екрану через `begin`).
 
-- [ ] **Step 1: failing tests** (save успіх create/update; порожній title → ValidationError(InvalidItem); пустий secret для LOGIN → ValidationError; isSaving гейт).
-- [ ] **Step 2: verify fails.**
-- [ ] **Step 3: implement.**
-- [ ] **Step 4: verify passes.**
-- [ ] **Step 5: Commit** `feat(presentation): item edit store with draft state and validation`
+- [x] **Step 1: failing tests** (save успіх create/update; порожній title → ValidationError(InvalidItem); пустий secret для LOGIN → ValidationError; isSaving гейт).
+- [x] **Step 2: verify fails.**
+- [x] **Step 3: implement.**
+- [x] **Step 4: verify passes.**
+- [x] **Step 5: Commit** `feat(presentation): item edit store with draft state and validation`
 
 ---
 

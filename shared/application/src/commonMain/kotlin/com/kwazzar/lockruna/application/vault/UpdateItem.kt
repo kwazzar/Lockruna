@@ -32,7 +32,7 @@ class UpdateItem(private val repository: VaultItemRepository, private val clock:
             val result = existing.update(
                 title = fields.title,
                 username = username,
-                secret = fields.secret,
+                secret = fields.secret ?: existing.secret,
                 url = fields.url,
                 folderId = folderId,
                 nowMillis = clock.nowMillis(),
