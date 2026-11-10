@@ -36,3 +36,52 @@ CREATE TABLE outbox (
 
 CREATE INDEX idx_vault_item_sync ON vault_item (sync_seq);
 CREATE INDEX idx_item_history_item ON item_history (item_id, version);
+
+-- Repository queries
+
+-- Upsert vault item (insert or update)
+upsertVaultItem:
+INSERT OR REPLACE INTO vault_item (id, type, ciphertext, nonce, version, sync_seq, deleted, dirty, max_seen_version, updated_at)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+-- Get vault item by id
+getVaultItem:
+SELECT id, type, ciphertext, nonce, version, sync_seq, deleted, dirty, max_seen_version, updated_at
+FROM vault_item
+WHERE id = ?;
+
+-- Get all vault items (for observeAll)
+getAllVaultItems:
+SELECT id, type, ciphertext, nonce, version, sync_seq, deleted, dirty, max_seen_version, updated_at
+FROM vault_item;
+
+-- Get all non-deleted vault items (for observeAll filtered)
+getAllNonDeletedVaultItems:
+SELECT id, type, ciphertext, nonce, version, sync_seq, deleted, dirty, max_seen_version, updated_at
+FROM vault_item
+WHERE deleted = 0;
+
+-- Insert into item history
+insertItemHistory:
+INSERT INTO item_history (item_id, version, ciphertext, nonce, updated_at)
+VALUES (?, ?, ?, ?, ?);
+
+-- Get item history for an item (ordered by version desc)
+getItemHistory:
+SELECT item_id, version, ciphertext, nonce, updated_at
+FROM item_history
+WHERE item_id = ?
+ORDER BY version DESC;
+
+-- Delete history versions beyond the newest [keep] ones
+deleteOldHistory:
+DELETE FROM item_history
+WHERE item_id = ?1 AND version NOT IN (
+    SELECT version FROM item_history WHERE item_id = ?1 ORDER BY version DESC LIMIT ?2
+);
+
+-- Update max_seen_version
+updateMaxSeenVersion:
+UPDATE vault_item
+SET max_seen_version = MAX(max_seen_version, ?)
+WHERE id = ?;

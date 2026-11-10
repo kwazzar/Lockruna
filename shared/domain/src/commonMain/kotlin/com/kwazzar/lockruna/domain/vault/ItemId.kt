@@ -12,27 +12,48 @@ value class ItemId private constructor(val value: String) {
     override fun toString(): String = "ItemId(len=${value.length})"
 
     companion object {
-        fun of(raw: String): Result<ItemId, AppError> {
-            if (!isValidUuidV4(raw)) {
-                return Result.Failure(AppError.InvalidItem("ItemId must be a valid UUID v4"))
-            }
-            return Result.Success(ItemId(raw))
+        private const val UUID_LENGTH = 36
+        private const val DASH_POSITION_1 = 8
+        private const val DASH_POSITION_2 = 13
+        private const val DASH_POSITION_3 = 18
+        private const val DASH_POSITION_4 = 23
+        private val DASH_POSITIONS = setOf(DASH_POSITION_1, DASH_POSITION_2, DASH_POSITION_3, DASH_POSITION_4)
+        private const val VERSION_POSITION = 14
+        private const val VARIANT_POSITION = 19
+        private const val VERSION_4_CHAR = '4'
+        private val VALID_VARIANT_CHARS = setOf('8', '9', 'a', 'b')
+        private const val HEX_CHARS = "0123456789abcdefABCDEF"
+
+        fun of(raw: String): Result<ItemId, AppError> = if (!isValidUuidV4(raw)) {
+            Result.Failure(AppError.InvalidItem("ItemId must be a valid UUID v4"))
+        } else {
+            Result.Success(ItemId(raw))
         }
 
-        private fun isValidUuidV4(s: String): Boolean {
-            if (s.length != 36) return false
-            if (s[8] != '-' || s[13] != '-' || s[18] != '-' || s[23] != '-') return false
-            val hexChars = "0123456789abcdefABCDEF"
-            for (i in 0 until 36) {
-                if (i in setOf(8, 13, 18, 23)) continue
-                if (s[i] !in hexChars) return false
+        private fun isValidUuidV4(s: String): Boolean = s.length == UUID_LENGTH &&
+            hasValidDashes(s) &&
+            hasValidHexChars(s) &&
+            hasValidVersion(s) &&
+            hasValidVariant(s)
+
+        private fun hasValidDashes(s: String): Boolean = s[DASH_POSITION_1] == '-' &&
+            s[DASH_POSITION_2] == '-' &&
+            s[DASH_POSITION_3] == '-' &&
+            s[DASH_POSITION_4] == '-'
+
+        private fun hasValidHexChars(s: String): Boolean {
+            for (i in 0 until UUID_LENGTH) {
+                if (i in DASH_POSITIONS) continue
+                if (s[i] !in HEX_CHARS) return false
             }
-            // Version 4: 13th char (index 14) must be '4'
-            if (s[14] != '4') return false
-            // Variant: 17th char (index 19) must be 8, 9, a, or b
-            val variantChar = s[19].lowercaseChar()
-            if (variantChar !in setOf('8', '9', 'a', 'b')) return false
             return true
+        }
+
+        private fun hasValidVersion(s: String): Boolean = s[VERSION_POSITION] == VERSION_4_CHAR
+
+        private fun hasValidVariant(s: String): Boolean {
+            val variantChar = s[VARIANT_POSITION].lowercaseChar()
+            return variantChar in VALID_VARIANT_CHARS
         }
     }
 }

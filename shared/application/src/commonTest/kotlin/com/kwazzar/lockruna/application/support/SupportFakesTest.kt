@@ -1,9 +1,6 @@
 package com.kwazzar.lockruna.application.support
 
 import com.kwazzar.lockruna.domain.core.Result
-import com.kwazzar.lockruna.domain.error.AppError
-import com.kwazzar.lockruna.domain.session.Clock
-import com.kwazzar.lockruna.domain.session.IdGenerator
 import com.kwazzar.lockruna.domain.vault.ItemId
 import com.kwazzar.lockruna.domain.vault.Secret
 import com.kwazzar.lockruna.domain.vault.Title
@@ -14,7 +11,6 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
-import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class SupportFakesTest {

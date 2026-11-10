@@ -20,17 +20,12 @@ class InMemoryVaultItemRepository : VaultItemRepository {
         return Result.Success(item)
     }
 
-    override suspend fun get(id: ItemId): Result<VaultItem?, AppError> {
-        return Result.Success(store[id.value])
-    }
+    override suspend fun get(id: ItemId): Result<VaultItem?, AppError> = Result.Success(store[id.value])
 
     override fun observeAll() = stateFlow.asStateFlow()
 }
 
-class FakeClock(
-    var wallMillis: Long = 0,
-    var monotonicMillis: Long = 0
-) : Clock {
+class FakeClock(var wallMillis: Long = 0, var monotonicMillis: Long = 0) : Clock {
     override fun nowMillis(): Long = wallMillis
     override fun monotonicMillis(): Long = monotonicMillis
 }
@@ -40,7 +35,10 @@ class FakeIdGenerator : IdGenerator {
 
     override fun newItemId(): ItemId {
         val uuid = String.format("%032x", counter).let { s ->
-            "${s.substring(0, 8)}-${s.substring(8, 12)}-4${s.substring(13, 16)}-8${s.substring(17, 20)}-${s.substring(20, 32)}"
+            "${s.substring(
+                0,
+                8,
+            )}-${s.substring(8, 12)}-4${s.substring(13, 16)}-8${s.substring(17, 20)}-${s.substring(20, 32)}"
         }
         counter++
         val result = ItemId.of(uuid)
@@ -52,7 +50,10 @@ class FakeIdGenerator : IdGenerator {
 
     override fun newUuid(): String {
         val uuid = String.format("%032x", counter).let { s ->
-            "${s.substring(0, 8)}-${s.substring(8, 12)}-4${s.substring(13, 16)}-8${s.substring(17, 20)}-${s.substring(20, 32)}"
+            "${s.substring(
+                0,
+                8,
+            )}-${s.substring(8, 12)}-4${s.substring(13, 16)}-8${s.substring(17, 20)}-${s.substring(20, 32)}"
         }
         counter++
         return uuid

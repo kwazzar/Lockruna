@@ -74,7 +74,16 @@ class VaultItemTest {
     fun `VaultItem create LOGIN without secret fails`() {
         val id = (ItemId.of(validItemId) as Result.Success).value
         val title = (Title.of(validTitle) as Result.Success).value
-        val result = VaultItem.create(id, VaultItemType.LOGIN, title, validUsername, null, (Url.of(validUrl) as Result.Success).value, null, nowMillis)
+        val result = VaultItem.create(
+            id,
+            VaultItemType.LOGIN,
+            title,
+            validUsername,
+            null,
+            (Url.of(validUrl) as Result.Success).value,
+            null,
+            nowMillis,
+        )
         assertTrue(result is Result.Failure)
         assertTrue((result as Result.Failure).error is AppError.InvalidItem)
     }
@@ -96,7 +105,16 @@ class VaultItemTest {
         val id = (ItemId.of(validItemId) as Result.Success).value
         val title = (Title.of(validTitle) as Result.Success).value
         val secret = (Secret.of(validSecret) as Result.Success).value
-        val result = VaultItem.create(id, VaultItemType.LOGIN, title, validUsername, secret, (Url.of(validUrl) as Result.Success).value, null, nowMillis)
+        val result = VaultItem.create(
+            id,
+            VaultItemType.LOGIN,
+            title,
+            validUsername,
+            secret,
+            (Url.of(validUrl) as Result.Success).value,
+            null,
+            nowMillis,
+        )
         assertTrue(result is Result.Success)
         val item = (result as Result.Success).value
         assertEquals(0, item.version)
@@ -110,11 +128,29 @@ class VaultItemTest {
         val id = (ItemId.of(validItemId) as Result.Success).value
         val title = (Title.of(validTitle) as Result.Success).value
         val secret = (Secret.of(validSecret) as Result.Success).value
-        val created = (VaultItem.create(id, VaultItemType.LOGIN, title, validUsername, secret, (Url.of(validUrl) as Result.Success).value, null, nowMillis) as Result.Success).value
+        val created = (
+            VaultItem.create(
+                id,
+                VaultItemType.LOGIN,
+                title,
+                validUsername,
+                secret,
+                (Url.of(validUrl) as Result.Success).value,
+                null,
+                nowMillis,
+            ) as Result.Success
+            ).value
 
         val newTitle = (Title.of("Updated Title") as Result.Success).value
         val newSecret = (Secret.of("new-secret") as Result.Success).value
-        val result = created.update(newTitle, validUsername, newSecret, (Url.of(validUrl) as Result.Success).value, null, nowMillis + 1000)
+        val result = created.update(
+            newTitle,
+            validUsername,
+            newSecret,
+            (Url.of(validUrl) as Result.Success).value,
+            null,
+            nowMillis + 1000,
+        )
         assertTrue(result is Result.Success)
         val updated = (result as Result.Success).value
         assertEquals(1, updated.version)
@@ -129,11 +165,29 @@ class VaultItemTest {
         val id = (ItemId.of(validItemId) as Result.Success).value
         val title = (Title.of(validTitle) as Result.Success).value
         val secret = (Secret.of(validSecret) as Result.Success).value
-        val created = (VaultItem.create(id, VaultItemType.LOGIN, title, validUsername, secret, (Url.of(validUrl) as Result.Success).value, null, nowMillis) as Result.Success).value
+        val created = (
+            VaultItem.create(
+                id,
+                VaultItemType.LOGIN,
+                title,
+                validUsername,
+                secret,
+                (Url.of(validUrl) as Result.Success).value,
+                null,
+                nowMillis,
+            ) as Result.Success
+            ).value
         val deleted = (created.delete(nowMillis + 1000) as Result.Success).value
 
         val newTitle = (Title.of("Updated") as Result.Success).value
-        val result = deleted.update(newTitle, validUsername, secret, (Url.of(validUrl) as Result.Success).value, null, nowMillis + 2000)
+        val result = deleted.update(
+            newTitle,
+            validUsername,
+            secret,
+            (Url.of(validUrl) as Result.Success).value,
+            null,
+            nowMillis + 2000,
+        )
         assertTrue(result is Result.Failure)
         assertTrue((result as Result.Failure).error is AppError.InvalidItem)
     }
@@ -143,7 +197,18 @@ class VaultItemTest {
         val id = (ItemId.of(validItemId) as Result.Success).value
         val title = (Title.of(validTitle) as Result.Success).value
         val secret = (Secret.of(validSecret) as Result.Success).value
-        val created = (VaultItem.create(id, VaultItemType.LOGIN, title, validUsername, secret, (Url.of(validUrl) as Result.Success).value, null, nowMillis) as Result.Success).value
+        val created = (
+            VaultItem.create(
+                id,
+                VaultItemType.LOGIN,
+                title,
+                validUsername,
+                secret,
+                (Url.of(validUrl) as Result.Success).value,
+                null,
+                nowMillis,
+            ) as Result.Success
+            ).value
 
         val result = created.delete(nowMillis + 1000)
         assertTrue(result is Result.Success)
@@ -159,7 +224,18 @@ class VaultItemTest {
         val id = (ItemId.of(validItemId) as Result.Success).value
         val title = (Title.of(validTitle) as Result.Success).value
         val secret = (Secret.of(validSecret) as Result.Success).value
-        val created = (VaultItem.create(id, VaultItemType.LOGIN, title, validUsername, secret, (Url.of(validUrl) as Result.Success).value, null, nowMillis) as Result.Success).value
+        val created = (
+            VaultItem.create(
+                id,
+                VaultItemType.LOGIN,
+                title,
+                validUsername,
+                secret,
+                (Url.of(validUrl) as Result.Success).value,
+                null,
+                nowMillis,
+            ) as Result.Success
+            ).value
         val deleted = (created.delete(nowMillis + 1000) as Result.Success).value
 
         val result = deleted.delete(nowMillis + 2000)
@@ -172,7 +248,18 @@ class VaultItemTest {
         val id = (ItemId.of(validItemId) as Result.Success).value
         val title = (Title.of(validTitle) as Result.Success).value
         val secret = (Secret.of(validSecret) as Result.Success).value
-        val item = (VaultItem.create(id, VaultItemType.LOGIN, title, validUsername, secret, (Url.of(validUrl) as Result.Success).value, null, nowMillis) as Result.Success).value
+        val item = (
+            VaultItem.create(
+                id,
+                VaultItemType.LOGIN,
+                title,
+                validUsername,
+                secret,
+                (Url.of(validUrl) as Result.Success).value,
+                null,
+                nowMillis,
+            ) as Result.Success
+            ).value
 
         val str = item.toString()
         assertTrue(!str.contains("secret-value"))
@@ -186,6 +273,8 @@ class VaultItemTest {
         assertTrue((Secret.of("secret") as Result.Success).value.toString().contains("len=6"))
         assertTrue((Title.of("title") as Result.Success).value.toString().contains("len=5"))
         assertTrue((Url.of("https://example.com") as Result.Success).value.toString().contains("len="))
-        assertTrue((ItemId.of("00000000-0000-4000-8000-000000000001") as Result.Success).value.toString().contains("len=36"))
+        assertTrue(
+            (ItemId.of("00000000-0000-4000-8000-000000000001") as Result.Success).value.toString().contains("len=36"),
+        )
     }
 }

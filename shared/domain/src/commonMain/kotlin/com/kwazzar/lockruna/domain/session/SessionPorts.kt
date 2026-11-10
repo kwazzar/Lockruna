@@ -51,8 +51,7 @@ value class VaultKey private constructor(val bytes: ByteArray) {
     }
 
     companion object {
-        fun random(cryptoService: CryptoService): VaultKey {
-            return VaultKey(cryptoService.randomBytes(32))
-        }
+        private const val VAULT_KEY_SIZE = 32
+        fun random(cryptoService: CryptoService): VaultKey = VaultKey(cryptoService.randomBytes(VAULT_KEY_SIZE))
     }
 }

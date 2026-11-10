@@ -2,7 +2,6 @@ package com.kwazzar.lockruna.domain.vault
 
 import com.kwazzar.lockruna.domain.core.Result
 import com.kwazzar.lockruna.domain.error.AppError
-import java.time.Instant
 
 /**
  * Vault item aggregate. Encrypted on disk, decrypted in memory when vault is unlocked.
@@ -27,7 +26,13 @@ data class VaultItem(
     val updatedAtMillis: Long,
 ) {
     override fun toString(): String {
-        return "VaultItem(id=$id, type=$type, title=${title.toString()}, username=${username?.let { "len=${it.length}" }}, secret=${secret?.toString()}, url=${url?.toString()}, folderId=$folderId, version=$version, dirty=$dirty, deleted=$deleted, updatedAtMillis=$updatedAtMillis)"
+        val usernameStr = username?.let { "len=${it.length}" }
+        val secretStr = secret?.toString()
+        val urlStr = url?.toString()
+        return "VaultItem(id=$id, type=$type, title=$title, " +
+            "username=$usernameStr, secret=$secretStr, url=$urlStr, " +
+            "folderId=$folderId, version=$version, dirty=$dirty, " +
+            "deleted=$deleted, updatedAtMillis=$updatedAtMillis)"
     }
 
     companion object {
@@ -46,19 +51,21 @@ data class VaultItem(
                 return Result.Failure(AppError.InvalidItem("LOGIN item requires a secret"))
             }
             // For other types, secret is optional but if provided must not be empty (validated by Secret.of)
-            return Result.Success(VaultItem(
-                id = id,
-                type = type,
-                title = title,
-                username = username,
-                secret = secret,
-                url = url,
-                folderId = folderId,
-                version = 0,
-                dirty = true,
-                deleted = false,
-                updatedAtMillis = nowMillis,
-            ))
+            return Result.Success(
+                VaultItem(
+                    id = id,
+                    type = type,
+                    title = title,
+                    username = username,
+                    secret = secret,
+                    url = url,
+                    folderId = folderId,
+                    version = 0,
+                    dirty = true,
+                    deleted = false,
+                    updatedAtMillis = nowMillis,
+                ),
+            )
         }
 
         fun createWithGeneratedId(
@@ -70,9 +77,7 @@ data class VaultItem(
             folderId: ItemId?,
             nowMillis: Long,
             idGenerator: () -> ItemId,
-        ): Result<VaultItem, AppError> {
-            return create(idGenerator(), type, title, username, secret, url, folderId, nowMillis)
-        }
+        ): Result<VaultItem, AppError> = create(idGenerator(), type, title, username, secret, url, folderId, nowMillis)
     }
 
     fun update(
@@ -90,27 +95,31 @@ data class VaultItem(
         if (type == VaultItemType.LOGIN && secret == null) {
             return Result.Failure(AppError.InvalidItem("LOGIN item requires a secret"))
         }
-        return Result.Success(copy(
-            title = title,
-            username = username,
-            secret = secret,
-            url = url,
-            folderId = folderId,
-            version = version + 1,
-            dirty = true,
-            updatedAtMillis = nowMillis,
-        ))
+        return Result.Success(
+            copy(
+                title = title,
+                username = username,
+                secret = secret,
+                url = url,
+                folderId = folderId,
+                version = version + 1,
+                dirty = true,
+                updatedAtMillis = nowMillis,
+            ),
+        )
     }
 
     fun delete(nowMillis: Long): Result<VaultItem, AppError> {
         if (deleted) {
             return Result.Failure(AppError.InvalidItem("Item is already deleted"))
         }
-        return Result.Success(copy(
-            deleted = true,
-            version = version + 1,
-            dirty = true,
-            updatedAtMillis = nowMillis,
-        ))
+        return Result.Success(
+            copy(
+                deleted = true,
+                version = version + 1,
+                dirty = true,
+                updatedAtMillis = nowMillis,
+            ),
+        )
     }
 }
