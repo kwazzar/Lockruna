@@ -14,6 +14,12 @@ sealed interface AppError {
 
     data object ItemNotFound : AppError
 
+    /** The same Idempotency-Key was reused with a different body. */
+    data object IdempotencyConflict : AppError
+
+    /** The email is already registered. */
+    data object EmailAlreadyRegistered : AppError
+
     data class InvalidItem(val reason: String) : AppError
 
     data class WeakKdfParams(val actual: String) : AppError
