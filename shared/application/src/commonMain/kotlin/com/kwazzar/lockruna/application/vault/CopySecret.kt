@@ -6,10 +6,7 @@ import com.kwazzar.lockruna.domain.vault.Clipboard
 import com.kwazzar.lockruna.domain.vault.ItemId
 import com.kwazzar.lockruna.domain.vault.VaultItemRepository
 
-class CopySecret(
-    private val repository: VaultItemRepository,
-    private val clipboard: Clipboard,
-) {
+class CopySecret(private val repository: VaultItemRepository, private val clipboard: Clipboard) {
     suspend operator fun invoke(id: ItemId): Result<Unit, AppError> {
         val item = when (val found = repository.get(id)) {
             is Result.Failure -> return Result.Failure(found.error)

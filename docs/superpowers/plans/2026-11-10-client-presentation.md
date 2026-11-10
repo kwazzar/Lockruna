@@ -165,11 +165,11 @@ sealed interface VaultListEffect {
 - Пошук: title + username, `lowercase()` contains, trim; `null`/порожній → усе.
 - `RevealSecret`-Intent — виклик use case; успіх → effect `SecretRevealed`. Помилка (нешіснуючий id, запис без секрету) → effect НЕ emit (UI загального банера в цій хвилі немає).
 - Фікс-тест: секрет у `state` не з'являється поле-за-полем, і `SecretRevealed` з `replay == 0` не перевидається повторно при re-collect.
-- [ ] **Step 1: Write failing tests:** emit списку (`isLoading` true→false після перших даних), фільтр регістр-незалежний, `Lock` викликає `LockVault`, Reveal → effect з секретом, Copy → `RecordingClipboard` + effect. Reveal для відсутнього id → без effect.
-- [ ] **Step 2: verify fails** `./gradlew :shared:presentation:jvmTest --tests '*VaultListStoreTest*'` — FAIL.
-- [ ] **Step 3: Implement.** У `init` — `observeItems.invoke()` collect у state (`isLoading = items.isEmpty()` не потрібен: порожній список валідний стан). Ефекти — приватний `MutableSharedFlow<VaultListEffect>(extraBufferCapacity = 0, replay = 0)`, відкритий як `SharedFlow`; send — `trySend`.
-- [ ] **Step 4: verify passes.**
-- [ ] **Step 5: Commit** `feat(presentation): vault list store with search and lock`
+- [x] **Step 1: Write failing tests:** emit списку (`isLoading` true→false після перших даних), фільтр регістр-незалежний, `Lock` викликає `LockVault`, Reveal → effect з секретом, Copy → `RecordingClipboard` + effect. Reveal для відсутнього id → без effect.
+- [x] **Step 2: verify fails** `./gradlew :shared:presentation:jvmTest --tests '*VaultListStoreTest*'` — FAIL.
+- [x] **Step 3: Implement.** У `init` — `observeItems.invoke()` collect у state (`isLoading = items.isEmpty()` не потрібен: порожній список валідний стан). Ефекти — приватний `MutableSharedFlow<VaultListEffect>(extraBufferCapacity = 0, replay = 0)`, відкритий як `SharedFlow`; send — `trySend`.
+- [x] **Step 4: verify passes.**
+- [x] **Step 5: Commit** `feat(presentation): vault list store with search and lock`
 
 ---
 
