@@ -50,11 +50,6 @@ SELECT id, type, ciphertext, nonce, version, sync_seq, deleted, dirty, max_seen_
 FROM vault_item
 WHERE id = ?;
 
--- Get all vault items (for observeAll)
-getAllVaultItems:
-SELECT id, type, ciphertext, nonce, version, sync_seq, deleted, dirty, max_seen_version, updated_at
-FROM vault_item;
-
 -- Get all non-deleted vault items (for observeAll filtered)
 getAllNonDeletedVaultItems:
 SELECT id, type, ciphertext, nonce, version, sync_seq, deleted, dirty, max_seen_version, updated_at

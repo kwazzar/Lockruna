@@ -35,10 +35,13 @@ class SqlDelightVaultItemRepository(
     override suspend fun save(item: VaultItem): Result<VaultItem, AppError> {
         val vaultKey = session.currentVaultKey() ?: return Result.Failure(AppError.VaultLocked)
         val row = database.passKeeperDatabaseQueries.getVaultItem(item.id.value).executeAsOneOrNull()
+        val now = clock.nowMillis()
 
         val stored = encryptRow(item, vaultKey) ?: return Result.Failure(AppError.ItemCorrupted)
 
         if (row != null && row.ciphertext != null && row.nonce != null) {
+            // shortcut: history rows drop the dirty flag, so the sealed AAD version (dirty +1)
+            // cannot be recovered; define history decryption together with the sync wave.
             database.passKeeperDatabaseQueries.insertItemHistory(
                 item_id = item.id.value,
                 version = row.version,
@@ -59,10 +62,10 @@ class SqlDelightVaultItemRepository(
             deleted = item.deleted,
             dirty = item.dirty,
             max_seen_version = maxOf(item.version, row?.max_seen_version ?: 0),
-            updated_at = clock.nowMillis(),
+            updated_at = now,
         )
 
-        return Result.Success(item.copy(updatedAtMillis = clock.nowMillis()))
+        return Result.Success(item.copy(updatedAtMillis = now))
     }
 
     override suspend fun get(id: ItemId): Result<VaultItem?, AppError> {
@@ -109,25 +112,29 @@ class SqlDelightVaultItemRepository(
             cryptoService.decryptGcm(vaultKey.bytes, ciphertext, aad(row.id, row.type, row.version, row.dirty))
         } ?: return Result.Failure(AppError.ItemCorrupted)
 
-        val content = (VaultItemRowMapper.deserializeContent(plaintext.decodeToString()) as? Result.Success)?.value
-            ?: return Result.Failure(AppError.ItemCorrupted)
-
-        return Result.Success(buildItem(row, content))
+        return buildItem(row, plaintext)
     }
 
-    private fun buildItem(row: Vault_item, content: VaultItemContent): VaultItem = VaultItem(
-        id = requireNotNull(ItemId.of(row.id) as? Result.Success).value,
-        type = VaultItemType.valueOf(row.type),
-        title = requireNotNull(Title.of(content.title) as? Result.Success).value,
-        username = content.username,
-        secret = content.secret?.let { (Secret.of(it) as? Result.Success)?.value },
-        url = content.url?.let { (Url.of(it) as? Result.Success)?.value },
-        folderId = content.folderId?.let { (ItemId.of(it) as? Result.Success)?.value },
-        version = row.version,
-        dirty = row.dirty,
-        deleted = row.deleted,
-        updatedAtMillis = row.updated_at,
-    )
+    private fun buildItem(row: Vault_item, plaintext: ByteArray): Result<VaultItem, AppError> {
+        val content = (VaultItemRowMapper.deserializeContent(plaintext.decodeToString()) as? Result.Success)?.value
+            ?: return Result.Failure(AppError.ItemCorrupted)
+        val item = attempt {
+            VaultItem(
+                id = requireNotNull(ItemId.of(row.id) as? Result.Success).value,
+                type = VaultItemType.valueOf(row.type),
+                title = requireNotNull(Title.of(content.title) as? Result.Success).value,
+                username = content.username,
+                secret = content.secret?.let { (Secret.of(it) as? Result.Success)?.value },
+                url = content.url?.let { (Url.of(it) as? Result.Success)?.value },
+                folderId = content.folderId?.let { (ItemId.of(it) as? Result.Success)?.value },
+                version = row.version,
+                dirty = row.dirty,
+                deleted = row.deleted,
+                updatedAtMillis = row.updated_at,
+            )
+        } ?: return Result.Failure(AppError.ItemCorrupted)
+        return Result.Success(item)
+    }
 
     private inline fun <T> attempt(block: () -> T): T? = try {
         block()
