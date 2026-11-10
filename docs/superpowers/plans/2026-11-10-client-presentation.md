@@ -217,11 +217,11 @@ sealed interface ItemDetailEffect {
 - `open(id)` — `GetItem` → state.item = `toItemUi()` або `null`.
 - `DeleteConfirmed` — `DeleteItem(id)` успіх → effect `Closed` + `state.item = null` (тест фіксує, що після видалення повторний Reveal не працює і без винятків).
 
-- [ ] **Step 1: failing tests** (5 інтентів; Reveal → `SecretRevealed` при `secretValue != null`; Hide → помилка не викидається; Delete → `Closed`).
-- [ ] **Step 2: verify fails.**
-- [ ] **Step 3: implement.**
-- [ ] **Step 4: verify passes.**
-- [ ] **Step 5: Commit** `feat(presentation): item detail store with reveal and delete`
+- [x] **Step 1: failing tests** (5 інтентів; Reveal → `SecretRevealed` при `secretValue != null`; Hide → помилка не викидається; Delete → `Closed`).
+- [x] **Step 2: verify fails.**
+- [x] **Step 3: implement.**
+- [x] **Step 4: verify passes.**
+- [x] **Step 5: Commit** `feat(presentation): item detail store with reveal and delete`
 
 ---
 
