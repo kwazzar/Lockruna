@@ -320,13 +320,13 @@ Konsist-тест `PresentationLayerTest`:
 - `shared/presentation/**` не імпортує `app.cash.sqldelight.`, `io.ktor.`, `androidx.`, `com.kwazzar.lockruna.domain.vault.VaultItemRepository` (прямі виклики репозиторію заборонені);
 - класи `*Store` не звертаються до `com.kwazzar.lockruna.data.`.
 
-- [ ] **Step 1: konsist тест RED** (не збирається — зʼявився файл) → run `./gradlew :architecture-tests:test` і зафіксувати FAIL на відсутність файлу.
-- [ ] **Step 2: додати module + build dep** → GREEN.
-- [ ] **Step 3: повна верифікація:**
+- [x] **Step 1: konsist тест RED** (не збирається — зʼявився файл) → run `./gradlew :architecture-tests:test` і зафіксувати FAIL на відсутність файлу.
+- [x] **Step 2: додати module + build dep** → GREEN.
+- [x] **Step 3: повна верифікація:**
   - `./gradlew ktlintCheck detekt`
   - `./gradlew :shared:presentation:jvmTest :shared:application:jvmTest :shared:domain:jvmTest :architecture-tests:test`
   - Expected: BUILD SUCCESSFUL. Збій (не середовище) = фікс тут.
-- [ ] **Step 4: Commit** `feat(presentation): koin module and architecture guard`
+- [x] **Step 4: Commit** `feat(presentation): koin module and architecture guard`
 
 ## Порядок злиття
 
