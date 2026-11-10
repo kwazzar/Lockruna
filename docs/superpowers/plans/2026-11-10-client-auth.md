@@ -122,7 +122,7 @@ data class SealedBlob(val nonce: ByteArray, val payload: ByteArray) {
 }
 ```
 
-`AppError.kt` — додати `data object EmailAlreadyRegistered : AppError` (sync-хвиля має `IdempotencyConflict` — merge ротація: тримати обидві гілки).
+`AppError.kt` — цю хвилю **не редагує**: гілки `IdempotencyConflict` і `EmailAlreadyRegistered` додає client-sync (власник спільного файлу). Тут лише використовувати їх.
 
 - `VaultSession`-порт малий поштовх: до `domain/session/SessionPorts.kt` додати `VaultKey.from(bytes: ByteArray): VaultKey` = compackage of `VaultKey` (конструктор private — це роздолиний дало volition для unlock flow). У `VaultKey` інший оре що `zeroize` існує.
 - [ ] **Step 1: failing test** — `FakeAuthStateStore` save/load/clear roundtrip; `FakeBiometricPolicyStore` counters; `FakeArgon2` детермінований;
@@ -346,7 +346,7 @@ class InMemoryAuthStateStore : AuthStateStore   // тестовий, used in jvm
 ```
 
 - **AccessTokenProvider impl: тут є реалізація; порт у domain/sync — не создание.
-- toml/build: ktor-client залежності приходитуть з client-sync (там же ktor-client-mock); ЯКЩО auth зливається першим — додати ті самі 3 рядки (згідно client-sync plan Task 3), дублікати бутер.
+- toml/build: ktor-клієнт залежності **не додаємо** в цій хвилі — їх додає client-sync (`gradle/libs.versions.toml` + `shared/data/build.gradle.kts`); порядок merge: sync → auth. Тести KtorAuthApi використовують `ktor-client-mock` з того ж набору.
 - Відповідь AuthResponseDto → `AuthenticatedUser`: `kdfSalt`, `kdfParams`, `wrappedVaultKey`; `wrappedVaultKey`-wire формат `nonce||ciphertext||tag` — СЕРВЕР ЛИШЕ КОПІЮВАє байти клієнта, тому формат порядку підтверджується unit-тестом package/unpack.
 
 - [ ] **Step 1: failing test** — mock roundtrips: register 201 (DTO → AuthenticatedUser), login 401 обох видів → InvalidCredentials, register 409 → EmailAlreadyRegistered, 429 → RateLimited з Retry-After, refresh, logout 204.
@@ -409,7 +409,9 @@ Konsist-тест `AuthLayerTest`:
 
 ## Порядок злиття
 
-Незалежний від інших хвиль. Точки дотику:
-- `AppError.kt`: гілка `EmailAlreadyRegistered` (merge з `IdempotencyConflict` sync-хвилі).
-- `gradle/libs.versions.toml`: ktor-client-рядки від sync-хвилі; їх дублювати тільки якщо auth зливається першим.
-- `domain/session/SessionPorts.kt`: додавання `VaultKey.from(bytes)` — дві рядки коду.
+Порядок: **client-presentation → client-sync → client-auth**.
+
+Правило одного власника (щоб merge був безконфліктним):
+- `shared/domain/error/AppError.kt`, `gradle/libs.versions.toml`, `shared/data/build.gradle.kts` — власник **client-sync**; auth їх лише використовує.
+- `shared/domain/session/SessionPorts.kt` (`VaultKey.from`) — власник **client-auth**.
+- `docs/adr/003-cryptography.md`, `docs/threat-model.md` — власник **client-auth** (решта хвиль не редагує ці файли).
