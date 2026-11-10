@@ -10,6 +10,8 @@ data class LocalRecord(
     val dirty: Boolean,
     val maxSeenVersion: Long,
 ) {
+    override fun toString(): String = "LocalRecord(id=$id, version=$version, dirty=$dirty)"
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || this::class != other::class) return false

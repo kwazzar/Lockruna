@@ -58,27 +58,29 @@ class SqlDelightSyncStore(private val database: PassKeeperDatabase) : SyncStore 
         }
 
     override suspend fun applyRemote(item: RemoteItem) {
-        val previous = queries.getVaultItem(item.id).executeAsOneOrNull()
-        if (previous?.ciphertext != null && previous.nonce != null) {
-            queries.insertLosingVersion(
-                item_id = item.id,
-                version = previous.version,
-                ciphertext = previous.ciphertext,
-                nonce = previous.nonce,
-                updated_at = previous.updated_at,
+        database.transaction {
+            val previous = queries.getVaultItem(item.id).executeAsOneOrNull()
+            if (previous?.ciphertext != null && previous.nonce != null) {
+                queries.insertLosingVersion(
+                    item_id = item.id,
+                    version = previous.version,
+                    ciphertext = previous.ciphertext,
+                    nonce = previous.nonce,
+                    updated_at = previous.updated_at,
+                )
+                queries.deleteOldHistory(item.id, HISTORY_SIZE)
+            }
+            queries.upsertRemoteItem(
+                id = item.id,
+                type = item.type.name,
+                ciphertext = item.ciphertext,
+                nonce = item.nonce,
+                version = item.version,
+                deleted = item.deleted,
+                max_seen_version = maxOf(previous?.max_seen_version ?: 0, item.version),
+                updated_at = item.updatedAtMillis,
             )
-            queries.deleteOldHistory(item.id, HISTORY_SIZE)
         }
-        queries.upsertRemoteItem(
-            id = item.id,
-            type = item.type.name,
-            ciphertext = item.ciphertext,
-            nonce = item.nonce,
-            version = item.version,
-            deleted = item.deleted,
-            max_seen_version = maxOf(previous?.max_seen_version ?: 0, item.version),
-            updated_at = item.updatedAtMillis,
-        )
     }
 
     override suspend fun markItemApplied(id: String, newVersion: Long, updatedAtMillis: Long) {
