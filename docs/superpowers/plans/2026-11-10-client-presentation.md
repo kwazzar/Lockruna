@@ -59,15 +59,15 @@ data class ItemUi(
 fun VaultItem.toItemUi(): ItemUi
 ```
 
-- [ ] **Step 1: Write the failing test** — `toItemUi()` переносить id/type/title/username/folderId/updatedAt, `hasSecret = secret != null`; тест-агрегат будується через `VaultItem.create` (версія 0); **жодна інстанція ItemUi не містить значення секрету** (перевірити `hasSecret == true`, absence самого рядка).
+- [x] **Step 1: Write the failing test** — `toItemUi()` переносить id/type/title/username/folderId/updatedAt, `hasSecret = secret != null`; тест-агрегат будується через `VaultItem.create` (версія 0); **жодна інстанція ItemUi не містить значення секрету** (перевірити `hasSecret == true`, absence самого рядка).
 
-- [ ] **Step 2: Run to verify fails:** `./gradlew :shared:presentation:jvmTest --tests '*ItemUiMappingTest*'` — FAIL.
+- [x] **Step 2: Run to verify fails:** `./gradlew :shared:presentation:jvmTest --tests '*ItemUiMappingTest*'` — FAIL.
 
-- [ ] **Step 3: Implement.** Розширити `ItemUi` полями `username`, `updatedAtMillis`; мапінг — одна функція extension, без логіки.
+- [x] **Step 3: Implement.** Розширити `ItemUi` полями `username`, `updatedAtMillis`; мапінг — одна функція extension, без логіки.
 
-- [ ] **Step 4: Run to verify passes:** same command — PASS.
+- [x] **Step 4: Run to verify passes:** same command — PASS.
 
-- [ ] **Step 5: Commit** `feat(presentation): map vault items to ItemUi without secrets`
+- [x] **Step 5: Commit** `feat(presentation): map vault items to ItemUi without secrets`
 
 ---
 
