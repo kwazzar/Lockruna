@@ -8,6 +8,8 @@ sealed interface AppError {
 
     data object Unauthorized : AppError
 
+    data object BiometricsUnavailable : AppError
+
     data object NetworkUnavailable : AppError
 
     data object ItemCorrupted : AppError

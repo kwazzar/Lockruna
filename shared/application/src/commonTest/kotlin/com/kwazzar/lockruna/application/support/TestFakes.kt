@@ -16,8 +16,11 @@ import com.kwazzar.lockruna.domain.crypto.GcmCiphertext
 import com.kwazzar.lockruna.domain.crypto.KdfParams
 import com.kwazzar.lockruna.domain.crypto.PasswordNormalizer
 import com.kwazzar.lockruna.domain.error.AppError
+import com.kwazzar.lockruna.domain.session.BiometricGate
 import com.kwazzar.lockruna.domain.session.Clock
 import com.kwazzar.lockruna.domain.session.IdGenerator
+import com.kwazzar.lockruna.domain.session.SecureKeyStore
+import com.kwazzar.lockruna.domain.session.VaultKey
 import com.kwazzar.lockruna.domain.vault.ItemId
 import com.kwazzar.lockruna.domain.vault.VaultItem
 import com.kwazzar.lockruna.domain.vault.VaultItemRepository
@@ -175,6 +178,29 @@ class FakeArgon2 : Argon2 {
 class FakePasswordNormalizer : PasswordNormalizer {
     var normalized: String = ""
     override fun normalize(input: String): String = normalized
+}
+
+class FakeBiometricGate : BiometricGate {
+    var isAvailableResult = true
+    var authenticateResult = true
+
+    override suspend fun isAvailable(): Boolean = isAvailableResult
+
+    override suspend fun authenticate(reason: String): Boolean = authenticateResult
+}
+
+class FakeSecureKeyStore : SecureKeyStore {
+    var storedKey: VaultKey? = null
+
+    override suspend fun saveVaultKey(key: VaultKey) {
+        storedKey = key
+    }
+
+    override suspend fun loadVaultKey(): VaultKey? = storedKey
+
+    override suspend fun clear() {
+        storedKey = null
+    }
 }
 
 private fun ByteArray.toHexString(): String = joinToString("") { "%02x".format(it) }
