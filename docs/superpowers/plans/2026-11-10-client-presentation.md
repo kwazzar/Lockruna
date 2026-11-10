@@ -107,11 +107,11 @@ class CopySecret(
 - `CopySecret` — та сама валідація; далі `clipboard.copySecret(secret.value)` → `Success(Unit)`.
 - Обидва беруть запис через `repository.get(id)` напряму — окремого GetItem-делегування всередині application не потрібне.
 
-- [ ] **Step 1: Write the failing tests** (увага: три гілки кожного use case; фейковий `RecordingClipboard` у тесті).
-- [ ] **Step 2: Run to verify fails** —`./gradlew :shared:application:jvmTest --tests '*RevealSecret*' --tests '*CopySecret*'` — FAIL.
-- [ ] **Step 3: Implement** — по одному `operator fun invoke`, тіла за гілками вище (запис — `repository.get(id)`).
-- [ ] **Step 4: Run to verify passes.**
-- [ ] **Step 5: Commit** `feat(application): reveal and copy secrets via clipboard port`
+- [x] **Step 1: Write the failing tests** (увага: три гілки кожного use case; фейковий `RecordingClipboard` у тесті).
+- [x] **Step 2: Run to verify fails** —`./gradlew :shared:application:jvmTest --tests '*RevealSecret*' --tests '*CopySecret*'` — FAIL.
+- [x] **Step 3: Implement** — по одному `operator fun invoke`, тіла за гілками вище (запис — `repository.get(id)`).
+- [x] **Step 4: Run to verify passes.**
+- [x] **Step 5: Commit** `feat(application): reveal and copy secrets via clipboard port`
 
 ---
 
