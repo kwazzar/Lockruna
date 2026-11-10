@@ -116,7 +116,7 @@ interface SyncStore {
 data class Outbox(val idempotencyKey: String, val changes: List<PendingChange>)
 ```
 
-`AppError` — додати гілку `data object IdempotencyConflict : AppError` у `shared/domain/src/commonMain/kotlin/com/kwazzar/lockruna/domain/error/AppError.kt`. Це єдине спільне редагування для хвилі (client-presentation його не торкнеться; client-auth додасть свою гілку — при merge тримати обидві).
+`AppError.kt` — ця хвиля є **єдиним власником** файлу `shared/domain/src/commonMain/kotlin/com/kwazzar/lockruna/domain/error/AppError.kt`: додати дві гілки — `data object IdempotencyConflict : AppError` (409 на повторний Idempotency-Key) і `data object EmailAlreadyRegistered : AppError` (409 на register). Другу гілку додаємо тут, щоб auth-хвиля не редагувала `AppError.kt` і merge був безконфліктним.
 
 - [ ] **Step 1: Write the failing test** — `SyncPortsTest`: `FakeSyncApi` віддає задані страницы/результати; `FakeSyncStore` roundtrip stage→pending→clearOutbox; `dirtyChanges` повертає staged value.
 - [ ] **Step 2: verify fails** `./gradlew :shared:application:jvmTest --tests '*SyncPortsTest*'` — FAIL.
@@ -301,7 +301,11 @@ Konsist-тест `SyncLayerTest`:
 
 ## Порядок злиття
 
-Всі три хвилі (`client-presentation`, `client-sync`, `client-auth`) незалежні. Єдині точки дотику:
-- `gradle/libs.versions.toml`: sync додає 2 рядки; якщо auth зливається першим — не писати дублікати.
-- `AppError.kt`: sync додає `IdempotencyConflict`, auth додає `EmailAlreadyRegistered` — merge тримає обидві.
+Порядок: **client-presentation → client-sync → client-auth**. Всі три незалежні за логікою.
+
+Правило одного власника на спільні файли (щоб merge був безконфліктним):
+- `shared/domain/error/AppError.kt` — власник **client-sync** (додає `IdempotencyConflict` + `EmailAlreadyRegistered`; auth їх лише використовує).
+- `gradle/libs.versions.toml` — власник **client-sync** (додає 2 ktor-клієнт рядки; auth їх лише використовує).
+- `shared/data/build.gradle.kts` — власник **client-sync** (додає ktor-клієнт залежності; auth їх лише використовує).
+- `shared/domain/session/SessionPorts.kt` — власник **client-auth** (`VaultKey.from`), presentation/sync його не чіпають.
 - DI-композиція всіх модулів — окрема нативна хвиля.
