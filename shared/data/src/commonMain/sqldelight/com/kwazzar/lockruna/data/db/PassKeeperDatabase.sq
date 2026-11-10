@@ -58,7 +58,7 @@ WHERE deleted = 0;
 
 -- Insert into item history
 insertItemHistory:
-INSERT INTO item_history (item_id, version, ciphertext, nonce, updated_at)
+INSERT OR REPLACE INTO item_history (item_id, version, ciphertext, nonce, updated_at)
 VALUES (?, ?, ?, ?, ?);
 
 -- Get item history for an item (ordered by version desc)

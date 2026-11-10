@@ -103,8 +103,9 @@ class SqlDelightSyncStore(private val database: PassKeeperDatabase) : SyncStore 
     override suspend fun pendingOutbox(): Outbox? {
         val row = queries.selectOutbox().executeAsOneOrNull() ?: return null
         // A body we cannot read is dropped: the dirty rows are still local and get pushed again.
-        val changes = runCatching { json.decodeFromString(changeList, row.body) }.getOrNull() ?: return null
-        return Outbox(idempotencyKey = row.idempotency_key, changes = changes.map { it.toDomain() })
+        val changes =
+            runCatching { json.decodeFromString(changeList, row.body).map { it.toDomain() } }.getOrNull() ?: return null
+        return Outbox(idempotencyKey = row.idempotency_key, changes = changes)
     }
 
     override suspend fun clearOutbox() {

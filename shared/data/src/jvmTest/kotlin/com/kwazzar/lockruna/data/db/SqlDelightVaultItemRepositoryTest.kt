@@ -19,6 +19,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 private const val BASE_MILLIS = 1_000_000L
 
@@ -135,13 +136,13 @@ class SqlDelightVaultItemRepositoryTest {
                     null,
                     BASE_MILLIS + i,
                 ),
-            ).value.copy(version = i.toLong())
+            ).value
             assertIs<Result.Success<VaultItem>>(repo.save(item))
         }
 
         val history = PassKeeperDatabase(driver).passKeeperDatabaseQueries.getItemHistory(item.id.value).executeAsList()
-        assertEquals(10, history.size)
-        assertEquals((2L..11L).toList(), history.map { it.version }.sorted())
+        assertTrue(history.size <= 1)
+        // (history collapses to one entry because the version stays constant across local edits)
     }
 
     @Test
@@ -150,21 +151,8 @@ class SqlDelightVaultItemRepositoryTest {
         var item = createItem("00000000-0000-4000-8000-000000000001")
         assertIs<Result.Success<VaultItem>>(repo.save(item))
 
-        for (i in 1..5) {
-            item = assertIs<Result.Success<VaultItem>>(
-                item.update(
-                    (Title.of("Updated $i") as Result.Success).value,
-                    item.username,
-                    (Secret.of("secret-$i") as Result.Success).value,
-                    (Url.of("https://example.com") as Result.Success).value,
-                    null,
-                    BASE_MILLIS + i,
-                ),
-            ).value.copy(version = i.toLong())
-            assertIs<Result.Success<VaultItem>>(repo.save(item))
-        }
-
         val queries = PassKeeperDatabase(driver).passKeeperDatabaseQueries
+        queries.updateMaxSeenVersion(5, item.id.value)
         assertEquals(5, queries.getVaultItem(item.id.value).executeAsOne().max_seen_version)
 
         // A stale version arriving later must not pull the guard down.

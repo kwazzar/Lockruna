@@ -70,6 +70,7 @@ internal fun String.toItemType(): VaultItemType =
 /**
  * Parses the ISO-8601 UTC instant the server sends (`2026-11-10T10:00:00[.123456789]Z`) into epoch millis.
  */
+@Suppress("MagicNumber")
 internal fun parseInstantMillis(text: String): Long {
     require(text.endsWith("Z")) { "Instant is not UTC: $text" }
     val dateTime = text.removeSuffix("Z")
@@ -89,6 +90,13 @@ internal fun parseInstantMillis(text: String): Long {
     } else {
         0
     }
+
+    require(month in 1..12) { "Invalid instant: $text" }
+    require(day in 1..daysInMonth(year, month)) { "Invalid instant: $text" }
+    require(hour in 0..23) { "Invalid instant: $text" }
+    require(minute in 0..59) { "Invalid instant: $text" }
+    require(second in 0..59) { "Invalid instant: $text" }
+    require(millis in 0..999) { "Invalid instant: $text" }
 
     val days = daysFromCivil(year, month, day)
     return days * MILLIS_PER_DAY + hour * MILLIS_PER_HOUR + minute * MILLIS_PER_MINUTE +
@@ -125,6 +133,16 @@ private fun daysFromCivil(year: Int, month: Int, day: Int): Long {
         yearOfEra / CENTURY_CYCLE + dayOfYear
     return era.toLong() * DAYS_PER_ERA + dayOfEra - EPOCH_DAY_SHIFT
 }
+
+@Suppress("MagicNumber")
+private fun daysInMonth(year: Int, month: Int): Int = when (month) {
+    2 -> if (isLeapYear(year)) 29 else 28
+    4, 6, 9, 11 -> 30
+    else -> 31
+}
+
+@Suppress("MagicNumber")
+private fun isLeapYear(year: Int): Boolean = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
 
 private fun ByteArray.toBase64(): String = Base64.encode(this)
 

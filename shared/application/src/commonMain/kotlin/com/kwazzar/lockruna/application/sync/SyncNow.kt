@@ -71,16 +71,48 @@ class SyncNow(
             val batch = nextBatch(pushed) ?: return Result.Success(Unit)
             pushed += batch.changes.map { it.id }
 
-            val result = when (val response = syncApi.push(batch.changes, batch.key)) {
-                is Result.Failure -> return Result.Failure(response.error)
-                is Result.Success -> response.value
+            val pushedUpdatedAt = batch.changes.associate { change ->
+                change.id to (store.peek(change.id)?.updatedAtMillis ?: 0L)
             }
-            result.applied.forEach { store.markItemApplied(it.id, it.newVersion, it.updatedAtMillis) }
 
-            val outcome = resolveConflicts(result.conflicts, batch.changes, repushes)
-            store.clearOutbox()
-            if (outcome.exhausted) return Result.Success(Unit)
-            if (outcome.retry.isNotEmpty()) store.stageOutbox(idGenerator.newUuid(), outcome.retry)
+            val step = pushOneBatch(batch, pushedUpdatedAt, repushes)
+            when (step) {
+                is PushStep.Finished -> return Result.Success(Unit)
+                is PushStep.Failed -> return Result.Failure(step.error)
+                is PushStep.Continue -> Unit
+            }
+        }
+    }
+
+    private suspend fun pushOneBatch(
+        batch: Batch,
+        pushedUpdatedAt: Map<String, Long>,
+        repushes: MutableMap<String, Int>,
+    ): PushStep {
+        val result = when (val response = syncApi.push(batch.changes, batch.key)) {
+            is Result.Failure -> return PushStep.Failed(response.error)
+            is Result.Success -> response.value
+        }
+        applyServerResults(result.applied, pushedUpdatedAt)
+        val outcome = resolveConflicts(result.conflicts, batch.changes, repushes, pushedUpdatedAt)
+        store.clearOutbox()
+        if (outcome.exhausted) return PushStep.Finished
+        if (outcome.retry.isNotEmpty()) store.stageOutbox(idGenerator.newUuid(), outcome.retry)
+        return PushStep.Continue
+    }
+
+    private suspend fun applyServerResults(
+        applied: List<com.kwazzar.lockruna.domain.sync.AppliedChange>,
+        pushedUpdatedAt: Map<String, Long>,
+    ) {
+        for (change in applied) {
+            val local = store.peek(change.id)
+            val allowed = local == null ||
+                (
+                    change.newVersion >= local.maxSeenVersion &&
+                        local.updatedAtMillis == pushedUpdatedAt[change.id]
+                    )
+            if (allowed) store.markItemApplied(change.id, change.newVersion, change.updatedAtMillis)
         }
     }
 
@@ -101,11 +133,15 @@ class SyncNow(
         conflicts: List<Conflict>,
         batch: List<PendingChange>,
         repushes: MutableMap<String, Int>,
+        pushedUpdatedAt: Map<String, Long>,
     ): ConflictOutcome {
         val retry = mutableListOf<PendingChange>()
         var exhausted = false
         for (conflict in conflicts) {
-            val localUpdatedAt = store.peek(conflict.id)?.updatedAtMillis ?: 0L
+            val local = store.peek(conflict.id)
+            val localUpdatedAt = local?.updatedAtMillis ?: 0L
+            // Rollback protection: a stale server version must not overwrite the local row.
+            if (conflict.server.version < (local?.maxSeenVersion ?: 0)) continue
             val serverWins = conflict.server.updatedAtMillis >= localUpdatedAt
             if (serverWins) {
                 store.applyRemote(conflict.server)
@@ -115,7 +151,10 @@ class SyncNow(
                 if (attempts > MAX_REPUSHES) {
                     exhausted = true
                 } else {
-                    val change = batch.firstOrNull { it.id == conflict.id }
+                    // Rebuild the retry from the current dirty row, not the stale snapshot,
+                    // so an edit made while the request was in flight is not lost.
+                    val current = store.dirtyChanges(BATCH_LIMIT).firstOrNull { it.id == conflict.id }
+                    val change = current ?: batch.firstOrNull { it.id == conflict.id }
                     if (change != null) retry += change.copy(baseVersion = conflict.server.version)
                 }
             }
@@ -126,4 +165,10 @@ class SyncNow(
     private data class Batch(val key: String, val changes: List<PendingChange>)
 
     private data class ConflictOutcome(val retry: List<PendingChange>, val exhausted: Boolean)
+
+    private sealed interface PushStep {
+        data object Continue : PushStep
+        data object Finished : PushStep
+        data class Failed(val error: AppError) : PushStep
+    }
 }
