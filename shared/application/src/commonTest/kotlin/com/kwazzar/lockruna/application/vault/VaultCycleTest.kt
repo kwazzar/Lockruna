@@ -30,7 +30,7 @@ class VaultCycleTest {
     private val deleteItemUseCase = DeleteItem(repository, clock)
 
     @Test
-    fun `create update and delete move through versions`() = runTest {
+    fun `create update and delete keep the server version and mark the item dirty`() = runTest {
         val created = createItemUseCase(
             CreateItemCommand(
                 type = VaultItemType.LOGIN,
@@ -54,12 +54,12 @@ class VaultCycleTest {
             null,
         )
         val updatedItem = (updated as Result.Success).value
-        assertEquals(1L, updatedItem.version)
+        assertEquals(0L, updatedItem.version)
         assertEquals(true, updatedItem.dirty)
 
         val deleted = deleteItemUseCase(itemId)
         val deletedItem = (deleted as Result.Success).value
-        assertEquals(2L, deletedItem.version)
+        assertEquals(0L, deletedItem.version)
         assertEquals(true, deletedItem.deleted)
     }
 

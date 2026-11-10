@@ -124,7 +124,7 @@ class VaultItemTest {
     }
 
     @Test
-    fun `VaultItem update increments version and sets dirty`() {
+    fun `VaultItem update keeps the server version and sets dirty`() {
         val id = (ItemId.of(validItemId) as Result.Success).value
         val title = (Title.of(validTitle) as Result.Success).value
         val secret = (Secret.of(validSecret) as Result.Success).value
@@ -153,7 +153,7 @@ class VaultItemTest {
         )
         assertTrue(result is Result.Success)
         val updated = (result as Result.Success).value
-        assertEquals(1, updated.version)
+        assertEquals(0, updated.version)
         assertTrue(updated.dirty)
         assertEquals(nowMillis + 1000, updated.updatedAtMillis)
         assertEquals("Updated Title", updated.title.value)
@@ -193,7 +193,7 @@ class VaultItemTest {
     }
 
     @Test
-    fun `VaultItem delete sets deleted true increments version sets dirty`() {
+    fun `VaultItem delete sets deleted true keeps the server version sets dirty`() {
         val id = (ItemId.of(validItemId) as Result.Success).value
         val title = (Title.of(validTitle) as Result.Success).value
         val secret = (Secret.of(validSecret) as Result.Success).value
@@ -214,7 +214,7 @@ class VaultItemTest {
         assertTrue(result is Result.Success)
         val deleted = (result as Result.Success).value
         assertTrue(deleted.deleted)
-        assertEquals(1, deleted.version)
+        assertEquals(0, deleted.version)
         assertTrue(deleted.dirty)
         assertEquals(nowMillis + 1000, deleted.updatedAtMillis)
     }

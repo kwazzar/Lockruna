@@ -79,13 +79,13 @@ class VaultUseCasesTest {
     }
 
     @Test
-    fun `update bumps the version and marks the item dirty`() = runTest {
+    fun `update keeps the server version and marks the item dirty`() = runTest {
         val created = createItem(createCommand()) as Result.Success
         val itemId = created.value.id
 
         val updated = updateItem(itemId, "Renamed", null, "secret-value-2", null, null) as Result.Success
 
-        assertEquals(1L, updated.value.version)
+        assertEquals(0L, updated.value.version)
         assertEquals(true, updated.value.dirty)
         assertEquals("Renamed", updated.value.title.value)
     }
@@ -98,7 +98,7 @@ class VaultUseCasesTest {
         val deleted = deleteItem(itemId) as Result.Success
 
         assertEquals(true, deleted.value.deleted)
-        assertEquals(1L, deleted.value.version)
+        assertEquals(0L, deleted.value.version)
     }
 
     @Test

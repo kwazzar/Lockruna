@@ -135,7 +135,7 @@ class SqlDelightVaultItemRepositoryTest {
                     null,
                     BASE_MILLIS + i,
                 ),
-            ).value
+            ).value.copy(version = i.toLong())
             assertIs<Result.Success<VaultItem>>(repo.save(item))
         }
 
@@ -160,7 +160,7 @@ class SqlDelightVaultItemRepositoryTest {
                     null,
                     BASE_MILLIS + i,
                 ),
-            ).value
+            ).value.copy(version = i.toLong())
             assertIs<Result.Success<VaultItem>>(repo.save(item))
         }
 

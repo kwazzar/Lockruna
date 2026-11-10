@@ -6,7 +6,7 @@ import com.kwazzar.lockruna.domain.error.AppError
 /**
  * Vault item aggregate. Encrypted on disk, decrypted in memory when vault is unlocked.
  * Invariants:
- * - version starts at 0 for new items, increments on every update/delete
+ * - version is the server version of the record; it changes only when the server applies the change
  * - dirty = true for any local change that hasn't been synced
  * - deleted = true for soft-deleted items (tombstones)
  * - secret is required for LOGIN type
@@ -102,7 +102,6 @@ data class VaultItem(
                 secret = secret,
                 url = url,
                 folderId = folderId,
-                version = version + 1,
                 dirty = true,
                 updatedAtMillis = nowMillis,
             ),
@@ -116,7 +115,6 @@ data class VaultItem(
         return Result.Success(
             copy(
                 deleted = true,
-                version = version + 1,
                 dirty = true,
                 updatedAtMillis = nowMillis,
             ),
