@@ -1,4 +1,4 @@
-package com.kwazzar.lockruna.ios
+package com.kwazzar.lockruna.umbrella
 
 import com.kwazzar.lockruna.data.di.authModule
 import com.kwazzar.lockruna.data.di.coreModule
