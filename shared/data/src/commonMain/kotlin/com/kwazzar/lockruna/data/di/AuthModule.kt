@@ -1,5 +1,12 @@
 package com.kwazzar.lockruna.data.di
 
+import com.kwazzar.lockruna.application.auth.EnableBiometrics
+import com.kwazzar.lockruna.application.auth.HasStoredSession
+import com.kwazzar.lockruna.application.auth.Login
+import com.kwazzar.lockruna.application.auth.Logout
+import com.kwazzar.lockruna.application.auth.Register
+import com.kwazzar.lockruna.application.auth.UnlockWithBiometrics
+import com.kwazzar.lockruna.application.auth.UnlockWithPassword
 import com.kwazzar.lockruna.data.auth.InMemoryAuthStateStore
 import com.kwazzar.lockruna.data.auth.SessionAccessTokenProvider
 import com.kwazzar.lockruna.data.auth.createAuthApi
@@ -17,58 +24,16 @@ fun authModule(httpClient: HttpClient, baseUrl: String): Module = module {
     single<AuthStateStore> { get<InMemoryAuthStateStore>() }
     single<AccessTokenProvider> { SessionAccessTokenProvider(get()) }
 
-    // Application use cases
-    single {
-        com.kwazzar.lockruna.application.auth.Login(
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-        )
-    }
-    single {
-        com.kwazzar.lockruna.application.auth.Logout(
-            get(),
-            get(),
-            get(),
-        )
-    }
-    single {
-        com.kwazzar.lockruna.application.auth.UnlockWithPassword(
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-        )
-    }
-    single {
-        com.kwazzar.lockruna.application.auth.Register(
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-        )
-    }
-    single {
-        com.kwazzar.lockruna.application.auth.EnableBiometrics(
-            get(),
-            get(),
-            get(),
-        )
-    }
-    single {
-        com.kwazzar.lockruna.application.auth.UnlockWithBiometrics(
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-        )
-    }
+    includes(authUseCasesModule)
+}
+
+/** Application use cases of the auth flow. */
+private val authUseCasesModule = module {
+    single { Login(get(), get(), get(), get(), get(), get()) }
+    single { Logout(get(), get(), get()) }
+    single { UnlockWithPassword(get(), get(), get(), get(), get()) }
+    single { Register(get(), get(), get(), get(), get(), get(), get()) }
+    single { EnableBiometrics(get(), get(), get()) }
+    single { UnlockWithBiometrics(get(), get(), get(), get(), get()) }
+    single { HasStoredSession(get()) }
 }

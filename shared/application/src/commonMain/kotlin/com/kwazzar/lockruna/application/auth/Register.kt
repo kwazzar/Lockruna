@@ -4,6 +4,7 @@ import com.kwazzar.lockruna.application.identity.ValidateMasterPassword
 import com.kwazzar.lockruna.domain.auth.DeviceIdentity
 import com.kwazzar.lockruna.domain.auth.DevicePlatform
 import com.kwazzar.lockruna.domain.auth.SealedBlob
+import com.kwazzar.lockruna.domain.auth.canonicalEmail
 import com.kwazzar.lockruna.domain.core.Result
 import com.kwazzar.lockruna.domain.crypto.CryptoService
 import com.kwazzar.lockruna.domain.crypto.HkdfLabels
@@ -50,7 +51,8 @@ class Register(
         val recoveryWrapKey = crypto.hkdfSha256(recoveryKey, null, HkdfLabels.RECOVERY_WRAP, 32)
         val recoveryAuthKey = crypto.hkdfSha256(recoveryKey, null, HkdfLabels.RECOVERY_AUTH, 32)
 
-        val emailBytes = command.email.encodeToByteArray()
+        val email = canonicalEmail(command.email)
+        val emailBytes = email.encodeToByteArray()
 
         val wrappedVaultKey = wrapKey(kek, vaultKey.bytes, emailBytes, crypto)
         val recoveryWrappedVaultKey = wrapKey(recoveryWrapKey, vaultKey.bytes, emailBytes, crypto)
@@ -62,7 +64,7 @@ class Register(
         )
 
         val registerResult = authApi.register(
-            email = command.email,
+            email = email,
             authKey = authKey,
             recoveryAuthKey = recoveryAuthKey,
             kdfSalt = kdfSalt,
@@ -78,7 +80,8 @@ class Register(
         }
 
         // Unwrap and unlock session
-        val unwrappedVaultKey = KeyDerivation.unwrapVaultKey(kek, user.wrappedVaultKey, command.email, crypto)
+        val unwrappedVaultKey = KeyDerivation.unwrapVaultKey(kek, user.wrappedVaultKey, email, crypto)
+            ?: return Result.Failure(AppError.InvalidCredentials)
         authStateStore.saveSession(user)
         session.unlock(VaultKey.from(unwrappedVaultKey))
 
