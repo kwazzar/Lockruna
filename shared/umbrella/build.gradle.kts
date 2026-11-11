@@ -16,6 +16,7 @@ kotlin {
         commonMain.dependencies {
             api(project(":shared:data"))
             api(project(":shared:presentation"))
+            api(libs.koin.core)
         }
     }
 }
