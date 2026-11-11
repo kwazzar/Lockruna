@@ -134,5 +134,16 @@
   "132": "PreloginUser",
   "133": "DevicePlatform",
   "134": "createAuthApi",
-  "135": "DeviceDto.kt"
+  "135": "DeviceDto.kt",
+  "136": "InMemoryRateLimiter",
+  "137": "RateLimitDecision",
+  "138": "ItemDetailStoreTest",
+  "139": "InMemoryVaultItemRepository",
+  "140": "AuthTypes.kt",
+  "141": "PresentationLayerTest",
+  "142": "requireSession",
+  "143": "FakeCryptoService",
+  "144": ".invoke",
+  "145": "ItemUiMappingTest",
+  "146": "PresentationModule.kt"
 }
