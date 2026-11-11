@@ -16,7 +16,7 @@ struct ContentView: View {
                 } else if model.screen == "login" {
                     LoginView(model: model)
                 } else {
-                    VaultContainer(model: model, route: $route, selectedId: $selectedId, revealed: $revealed)
+                    VaultContainer(model: model, route: $route, selectedId: $selectedId)
                 }
             }
             if model.showBlur {
@@ -32,7 +32,8 @@ struct ContentView: View {
                 model.showBlur = false
                 if let ts = model.backgroundedAt {
                     let mono = Int64(ts.timeIntervalSince1970 * 1000)
-                    Task { await model.sessionStore.dispatch(intent: SessionIntentResumed(backgroundedAtMonotonicMillis: mono)) }
+                    Task { try await model.sessionStore.dispatch(intent: PresentationSessionIntentResumed(backgroundedAtMonotonicMillis: KotlinLong(value: mono))) }
+                    model.backgroundedAt = nil
                 }
             }
         }
@@ -51,17 +52,17 @@ struct UnlockView: View {
             SecureField("Password", text: $password).textFieldStyle(.roundedBorder)
             Button("Unlock") {
                 Task {
-                    await model.unlockStore.dispatch(intent: UnlockIntentEmailChanged(value: email))
-                    await model.unlockStore.dispatch(intent: UnlockIntentPasswordChanged(value: password))
-                    await model.unlockStore.dispatch(intent: UnlockIntentSubmitPassword())
+                    try await model.unlockStore.dispatch(intent: PresentationUnlockIntentEmailChanged(value: email))
+                    try await model.unlockStore.dispatch(intent: PresentationUnlockIntentPasswordChanged(value: password))
+                    try await model.unlockStore.dispatch(intent: PresentationUnlockIntentSubmitPassword())
                 }
             }
-            if model.unlockStore.state.biometricAvailable {
+            if model.unlockStore.state.value.biometricAvailable {
                 Button("Use biometrics") {
-                    Task { await model.unlockStore.dispatch(intent: UnlockIntentSubmitBiometrics()) }
+                    Task { try await model.unlockStore.dispatch(intent: PresentationUnlockIntentSubmitBiometrics()) }
                 }
             }
-            if let err = model.unlockStore.state.error {
+            if model.unlockStore.state.value.error != nil {
                 Text("Invalid credentials").foregroundColor(.red)
             }
         }.padding()
@@ -82,11 +83,14 @@ struct LoginView: View {
             TextField("Device name", text: $deviceName).textFieldStyle(.roundedBorder)
             Button("Sign in") {
                 Task {
-                    await model.loginStore.dispatch(intent: LoginIntentEmailChanged(value: email))
-                    await model.loginStore.dispatch(intent: LoginIntentPasswordChanged(value: password))
-                    await model.loginStore.dispatch(intent: LoginIntentDeviceNameChanged(value: deviceName))
-                    await model.loginStore.dispatch(intent: LoginIntentSubmit())
+                    try await model.loginStore.dispatch(intent: PresentationLoginIntentEmailChanged(value: email))
+                    try await model.loginStore.dispatch(intent: PresentationLoginIntentPasswordChanged(value: password))
+                    try await model.loginStore.dispatch(intent: PresentationLoginIntentDeviceNameChanged(value: deviceName))
+                    try await model.loginStore.dispatch(intent: PresentationLoginIntentSubmit())
                 }
+            }
+            if model.loginStore.state.value.error != nil {
+                Text("Login failed").foregroundColor(.red)
             }
         }.padding()
     }
@@ -96,7 +100,6 @@ struct VaultContainer: View {
     @ObservedObject var model: AppModel
     @Binding var route: String
     @Binding var selectedId: String?
-    @Binding var revealed: String?
 
     var body: some View {
         if route == "list" {
@@ -117,16 +120,20 @@ struct VaultListView: View {
     var body: some View {
         VStack {
             Text("Vault").font(.title)
-            List(model.vaultListStore.state.items, id: \.id) { item in
+            List(model.vaultListStore.state.value.items, id: \.id) { item in
                 Button(item.title) {
                     selectedId = item.id
-                    Task { await model.vaultListStore.dispatch(intent: VaultListIntentItemClicked(id: item.id)) }
+                    Task {
+                        try await model.vaultListStore.dispatch(intent: PresentationVaultListIntentItemClicked(id: item.id))
+                    }
                     route = "detail"
                 }
             }
             Button("Lock") {
-                Task { await model.sessionStore.dispatch(intent: SessionIntentLock()) }
-                model.screen = "unlock"
+                Task {
+                    try await model.sessionStore.dispatch(intent: PresentationSessionIntentLock())
+                    model.screen = "unlock"
+                }
             }
             Button("New item") { route = "edit" }
         }.padding()
@@ -139,13 +146,13 @@ struct ItemDetailView: View {
 
     var body: some View {
         VStack {
-            Text(model.itemDetailStore.state.item?.title ?? "").font(.title)
-            Text(model.itemDetailStore.state.item?.username ?? "")
-            Button("Reveal") { Task { await model.itemDetailStore.dispatch(intent: ItemDetailIntentReveal()) } }
-            Button("Hide") { Task { await model.itemDetailStore.dispatch(intent: ItemDetailIntentHide()) } }
-            Button("Copy") { Task { await model.itemDetailStore.dispatch(intent: ItemDetailIntentCopy()) } }
-            Button("Edit") { Task { await model.itemDetailStore.dispatch(intent: ItemDetailIntentEdit()) } }
-            Button("Delete") { Task { await model.itemDetailStore.dispatch(intent: ItemDetailIntentDeleteConfirmed()) } }
+            Text(model.itemDetailStore.state.value.item?.title ?? "").font(.title)
+            Text(model.itemDetailStore.state.value.item?.username ?? "")
+            Button("Reveal") { Task { try await model.itemDetailStore.dispatch(intent: PresentationItemDetailIntentReveal()) } }
+            Button("Hide") { Task { try await model.itemDetailStore.dispatch(intent: PresentationItemDetailIntentHide()) } }
+            Button("Copy") { Task { try await model.itemDetailStore.dispatch(intent: PresentationItemDetailIntentCopy()) } }
+            Button("Edit") { Task { try await model.itemDetailStore.dispatch(intent: PresentationItemDetailIntentEdit()) } }
+            Button("Delete") { Task { try await model.itemDetailStore.dispatch(intent: PresentationItemDetailIntentDeleteConfirmed()) } }
             Button("Back") { route = "list" }
         }.padding()
     }
@@ -162,8 +169,8 @@ struct ItemEditView: View {
             TextField("Title", text: $title).textFieldStyle(.roundedBorder)
             Button("Save") {
                 Task {
-                    await model.itemEditStore.dispatch(intent: ItemEditIntentTitleChanged(value: title))
-                    await model.itemEditStore.dispatch(intent: ItemEditIntentSave())
+                    try await model.itemEditStore.dispatch(intent: PresentationItemEditIntentTitleChanged(value: title))
+                    try await model.itemEditStore.dispatch(intent: PresentationItemEditIntentSave())
                 }
             }
             Button("Back") { route = "list" }

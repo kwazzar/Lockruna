@@ -7,12 +7,12 @@ final class AppModel: ObservableObject {
     @Published var backgroundedAt: Date? = nil
     @Published var showBlur: Bool = false
 
-    let sessionStore: SessionStore
-    let loginStore: LoginStore
-    let unlockStore: UnlockStore
-    let vaultListStore: VaultListStore
-    let itemDetailStore: ItemDetailStore
-    let itemEditStore: ItemEditStore
+    let sessionStore: PresentationSessionStore
+    let loginStore: PresentationLoginStore
+    let unlockStore: PresentationUnlockStore
+    let vaultListStore: PresentationVaultListStore
+    let itemDetailStore: PresentationItemDetailStore
+    let itemEditStore: PresentationItemEditStore
 
     private var sessionTask: Task<Void, Never>?
 
@@ -27,7 +27,7 @@ final class AppModel: ObservableObject {
 
         sessionTask = Task { @MainActor in
             for await effect in sessionStore.effects {
-                if effect is SessionEffectLocked {
+                if effect is PresentationSessionEffectLocked {
                     screen = "unlock"
                 }
             }
