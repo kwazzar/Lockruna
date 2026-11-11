@@ -16,6 +16,7 @@ PassKeeper це zero-knowledge менеджер паролів. Сервер з�
 - **Розділення ключів:** HKDF-SHA256 з різними info-рядками (див. нижче).
 - **Шифрування:** AES-256-GCM, випадковий 96-бітний nonce на кожну операцію, тег 128 біт.
 - **Пароль:** перед KDF нормалізується NFKC і кодується в UTF-8. Правило живе в `domain` як порт `PasswordNormalizer`, примітиви — у платформних реалізаціях `shared/data`: Android `java.text.Normalizer` (NFKC), iOS — системний ICU4C (`unorm2`) через cinterop-шим над `libicucore` з iOS SDK. Нормалізатор повертає текст, кодування UTF-8 виконує KDF. Результат має бути однаковим на iOS і Android (тест-вектори з кирилицею та комбінованими символами). `NSString.precomposedStringWithCompatibilityMapping` не використовується: Foundation не компонує U+30AB + U+3099 у U+30AC, тоді як ICU і Java це роблять, тому одна й та сама пароль давала б різні ключі на iOS і Android. Параметри KDF, HKDF-рядки та AAD не змінені.
+- **Email:** канонічна форма — `trim().lowercase()`, однакова на клієнті й сервері (`domain.auth.canonicalEmail`, сервер — `email.trim().lowercase()`). AAD завжди будується з канонічної форми: сирий email, введений користувачем, може відрізнятися від того, з которим загорнуто `vaultKey`, і тоді `wrapped_vault_key` не розгорнеться. Правило змінює лише значення AAD, а не його формат: `email (UTF-8 bytes)`.
 - Власні криптопримітиви не пишуться, усе проходить через `CryptoService` і порт `Argon2`.
 
 ### 2. Ієрархія ключів
@@ -24,7 +25,7 @@ PassKeeper це zero-knowledge менеджер паролів. Сервер з�
 2. `authKey = HKDF(masterKey, "passkeeper/auth/v1")`, надсилається серверу
 3. `kek = HKDF(masterKey, "passkeeper/kek/v1")`, не залишає клієнта
 4. `vaultKey`, випадковий, 32 байти, шифрує записи
-5. `wrapped_vault_key = AES-GCM(kek, vaultKey)`, AAD = `email` (UTF-8 bytes)
+5. `wrapped_vault_key = AES-GCM(kek, vaultKey)`, AAD = `canonical_email` (UTF-8 bytes)
 6. Сервер зберігає `HMAC(pepper, authKey)`, а не сам `authKey`. Достатньо швидкого хешу, бо `authKey` високоентропійний.
 
 Зміна пароля перезагортає лише `vaultKey`, записи не перешифровуються.
@@ -38,7 +39,7 @@ PassKeeper це zero-knowledge менеджер паролів. Сервер з�
 - Під час реєстрації клієнт генерує recovery key (128 біт ентропії) і показує його один раз як 12 слів BIP39: 4-бітний checksum дозволяє виявити помилку введення. Користувач підтверджує key повторним введенням; ключ не зберігається на пристрої.
 - `recoveryWrapKey = HKDF(recoveryKey, "passkeeper/recovery-wrap/v1")`
 - `recoveryAuthKey = HKDF(recoveryKey, "passkeeper/recovery-auth/v1")`
-- `recovery_wrapped_vault_key = AES-GCM(recoveryWrapKey, vaultKey)`, AAD = `email` (UTF-8 bytes)
+- `recovery_wrapped_vault_key = AES-GCM(recoveryWrapKey, vaultKey)`, AAD = `canonical_email` (UTF-8 bytes)
 - Сервер зберігає `HMAC(pepper, recoveryAuthKey)`. Скидання пароля вимагає `recoveryAuthKey`, а не лише email.
 - Відновлення: клієнт розгортає `vaultKey` через `recoveryWrapKey`, користувач задає новий майстер-пароль, клієнт генерує новий `kdf_salt`, виводить нові `authKey` і `kek`, перезагортає `vaultKey`. Сервер замінює ключовий матеріал і відкликає всі інші пристрої.
 

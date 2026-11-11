@@ -11,6 +11,7 @@ import com.kwazzar.lockruna.application.support.FakeIdGenerator
 import com.kwazzar.lockruna.application.support.FakePasswordNormalizer
 import com.kwazzar.lockruna.domain.auth.AuthTokens
 import com.kwazzar.lockruna.domain.auth.AuthenticatedUser
+import com.kwazzar.lockruna.domain.auth.DevicePlatform
 import com.kwazzar.lockruna.domain.auth.SealedBlob
 import com.kwazzar.lockruna.domain.core.Result
 import com.kwazzar.lockruna.domain.crypto.KdfParams
@@ -96,6 +97,7 @@ class LoginTest {
                 password = password,
                 deviceName = "Test Device",
                 deviceId = "device-1",
+                platform = DevicePlatform.ANDROID,
             ),
         )
 
@@ -129,6 +131,7 @@ class LoginTest {
                 password = "password123",
                 deviceName = "Test Device",
                 deviceId = "device-1",
+                platform = DevicePlatform.ANDROID,
             ),
         )
 
@@ -161,6 +164,7 @@ class LoginTest {
                 password = "password123",
                 deviceName = "Test Device",
                 deviceId = "device-1",
+                platform = DevicePlatform.ANDROID,
             ),
         )
 
@@ -193,12 +197,126 @@ class LoginTest {
                 password = "password123",
                 deviceName = "Test Device",
                 deviceId = "device-1",
+                platform = DevicePlatform.ANDROID,
             ),
         )
 
         assertTrue(result.isFailure)
         assertEquals(AppError.RateLimited(60), result.error)
     }
+
+    @Test
+    fun devicePlatformComesFromTheCommand() = runBlocking {
+        authApi.preloginResult = Result.Success(
+            com.kwazzar.lockruna.domain.auth.PreLoginData(ByteArray(16), KdfParams.SUPPORTED),
+        )
+
+        val login = Login(
+            authApi = authApi,
+            argon2 = argon2,
+            normalizer = normalizer,
+            crypto = crypto,
+            authStateStore = authStateStore,
+            session = session,
+        )
+
+        login(
+            CredentialsCommand(
+                email = "user@example.com",
+                password = "password123",
+                deviceName = "Test Device",
+                deviceId = "device-1",
+                platform = DevicePlatform.IOS,
+            ),
+        )
+
+        assertEquals(DevicePlatform.IOS, authApi.lastLoginDevice?.platform)
+    }
+
+    @Test
+    fun aWrongMasterPasswordFailsWithInvalidCredentials() = runBlocking {
+        authApi.preloginResult = Result.Success(
+            com.kwazzar.lockruna.domain.auth.PreLoginData(ByteArray(16), KdfParams.SUPPORTED),
+        )
+        authApi.loginResult = Result.Success(authenticatedUser())
+        crypto.decryptGcmFails = true
+
+        val result = loginUseCase()(
+            CredentialsCommand(
+                email = "user@example.com",
+                password = "password123",
+                deviceName = "Test Device",
+                deviceId = null,
+                platform = DevicePlatform.ANDROID,
+            ),
+        )
+
+        assertTrue(result.isFailure)
+        assertEquals(AppError.InvalidCredentials, result.error)
+        assertNull(session.currentVaultKey())
+    }
+
+    @Test
+    fun theLoginReusesTheStoredDeviceId() = runBlocking {
+        authApi.preloginResult = Result.Success(
+            com.kwazzar.lockruna.domain.auth.PreLoginData(ByteArray(16), KdfParams.SUPPORTED),
+        )
+        authApi.loginResult = Result.Success(authenticatedUser())
+        authStateStore.saveSession(authenticatedUser())
+
+        loginUseCase()(
+            CredentialsCommand(
+                email = "user@example.com",
+                password = "password123",
+                deviceName = "Test Device",
+                deviceId = null,
+                platform = DevicePlatform.ANDROID,
+            ),
+        )
+
+        assertEquals("device-1", authApi.lastLoginDevice?.deviceId)
+    }
+
+    @Test
+    fun theEmailIsCanonicalisedForTheApiAndTheAad() = runBlocking {
+        authApi.preloginResult = Result.Success(
+            com.kwazzar.lockruna.domain.auth.PreLoginData(ByteArray(16), KdfParams.SUPPORTED),
+        )
+        authApi.loginResult = Result.Success(authenticatedUser())
+
+        loginUseCase()(
+            CredentialsCommand(
+                email = "  User@Example.com  ",
+                password = "password123",
+                deviceName = "Test Device",
+                deviceId = null,
+                platform = DevicePlatform.ANDROID,
+            ),
+        )
+
+        assertEquals("user@example.com", authApi.lastPreloginEmail)
+        assertEquals("user@example.com", authApi.lastLoginEmail)
+        assertEquals("user@example.com".encodeToByteArray().decodeToString(), crypto.lastAad?.decodeToString())
+    }
+
+    private fun loginUseCase() = Login(
+        authApi = authApi,
+        argon2 = argon2,
+        normalizer = normalizer,
+        crypto = crypto,
+        authStateStore = authStateStore,
+        session = session,
+    )
+
+    private fun authenticatedUser() = AuthenticatedUser(
+        userId = "user-1",
+        deviceId = "device-1",
+        wrappedVaultKey = SealedBlob.pack(ByteArray(12), ByteArray(32) { 4 } + ByteArray(16)),
+        keyNonce = ByteArray(12),
+        kdfSalt = ByteArray(16),
+        kdfParams = KdfParams.SUPPORTED,
+        tokens = AuthTokens("access-token", "refresh-token", 3600),
+    )
 }
 
 class LogoutTest {
@@ -317,4 +435,37 @@ class UnlockWithPasswordTest {
         assertTrue(result.isSuccess)
         assertEquals(vaultKey.contentToString(), session.currentVaultKey()!!.bytes.contentToString())
     }
+
+    @Test
+    fun aWrongMasterPasswordFailsWithInvalidCredentials() = runBlocking {
+        authStateStore.saveSession(storedUser())
+        crypto.decryptGcmFails = true
+
+        val unlock = UnlockWithPassword(argon2, normalizer, crypto, authStateStore, session)
+        val result = unlock("user@example.com", "password123")
+
+        assertTrue(result.isFailure)
+        assertEquals(AppError.InvalidCredentials, result.error)
+        assertNull(session.currentVaultKey())
+    }
+
+    @Test
+    fun theEmailIsCanonicalisedForTheAad() = runBlocking {
+        authStateStore.saveSession(storedUser())
+
+        val unlock = UnlockWithPassword(argon2, normalizer, crypto, authStateStore, session)
+        unlock("  User@Example.com  ", "password123")
+
+        assertEquals("user@example.com", crypto.lastAad?.decodeToString())
+    }
+
+    private fun storedUser() = AuthenticatedUser(
+        userId = "user-1",
+        deviceId = "device-1",
+        wrappedVaultKey = SealedBlob.pack(ByteArray(12), ByteArray(32) { 4 } + ByteArray(16)),
+        keyNonce = ByteArray(12),
+        kdfSalt = ByteArray(16),
+        kdfParams = KdfParams.SUPPORTED,
+        tokens = AuthTokens("access-token", "refresh-token", 3600),
+    )
 }

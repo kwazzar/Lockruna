@@ -23,14 +23,18 @@ class FakeClock(var wallMillis: Long = 0, var monotonicMillis: Long = 0) : Clock
 }
 
 class FakeCryptoService : CryptoService {
+    var decryptGcmFails: Boolean = false
+
     override fun hkdfSha256(inputKey: ByteArray, salt: ByteArray?, info: String, length: Int): ByteArray =
         ByteArray(length)
 
     override fun encryptGcm(key: ByteArray, plaintext: ByteArray, aad: ByteArray): GcmCiphertext =
         GcmCiphertext(ciphertext = plaintext, nonce = ByteArray(12), tag = ByteArray(16))
 
-    override fun decryptGcm(key: ByteArray, ciphertext: GcmCiphertext, aad: ByteArray): ByteArray =
-        ciphertext.ciphertext
+    override fun decryptGcm(key: ByteArray, ciphertext: GcmCiphertext, aad: ByteArray): ByteArray {
+        if (decryptGcmFails) throw IllegalArgumentException("GCM authentication failed")
+        return ciphertext.ciphertext
+    }
 
     override fun randomBytes(size: Int): ByteArray = ByteArray(size)
 }

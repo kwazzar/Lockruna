@@ -1,6 +1,6 @@
 # Презентація: вхід, розблокування, сесія (Client Auth & Session Presentation) — Implementation Plan
 
-> **Для агентних виконавців:** ОБОВ'ЯЗКОВО: використати `superpowers:subagent-driven-development` (рекомендовано) або `superpowers:executing-plans` для виконання цього плану по завданнях. Кроки використовують checkbox (`- [ ]`) для відстеження.
+> **Для агентних виконавців:** ОБОВ'ЯЗКОВО: використати `superpowers:subagent-driven-development` (рекомендовано) або `superpowers:executing-plans` для виконання цього плану по завданнях. Кроки використовують checkbox (`- [x]`) для відстеження.
 
 **Воркспейс:** гілка `feature/client-auth-session-presentation` від `main`. Файли, які ця хвиля володіє (інші хвилі їх не редагують): `shared/presentation/src/commonMain/**/presentation/auth/**`, `.../presentation/session/**`, `shared/presentation/src/commonMain/**/presentation/di/PresentationModule.kt`, `shared/presentation/src/commonTest/**/presentation/support/**`, `shared/application/src/commonMain/**/application/auth/Login.kt`, `shared/application/src/commonTest/**/application/auth/LoginTest.kt`.
 
@@ -43,11 +43,11 @@
 
 - Produces: `data class CredentialsCommand(val email: String, val password: String, val deviceName: String, val deviceId: String?, val platform: DevicePlatform)`; `Login` передає `platform` у `DeviceIdentity` замість константи `DevicePlatform.ANDROID`.
 
-- [ ] **Step 1: Write the failing test.** У `LoginTest` додати тест: `CredentialsCommand(..., platform = DevicePlatform.IOS)` → `FakeAuthApi.lastLoginDevice?.platform == DevicePlatform.IOS`. У `FakeAuthApi` (application `commonTest/support/TestFakes.kt`) додати `var lastLoginDevice: DeviceIdentity? = null` і зберігати його в `login(...)`.
-- [ ] **Step 2: Run to verify it fails.** `./gradlew :shared:application:jvmTest --tests '*Login*'` — FAIL (немає поля `platform`).
-- [ ] **Step 3: Implement.** Додати `platform` у `CredentialsCommand`, прибрати `DevicePlatform.ANDROID` з `Login`.
-- [ ] **Step 4: Run to verify it passes.** Та сама команда — PASS.
-- [ ] **Step 5: Commit.** `feat(auth): take the device platform from the login command`
+- [x] **Step 1: Write the failing test.** У `LoginTest` додати тест: `CredentialsCommand(..., platform = DevicePlatform.IOS)` → `FakeAuthApi.lastLoginDevice?.platform == DevicePlatform.IOS`. У `FakeAuthApi` (application `commonTest/support/TestFakes.kt`) додати `var lastLoginDevice: DeviceIdentity? = null` і зберігати його в `login(...)`.
+- [x] **Step 2: Run to verify it fails.** `./gradlew :shared:application:jvmTest --tests '*Login*'` — FAIL (немає поля `platform`).
+- [x] **Step 3: Implement.** Додати `platform` у `CredentialsCommand`, прибрати `DevicePlatform.ANDROID` з `Login`.
+- [x] **Step 4: Run to verify it passes.** Та сама команда — PASS.
+- [x] **Step 5: Commit.** `feat(auth): take the device platform from the login command`
 
 ---
 
@@ -94,11 +94,11 @@ sealed interface LoginIntent {
 sealed interface LoginEffect { data object LoggedIn : LoginEffect }
 ```
 
-- [ ] **Step 1: Write the failing tests.** У `AuthTestSupport` — фейки `FakeAuthApi` (з `loginCalls: Int`), `FakeArgon2`, `FakePasswordNormalizer`, `FakeAuthStateStore`, `FakeCryptoService` (уже є в `support/TestSupport.kt`), щоб підняти справжній `Login`. Тести: успіх → `effects` дає `LoggedIn`, `state.isSubmitting == false`, `VaultSession.state == Unlocked`; невірний пароль → `state.error == AppError.InvalidCredentials`, effect не емітиться; два `Submit` поспіль → `loginCalls == 1`; `state.toString()` не містить введеного пароля.
-- [ ] **Step 2: Run to verify it fails.** `./gradlew :shared:presentation:jvmTest --tests '*LoginStoreTest*'` — FAIL.
-- [ ] **Step 3: Implement.** Приватні `draftPassword: String`; `Submit` під `Mutex.tryLock` (як `ItemEditStore`), виклик `login(CredentialsCommand(email, draftPassword, deviceName, deviceId = null, platform))`, успіх → `LoggedIn`, невдача → `state.error`, `isSubmitting = false`; очищати `draftPassword` і `hasPassword` після успіху; `close()` скасовує scope (той самий патерн, що `VaultListStore`).
-- [ ] **Step 4: Run to verify it passes.** Та сама команда — PASS.
-- [ ] **Step 5: Commit.** `feat(presentation): login store with redacted password and single-flight submit`
+- [x] **Step 1: Write the failing tests.** У `AuthTestSupport` — фейки `FakeAuthApi` (з `loginCalls: Int`), `FakeArgon2`, `FakePasswordNormalizer`, `FakeAuthStateStore`, `FakeCryptoService` (уже є в `support/TestSupport.kt`), щоб підняти справжній `Login`. Тести: успіх → `effects` дає `LoggedIn`, `state.isSubmitting == false`, `VaultSession.state == Unlocked`; невірний пароль → `state.error == AppError.InvalidCredentials`, effect не емітиться; два `Submit` поспіль → `loginCalls == 1`; `state.toString()` не містить введеного пароля.
+- [x] **Step 2: Run to verify it fails.** `./gradlew :shared:presentation:jvmTest --tests '*LoginStoreTest*'` — FAIL.
+- [x] **Step 3: Implement.** Приватні `draftPassword: String`; `Submit` під `Mutex.tryLock` (як `ItemEditStore`), виклик `login(CredentialsCommand(email, draftPassword, deviceName, deviceId = null, platform))`, успіх → `LoggedIn`, невдача → `state.error`, `isSubmitting = false`; очищати `draftPassword` і `hasPassword` після успіху; `close()` скасовує scope (той самий патерн, що `VaultListStore`).
+- [x] **Step 4: Run to verify it passes.** Та сама команда — PASS.
+- [x] **Step 5: Commit.** `feat(presentation): login store with redacted password and single-flight submit`
 
 ---
 
@@ -150,11 +150,11 @@ sealed interface UnlockEffect {
 }
 ```
 
-- [ ] **Step 1: Write the failing tests.** `init` питає `biometricGate.isAvailable()` → `biometricAvailable`; пароль-успіх → `Unlocked` + `VaultSession` розблокована; пароль-невдача → `state.error == InvalidCredentials`, без effect; біометрія-успіх → `Unlocked`; відмова біометрії → `state.error`, парольний шлях далі працює; `EnableBiometrics` → `BiometricsEnabled`; `state.toString()` без пароля.
-- [ ] **Step 2: Run to verify it fails.** `./gradlew :shared:presentation:jvmTest --tests '*UnlockStoreTest*'` — FAIL.
-- [ ] **Step 3: Implement.** Той самий патерн, що Task 1 (приватний `draftPassword`, `Mutex.tryLock`, `isUnlocking`); `init` — `scope.launch { state = state.copy(biometricAvailable = biometricGate.isAvailable()) }`.
-- [ ] **Step 4: Run to verify it passes.** Та сама команда — PASS.
-- [ ] **Step 5: Commit.** `feat(presentation): unlock store for password and biometrics`
+- [x] **Step 1: Write the failing tests.** `init` питає `biometricGate.isAvailable()` → `biometricAvailable`; пароль-успіх → `Unlocked` + `VaultSession` розблокована; пароль-невдача → `state.error == InvalidCredentials`, без effect; біометрія-успіх → `Unlocked`; відмова біометрії → `state.error`, парольний шлях далі працює; `EnableBiometrics` → `BiometricsEnabled`; `state.toString()` без пароля.
+- [x] **Step 2: Run to verify it fails.** `./gradlew :shared:presentation:jvmTest --tests '*UnlockStoreTest*'` — FAIL.
+- [x] **Step 3: Implement.** Той самий патерн, що Task 1 (приватний `draftPassword`, `Mutex.tryLock`, `isUnlocking`); `init` — `scope.launch { state = state.copy(biometricAvailable = biometricGate.isAvailable()) }`.
+- [x] **Step 4: Run to verify it passes.** Та сама команда — PASS.
+- [x] **Step 5: Commit.** `feat(presentation): unlock store for password and biometrics`
 
 ---
 
@@ -192,11 +192,11 @@ sealed interface SessionIntent {
 sealed interface SessionEffect { data object Locked : SessionEffect }
 ```
 
-- [ ] **Step 1: Write the failing tests.** (справжні use cases + `VaultSession` + `FakeClock`): старт → `isLocked == true`; `session.unlock(...)` → `isLocked == false`; `Resumed(now - 61_000)` при політиці 1 хвилина → `Locked`, `session.currentVaultKey() == null`; `Resumed(now - 10)` → лишається розблокованою; `Lock` → `Locked`.
-- [ ] **Step 2: Run to verify it fails.** `./gradlew :shared:presentation:jvmTest --tests '*SessionStoreTest*'` — FAIL.
-- [ ] **Step 3: Implement.** `init` збирає `observeVaultState()` у `state.isLocked`; `Resumed` викликає `applyAutoLockPolicy(backgroundedAt)` і на `true` емітить `Locked`; `Lock` → `lockVault()` + `Locked`; `close()`.
-- [ ] **Step 4: Run to verify it passes.** Та сама команда — PASS.
-- [ ] **Step 5: Commit.** `feat(presentation): session store with auto-lock on resume`
+- [x] **Step 1: Write the failing tests.** (справжні use cases + `VaultSession` + `FakeClock`): старт → `isLocked == true`; `session.unlock(...)` → `isLocked == false`; `Resumed(now - 61_000)` при політиці 1 хвилина → `Locked`, `session.currentVaultKey() == null`; `Resumed(now - 10)` → лишається розблокованою; `Lock` → `Locked`.
+- [x] **Step 2: Run to verify it fails.** `./gradlew :shared:presentation:jvmTest --tests '*SessionStoreTest*'` — FAIL.
+- [x] **Step 3: Implement.** `init` збирає `observeVaultState()` у `state.isLocked`; `Resumed` викликає `applyAutoLockPolicy(backgroundedAt)` і на `true` емітить `Locked`; `Lock` → `lockVault()` + `Locked`; `close()`.
+- [x] **Step 4: Run to verify it passes.** Та сама команда — PASS.
+- [x] **Step 5: Commit.** `feat(presentation): session store with auto-lock on resume`
 
 ---
 
@@ -218,11 +218,11 @@ enum class AppScreen { UNLOCK, LOGIN, VAULT }
 fun startScreen(isLocked: Boolean, hasSession: Boolean): AppScreen
 ```
 
-- [ ] **Step 1: Write the failing test.** Три комбінації: `(true, true) → UNLOCK`, `(true, false) → LOGIN`, `(false, false) → VAULT`.
-- [ ] **Step 2: Run to verify it fails.** `./gradlew :shared:presentation:jvmTest --tests '*AppGateTest*'` — FAIL.
-- [ ] **Step 3: Implement** `when` на три гілки.
-- [ ] **Step 4: Run to verify it passes.** Та сама команда — PASS.
-- [ ] **Step 5: Commit.** `feat(presentation): start screen gate for the app shell`
+- [x] **Step 1: Write the failing test.** Три комбінації: `(true, true) → UNLOCK`, `(true, false) → LOGIN`, `(false, false) → VAULT`.
+- [x] **Step 2: Run to verify it fails.** `./gradlew :shared:presentation:jvmTest --tests '*AppGateTest*'` — FAIL.
+- [x] **Step 3: Implement** `when` на три гілки.
+- [x] **Step 4: Run to verify it passes.** Та сама команда — PASS.
+- [x] **Step 5: Commit.** `feat(presentation): start screen gate for the app shell`
 
 ---
 
@@ -238,12 +238,12 @@ fun startScreen(isLocked: Boolean, hasSession: Boolean): AppScreen
 
 - Produces: `presentationModule` реєструє `LoginStore`, `UnlockStore`, `SessionStore` як `factory`.
 
-- [ ] **Step 1: Extend the module test (RED).** Додати `single { AutoLockPolicy.ONE_MINUTE }`, `single<BiometricGate>`, `single<AuthStateStore>`; перевірити `koin.get<LoginStore>()`, `get<UnlockStore>()`, `get<SessionStore>()`, і що кожен `factory` дає новий інстанс.
-- [ ] **Step 2: Run to verify it fails.** `./gradlew :shared:presentation:jvmTest --tests '*PresentationModuleTest*'` — FAIL.
-- [ ] **Step 3: Register stores.** `factory { LoginStore(get(), get()) }`, `factory { UnlockStore(get(), get(), get(), get()) }`, `factory { SessionStore(get(), get(), get()) }`. `DevicePlatform` — біндинг платформи (`single { DevicePlatform.ANDROID }` у тесті; нативний — у хвилі native-platform).
-- [ ] **Step 4: Konsist.** Додати правило: файли `presentation/auth/*Store.kt` і `presentation/session/*Store.kt` імпортують `com.kwazzar.lockruna.application.` і не імпортують `com.kwazzar.lockruna.data.`, `io.ktor.`, `app.cash.sqldelight.`; `*State` не має властивостей з іменами `password`, `secret`, `vaultKey`.
-- [ ] **Step 5: Full verification.** `./gradlew :shared:presentation:jvmTest :shared:application:jvmTest :shared:domain:jvmTest :architecture-tests:test ktlintCheck detekt` — BUILD SUCCESSFUL.
-- [ ] **Step 6: Commit.** `feat(presentation): register auth and session stores`
+- [x] **Step 1: Extend the module test (RED).** Додати `single { AutoLockPolicy.ONE_MINUTE }`, `single<BiometricGate>`, `single<AuthStateStore>`; перевірити `koin.get<LoginStore>()`, `get<UnlockStore>()`, `get<SessionStore>()`, і що кожен `factory` дає новий інстанс.
+- [x] **Step 2: Run to verify it fails.** `./gradlew :shared:presentation:jvmTest --tests '*PresentationModuleTest*'` — FAIL.
+- [x] **Step 3: Register stores.** `factory { LoginStore(get(), get()) }`, `factory { UnlockStore(get(), get(), get(), get()) }`, `factory { SessionStore(get(), get(), get()) }`. `DevicePlatform` — біндинг платформи (`single { DevicePlatform.ANDROID }` у тесті; нативний — у хвилі native-platform).
+- [x] **Step 4: Konsist.** Додати правило: файли `presentation/auth/*Store.kt` і `presentation/session/*Store.kt` імпортують `com.kwazzar.lockruna.application.` і не імпортують `com.kwazzar.lockruna.data.`, `io.ktor.`, `app.cash.sqldelight.`; `*State` не має властивостей з іменами `password`, `secret`, `vaultKey`.
+- [x] **Step 5: Full verification.** `./gradlew :shared:presentation:jvmTest :shared:application:jvmTest :shared:domain:jvmTest :architecture-tests:test ktlintCheck detekt` — BUILD SUCCESSFUL.
+- [x] **Step 6: Commit.** `feat(presentation): register auth and session stores`
 
 ## Порядок злиття
 
