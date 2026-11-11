@@ -85,6 +85,7 @@ class FakeAuthApi(
     var lastPreloginEmail: String? = null
     var lastRegisterEmail: String? = null
     var lastLoginEmail: String? = null
+    var lastLoginDevice: DeviceIdentity? = null
 
     override suspend fun prelogin(email: String): Result<PreLoginData, AppError> {
         lastPreloginEmail = email
@@ -111,6 +112,7 @@ class FakeAuthApi(
         device: DeviceIdentity,
     ): Result<AuthenticatedUser, AppError> {
         lastLoginEmail = email
+        lastLoginDevice = device
         return loginResult ?: Result.Failure(AppError.InvalidCredentials)
     }
 

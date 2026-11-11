@@ -11,6 +11,7 @@ import com.kwazzar.lockruna.application.support.FakeIdGenerator
 import com.kwazzar.lockruna.application.support.FakePasswordNormalizer
 import com.kwazzar.lockruna.domain.auth.AuthTokens
 import com.kwazzar.lockruna.domain.auth.AuthenticatedUser
+import com.kwazzar.lockruna.domain.auth.DevicePlatform
 import com.kwazzar.lockruna.domain.auth.SealedBlob
 import com.kwazzar.lockruna.domain.core.Result
 import com.kwazzar.lockruna.domain.crypto.KdfParams
@@ -96,6 +97,7 @@ class LoginTest {
                 password = password,
                 deviceName = "Test Device",
                 deviceId = "device-1",
+                platform = DevicePlatform.ANDROID,
             ),
         )
 
@@ -129,6 +131,7 @@ class LoginTest {
                 password = "password123",
                 deviceName = "Test Device",
                 deviceId = "device-1",
+                platform = DevicePlatform.ANDROID,
             ),
         )
 
@@ -161,6 +164,7 @@ class LoginTest {
                 password = "password123",
                 deviceName = "Test Device",
                 deviceId = "device-1",
+                platform = DevicePlatform.ANDROID,
             ),
         )
 
@@ -193,11 +197,40 @@ class LoginTest {
                 password = "password123",
                 deviceName = "Test Device",
                 deviceId = "device-1",
+                platform = DevicePlatform.ANDROID,
             ),
         )
 
         assertTrue(result.isFailure)
         assertEquals(AppError.RateLimited(60), result.error)
+    }
+
+    @Test
+    fun devicePlatformComesFromTheCommand() = runBlocking {
+        authApi.preloginResult = Result.Success(
+            com.kwazzar.lockruna.domain.auth.PreLoginData(ByteArray(16), KdfParams.SUPPORTED),
+        )
+
+        val login = Login(
+            authApi = authApi,
+            argon2 = argon2,
+            normalizer = normalizer,
+            crypto = crypto,
+            authStateStore = authStateStore,
+            session = session,
+        )
+
+        login(
+            CredentialsCommand(
+                email = "user@example.com",
+                password = "password123",
+                deviceName = "Test Device",
+                deviceId = "device-1",
+                platform = DevicePlatform.IOS,
+            ),
+        )
+
+        assertEquals(DevicePlatform.IOS, authApi.lastLoginDevice?.platform)
     }
 }
 

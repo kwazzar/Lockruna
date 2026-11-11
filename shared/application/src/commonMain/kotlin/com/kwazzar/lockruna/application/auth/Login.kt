@@ -12,7 +12,13 @@ import com.kwazzar.lockruna.domain.error.AppError
 import com.kwazzar.lockruna.domain.session.VaultKey
 import com.kwazzar.lockruna.domain.session.VaultSession
 
-data class CredentialsCommand(val email: String, val password: String, val deviceName: String, val deviceId: String?)
+data class CredentialsCommand(
+    val email: String,
+    val password: String,
+    val deviceName: String,
+    val deviceId: String?,
+    val platform: DevicePlatform,
+)
 
 class Login(
     private val authApi: AuthApi,
@@ -43,7 +49,7 @@ class Login(
         val device = DeviceIdentity(
             deviceId = command.deviceId ?: "unknown",
             name = command.deviceName,
-            platform = DevicePlatform.ANDROID,
+            platform = command.platform,
         )
 
         val loginResult = authApi.login(command.email, authKey, device)
