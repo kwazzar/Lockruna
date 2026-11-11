@@ -11,6 +11,7 @@ import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.lowerCase
 import org.jetbrains.exposed.v1.exceptions.ExposedSQLException
 import org.jetbrains.exposed.v1.jdbc.insert
+import org.jetbrains.exposed.v1.jdbc.deleteWhere
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.update
 
@@ -62,6 +63,10 @@ class ExposedUserRepository(private val transactions: TransactionRunner) : UserR
             it[Users.kdfSalt] = kdfSalt
             it[Users.wrappedVaultKey] = wrappedVaultKey
         } > 0
+    }
+
+    override suspend fun deleteById(id: String): Boolean = transactions.transaction {
+        Users.deleteWhere { Users.id eq id.toUuid() } > 0
     }
 
     private companion object {

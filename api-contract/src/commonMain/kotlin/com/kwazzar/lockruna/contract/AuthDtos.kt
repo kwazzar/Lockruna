@@ -43,3 +43,23 @@ data class AuthResponseDto(
     val kdfParams: KdfParamsDto,
     val wrappedVaultKey: String,
 )
+
+@Serializable
+data class RecoveryStartResponseDto(
+    val userId: String,
+    val recoveryWrappedVaultKey: String,
+)
+
+@Serializable
+data class RecoveryCompleteRequest(
+    val email: String,
+    val recoveryAuthKey: String,
+    val newAuthKey: String,
+    val newKdfSalt: String,
+    val newKdfParams: KdfParamsDto,
+    val newWrappedVaultKey: String,
+    val device: DeviceInfoDto,
+)
+
+@Serializable
+data class DeleteAccountRequest(val authKey: String)

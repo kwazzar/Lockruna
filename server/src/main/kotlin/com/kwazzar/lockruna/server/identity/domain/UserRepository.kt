@@ -29,4 +29,6 @@ interface UserRepository {
         kdfSalt: ByteArray,
         wrappedVaultKey: ByteArray,
     ): Boolean
+
+    suspend fun deleteById(id: String): Boolean
 }

@@ -27,4 +27,6 @@ interface RefreshTokenRepository {
     suspend fun revokeFamily(userId: String, familyId: String, revokedAt: Instant): Int
 
     suspend fun revokeDeviceTokens(userId: String, deviceId: String, revokedAt: Instant): Int
+
+    suspend fun revokeAllForUser(userId: String, revokedAt: Instant): Int
 }

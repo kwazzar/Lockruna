@@ -22,4 +22,6 @@ interface DeviceRepository {
     suspend fun findById(userId: String, deviceId: String): DeviceRecord?
 
     suspend fun touch(userId: String, deviceId: String, seenAt: Instant): Boolean
+
+    suspend fun revokeAllForUser(userId: String, exceptDeviceId: String?, revokedAt: Instant): Int
 }

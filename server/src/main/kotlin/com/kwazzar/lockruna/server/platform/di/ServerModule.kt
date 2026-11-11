@@ -4,7 +4,10 @@ import com.kwazzar.lockruna.server.identity.application.AuthenticateSession
 import com.kwazzar.lockruna.server.identity.application.ListDevices
 import com.kwazzar.lockruna.server.identity.application.LoginUser
 import com.kwazzar.lockruna.server.identity.application.LogoutSession
+import com.kwazzar.lockruna.server.identity.application.CompleteRecovery
+import com.kwazzar.lockruna.server.identity.application.DeleteAccount
 import com.kwazzar.lockruna.server.identity.application.PreloginUser
+import com.kwazzar.lockruna.server.identity.application.StartRecovery
 import com.kwazzar.lockruna.server.identity.application.RefreshSession
 import com.kwazzar.lockruna.server.identity.application.RegisterUser
 import com.kwazzar.lockruna.server.identity.application.RevokeDevice
@@ -52,7 +55,10 @@ fun serverModule(
     single<DeviceDenylist> { denylist }
     single<TokenService> { JwtTokenService(get(), settings) }
     single { PreloginUser(get(), get(), settings.authFakeSecret) }
+    single { StartRecovery(get(), get(), settings.authFakeSecret) }
     single { RegisterUser(get(), get(), get(), get(), get(), settings) }
+    single { CompleteRecovery(get(), get(), get(), get(), get(), get(), settings) }
+    single { DeleteAccount(get(), get(), get(), settings) }
     single { LoginUser(get(), get(), get(), get(), settings) }
     single { AuthenticateSession(get(), get()) }
     single { RefreshSession(get(), get(), get()) }

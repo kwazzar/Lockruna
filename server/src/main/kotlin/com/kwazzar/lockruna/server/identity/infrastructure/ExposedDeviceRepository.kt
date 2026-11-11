@@ -9,6 +9,7 @@ import com.kwazzar.lockruna.server.platform.db.toUuid
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.neq
 import org.jetbrains.exposed.v1.jdbc.insert
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.update
@@ -53,6 +54,19 @@ class ExposedDeviceRepository(private val transactions: TransactionRunner) : Dev
         Devices.update({ (Devices.userId eq userId.toUuid()) and (Devices.id eq deviceId.toUuid()) }) {
             it[Devices.lastSeen] = seenAt.toColumn()
         } > 0
+    }
+
+    override suspend fun revokeAllForUser(userId: String, exceptDeviceId: String?, revokedAt: Instant): Int = transactions.transaction {
+        val now = OffsetDateTime.now(ZoneOffset.UTC)
+        if (exceptDeviceId == null) {
+            Devices.update({ Devices.userId eq userId.toUuid() }) {
+                it[Devices.revokedAt] = now
+            }
+        } else {
+            Devices.update({ (Devices.userId eq userId.toUuid()) and (Devices.id neq exceptDeviceId.toUuid()) }) {
+                it[Devices.revokedAt] = now
+            }
+        }
     }
 
     private fun ResultRow.toRecord() = DeviceRecord(

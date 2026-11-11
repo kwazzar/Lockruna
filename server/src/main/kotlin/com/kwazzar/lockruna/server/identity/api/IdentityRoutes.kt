@@ -2,7 +2,10 @@ package com.kwazzar.lockruna.server.identity.api
 
 import com.kwazzar.lockruna.contract.AuthResponseDto
 import com.kwazzar.lockruna.contract.LoginRequest
+import com.kwazzar.lockruna.contract.DeleteAccountRequest
 import com.kwazzar.lockruna.contract.PreloginRequest
+import com.kwazzar.lockruna.contract.RecoveryCompleteRequest
+import com.kwazzar.lockruna.contract.RecoveryStartResponseDto
 import com.kwazzar.lockruna.contract.PreloginResponse
 import com.kwazzar.lockruna.contract.RefreshRequest
 import com.kwazzar.lockruna.contract.RegisterRequest
@@ -15,7 +18,11 @@ import com.kwazzar.lockruna.server.identity.application.LogoutSession
 import com.kwazzar.lockruna.server.identity.application.PreloginUser
 import com.kwazzar.lockruna.server.identity.application.RefreshSession
 import com.kwazzar.lockruna.server.identity.application.RegisterCommand
+import com.kwazzar.lockruna.server.identity.application.CompleteRecovery
+import com.kwazzar.lockruna.server.identity.application.CompleteRecoveryCommand
+import com.kwazzar.lockruna.server.identity.application.DeleteAccount
 import com.kwazzar.lockruna.server.identity.application.RegisterUser
+import com.kwazzar.lockruna.server.identity.application.StartRecovery
 import com.kwazzar.lockruna.server.platform.error.Problem
 import com.kwazzar.lockruna.server.platform.error.ProblemException
 import com.kwazzar.lockruna.server.platform.web.receiveTextLimited
@@ -24,6 +31,7 @@ import io.ktor.server.application.ApplicationCall
 import io.ktor.server.plugins.origin
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
+import io.ktor.server.routing.delete
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
 import kotlinx.serialization.SerializationException
@@ -42,6 +50,9 @@ fun Route.identityRoutes() {
     val refreshSession by inject<RefreshSession>()
     val logoutSession by inject<LogoutSession>()
     val authenticate by inject<AuthenticateSession>()
+    val startRecovery by inject<StartRecovery>()
+    val completeRecovery by inject<CompleteRecovery>()
+    val deleteAccount by inject<DeleteAccount>()
 
     route("/auth") {
         post("/prelogin") {
@@ -68,6 +79,27 @@ fun Route.identityRoutes() {
             call.respond(session.toResponse())
         }
 
+        post("/recovery/start") {
+            val request = call.receiveJson<PreloginRequest>()
+
+            val result = startRecovery(request.email, call.clientIp())
+
+            call.respond(
+                RecoveryStartResponseDto(
+                    userId = result.userId,
+                    recoveryWrappedVaultKey = result.recoveryWrappedVaultKey.toBase64(),
+                ),
+            )
+        }
+
+        post("/recovery/complete") {
+            val request = call.receiveJson<RecoveryCompleteRequest>()
+
+            val session = completeRecovery(request.toCommand(call.clientIp()))
+
+            call.respond(session.toResponse())
+        }
+
         post("/refresh") {
             val request = call.receiveJson<RefreshRequest>()
 
@@ -90,6 +122,15 @@ fun Route.identityRoutes() {
             call.respond(HttpStatusCode.NoContent)
         }
     }
+
+    delete("/account") {
+        val claims = call.requireSession(authenticate)
+        val request = call.receiveJson<DeleteAccountRequest>()
+
+        deleteAccount(claims.userId, request.authKey.fromBase64())
+
+        call.respond(HttpStatusCode.NoContent)
+    }
 }
 
 private fun RegisterRequest.toCommand(clientIp: String) = RegisterCommand(
@@ -100,6 +141,18 @@ private fun RegisterRequest.toCommand(clientIp: String) = RegisterCommand(
     kdfParams = kdfParams,
     wrappedVaultKey = wrappedVaultKey.fromBase64(),
     recoveryWrappedVaultKey = recoveryWrappedVaultKey.fromBase64(),
+    deviceName = device.name,
+    devicePlatform = device.platform.requirePlatform(),
+    clientIp = clientIp,
+)
+
+private fun RecoveryCompleteRequest.toCommand(clientIp: String) = CompleteRecoveryCommand(
+    email = email,
+    recoveryAuthKey = recoveryAuthKey.fromBase64(),
+    newAuthKey = newAuthKey.fromBase64(),
+    newKdfSalt = newKdfSalt.fromBase64(),
+    newKdfParams = newKdfParams,
+    newWrappedVaultKey = newWrappedVaultKey.fromBase64(),
     deviceName = device.name,
     devicePlatform = device.platform.requirePlatform(),
     clientIp = clientIp,
