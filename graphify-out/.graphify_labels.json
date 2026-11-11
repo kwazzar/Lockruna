@@ -153,5 +153,10 @@
   "151": ".resolveDevice",
   "152": "PreloginUser",
   "153": ".invoke",
-  "154": "DevicePlatform"
+  "154": "DevicePlatform",
+  "155": "SessionStoreTest",
+  "156": ".invoke",
+  "157": "FakeBiometricPolicyStore",
+  "158": "WeakPasswordReason",
+  "159": "HasStoredSession"
 }
