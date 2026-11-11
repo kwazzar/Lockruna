@@ -11,7 +11,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import kotlinx.coroutines.launch
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -26,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.kwazzar.lockruna.presentation.auth.LoginIntent
 import com.kwazzar.lockruna.presentation.auth.LoginStore
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(store: LoginStore, onLoggedIn: () -> Unit) {
@@ -45,19 +45,38 @@ fun LoginScreen(store: LoginStore, onLoggedIn: () -> Unit) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        OutlinedTextField(value = state.email, onValueChange = { scope.launch { store.dispatch(LoginIntent.EmailChanged(it)) } }, label = { Text("Email") })
+        OutlinedTextField(value = state.email, onValueChange = {
+            scope.launch { store.dispatch(LoginIntent.EmailChanged(it)) }
+        }, label = { Text("Email") })
         Spacer(Modifier.height(8.dp))
         OutlinedTextField(
             value = password,
-            onValueChange = { scope.launch { password = it; store.dispatch(LoginIntent.PasswordChanged(it)) } },
+            onValueChange = {
+                scope.launch {
+                    password = it
+                    store.dispatch(LoginIntent.PasswordChanged(it))
+                }
+            },
             label = { Text("Password") },
             visualTransformation = PasswordVisualTransformation(),
         )
         Spacer(Modifier.height(8.dp))
-        OutlinedTextField(value = state.deviceName, onValueChange = { scope.launch { store.dispatch(LoginIntent.DeviceNameChanged(it)) } }, label = { Text("Device name") })
+        OutlinedTextField(value = state.deviceName, onValueChange = {
+            scope.launch { store.dispatch(LoginIntent.DeviceNameChanged(it)) }
+        }, label = { Text("Device name") })
         Spacer(Modifier.height(8.dp))
-        if (state.error != null) Text("Login failed", color = androidx.compose.material3.MaterialTheme.colorScheme.error)
+        if (state.error !=
+            null
+        ) {
+            Text("Login failed", color = androidx.compose.material3.MaterialTheme.colorScheme.error)
+        }
         Spacer(Modifier.height(8.dp))
-        if (state.isSubmitting) CircularProgressIndicator() else Button(onClick = { scope.launch { store.dispatch(LoginIntent.Submit) } }) { Text("Sign in") }
+        if (state.isSubmitting) {
+            CircularProgressIndicator()
+        } else {
+            Button(onClick = {
+                scope.launch { store.dispatch(LoginIntent.Submit) }
+            }) { Text("Sign in") }
+        }
     }
 }

@@ -6,7 +6,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import kotlinx.coroutines.launch
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -18,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.kwazzar.lockruna.presentation.vault.ItemDetailIntent
 import com.kwazzar.lockruna.presentation.vault.ItemDetailStore
+import kotlinx.coroutines.launch
 
 @Composable
 fun ItemDetailScreen(store: ItemDetailStore, onBack: () -> Unit, onEdit: () -> Unit) {
@@ -29,7 +29,9 @@ fun ItemDetailScreen(store: ItemDetailStore, onBack: () -> Unit, onEdit: () -> U
             when (effect) {
                 is com.kwazzar.lockruna.presentation.vault.ItemDetailEffect.NavigateToEdit -> onEdit()
                 com.kwazzar.lockruna.presentation.vault.ItemDetailEffect.Closed -> onBack()
-                is com.kwazzar.lockruna.presentation.vault.ItemDetailEffect.SecretRevealed -> { revealed = effect.value }
+                is com.kwazzar.lockruna.presentation.vault.ItemDetailEffect.SecretRevealed -> {
+                    revealed = effect.value
+                }
                 com.kwazzar.lockruna.presentation.vault.ItemDetailEffect.SecretCopied -> {}
             }
         }

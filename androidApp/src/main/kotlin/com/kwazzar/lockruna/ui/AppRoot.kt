@@ -1,9 +1,9 @@
 package com.kwazzar.lockruna.ui
 
+import android.os.SystemClock
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -11,7 +11,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import android.os.SystemClock
 import com.kwazzar.lockruna.domain.auth.AuthStateStore
 import com.kwazzar.lockruna.presentation.app.AppScreen
 import com.kwazzar.lockruna.presentation.app.startScreen
@@ -21,7 +20,6 @@ import com.kwazzar.lockruna.presentation.session.SessionStore
 import com.kwazzar.lockruna.presentation.vault.ItemDetailStore
 import com.kwazzar.lockruna.presentation.vault.ItemEditStore
 import com.kwazzar.lockruna.presentation.vault.VaultListStore
-import kotlinx.coroutines.launch
 import org.koin.core.context.GlobalContext
 
 @Composable
@@ -47,7 +45,9 @@ fun AppRoot() {
                 Lifecycle.Event.ON_START -> {
                     val ts = backgroundedAt
                     backgroundedAt = null
-                    kotlinx.coroutines.runBlocking { sessionStore.dispatch(com.kwazzar.lockruna.presentation.session.SessionIntent.Resumed(ts)) }
+                    kotlinx.coroutines.runBlocking {
+                        sessionStore.dispatch(com.kwazzar.lockruna.presentation.session.SessionIntent.Resumed(ts))
+                    }
                 }
                 else -> {}
             }
@@ -72,7 +72,10 @@ fun AppRoot() {
         AppScreen.VAULT -> when (route) {
             "list" -> VaultListScreen(
                 store = vaultListStore,
-                onOpenItem = { id -> selectedId = id; route = "detail" },
+                onOpenItem = { id ->
+                    selectedId = id
+                    route = "detail"
+                },
                 onNewItem = { route = "edit" },
                 onLock = { },
             )

@@ -12,7 +12,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import kotlinx.coroutines.launch
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -27,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.kwazzar.lockruna.presentation.auth.UnlockIntent
 import com.kwazzar.lockruna.presentation.auth.UnlockStore
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @Composable
 fun UnlockScreen(store: UnlockStore, onUnlocked: () -> Unit) {
@@ -46,21 +46,40 @@ fun UnlockScreen(store: UnlockStore, onUnlocked: () -> Unit) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        OutlinedTextField(value = state.email, onValueChange = { scope.launch { store.dispatch(UnlockIntent.EmailChanged(it)) } }, label = { Text("Email") })
+        OutlinedTextField(value = state.email, onValueChange = {
+            scope.launch { store.dispatch(UnlockIntent.EmailChanged(it)) }
+        }, label = { Text("Email") })
         Spacer(Modifier.height(8.dp))
         OutlinedTextField(
             value = password,
-            onValueChange = { scope.launch { password = it; store.dispatch(UnlockIntent.PasswordChanged(it)) } },
+            onValueChange = {
+                scope.launch {
+                    password = it
+                    store.dispatch(UnlockIntent.PasswordChanged(it))
+                }
+            },
             label = { Text("Password") },
             visualTransformation = PasswordVisualTransformation(),
         )
         Spacer(Modifier.height(8.dp))
-        if (state.error != null) Text("Invalid credentials", color = androidx.compose.material3.MaterialTheme.colorScheme.error)
+        if (state.error !=
+            null
+        ) {
+            Text("Invalid credentials", color = androidx.compose.material3.MaterialTheme.colorScheme.error)
+        }
         Spacer(Modifier.height(8.dp))
-        if (state.isUnlocking) CircularProgressIndicator() else Button(onClick = { scope.launch { store.dispatch(UnlockIntent.SubmitPassword) } }) { Text("Unlock") }
+        if (state.isUnlocking) {
+            CircularProgressIndicator()
+        } else {
+            Button(onClick = {
+                scope.launch { store.dispatch(UnlockIntent.SubmitPassword) }
+            }) { Text("Unlock") }
+        }
         if (state.biometricAvailable) {
             Spacer(Modifier.height(8.dp))
-            TextButton(onClick = { scope.launch { store.dispatch(UnlockIntent.SubmitBiometrics) } }) { Text("Use biometrics") }
+            TextButton(onClick = {
+                scope.launch { store.dispatch(UnlockIntent.SubmitBiometrics) }
+            }) { Text("Use biometrics") }
         }
     }
 }
