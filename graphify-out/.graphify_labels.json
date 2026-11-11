@@ -145,5 +145,13 @@
   "143": "FakeCryptoService",
   "144": ".invoke",
   "145": "ItemUiMappingTest",
-  "146": "PresentationModule.kt"
+  "146": "PresentationModule.kt",
+  "147": "AuthDtos.kt",
+  "148": "authModule",
+  "149": "FakeBiometricGate",
+  "150": "ItemId.kt",
+  "151": ".resolveDevice",
+  "152": "PreloginUser",
+  "153": ".invoke",
+  "154": "DevicePlatform"
 }

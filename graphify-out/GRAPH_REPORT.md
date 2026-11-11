@@ -1,16 +1,16 @@
 # Graph Report - Lockruna  (2026-11-11)
 
 ## Corpus Check
-- 238 files · ~65,884 words
+- 239 files · ~65,950 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1744 nodes · 2938 edges · 147 communities (103 shown, 44 thin omitted)
-- Extraction: 86% EXTRACTED · 14% INFERRED · 0% AMBIGUOUS · INFERRED: 412 edges (avg confidence: 0.8)
+- 1747 nodes · 2942 edges · 155 communities (104 shown, 51 thin omitted)
+- Extraction: 86% EXTRACTED · 14% INFERRED · 0% AMBIGUOUS · INFERRED: 413 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d62b4266`
+- Built from commit: `ee7e177b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -145,6 +145,14 @@
 - FakeCryptoService
 - .invoke
 - ItemUiMappingTest
+- AuthDtos.kt
+- authModule
+- FakeBiometricGate
+- ItemId.kt
+- .resolveDevice
+- PreloginUser
+- .invoke
+- DevicePlatform
 
 ## God Nodes (most connected - your core abstractions)
 1. `AppError` - 87 edges
@@ -161,23 +169,23 @@
 ## Surprising Connections (you probably didn't know these)
 - `identityRoutes()` --calls--> `TokenPairDto`  [INFERRED]
   server/src/main/kotlin/com/kwazzar/lockruna/server/identity/api/IdentityRoutes.kt → api-contract/src/commonMain/kotlin/com/kwazzar/lockruna/contract/AuthDtos.kt
+- `toResponse()` --calls--> `AuthResponseDto`  [INFERRED]
+  server/src/main/kotlin/com/kwazzar/lockruna/server/identity/api/IdentityRoutes.kt → api-contract/src/commonMain/kotlin/com/kwazzar/lockruna/contract/AuthDtos.kt
 - `toDto()` --calls--> `EncryptedItemDto`  [INFERRED]
   server/src/main/kotlin/com/kwazzar/lockruna/server/sync/api/SyncRoutes.kt → api-contract/src/commonMain/kotlin/com/kwazzar/lockruna/contract/SyncDtos.kt
 - `toDto()` --calls--> `AppliedChangeDto`  [INFERRED]
   server/src/main/kotlin/com/kwazzar/lockruna/server/sync/api/SyncRoutes.kt → api-contract/src/commonMain/kotlin/com/kwazzar/lockruna/contract/SyncDtos.kt
 - `toDto()` --calls--> `ConflictDto`  [INFERRED]
   server/src/main/kotlin/com/kwazzar/lockruna/server/sync/api/SyncRoutes.kt → api-contract/src/commonMain/kotlin/com/kwazzar/lockruna/contract/SyncDtos.kt
-- `toDto()` --calls--> `PushResultDto`  [INFERRED]
-  server/src/main/kotlin/com/kwazzar/lockruna/server/sync/api/SyncRoutes.kt → api-contract/src/commonMain/kotlin/com/kwazzar/lockruna/contract/SyncDtos.kt
 
 ## Import Cycles
 - None detected.
 
-## Communities (147 total, 44 thin omitted)
+## Communities (155 total, 51 thin omitted)
 
 ### Community 0 - "AppError"
-Cohesion: 0.09
-Nodes (20): Fields, UpdateItem, AppError, BiometricsUnavailable, ClipboardUnavailable, EmailAlreadyRegistered, IdempotencyConflict, InvalidCredentials (+12 more)
+Cohesion: 0.06
+Nodes (30): E, FakeSyncApi, PushCall, FakeAuthApi, PreLoginData, Failure, T, Result (+22 more)
 
 ### Community 1 - "Рішення"
 Cohesion: 0.09
@@ -236,8 +244,8 @@ Cohesion: 0.33
 Nodes (5): ADR-002: Clean Architecture + DDD-lite, MVI у presentation, Альтернативи, Контекст, Наслідки, Рішення
 
 ### Community 18 - "VaultItemType"
-Cohesion: 0.06
-Nodes (22): FakeCryptoService, PassKeeperDatabase, Flow, ObserveVaultState, FakeBiometricGate, FakeSecureKeyStore, FakeClock, SqlDriver (+14 more)
+Cohesion: 0.41
+Nodes (4): FakeCryptoService, PassKeeperDatabase, SqlDriver, SqlDelightVaultItemRepositoryTest
 
 ### Community 19 - "MainActivity"
 Cohesion: 0.40
@@ -248,24 +256,24 @@ Cohesion: 0.83
 Nodes (3): gradlew script, die(), warn()
 
 ### Community 21 - "ServerConfigTest"
-Cohesion: 0.19
-Nodes (10): deviceRoutes(), toDto(), LoginCommand, LoginUser, requireAllowed(), RuntimeException, Problem, ProblemException (+2 more)
+Cohesion: 0.18
+Nodes (10): deviceRoutes(), toDto(), requireAllowed(), RuntimeException, Problem, ProblemException, unauthorized(), installStatusPages() (+2 more)
 
 ### Community 27 - "ServerConfig.kt"
 Cohesion: 0.10
 Nodes (14): Job, CopySecret, ItemClicked, Lock, OpenItem, RevealSecret, Search, SecretCopied (+6 more)
 
 ### Community 29 - "Application.kt"
-Cohesion: 0.19
-Nodes (10): InMemoryDeviceDenylist, SyncClient, change(), ByteArray, JsonObject, record(), register(), registerUser() (+2 more)
+Cohesion: 0.05
+Nodes (39): DeviceInfoDto, PushRequestDto, DataSource, main(), module(), Allowed, Blocked, RateLimitDecision (+31 more)
 
 ### Community 43 - "KdfParams"
-Cohesion: 0.08
-Nodes (13): Argon2Factory, PlatformNormalizer, Argon2Factory, Argon2Libsodium, ByteArray, PlatformNormalizer, Argon2BouncyCastle, Argon2Factory (+5 more)
+Cohesion: 0.14
+Nodes (5): Argon2Factory, PlatformNormalizer, PlatformNormalizer, PlatformNormalizer, PasswordNormalizer
 
 ### Community 44 - "PasswordNormalizer"
-Cohesion: 0.17
-Nodes (8): Applied, ApplyResult, ChangeRecord, Conflict, SealedItemRecord, VaultItemRepository, ExposedVaultItemRepository, VaultItemRepository
+Cohesion: 0.08
+Nodes (18): AppliedChange, Conflict, ByteArray, PushChanges, PushOutcome, IdempotencyRepository, ByteArray, StoredResponse (+10 more)
 
 ### Community 45 - "Крипто-ядро клієнта (Crypto Core) — Implementation Plan"
 Cohesion: 0.15
@@ -292,40 +300,36 @@ Cohesion: 0.11
 Nodes (13): Conflict, Batch, ConflictOutcome, Continue, Failed, Finished, com, PushStep (+5 more)
 
 ### Community 59 - "JwtTokenService"
-Cohesion: 0.07
-Nodes (10): ListDevices, DeviceRecord, DeviceRepository, ByteArray, RefreshTokenRecord, RefreshTokenRepository, ExposedDeviceRepository, ExposedRefreshTokenRepository (+2 more)
+Cohesion: 0.12
+Nodes (6): ByteArray, RefreshTokenRecord, RefreshTokenRepository, ExposedRefreshTokenRepository, ByteArray, RefreshTokenRepositoryTest
 
 ### Community 60 - "ServerSettings.kt"
 Cohesion: 0.12
 Nodes (14): HikariConfig, fromEnv(), ByteArray, required(), ServerSettings, toFakeSecret(), toJwtKey(), toPepper() (+6 more)
-
-### Community 61 - "Result"
-Cohesion: 0.13
-Nodes (4): TestIdGenerator, IdGenerator, FixedIdGenerator, PresentationModuleTest
 
 ### Community 62 - "FakeCryptoService"
 Cohesion: 0.15
 Nodes (6): FakeClock, ApplyAutoLockPolicy, AutoLockPolicyTest, FakeCryptoService, ByteArray, AutoLockPolicy
 
 ### Community 63 - "InMemoryVaultItemRepository"
-Cohesion: 0.16
-Nodes (4): SupportFakesTest, FakeIdGenerator, InMemoryVaultItemRepository, VaultItemRepository
+Cohesion: 0.22
+Nodes (3): SupportFakesTest, FakeIdGenerator, IdGenerator
 
 ### Community 65 - "PostgresTest"
 Cohesion: 0.15
 Nodes (7): PostgreSQLContainer, ExposedTransactionRunner, T, TransactionRunner, Database, HikariDataSource, PostgresTest
 
 ### Community 66 - "VaultItem"
-Cohesion: 0.16
-Nodes (6): CreateItem, CreateItemCommand, Flow, VaultItemRepository, LockedAwareInMemoryRepository, VaultCycleTest
+Cohesion: 0.11
+Nodes (9): CreateItem, InMemoryVaultItemRepository, VaultItemRepository, Flow, VaultItemRepository, LockedAwareInMemoryRepository, VaultItem, Flow (+1 more)
 
 ### Community 67 - "create"
-Cohesion: 0.08
-Nodes (15): RevealSecretTest, VaultUseCasesTest, of(), Secret, of(), Title, of(), Url (+7 more)
+Cohesion: 0.10
+Nodes (9): CreateItemCommand, RevealSecretTest, VaultCycleTest, VaultUseCasesTest, VaultItemType, CARD, FOLDER, LOGIN (+1 more)
 
 ### Community 68 - "SqlDelightVaultItemRepository"
-Cohesion: 0.16
-Nodes (9): ByteArray, Flow, T, VaultItemRepository, SqlDelightVaultItemRepository, VaultItem, Flow, VaultItemRepository (+1 more)
+Cohesion: 0.24
+Nodes (6): ByteArray, Flow, T, VaultItemRepository, SqlDelightVaultItemRepository, Vault_item
 
 ### Community 69 - "Клієнтське ядро vault (Client Vault Core) — Implementation Plan"
 Cohesion: 0.15
@@ -336,8 +340,8 @@ Cohesion: 0.17
 Nodes (11): Global Constraints, Task 1: Каркас сервера: шари, Ktor, Koin, конфіг, помилки, Task 2: Схема БД, Exposed-таблиці та репозиторії, Task 3: Identity API — prelogin, register, login, Task 4: Токени, refresh-ротація та керування пристроями, Task 5: Sync API — курсор, push, ідемпотентність, конфлікти, Власність файлів (паралельна робота), Не в обсязі цього плану (+3 more)
 
 ### Community 71 - "StoredResponse"
-Cohesion: 0.27
-Nodes (5): IdempotencyRepository, ByteArray, StoredResponse, ExposedIdempotencyRepository, ByteArray
+Cohesion: 0.20
+Nodes (3): DeviceRecord, DeviceRepository, ExposedDeviceRepository
 
 ### Community 72 - "RedisDeviceDenylist"
 Cohesion: 0.22
@@ -348,35 +352,35 @@ Cohesion: 0.23
 Nodes (5): KeyDerivation, ByteArray, com, CryptoService, ByteArray
 
 ### Community 75 - "RateLimitDecision"
-Cohesion: 0.08
-Nodes (4): FakeSyncStore, LocalRecord, Outbox, SyncStore
+Cohesion: 0.11
+Nodes (3): FakeSyncStore, LocalRecord, Outbox
 
 ### Community 79 - "Tables.kt"
 Cohesion: 0.48
 Nodes (6): Devices, IdempotencyKeys, RefreshTokens, Users, VaultItems, Table
 
 ### Community 83 - ".invoke"
-Cohesion: 0.40
-Nodes (3): ValidateMasterPassword, MasterPassword, of()
+Cohesion: 0.21
+Nodes (12): AuthResponse, DeviceDto, hex(), hexToByteArray(), KdfParamsDto, ByteArray, LoginRequest, PreloginRequest (+4 more)
 
 ### Community 84 - "PlatformCrypto"
-Cohesion: 0.21
+Cohesion: 0.25
 Nodes (3): ByteArray, PlatformCrypto, GcmCiphertext
 
 ### Community 86 - "ItemId.kt"
-Cohesion: 0.11
-Nodes (11): CopySecret, DeleteItem, GetItem, RevealSecret, hasValidDashes(), hasValidHexChars(), hasValidVariant(), hasValidVersion() (+3 more)
+Cohesion: 0.12
+Nodes (7): DeleteItem, GetItem, RevealSecret, Fields, UpdateItem, ItemId, of()
 
 ### Community 95 - ".invoke"
 Cohesion: 0.11
-Nodes (11): DomainKdfParams, createAuthApi(), HttpClient, createAuthApi(), HttpClient, AuthApi, ByteArray, DeviceIdentity (+3 more)
+Nodes (12): DomainKdfParams, createAuthApi(), HttpClient, HttpClient, T, KtorAuthApi, createAuthApi(), HttpClient (+4 more)
 
 ### Community 96 - "VaultKey"
-Cohesion: 0.11
-Nodes (8): FakeClock, CopySecretTest, FailingClipboard, RecordingClipboard, Clock, Clipboard, FakeClock, RecordingClipboard
+Cohesion: 0.23
+Nodes (6): CopySecret, CopySecretTest, FailingClipboard, RecordingClipboard, Clipboard, RecordingClipboard
 
 ### Community 97 - ".unlock"
-Cohesion: 0.16
+Cohesion: 0.18
 Nodes (4): EnableBiometrics, UnlockWithBiometrics, EnableBiometricsTest, UnlockWithBiometricsTest
 
 ### Community 98 - ".respond"
@@ -384,8 +388,8 @@ Cohesion: 0.24
 Nodes (5): MockEngine, HttpResponse, T, KtorSyncApi, KtorSyncApiTest
 
 ### Community 99 - ".register"
-Cohesion: 0.13
-Nodes (20): E, AuthResponse, DeviceDto, hex(), hexToByteArray(), KdfParamsDto, ByteArray, HttpClient (+12 more)
+Cohesion: 0.15
+Nodes (6): Locked, State, Unlocked, VaultSession, VaultSessionTest, StateFlow
 
 ### Community 100 - "SyncNowTest"
 Cohesion: 0.27
@@ -396,56 +400,52 @@ Cohesion: 0.18
 Nodes (4): FakeAuthStateStore, InMemoryAuthStateStore, AuthStateStore, AuthenticatedUser
 
 ### Community 102 - "toDomain"
-Cohesion: 0.20
-Nodes (10): daysFromCivil(), daysInMonth(), fromBase64(), invalidInstant(), isLeapYear(), ByteArray, parseInstantMillis(), toDomain() (+2 more)
-
-### Community 104 - "PendingChange"
-Cohesion: 0.18
-Nodes (4): FakeSyncApi, PushCall, SyncApi, PendingChange
+Cohesion: 0.16
+Nodes (13): ChangeDto, daysFromCivil(), daysInMonth(), fromBase64(), invalidInstant(), isLeapYear(), ByteArray, parseInstantMillis() (+5 more)
 
 ### Community 105 - ".invoke"
-Cohesion: 0.19
-Nodes (4): IdentityApiTest, ByteArray, HttpResponse, JsonObject
+Cohesion: 0.20
+Nodes (8): of(), Secret, of(), Title, of(), Url, create(), createWithGeneratedId()
 
 ### Community 106 - ".weakPasswordReturnsWeakMasterPassword"
-Cohesion: 0.13
-Nodes (11): ByteArray, Register, RegisterCommand, RegisterOutcome, FakeArgon2Test, RegisterTest, FakeArgon2, FakeAuthApi (+3 more)
+Cohesion: 0.18
+Nodes (6): ByteArray, Register, RegisterCommand, RegisterOutcome, ValidateMasterPassword, RegisterTest
 
 ### Community 107 - "KdfParams"
-Cohesion: 0.18
-Nodes (5): Argon2VectorsTest, Argon2DispatchTest, isAcceptable(), KdfParams, KdfParamsTest
+Cohesion: 0.15
+Nodes (6): Argon2VectorsTest, ByteArray, Argon2DispatchTest, isAcceptable(), KdfParams, KdfParamsTest
 
 ### Community 108 - "Review Focus"
 Cohesion: 0.15
 Nodes (12): Global Constraints, Review Focus, Task 0: Оновлення docs (ADR-003, погроза), Task 1: Domain-типи auth і порти, Task 2: Login, Logout, Unlock (use cases), Task 3: Register, Task 4: Біометрия: EnableBiometrics, UnlockWithBiometrics, Task 5: KtorAuthApi і SessionAccessTokenProvider (+4 more)
 
 ### Community 111 - "serverModule"
-Cohesion: 0.15
-Nodes (7): LogoutSession, PreloginResult, PreloginUser, RevokeDevice, DataSource, Module, serverModule()
+Cohesion: 0.17
+Nodes (6): ListDevices, LogoutSession, RevokeDevice, DataSource, Module, serverModule()
 
 ### Community 112 - "SyncRoutes.kt"
 Cohesion: 0.38
 Nodes (11): asUuid(), bodyHash(), fromBase64(), idempotencyKey(), invalidRequest(), ByteArray, limit(), parse() (+3 more)
 
 ### Community 113 - "PushChanges"
-Cohesion: 0.32
-Nodes (5): AppliedChange, Conflict, ByteArray, PushChanges, PushOutcome
+Cohesion: 0.22
+Nodes (6): FakeSecureKeyStore, from(), ByteArray, random(), SecureKeyStore, VaultKey
 
 ### Community 115 - "Review Focus"
 Cohesion: 0.18
 Nodes (10): Global Constraints, Review Focus, Task 1: Domain-типи sync і порти, Task 2: SQLDelight-запити + SqlDelightSyncStore, Task 3: KtorSyncApi, Task 4: SyncNow — use case sync-алгоритму, Task 5: Koin-модуль + архітектурний тест + повна верифікація, Не в обсязі цієї хвилі (+2 more)
 
 ### Community 116 - "identityRoutes"
-Cohesion: 0.16
-Nodes (17): AuthResponseDto, LoginRequest, PreloginRequest, PreloginResponse, RefreshRequest, RegisterRequest, TokenPairDto, clientIp() (+9 more)
+Cohesion: 0.33
+Nodes (10): clientIp(), fromBase64(), identityRoutes(), ByteArray, T, receiveJson(), requirePlatform(), toBase64() (+2 more)
 
 ### Community 117 - "PasswordNormalizer"
 Cohesion: 0.15
 Nodes (13): Closed, Copy, DeleteConfirmed, Edit, Hide, ItemDetailEffect, ItemDetailIntent, ItemDetailState (+5 more)
 
 ### Community 118 - ".login"
-Cohesion: 0.44
-Nodes (3): CredentialsCommand, Login, LoginTest
+Cohesion: 0.35
+Nodes (4): CredentialsCommand, Login, LoginTest, DeviceIdentity
 
 ### Community 120 - ".spendAndRotate"
 Cohesion: 0.39
@@ -460,19 +460,15 @@ Cohesion: 0.15
 Nodes (5): BlockingVaultItemRepository, FixedIdGenerator, ItemEditStoreTest, Flow, VaultItemRepository
 
 ### Community 123 - "SyncDtos.kt"
-Cohesion: 0.20
-Nodes (11): AppliedChangeDto, ChangeDto, ConflictDto, EncryptedItemDto, PushRequestDto, PushResultDto, SyncPageDto, toDto() (+3 more)
+Cohesion: 0.48
+Nodes (6): AppliedChangeDto, ConflictDto, EncryptedItemDto, PushResultDto, SyncPageDto, toDto()
 
 ### Community 124 - ".invoke"
 Cohesion: 0.29
 Nodes (4): RegisterCommand, AuthSession, RegisterCommand, RegisterUser
 
-### Community 125 - "installStatusPages"
-Cohesion: 0.29
-Nodes (3): installStatusPages(), respondProblem(), StatusPagesTest
-
 ### Community 126 - ".logoutClearsSessionAndLocks"
-Cohesion: 0.16
+Cohesion: 0.21
 Nodes (5): Logout, UnlockWithPassword, LogoutTest, UnlockWithPasswordTest, AuthTokens
 
 ### Community 129 - ".get"
@@ -480,59 +476,75 @@ Cohesion: 0.14
 Nodes (12): FolderSelected, ItemEditEffect, ItemEditIntent, ItemEditState, ItemEditStore, Save, Saved, SecretChanged (+4 more)
 
 ### Community 130 - ".resolveDevice"
-Cohesion: 0.17
-Nodes (6): DataSource, main(), module(), ByteArray, TokenFlowTest, Timestamp
+Cohesion: 0.21
+Nodes (7): Argon2Factory, Argon2Libsodium, Argon2BouncyCastle, Argon2Factory, ByteArray, Argon2, ByteArray
 
 ### Community 131 - "deviceRoutes"
-Cohesion: 0.16
-Nodes (6): Algorithm, DecodedJWT, JWTVerifier, AccessTokenClaims, TokenService, JwtTokenService
+Cohesion: 0.24
+Nodes (4): Algorithm, DecodedJWT, JWTVerifier, JwtTokenService
 
 ### Community 132 - "PreloginUser"
-Cohesion: 0.13
-Nodes (8): io, createAuthApi(), SessionAccessTokenProvider, authModule(), HttpClient, Module, InMemoryAuthStateStoreTest, SessionAccessTokenProviderTest
+Cohesion: 0.25
+Nodes (3): SessionAccessTokenProvider, InMemoryAuthStateStoreTest, SessionAccessTokenProviderTest
 
 ### Community 133 - "DevicePlatform"
 Cohesion: 0.25
-Nodes (8): DeviceInfoDto, bearer(), IdentityClient, json(), ByteArray, HttpResponse, JsonObject, randomBytes()
+Nodes (5): FakeArgon2Test, FakeArgon2, FakePasswordNormalizer, ByteArray, toHexString()
 
 ### Community 134 - "createAuthApi"
 Cohesion: 0.17
 Nodes (11): Global Constraints, Review Focus, Review волни (після Task 6), Task 1: ItemUi v2 + мапінг, Task 2: Порт Clipboard + Reveal/Copy use cases, Task 3: VaultListStore, Task 4: ItemDetailStore, Task 5: ItemEditStore (+3 more)
 
 ### Community 136 - "InMemoryRateLimiter"
-Cohesion: 0.25
-Nodes (3): DeviceApiTest, Counter, InMemoryRateLimiter
+Cohesion: 0.18
+Nodes (3): FakeClock, Clock, FakeClock
 
 ### Community 137 - "RateLimitDecision"
-Cohesion: 0.22
-Nodes (6): Allowed, Blocked, RateLimitDecision, RateLimiter, AutoCloseable, RedisRateLimiter
+Cohesion: 0.20
+Nodes (3): FakeClock, SyncModuleTest, TestIdGenerator
 
 ### Community 139 - "InMemoryVaultItemRepository"
 Cohesion: 0.22
 Nodes (3): InMemoryVaultItemRepository, Flow, VaultItemRepository
 
 ### Community 140 - "AuthTypes.kt"
-Cohesion: 0.32
-Nodes (5): ByteArray, pack(), PreLoginData, SealedBlob, unpack()
+Cohesion: 0.60
+Nodes (4): ByteArray, pack(), SealedBlob, unpack()
 
 ### Community 142 - "requireSession"
+Cohesion: 0.18
+Nodes (5): requireSession(), AuthenticateSession, AccessTokenClaims, TokenService, bearerToken()
+
+### Community 147 - "AuthDtos.kt"
+Cohesion: 0.25
+Nodes (7): AuthResponseDto, LoginRequest, PreloginRequest, PreloginResponse, RefreshRequest, RegisterRequest, TokenPairDto
+
+### Community 148 - "authModule"
 Cohesion: 0.29
-Nodes (3): requireSession(), AuthenticateSession, bearerToken()
+Nodes (5): io, createAuthApi(), authModule(), HttpClient, Module
+
+### Community 150 - "ItemId.kt"
+Cohesion: 0.60
+Nodes (5): hasValidDashes(), hasValidHexChars(), hasValidVariant(), hasValidVersion(), isValidUuidV4()
+
+### Community 154 - "DevicePlatform"
+Cohesion: 0.50
+Nodes (3): DevicePlatform, ANDROID, IOS
 
 ## Knowledge Gaps
 - **243 isolated node(s):** `PreloginRequest`, `PreloginResponse`, `RegisterRequest`, `LoginRequest`, `RefreshRequest` (+238 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **44 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **51 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `module()` connect `.resolveDevice` to `PreloginUser`, `DevicePlatform`, `RedisDeviceDenylist`, `RateLimitDecision`, `InMemoryRateLimiter`, `.invoke`, `serverModule`, `SyncRoutes.kt`, `Application.kt`, `VaultItemType`, `identityRoutes`, `ServerConfigTest`, `installSafeCallLogging`, `ExposedRefreshTokenRepository`, `ServerSettings.kt`, `installStatusPages`?**
-  _High betweenness centrality (0.250) - this node is a cross-community bridge._
-- **Why does `AppError` connect `AppError` to `.get`, `InMemoryVaultItemRepository`, `AuthTypes.kt`, `ExposedRefreshTokenRepository`, `InMemoryVaultItemRepository`, `VaultItem`, `create`, `SqlDelightVaultItemRepository`, `.invoke`, `VaultItemContent`, `ItemId.kt`, `.invoke`, `VaultKey`, `.unlock`, `.respond`, `.register`, `PendingChange`, `.weakPasswordReturnsWeakMasterPassword`, `.login`, `AuthDtos.kt`, `.logoutClearsSessionAndLocks`?**
-  _High betweenness centrality (0.121) - this node is a cross-community bridge._
-- **Why does `serverModule()` connect `serverModule` to `PostgresTest`, `.resolveDevice`, `deviceRoutes`, `StoredResponse`, `RedisDeviceDenylist`, `RateLimitDecision`, `PasswordNormalizer`, `requireSession`, `ServerSettings.kt`, `.invoke`, `PushChanges`, `ServerConfigTest`, `.spendAndRotate`, `UserRecord`, `JwtTokenService`, `.invoke`?**
-  _High betweenness centrality (0.109) - this node is a cross-community bridge._
+- **Why does `module()` connect `Application.kt` to `RedisDeviceDenylist`, `RateLimitDecision`, `serverModule`, `SyncRoutes.kt`, `identityRoutes`, `ServerConfigTest`, `authModule`, `installSafeCallLogging`, `ExposedRefreshTokenRepository`, `ServerSettings.kt`?**
+  _High betweenness centrality (0.263) - this node is a cross-community bridge._
+- **Why does `AppError` connect `AppError` to `VaultKey`, `.get`, `VaultItem`, `.respond`, `SqlDelightVaultItemRepository`, `AuthDtos.kt`, `.invoke`, `.weakPasswordReturnsWeakMasterPassword`, `InMemoryVaultItemRepository`, `.invoke`, `VaultItemContent`, `ItemId.kt`, `.login`, `ExposedRefreshTokenRepository`, `.invoke`?**
+  _High betweenness centrality (0.116) - this node is a cross-community bridge._
+- **Why does `serverModule()` connect `serverModule` to `PostgresTest`, `deviceRoutes`, `StoredResponse`, `RedisDeviceDenylist`, `PasswordNormalizer`, `requireSession`, `ServerSettings.kt`, `.invoke`, `.invoke`, `.resolveDevice`, `PreloginUser`, `UserRecord`, `JwtTokenService`, `.spendAndRotate`, `Application.kt`?**
+  _High betweenness centrality (0.113) - this node is a cross-community bridge._
 - **Are the 51 inferred relationships involving `module()` (e.g. with `deviceRoutes()` and `identityRoutes()`) actually correct?**
   _`module()` has 51 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 38 inferred relationships involving `InMemoryRateLimiter` (e.g. with `.`a device of another user is not revoked`()` and `.`deleting a device blocks its access token immediately`()`) actually correct?**
