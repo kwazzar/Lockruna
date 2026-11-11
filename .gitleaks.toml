@@ -1,0 +1,9 @@
+[extend]
+useDefault = true
+
+# Test fixtures shaped like JWT keys. Not secrets, and they must stay long enough
+# for ServerSettingsTest to exercise the "key shorter than 32 bytes" rejection.
+[[allowlists]]
+description = "JWT-shaped test fixtures in ServerSettingsTest"
+regexTarget = "match"
+regexes = ['''previous-key-0123456789abcdef0123456''']
