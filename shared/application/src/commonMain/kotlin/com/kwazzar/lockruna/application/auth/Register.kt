@@ -50,7 +50,7 @@ class Register(
         val recoveryWrapKey = crypto.hkdfSha256(recoveryKey, null, HkdfLabels.RECOVERY_WRAP, 32)
         val recoveryAuthKey = crypto.hkdfSha256(recoveryKey, null, HkdfLabels.RECOVERY_AUTH, 32)
 
-        val emailBytes = command.email.toByteArray()
+        val emailBytes = command.email.encodeToByteArray()
 
         val wrappedVaultKey = wrapKey(kek, vaultKey.bytes, emailBytes, crypto)
         val recoveryWrappedVaultKey = wrapKey(recoveryWrapKey, vaultKey.bytes, emailBytes, crypto)

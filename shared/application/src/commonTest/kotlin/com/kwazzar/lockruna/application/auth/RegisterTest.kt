@@ -224,7 +224,7 @@ class RegisterTest {
         crypto.decryptGcmResult = vaultKey
 
         // First wrap with email
-        val emailBytes = email.toByteArray()
+        val emailBytes = email.encodeToByteArray()
         val nonce = crypto.randomBytes(12)
         val ciphertext = crypto.encryptGcm(kek, vaultKey, emailBytes)
         val wrapped = SealedBlob.pack(nonce, ciphertext.ciphertext + ciphertext.tag)
@@ -253,7 +253,7 @@ class RegisterTest {
 
         crypto.hkdfResults = mapOf(HkdfLabels.KEK to kek)
 
-        val emailBytes = email.toByteArray()
+        val emailBytes = email.encodeToByteArray()
         val nonce = crypto.randomBytes(12)
         val ciphertext = crypto.encryptGcm(kek, vaultKey, emailBytes)
         val wrapped = SealedBlob.pack(nonce, ciphertext.ciphertext + ciphertext.tag)
@@ -267,7 +267,7 @@ class RegisterTest {
                 nonce = sealed.nonce,
                 tag = sealed.payload.copyOfRange(sealed.payload.size - 16, sealed.payload.size),
             ),
-            differentEmail.toByteArray(),
+            differentEmail.encodeToByteArray(),
         )
 
         // With fake crypto, decryptGcm returns decryptGcmResult, not actual decryption

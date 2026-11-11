@@ -87,7 +87,7 @@ class SqlDelightVaultItemRepository(
         // ADR-003: AAD version is the value the record has after push, so an unpushed
         // local version is sealed for version + 1 and a synced one for its own version.
         val aadVersion = if (dirty) version + 1 else version
-        return "$id|$type|$aadVersion".toByteArray()
+        return "$id|$type|$aadVersion".encodeToByteArray()
     }
 
     private fun encryptRow(item: VaultItem, vaultKey: VaultKey): GcmCiphertext? {

@@ -47,7 +47,7 @@ class FakeIdGenerator : IdGenerator {
     private var counter = 1
 
     override fun newItemId(): ItemId {
-        val uuid = String.format("%032x", counter).let { s ->
+        val uuid = counter.toString(16).padStart(32, '0').let { s ->
             "${s.substring(
                 0,
                 8,
@@ -62,7 +62,7 @@ class FakeIdGenerator : IdGenerator {
     }
 
     override fun newUuid(): String {
-        val uuid = String.format("%032x", counter).let { s ->
+        val uuid = counter.toString(16).padStart(32, '0').let { s ->
             "${s.substring(
                 0,
                 8,
@@ -163,7 +163,7 @@ class FakeArgon2 : Argon2 {
     var hashResult: ByteArray? = null
 
     override suspend fun hash(password: String, salt: ByteArray, params: KdfParams): ByteArray = hashResult ?: run {
-        val bytes = (password + salt.toHexString()).toByteArray()
+        val bytes = (password + salt.toHexString()).encodeToByteArray()
         val result = ByteArray(32)
         val copyLen = minOf(bytes.size, 32)
         bytes.copyInto(result, 0, 0, copyLen)
@@ -199,4 +199,9 @@ class FakeSecureKeyStore : SecureKeyStore {
     }
 }
 
-private fun ByteArray.toHexString(): String = joinToString("") { "%02x".format(it) }
+private fun ByteArray.toHexString(): String = joinToString("") { byte ->
+    val value = byte.toInt() and 0xFF
+    "${HEX_DIGITS[value shr 4]}${HEX_DIGITS[value and 0x0F]}"
+}
+
+private const val HEX_DIGITS = "0123456789abcdef"

@@ -113,7 +113,7 @@ class UnlockWithBiometricsTest {
     @Test
     fun failsWhenLastSuccessOlderThan7Days() {
         runBlocking {
-            clock.wallMillis = System.currentTimeMillis()
+            clock.wallMillis = 1_700_000_000_000L
             val eightDaysAgo = clock.nowMillis() - 8L * 24 * 60 * 60 * 1000
             policyStore.setLastSuccessfulUnlock(eightDaysAgo)
 

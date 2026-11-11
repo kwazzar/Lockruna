@@ -221,9 +221,14 @@ data class DeviceDto(val deviceId: String, val name: String, val platform: Strin
 
 private const val HEX_CHUNK_SIZE = 2
 private const val HEX_RADIX = 16
-private const val HEX_FORMAT = "%02x"
+private const val HEX_DIGITS = "0123456789abcdef"
+private const val HEX_NIBBLE_SHIFT = 4
 
 private fun String.hexToByteArray(): ByteArray =
     chunked(HEX_CHUNK_SIZE).map { it.toInt(HEX_RADIX).toByte() }.toByteArray()
 
-private fun ByteArray.hex(): String = joinToString("") { HEX_FORMAT.format(it) }
+/** Lowercase hex, two digits per byte — matches the previous `String.format("%02x")` output. */
+private fun ByteArray.hex(): String = joinToString("") { byte ->
+    val value = byte.toInt() and 0xFF
+    "${HEX_DIGITS[value shr HEX_NIBBLE_SHIFT]}${HEX_DIGITS[value and 0x0F]}"
+}

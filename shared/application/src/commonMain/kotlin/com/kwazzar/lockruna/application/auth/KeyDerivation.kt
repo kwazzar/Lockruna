@@ -33,6 +33,6 @@ internal object KeyDerivation {
             nonce = sealed.nonce,
             tag = sealed.payload.copyOfRange(sealed.payload.size - 16, sealed.payload.size),
         )
-        return crypto.decryptGcm(kek, ciphertext, aadEmail.toByteArray())
+        return crypto.decryptGcm(kek, ciphertext, aadEmail.encodeToByteArray())
     }
 }

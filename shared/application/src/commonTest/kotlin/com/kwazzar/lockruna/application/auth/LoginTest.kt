@@ -48,7 +48,7 @@ class LoginTest {
     fun successfulLoginUnlocksSession() = runBlocking {
         val email = "user@example.com"
         val password = "password123"
-        val salt = "salt123456789012".toByteArray()
+        val salt = "salt123456789012".encodeToByteArray()
         val masterKey = ByteArray(32) { 1 }
         val authKey = ByteArray(32) { 2 }
         val kek = ByteArray(32) { 3 }
@@ -139,7 +139,7 @@ class LoginTest {
     @Test
     fun loginInvalidCredentials() = runBlocking {
         val email = "user@example.com"
-        val salt = "salt123456789012".toByteArray()
+        val salt = "salt123456789012".encodeToByteArray()
 
         authApi.preloginResult = Result.Success(
             com.kwazzar.lockruna.domain.auth.PreLoginData(salt, KdfParams.SUPPORTED),
@@ -171,7 +171,7 @@ class LoginTest {
     @Test
     fun loginRateLimited() = runBlocking {
         val email = "user@example.com"
-        val salt = "salt123456789012".toByteArray()
+        val salt = "salt123456789012".encodeToByteArray()
 
         authApi.preloginResult = Result.Success(
             com.kwazzar.lockruna.domain.auth.PreLoginData(salt, KdfParams.SUPPORTED),
@@ -243,7 +243,7 @@ class UnlockWithPasswordTest {
     fun unlockWithPasswordFromStoredSession() = runBlocking {
         val email = "user@example.com"
         val password = "password123"
-        val salt = "salt123456789012".toByteArray()
+        val salt = "salt123456789012".encodeToByteArray()
         val masterKey = ByteArray(32) { 1 }
         val kek = ByteArray(32) { 3 }
         val vaultKey = ByteArray(32) { 4 }
@@ -288,7 +288,7 @@ class UnlockWithPasswordTest {
     fun unlockSucceedsEvenWhenAlreadyUnlocked() = runBlocking {
         val email = "user@example.com"
         val password = "password123"
-        val salt = "salt123456789012".toByteArray()
+        val salt = "salt123456789012".encodeToByteArray()
         val masterKey = ByteArray(32) { 1 }
         val kek = ByteArray(32) { 3 }
         val vaultKey = ByteArray(32) { 4 }

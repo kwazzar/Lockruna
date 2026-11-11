@@ -67,7 +67,7 @@ class FakeArgon2Test {
     @Test
     fun deterministicHashForSameInput() = runBlocking {
         val argon2 = FakeArgon2()
-        val salt = "salt".toByteArray()
+        val salt = "salt".encodeToByteArray()
         val params = KdfParams.SUPPORTED
 
         val hash1 = argon2.hash("password", salt, params)
@@ -83,8 +83,8 @@ class FakeArgon2Test {
         val argon2 = FakeArgon2()
         val params = KdfParams.SUPPORTED
 
-        val hash1 = argon2.hash("password", "salt1".toByteArray(), params)
-        val hash2 = argon2.hash("password", "salt2".toByteArray(), params)
+        val hash1 = argon2.hash("password", "salt1".encodeToByteArray(), params)
+        val hash2 = argon2.hash("password", "salt2".encodeToByteArray(), params)
 
         assertTrue(hash1.contentToString() != hash2.contentToString())
     }
