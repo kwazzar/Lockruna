@@ -2,6 +2,7 @@ package com.kwazzar.lockruna.domain.vault
 
 import com.kwazzar.lockruna.domain.core.Result
 import com.kwazzar.lockruna.domain.error.AppError
+import kotlin.jvm.JvmInline
 
 /**
  * Title of a vault item. Must not be blank.

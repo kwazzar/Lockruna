@@ -22,6 +22,8 @@ sealed interface AppError {
     /** The email is already registered. */
     data object EmailAlreadyRegistered : AppError
 
+    data object ClipboardUnavailable : AppError
+
     data class InvalidItem(val reason: String) : AppError
 
     data class WeakKdfParams(val actual: String) : AppError

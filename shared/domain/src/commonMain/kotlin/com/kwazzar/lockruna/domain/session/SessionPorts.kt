@@ -2,6 +2,7 @@ package com.kwazzar.lockruna.domain.session
 
 import com.kwazzar.lockruna.domain.crypto.CryptoService
 import com.kwazzar.lockruna.domain.vault.ItemId
+import kotlin.jvm.JvmInline
 
 /**
  * Clock providing both wall time and monotonic time.

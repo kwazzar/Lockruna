@@ -91,6 +91,15 @@ class VaultUseCasesTest {
     }
 
     @Test
+    fun `update without a secret draft preserves the existing secret`() = runTest {
+        val created = createItem(createCommand(type = VaultItemType.LOGIN)) as Result.Success
+
+        val updated = updateItem(created.value.id, "Renamed", null, null, null, null) as Result.Success
+
+        assertEquals("secret-value", updated.value.secret?.value)
+    }
+
+    @Test
     fun `delete soft deletes the item`() = runTest {
         val created = createItem(createCommand()) as Result.Success
         val itemId = created.value.id
