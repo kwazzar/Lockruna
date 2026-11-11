@@ -5,12 +5,12 @@
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2124 nodes · 3567 edges · 174 communities (122 shown, 52 thin omitted)
+- 2124 nodes · 3567 edges · 175 communities (123 shown, 52 thin omitted)
 - Extraction: 86% EXTRACTED · 14% INFERRED · 0% AMBIGUOUS · INFERRED: 507 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `860e0775`
+- Built from commit: `974747a9`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -171,6 +171,7 @@
 - .resolveDevice
 - PlatformNormalizer
 - PreloginUser
+- PlatformNormalizer
 - HasStoredSessionTest
 
 ## God Nodes (most connected - your core abstractions)
@@ -200,7 +201,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (174 total, 52 thin omitted)
+## Communities (175 total, 52 thin omitted)
 
 ### Community 0 - "AppError"
 Cohesion: 0.06
@@ -291,8 +292,8 @@ Cohesion: 0.19
 Nodes (10): InMemoryDeviceDenylist, SyncClient, change(), ByteArray, JsonObject, record(), register(), registerUser() (+2 more)
 
 ### Community 43 - "KdfParams"
-Cohesion: 0.18
-Nodes (4): PlatformNormalizer, PlatformNormalizer, PlatformNormalizer, PasswordNormalizer
+Cohesion: 0.22
+Nodes (3): PlatformNormalizer, PlatformNormalizer, PasswordNormalizer
 
 ### Community 44 - "PasswordNormalizer"
 Cohesion: 0.17
@@ -398,6 +399,10 @@ Nodes (3): ByteArray, PlatformCrypto, GcmCiphertext
 Cohesion: 0.13
 Nodes (13): BiometricsEnabled, EmailChanged, EnableBiometrics, ErrorDismissed, Flow, PasswordChanged, SubmitBiometrics, SubmitPassword (+5 more)
 
+### Community 87 - "installSafeCallLogging"
+Cohesion: 0.25
+Nodes (3): DeviceApiTest, Counter, InMemoryRateLimiter
+
 ### Community 91 - ".invoke"
 Cohesion: 0.11
 Nodes (10): ApplyAutoLockPolicy, LockVault, DeleteItem, Flow, ObserveItems, coreModule(), HttpClient, platformClock() (+2 more)
@@ -443,8 +448,8 @@ Cohesion: 0.16
 Nodes (6): CreateItem, CreateItemCommand, Flow, VaultItemRepository, LockedAwareInMemoryRepository, VaultCycleTest
 
 ### Community 104 - "PendingChange"
-Cohesion: 0.13
-Nodes (11): DeviceInfoDto, PushRequestDto, DeviceApiTest, bearer(), IdentityClient, json(), ByteArray, HttpResponse (+3 more)
+Cohesion: 0.10
+Nodes (13): DeviceInfoDto, PushRequestDto, ByteArray, TokenFlowTest, bearer(), IdentityClient, json(), ByteArray (+5 more)
 
 ### Community 105 - ".invoke"
 Cohesion: 0.10
@@ -523,8 +528,8 @@ Cohesion: 0.40
 Nodes (3): Argon2BouncyCastle, Argon2Factory, ByteArray
 
 ### Community 131 - "deviceRoutes"
-Cohesion: 0.17
-Nodes (6): DataSource, main(), module(), ByteArray, TokenFlowTest, Timestamp
+Cohesion: 0.28
+Nodes (5): DataSource, main(), module(), installSafeCallLogging(), SafeCallLogging
 
 ### Community 132 - "PreloginUser"
 Cohesion: 0.18
@@ -571,8 +576,8 @@ Cohesion: 0.60
 Nodes (5): hasValidDashes(), hasValidHexChars(), hasValidVariant(), hasValidVersion(), isValidUuidV4()
 
 ### Community 151 - ".resolveDevice"
-Cohesion: 0.17
-Nodes (8): Allowed, Blocked, RateLimitDecision, RateLimiter, AutoCloseable, RedisRateLimiter, Counter, InMemoryRateLimiter
+Cohesion: 0.22
+Nodes (6): Allowed, Blocked, RateLimitDecision, RateLimiter, AutoCloseable, RedisRateLimiter
 
 ### Community 152 - "PreloginUser"
 Cohesion: 0.22
@@ -615,8 +620,8 @@ Cohesion: 0.33
 Nodes (6): Copy, DeleteConfirmed, Edit, Hide, ItemDetailIntent, Reveal
 
 ### Community 167 - "Argon2Libsodium"
-Cohesion: 0.24
-Nodes (5): Argon2Factory, Argon2Factory, Argon2Libsodium, Argon2, ByteArray
+Cohesion: 0.38
+Nodes (4): Argon2Factory, Argon2Libsodium, Argon2, ByteArray
 
 ### Community 168 - "AuthTestSupport.kt"
 Cohesion: 0.40
@@ -634,7 +639,7 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.249) - this node is a cross-community bridge._
 - **Why does `serverModule()` connect `serverModule` to `AccessTokenClaims`, `PostgresTest`, `StoredResponse`, `deviceRoutes`, `StoredResponse`, `RedisDeviceDenylist`, `SyncDtos.kt`, `PasswordNormalizer`, `ServerSettings.kt`, `ServerConfigTest`, `.resolveDevice`, `.spendAndRotate`, `UserRecord`, `JwtTokenService`, `.invoke`?**
   _High betweenness centrality (0.129) - this node is a cross-community bridge._
-- **Why does `coreModule()` connect `.invoke` to `deviceRoutes`, `SqlDelightVaultItemRepository`, `.graph`, `.register`, `AuthTokens`, `KdfParams`, `requireSession`, `VaultItemType`, `PlatformCrypto`, `DatabaseDriverFactory`, `.invoke`, `ExposedRefreshTokenRepository`?**
+- **Why does `coreModule()` connect `.invoke` to `deviceRoutes`, `SqlDelightVaultItemRepository`, `.graph`, `.register`, `AuthTokens`, `PlatformNormalizer`, `requireSession`, `VaultItemType`, `PlatformCrypto`, `DatabaseDriverFactory`, `.invoke`, `ExposedRefreshTokenRepository`?**
   _High betweenness centrality (0.107) - this node is a cross-community bridge._
 - **Are the 55 inferred relationships involving `module()` (e.g. with `deviceRoutes()` and `identityRoutes()`) actually correct?**
   _`module()` has 55 INFERRED edges - model-reasoned connections that need verification._
