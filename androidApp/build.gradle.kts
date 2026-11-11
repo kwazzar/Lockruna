@@ -13,10 +13,12 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "0.1.0"
+        buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:8080\"")
     }
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     compileOptions {
@@ -38,4 +40,9 @@ dependencies {
     implementation(libs.activity.compose)
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.lifecycle.viewmodel.compose)
+
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
+    implementation(libs.ktor.client.core)
+    implementation(libs.androidx.biometric)
 }

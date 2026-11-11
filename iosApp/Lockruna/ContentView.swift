@@ -2,14 +2,178 @@ import SwiftUI
 import Shared
 
 struct ContentView: View {
+    @ObservedObject var model: AppModel
+    @Environment(\.scenePhase) private var scenePhase
+    @State private var route: String = "list"
+    @State private var selectedId: String? = nil
+    @State private var revealed: String? = nil
+
+    var body: some View {
+        ZStack {
+            Group {
+                if model.screen == "unlock" {
+                    UnlockView(model: model)
+                } else if model.screen == "login" {
+                    LoginView(model: model)
+                } else {
+                    VaultContainer(model: model, route: $route, selectedId: $selectedId)
+                }
+            }
+            if model.showBlur {
+                Color.black.opacity(0.85).ignoresSafeArea()
+                    .overlay(Text("PassKeeper").foregroundColor(.white))
+            }
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .background {
+                model.showBlur = true
+                model.backgroundedAt = Date()
+            } else if newPhase == .active {
+                model.showBlur = false
+                if let ts = model.backgroundedAt {
+                    let mono = Int64(ts.timeIntervalSince1970 * 1000)
+                    Task { try await model.sessionStore.dispatch(intent: PresentationSessionIntentResumed(backgroundedAtMonotonicMillis: KotlinLong(value: mono))) }
+                    model.backgroundedAt = nil
+                }
+            }
+        }
+    }
+}
+
+struct UnlockView: View {
+    @ObservedObject var model: AppModel
+    @State private var email: String = ""
+    @State private var password: String = ""
+
     var body: some View {
         VStack(spacing: 12) {
-            Text("PassKeeper")
-                .font(.largeTitle)
-            Text("Shared core \(SharedCore.shared.VERSION)")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
+            Text("Unlock").font(.title)
+            TextField("Email", text: $email).textFieldStyle(.roundedBorder)
+            SecureField("Password", text: $password).textFieldStyle(.roundedBorder)
+            Button("Unlock") {
+                Task {
+                    try await model.unlockStore.dispatch(intent: PresentationUnlockIntentEmailChanged(value: email))
+                    try await model.unlockStore.dispatch(intent: PresentationUnlockIntentPasswordChanged(value: password))
+                    try await model.unlockStore.dispatch(intent: PresentationUnlockIntentSubmitPassword())
+                }
+            }
+            if model.unlockStore.state.value.biometricAvailable {
+                Button("Use biometrics") {
+                    Task { try await model.unlockStore.dispatch(intent: PresentationUnlockIntentSubmitBiometrics()) }
+                }
+            }
+            if model.unlockStore.state.value.error != nil {
+                Text("Invalid credentials").foregroundColor(.red)
+            }
+        }.padding()
+    }
+}
+
+struct LoginView: View {
+    @ObservedObject var model: AppModel
+    @State private var email: String = ""
+    @State private var password: String = ""
+    @State private var deviceName: String = "iPhone"
+
+    var body: some View {
+        VStack(spacing: 12) {
+            Text("Sign in").font(.title)
+            TextField("Email", text: $email).textFieldStyle(.roundedBorder)
+            SecureField("Password", text: $password).textFieldStyle(.roundedBorder)
+            TextField("Device name", text: $deviceName).textFieldStyle(.roundedBorder)
+            Button("Sign in") {
+                Task {
+                    try await model.loginStore.dispatch(intent: PresentationLoginIntentEmailChanged(value: email))
+                    try await model.loginStore.dispatch(intent: PresentationLoginIntentPasswordChanged(value: password))
+                    try await model.loginStore.dispatch(intent: PresentationLoginIntentDeviceNameChanged(value: deviceName))
+                    try await model.loginStore.dispatch(intent: PresentationLoginIntentSubmit())
+                }
+            }
+            if model.loginStore.state.value.error != nil {
+                Text("Login failed").foregroundColor(.red)
+            }
+        }.padding()
+    }
+}
+
+struct VaultContainer: View {
+    @ObservedObject var model: AppModel
+    @Binding var route: String
+    @Binding var selectedId: String?
+
+    var body: some View {
+        if route == "list" {
+            VaultListView(model: model, route: $route, selectedId: $selectedId)
+        } else if route == "detail" {
+            ItemDetailView(model: model, route: $route)
+        } else {
+            ItemEditView(model: model, route: $route)
         }
-        .padding()
+    }
+}
+
+struct VaultListView: View {
+    @ObservedObject var model: AppModel
+    @Binding var route: String
+    @Binding var selectedId: String?
+
+    var body: some View {
+        VStack {
+            Text("Vault").font(.title)
+            List(model.vaultListStore.state.value.items, id: \.id) { item in
+                Button(item.title) {
+                    selectedId = item.id
+                    Task {
+                        try await model.vaultListStore.dispatch(intent: PresentationVaultListIntentItemClicked(id: item.id))
+                    }
+                    route = "detail"
+                }
+            }
+            Button("Lock") {
+                Task {
+                    try await model.sessionStore.dispatch(intent: PresentationSessionIntentLock())
+                    model.screen = "unlock"
+                }
+            }
+            Button("New item") { route = "edit" }
+        }.padding()
+    }
+}
+
+struct ItemDetailView: View {
+    @ObservedObject var model: AppModel
+    @Binding var route: String
+
+    var body: some View {
+        VStack {
+            Text(model.itemDetailStore.state.value.item?.title ?? "").font(.title)
+            Text(model.itemDetailStore.state.value.item?.username ?? "")
+            Button("Reveal") { Task { try await model.itemDetailStore.dispatch(intent: PresentationItemDetailIntentReveal()) } }
+            Button("Hide") { Task { try await model.itemDetailStore.dispatch(intent: PresentationItemDetailIntentHide()) } }
+            Button("Copy") { Task { try await model.itemDetailStore.dispatch(intent: PresentationItemDetailIntentCopy()) } }
+            Button("Edit") { Task { try await model.itemDetailStore.dispatch(intent: PresentationItemDetailIntentEdit()) } }
+            Button("Delete") { Task { try await model.itemDetailStore.dispatch(intent: PresentationItemDetailIntentDeleteConfirmed()) } }
+            Button("Back") { route = "list" }
+        }.padding()
+    }
+}
+
+struct ItemEditView: View {
+    @ObservedObject var model: AppModel
+    @Binding var route: String
+    @State private var title: String = ""
+
+    var body: some View {
+        VStack {
+            Text("Edit").font(.title)
+            TextField("Title", text: $title).textFieldStyle(.roundedBorder)
+            Button("Save") {
+                Task {
+                    try await model.itemEditStore.dispatch(intent: PresentationItemEditIntentTitleChanged(value: title))
+                    try await model.itemEditStore.dispatch(intent: PresentationItemEditIntentSave())
+                }
+            }
+            Button("Back") { route = "list" }
+        }.padding()
     }
 }
