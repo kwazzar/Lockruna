@@ -172,7 +172,5 @@
   "170": ".resolveDevice",
   "171": "PlatformNormalizer",
   "172": "PreloginUser",
-  "173": ".invoke",
-  "174": "HasStoredSessionTest",
-  "175": ".createUser"
+  "174": "HasStoredSessionTest"
 }

@@ -5,13 +5,13 @@
     "semantic_hash": ""
   },
   "androidApp/build.gradle.kts": {
-    "mtime": 1794087986.8533142,
-    "ast_hash": "7996f0bfa205aa0685e808b39db1f127",
+    "mtime": 1794420017.3853617,
+    "ast_hash": "720bc1610135a64d8fd37b6fd351994f",
     "semantic_hash": ""
   },
   "androidApp/src/main/kotlin/com/kwazzar/lockruna/MainActivity.kt": {
-    "mtime": 1794084594.8375118,
-    "ast_hash": "de5f8d0e1e35c490d8018c49b0c00e93",
+    "mtime": 1794420017.3869672,
+    "ast_hash": "c093e38d4b3e235bd11b67d398a73130",
     "semantic_hash": ""
   },
   "api-contract/build.gradle.kts": {
@@ -55,13 +55,13 @@
     "semantic_hash": ""
   },
   "iosApp/Lockruna/ContentView.swift": {
-    "mtime": 1794113773.8830304,
-    "ast_hash": "ea6c23fc729fd7b3514d4e582fba4e59",
+    "mtime": 1794420017.3915842,
+    "ast_hash": "91b806b6d6160209b8f5f884a8508d98",
     "semantic_hash": ""
   },
   "iosApp/Lockruna/LockrunaApp.swift": {
-    "mtime": 1794099074.5140226,
-    "ast_hash": "382e26d5823d35c55fccdbe7dfad2c65",
+    "mtime": 1794420017.3919396,
+    "ast_hash": "14505f03661defec758bce0bc36f0a04",
     "semantic_hash": ""
   },
   "opencode.json": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "shared/umbrella/build.gradle.kts": {
-    "mtime": 1794099538.2480736,
-    "ast_hash": "7eb792ffe102338199cff951294c12ee",
+    "mtime": 1794420017.395036,
+    "ast_hash": "3e47c09c8434a15364083f2dc824a66d",
     "semantic_hash": ""
   },
   "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/umbrella/SharedCore.kt": {
@@ -1402,6 +1402,76 @@
   "shared/data/src/jvmTest/kotlin/com/kwazzar/lockruna/data/di/CoreModuleTest.kt": {
     "mtime": 1794417262.302864,
     "ast_hash": "727785058385974a243af43251143a8e",
+    "semantic_hash": ""
+  },
+  "androidApp/src/main/kotlin/com/kwazzar/lockruna/LockrunaApplication.kt": {
+    "mtime": 1794420017.3861027,
+    "ast_hash": "2fed4b84d255f9e6d37fed153c22e530",
+    "semantic_hash": ""
+  },
+  "androidApp/src/main/kotlin/com/kwazzar/lockruna/platform/CurrentActivityProvider.kt": {
+    "mtime": 1794420017.387329,
+    "ast_hash": "a09c0ee693dedd796f5c7020a98e2560",
+    "semantic_hash": ""
+  },
+  "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/AppRoot.kt": {
+    "mtime": 1794420017.387712,
+    "ast_hash": "65f5051e56053a45363f80255c9d0091",
+    "semantic_hash": ""
+  },
+  "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/ItemDetailScreen.kt": {
+    "mtime": 1794420017.3880796,
+    "ast_hash": "04a0db7f1c318b0de86c21f54f1a530b",
+    "semantic_hash": ""
+  },
+  "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/ItemEditScreen.kt": {
+    "mtime": 1794420017.3884482,
+    "ast_hash": "e5830dba0c9a36be73bf641f8e2fc781",
+    "semantic_hash": ""
+  },
+  "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/LoginScreen.kt": {
+    "mtime": 1794420017.3887434,
+    "ast_hash": "e8b05f72952bb3a63f2e9bb20a86d984",
+    "semantic_hash": ""
+  },
+  "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/Theme.kt": {
+    "mtime": 1794420017.3896382,
+    "ast_hash": "c89ed0d138243d2d6462cac3a0006bda",
+    "semantic_hash": ""
+  },
+  "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/UnlockScreen.kt": {
+    "mtime": 1794420017.390038,
+    "ast_hash": "3f101abe5e9c1cfcd5da7a4c275ef8df",
+    "semantic_hash": ""
+  },
+  "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/VaultListScreen.kt": {
+    "mtime": 1794420017.3903172,
+    "ast_hash": "13a955f190e343d47bf52f06bea8fd12",
+    "semantic_hash": ""
+  },
+  "shared/data/src/androidMain/kotlin/com/kwazzar/lockruna/data/di/PlatformModule.kt": {
+    "mtime": 1794420017.3926382,
+    "ast_hash": "8e808aa04ded830e556b9431a3b03447",
+    "semantic_hash": ""
+  },
+  "shared/data/src/commonMain/kotlin/com/kwazzar/lockruna/data/di/PlatformModule.kt": {
+    "mtime": 1794420017.3930664,
+    "ast_hash": "94616f0710746468ad5048091ec1b778",
+    "semantic_hash": ""
+  },
+  "shared/data/src/iosMain/kotlin/com/kwazzar/lockruna/data/di/PlatformModule.kt": {
+    "mtime": 1794420017.3941972,
+    "ast_hash": "5cf7ea1ff3d00523b37cd947114e5250",
+    "semantic_hash": ""
+  },
+  "shared/data/src/jvmMain/kotlin/com/kwazzar/lockruna/data/di/PlatformModule.kt": {
+    "mtime": 1794420017.3945498,
+    "ast_hash": "d74c3b8c8b6f62953044eff09ee34655",
+    "semantic_hash": ""
+  },
+  "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt": {
+    "mtime": 1794420017.3954396,
+    "ast_hash": "b4f60c2ab757c1ba1e82c18bb5bdd0cb",
     "semantic_hash": ""
   }
 }

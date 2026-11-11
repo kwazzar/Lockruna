@@ -48,6 +48,50 @@
       "norm_label": "androidapp/build.gradle.kts"
     },
     {
+      "label": "LockrunaApplication.kt",
+      "file_type": "code",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/LockrunaApplication.kt",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_lockrunaapplication",
+      "community": 58,
+      "community_name": "ExposedRefreshTokenRepository",
+      "norm_label": "lockrunaapplication.kt"
+    },
+    {
+      "label": "LockrunaApplication",
+      "file_type": "code",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/LockrunaApplication.kt",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_lockrunaapplication_lockrunaapplication",
+      "community": 58,
+      "community_name": "ExposedRefreshTokenRepository",
+      "norm_label": "lockrunaapplication"
+    },
+    {
+      "label": "Application",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "application",
+      "community": 58,
+      "community_name": "ExposedRefreshTokenRepository",
+      "norm_label": "application"
+    },
+    {
+      "label": ".onCreate()",
+      "file_type": "code",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/LockrunaApplication.kt",
+      "source_location": "L17",
+      "_origin": "ast",
+      "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_lockrunaapplication_lockrunaapplication_oncreate",
+      "community": 58,
+      "community_name": "ExposedRefreshTokenRepository",
+      "norm_label": ".oncreate()"
+    },
+    {
       "label": "MainActivity.kt",
       "file_type": "code",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/MainActivity.kt",
@@ -62,7 +106,7 @@
       "label": "MainActivity",
       "file_type": "code",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/MainActivity.kt",
-      "source_location": "L12",
+      "source_location": "L10",
       "_origin": "ast",
       "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_mainactivity_mainactivity",
       "community": 19,
@@ -70,21 +114,21 @@
       "norm_label": "mainactivity"
     },
     {
-      "label": "ComponentActivity",
+      "label": "FragmentActivity",
       "file_type": "code",
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "componentactivity",
+      "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_mainactivity_kt_fragmentactivity",
       "community": 19,
       "community_name": "MainActivity",
-      "norm_label": "componentactivity"
+      "norm_label": "fragmentactivity"
     },
     {
       "label": ".onCreate()",
       "file_type": "code",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/MainActivity.kt",
-      "source_location": "L13",
+      "source_location": "L11",
       "_origin": "ast",
       "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_mainactivity_mainactivity_oncreate",
       "community": 19,
@@ -101,6 +145,248 @@
       "community": 19,
       "community_name": "MainActivity",
       "norm_label": "bundle"
+    },
+    {
+      "label": ".onResume()",
+      "file_type": "code",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/MainActivity.kt",
+      "source_location": "L20",
+      "_origin": "ast",
+      "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_mainactivity_mainactivity_onresume",
+      "community": 19,
+      "community_name": "MainActivity",
+      "norm_label": ".onresume()"
+    },
+    {
+      "label": ".onPause()",
+      "file_type": "code",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/MainActivity.kt",
+      "source_location": "L25",
+      "_origin": "ast",
+      "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_mainactivity_mainactivity_onpause",
+      "community": 19,
+      "community_name": "MainActivity",
+      "norm_label": ".onpause()"
+    },
+    {
+      "label": ".onDestroy()",
+      "file_type": "code",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/MainActivity.kt",
+      "source_location": "L30",
+      "_origin": "ast",
+      "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_mainactivity_mainactivity_ondestroy",
+      "community": 19,
+      "community_name": "MainActivity",
+      "norm_label": ".ondestroy()"
+    },
+    {
+      "label": "CurrentActivityProvider.kt",
+      "file_type": "code",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/platform/CurrentActivityProvider.kt",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_platform_currentactivityprovider",
+      "community": 102,
+      "community_name": "toDomain",
+      "norm_label": "currentactivityprovider.kt"
+    },
+    {
+      "label": "CurrentActivityProvider",
+      "file_type": "code",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/platform/CurrentActivityProvider.kt",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_platform_currentactivityprovider_currentactivityprovider",
+      "community": 102,
+      "community_name": "toDomain",
+      "norm_label": "currentactivityprovider"
+    },
+    {
+      "label": "FragmentActivity",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_platform_currentactivityprovider_kt_fragmentactivity",
+      "community": 102,
+      "community_name": "toDomain",
+      "norm_label": "fragmentactivity"
+    },
+    {
+      "label": ".set()",
+      "file_type": "code",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/platform/CurrentActivityProvider.kt",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_platform_currentactivityprovider_currentactivityprovider_set",
+      "community": 102,
+      "community_name": "toDomain",
+      "norm_label": ".set()"
+    },
+    {
+      "label": ".current()",
+      "file_type": "code",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/platform/CurrentActivityProvider.kt",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_platform_currentactivityprovider_currentactivityprovider_current",
+      "community": 102,
+      "community_name": "toDomain",
+      "norm_label": ".current()"
+    },
+    {
+      "label": "AppRoot.kt",
+      "file_type": "code",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/AppRoot.kt",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_approot",
+      "community": 145,
+      "community_name": "ItemUiMappingTest",
+      "norm_label": "approot.kt"
+    },
+    {
+      "label": "AppRoot()",
+      "file_type": "code",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/AppRoot.kt",
+      "source_location": "L27",
+      "_origin": "ast",
+      "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_approot_approot",
+      "community": 145,
+      "community_name": "ItemUiMappingTest",
+      "norm_label": "approot()"
+    },
+    {
+      "label": "ItemDetailScreen.kt",
+      "file_type": "code",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/ItemDetailScreen.kt",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_itemdetailscreen",
+      "community": 145,
+      "community_name": "ItemUiMappingTest",
+      "norm_label": "itemdetailscreen.kt"
+    },
+    {
+      "label": "ItemDetailScreen()",
+      "file_type": "code",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/ItemDetailScreen.kt",
+      "source_location": "L24",
+      "_origin": "ast",
+      "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_itemdetailscreen_itemdetailscreen",
+      "community": 145,
+      "community_name": "ItemUiMappingTest",
+      "norm_label": "itemdetailscreen()"
+    },
+    {
+      "label": "ItemEditScreen.kt",
+      "file_type": "code",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/ItemEditScreen.kt",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_itemeditscreen",
+      "community": 145,
+      "community_name": "ItemUiMappingTest",
+      "norm_label": "itemeditscreen.kt"
+    },
+    {
+      "label": "ItemEditScreen()",
+      "file_type": "code",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/ItemEditScreen.kt",
+      "source_location": "L25",
+      "_origin": "ast",
+      "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_itemeditscreen_itemeditscreen",
+      "community": 145,
+      "community_name": "ItemUiMappingTest",
+      "norm_label": "itemeditscreen()"
+    },
+    {
+      "label": "LoginScreen.kt",
+      "file_type": "code",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/LoginScreen.kt",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_loginscreen",
+      "community": 94,
+      "community_name": "LockVault",
+      "norm_label": "loginscreen.kt"
+    },
+    {
+      "label": "LoginScreen()",
+      "file_type": "code",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/LoginScreen.kt",
+      "source_location": "L32",
+      "_origin": "ast",
+      "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_loginscreen_loginscreen",
+      "community": 94,
+      "community_name": "LockVault",
+      "norm_label": "loginscreen()"
+    },
+    {
+      "label": "Theme.kt",
+      "file_type": "code",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/Theme.kt",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_theme",
+      "community": 19,
+      "community_name": "MainActivity",
+      "norm_label": "theme.kt"
+    },
+    {
+      "label": "Theme()",
+      "file_type": "code",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/Theme.kt",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_theme_theme",
+      "community": 19,
+      "community_name": "MainActivity",
+      "norm_label": "theme()"
+    },
+    {
+      "label": "UnlockScreen.kt",
+      "file_type": "code",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/UnlockScreen.kt",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_unlockscreen",
+      "community": 145,
+      "community_name": "ItemUiMappingTest",
+      "norm_label": "unlockscreen.kt"
+    },
+    {
+      "label": "UnlockScreen()",
+      "file_type": "code",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/UnlockScreen.kt",
+      "source_location": "L33",
+      "_origin": "ast",
+      "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_unlockscreen_unlockscreen",
+      "community": 145,
+      "community_name": "ItemUiMappingTest",
+      "norm_label": "unlockscreen()"
+    },
+    {
+      "label": "VaultListScreen.kt",
+      "file_type": "code",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/VaultListScreen.kt",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_vaultlistscreen",
+      "community": 145,
+      "community_name": "ItemUiMappingTest",
+      "norm_label": "vaultlistscreen.kt"
+    },
+    {
+      "label": "VaultListScreen()",
+      "file_type": "code",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/VaultListScreen.kt",
+      "source_location": "L30",
+      "_origin": "ast",
+      "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_vaultlistscreen_vaultlistscreen",
+      "community": 145,
+      "community_name": "ItemUiMappingTest",
+      "norm_label": "vaultlistscreen()"
     },
     {
       "label": "api-contract/build.gradle.kts",
@@ -120,8 +406,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "api_contract_src_commonmain_kotlin_com_kwazzar_lockruna_contract_authdtos",
-      "community": 147,
-      "community_name": "AuthDtos.kt",
+      "community": 116,
+      "community_name": "identityRoutes",
       "norm_label": "authdtos.kt"
     },
     {
@@ -131,8 +417,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "api_contract_src_commonmain_kotlin_com_kwazzar_lockruna_contract_authdtos_preloginrequest",
-      "community": 147,
-      "community_name": "AuthDtos.kt",
+      "community": 116,
+      "community_name": "identityRoutes",
       "norm_label": "preloginrequest"
     },
     {
@@ -142,8 +428,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "api_contract_src_commonmain_kotlin_com_kwazzar_lockruna_contract_authdtos_preloginresponse",
-      "community": 147,
-      "community_name": "AuthDtos.kt",
+      "community": 116,
+      "community_name": "identityRoutes",
       "norm_label": "preloginresponse"
     },
     {
@@ -153,8 +439,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "api_contract_src_commonmain_kotlin_com_kwazzar_lockruna_contract_authdtos_deviceinfodto",
-      "community": 66,
-      "community_name": "VaultItem",
+      "community": 104,
+      "community_name": "PendingChange",
       "norm_label": "deviceinfodto"
     },
     {
@@ -164,8 +450,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "api_contract_src_commonmain_kotlin_com_kwazzar_lockruna_contract_authdtos_registerrequest",
-      "community": 147,
-      "community_name": "AuthDtos.kt",
+      "community": 116,
+      "community_name": "identityRoutes",
       "norm_label": "registerrequest"
     },
     {
@@ -175,8 +461,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "api_contract_src_commonmain_kotlin_com_kwazzar_lockruna_contract_authdtos_loginrequest",
-      "community": 147,
-      "community_name": "AuthDtos.kt",
+      "community": 116,
+      "community_name": "identityRoutes",
       "norm_label": "loginrequest"
     },
     {
@@ -186,8 +472,8 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "api_contract_src_commonmain_kotlin_com_kwazzar_lockruna_contract_authdtos_refreshrequest",
-      "community": 147,
-      "community_name": "AuthDtos.kt",
+      "community": 116,
+      "community_name": "identityRoutes",
       "norm_label": "refreshrequest"
     },
     {
@@ -197,8 +483,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "api_contract_src_commonmain_kotlin_com_kwazzar_lockruna_contract_authdtos_tokenpairdto",
-      "community": 147,
-      "community_name": "AuthDtos.kt",
+      "community": 116,
+      "community_name": "identityRoutes",
       "norm_label": "tokenpairdto"
     },
     {
@@ -208,8 +494,8 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "api_contract_src_commonmain_kotlin_com_kwazzar_lockruna_contract_authdtos_authresponsedto",
-      "community": 147,
-      "community_name": "AuthDtos.kt",
+      "community": 116,
+      "community_name": "identityRoutes",
       "norm_label": "authresponsedto"
     },
     {
@@ -329,8 +615,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "api_contract_src_commonmain_kotlin_com_kwazzar_lockruna_contract_syncdtos",
-      "community": 123,
-      "community_name": "SyncDtos.kt",
+      "community": 67,
+      "community_name": "create",
       "norm_label": "syncdtos.kt"
     },
     {
@@ -340,8 +626,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "api_contract_src_commonmain_kotlin_com_kwazzar_lockruna_contract_syncdtos_encrypteditemdto",
-      "community": 123,
-      "community_name": "SyncDtos.kt",
+      "community": 67,
+      "community_name": "create",
       "norm_label": "encrypteditemdto"
     },
     {
@@ -351,8 +637,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "api_contract_src_commonmain_kotlin_com_kwazzar_lockruna_contract_syncdtos_changedto",
-      "community": 104,
-      "community_name": "PendingChange",
+      "community": 67,
+      "community_name": "create",
       "norm_label": "changedto"
     },
     {
@@ -362,8 +648,8 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "api_contract_src_commonmain_kotlin_com_kwazzar_lockruna_contract_syncdtos_pushrequestdto",
-      "community": 123,
-      "community_name": "SyncDtos.kt",
+      "community": 104,
+      "community_name": "PendingChange",
       "norm_label": "pushrequestdto"
     },
     {
@@ -373,8 +659,8 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "api_contract_src_commonmain_kotlin_com_kwazzar_lockruna_contract_syncdtos_appliedchangedto",
-      "community": 123,
-      "community_name": "SyncDtos.kt",
+      "community": 67,
+      "community_name": "create",
       "norm_label": "appliedchangedto"
     },
     {
@@ -384,8 +670,8 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "api_contract_src_commonmain_kotlin_com_kwazzar_lockruna_contract_syncdtos_conflictdto",
-      "community": 123,
-      "community_name": "SyncDtos.kt",
+      "community": 67,
+      "community_name": "create",
       "norm_label": "conflictdto"
     },
     {
@@ -395,8 +681,8 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "api_contract_src_commonmain_kotlin_com_kwazzar_lockruna_contract_syncdtos_pushresultdto",
-      "community": 123,
-      "community_name": "SyncDtos.kt",
+      "community": 67,
+      "community_name": "create",
       "norm_label": "pushresultdto"
     },
     {
@@ -406,8 +692,8 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "api_contract_src_commonmain_kotlin_com_kwazzar_lockruna_contract_syncdtos_syncpagedto",
-      "community": 123,
-      "community_name": "SyncDtos.kt",
+      "community": 67,
+      "community_name": "create",
       "norm_label": "syncpagedto"
     },
     {
@@ -1058,7 +1344,7 @@
       "label": "Shared",
       "file_type": "code",
       "type": "module",
-      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
       "source_location": "L2",
       "_origin": "ast",
       "id": "shared",
@@ -1089,6 +1375,83 @@
       "norm_label": "view"
     },
     {
+      "label": "String",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "iosapp_lockruna_contentview_swift_string",
+      "community": 11,
+      "community_name": "ContentView.swift",
+      "norm_label": "string"
+    },
+    {
+      "label": "UnlockView",
+      "file_type": "code",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L43",
+      "_origin": "ast",
+      "id": "iosapp_lockruna_contentview_unlockview",
+      "community": 11,
+      "community_name": "ContentView.swift",
+      "norm_label": "unlockview"
+    },
+    {
+      "label": "LoginView",
+      "file_type": "code",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L72",
+      "_origin": "ast",
+      "id": "iosapp_lockruna_contentview_loginview",
+      "community": 11,
+      "community_name": "ContentView.swift",
+      "norm_label": "loginview"
+    },
+    {
+      "label": "VaultContainer",
+      "file_type": "code",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L99",
+      "_origin": "ast",
+      "id": "iosapp_lockruna_contentview_vaultcontainer",
+      "community": 11,
+      "community_name": "ContentView.swift",
+      "norm_label": "vaultcontainer"
+    },
+    {
+      "label": "VaultListView",
+      "file_type": "code",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L115",
+      "_origin": "ast",
+      "id": "iosapp_lockruna_contentview_vaultlistview",
+      "community": 11,
+      "community_name": "ContentView.swift",
+      "norm_label": "vaultlistview"
+    },
+    {
+      "label": "ItemDetailView",
+      "file_type": "code",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L143",
+      "_origin": "ast",
+      "id": "iosapp_lockruna_contentview_itemdetailview",
+      "community": 11,
+      "community_name": "ContentView.swift",
+      "norm_label": "itemdetailview"
+    },
+    {
+      "label": "ItemEditView",
+      "file_type": "code",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L161",
+      "_origin": "ast",
+      "id": "iosapp_lockruna_contentview_itemeditview",
+      "community": 11,
+      "community_name": "ContentView.swift",
+      "norm_label": "itemeditview"
+    },
+    {
       "label": "LockrunaApp.swift",
       "file_type": "code",
       "source_file": "iosApp/Lockruna/LockrunaApp.swift",
@@ -1100,10 +1463,186 @@
       "norm_label": "lockrunaapp.swift"
     },
     {
+      "label": "AppModel",
+      "file_type": "code",
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "iosapp_lockruna_lockrunaapp_appmodel",
+      "community": 11,
+      "community_name": "ContentView.swift",
+      "norm_label": "appmodel"
+    },
+    {
+      "label": "ObservableObject",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "observableobject",
+      "community": 11,
+      "community_name": "ContentView.swift",
+      "norm_label": "observableobject"
+    },
+    {
+      "label": "String",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "iosapp_lockruna_lockrunaapp_swift_string",
+      "community": 11,
+      "community_name": "ContentView.swift",
+      "norm_label": "string"
+    },
+    {
+      "label": "Date",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "date",
+      "community": 11,
+      "community_name": "ContentView.swift",
+      "norm_label": "date"
+    },
+    {
+      "label": "Bool",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "bool",
+      "community": 11,
+      "community_name": "ContentView.swift",
+      "norm_label": "bool"
+    },
+    {
+      "label": "PresentationSessionStore",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "presentationsessionstore",
+      "community": 11,
+      "community_name": "ContentView.swift",
+      "norm_label": "presentationsessionstore"
+    },
+    {
+      "label": "PresentationLoginStore",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "presentationloginstore",
+      "community": 11,
+      "community_name": "ContentView.swift",
+      "norm_label": "presentationloginstore"
+    },
+    {
+      "label": "PresentationUnlockStore",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "presentationunlockstore",
+      "community": 11,
+      "community_name": "ContentView.swift",
+      "norm_label": "presentationunlockstore"
+    },
+    {
+      "label": "PresentationVaultListStore",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "presentationvaultliststore",
+      "community": 11,
+      "community_name": "ContentView.swift",
+      "norm_label": "presentationvaultliststore"
+    },
+    {
+      "label": "PresentationItemDetailStore",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "presentationitemdetailstore",
+      "community": 11,
+      "community_name": "ContentView.swift",
+      "norm_label": "presentationitemdetailstore"
+    },
+    {
+      "label": "PresentationItemEditStore",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "presentationitemeditstore",
+      "community": 11,
+      "community_name": "ContentView.swift",
+      "norm_label": "presentationitemeditstore"
+    },
+    {
+      "label": "Task",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "task",
+      "community": 11,
+      "community_name": "ContentView.swift",
+      "norm_label": "task"
+    },
+    {
+      "label": "Void",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "void",
+      "community": 11,
+      "community_name": "ContentView.swift",
+      "norm_label": "void"
+    },
+    {
+      "label": "Never",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "never",
+      "community": 11,
+      "community_name": "ContentView.swift",
+      "norm_label": "never"
+    },
+    {
+      "label": ".init()",
+      "file_type": "code",
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
+      "source_location": "L19",
+      "_origin": "ast",
+      "id": "iosapp_lockruna_lockrunaapp_appmodel_init",
+      "community": 142,
+      "community_name": "requireSession",
+      "norm_label": ".init()"
+    },
+    {
+      "label": ".deinit()",
+      "file_type": "code",
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
+      "source_location": "L37",
+      "_origin": "ast",
+      "id": "iosapp_lockruna_lockrunaapp_appmodel_deinit",
+      "community": 11,
+      "community_name": "ContentView.swift",
+      "norm_label": ".deinit()"
+    },
+    {
       "label": "LockrunaApp",
       "file_type": "code",
       "source_file": "iosApp/Lockruna/LockrunaApp.swift",
-      "source_location": "L3",
+      "source_location": "L40",
       "_origin": "ast",
       "id": "iosapp_lockruna_lockrunaapp_lockrunaapp",
       "community": 11,
@@ -1741,8 +2280,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_identity_application_listdevices",
-      "community": 111,
-      "community_name": "serverModule",
+      "community": 71,
+      "community_name": "StoredResponse",
       "norm_label": "listdevices.kt"
     },
     {
@@ -1752,8 +2291,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_identity_application_listdevices_listdevices",
-      "community": 111,
-      "community_name": "serverModule",
+      "community": 71,
+      "community_name": "StoredResponse",
       "norm_label": "listdevices"
     },
     {
@@ -1763,8 +2302,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_identity_application_listdevices_listdevices_invoke",
-      "community": 111,
-      "community_name": "serverModule",
+      "community": 71,
+      "community_name": "StoredResponse",
       "norm_label": ".invoke()"
     },
     {
@@ -1774,8 +2313,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_identity_application_loginuser",
-      "community": 170,
-      "community_name": ".resolveDevice",
+      "community": 21,
+      "community_name": "ServerConfigTest",
       "norm_label": "loginuser.kt"
     },
     {
@@ -1785,8 +2324,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_identity_application_loginuser_loginuser",
-      "community": 170,
-      "community_name": ".resolveDevice",
+      "community": 21,
+      "community_name": "ServerConfigTest",
       "norm_label": "loginuser"
     },
     {
@@ -1796,8 +2335,8 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_identity_application_loginuser_loginuser_invoke",
-      "community": 170,
-      "community_name": ".resolveDevice",
+      "community": 21,
+      "community_name": "ServerConfigTest",
       "norm_label": ".invoke()"
     },
     {
@@ -1807,8 +2346,8 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_identity_application_loginuser_loginuser_resolvedevice",
-      "community": 170,
-      "community_name": ".resolveDevice",
+      "community": 21,
+      "community_name": "ServerConfigTest",
       "norm_label": ".resolvedevice()"
     },
     {
@@ -1818,8 +2357,8 @@
       "source_location": "L89",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_identity_application_loginuser_logincommand",
-      "community": 170,
-      "community_name": ".resolveDevice",
+      "community": 21,
+      "community_name": "ServerConfigTest",
       "norm_label": "logincommand"
     },
     {
@@ -1862,8 +2401,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_identity_application_preloginuser",
-      "community": 172,
-      "community_name": "PreloginUser",
+      "community": 111,
+      "community_name": "serverModule",
       "norm_label": "preloginuser.kt"
     },
     {
@@ -1873,8 +2412,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_identity_application_preloginuser_preloginuser",
-      "community": 172,
-      "community_name": "PreloginUser",
+      "community": 111,
+      "community_name": "serverModule",
       "norm_label": "preloginuser"
     },
     {
@@ -1884,8 +2423,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_identity_application_preloginuser_preloginuser_invoke",
-      "community": 172,
-      "community_name": "PreloginUser",
+      "community": 111,
+      "community_name": "serverModule",
       "norm_label": ".invoke()"
     },
     {
@@ -1895,8 +2434,8 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_identity_application_preloginuser_preloginresult",
-      "community": 172,
-      "community_name": "PreloginUser",
+      "community": 111,
+      "community_name": "serverModule",
       "norm_label": "preloginresult"
     },
     {
@@ -2027,8 +2566,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_identity_application_registeruser",
-      "community": 124,
-      "community_name": ".invoke",
+      "community": 116,
+      "community_name": "identityRoutes",
       "norm_label": "registeruser.kt"
     },
     {
@@ -2082,8 +2621,8 @@
       "source_location": "L91",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_identity_application_registeruser_registercommand",
-      "community": 124,
-      "community_name": ".invoke",
+      "community": 116,
+      "community_name": "identityRoutes",
       "norm_label": "registercommand"
     },
     {
@@ -2115,8 +2654,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_identity_application_revokedevice_revokedevice_invoke",
-      "community": 21,
-      "community_name": "ServerConfigTest",
+      "community": 111,
+      "community_name": "serverModule",
       "norm_label": ".invoke()"
     },
     {
@@ -2533,8 +3072,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_identity_domain_tokenservice",
-      "community": 160,
-      "community_name": "AccessTokenClaims",
+      "community": 59,
+      "community_name": "JwtTokenService",
       "norm_label": "tokenservice.kt"
     },
     {
@@ -2544,8 +3083,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_identity_domain_tokenservice_tokenservice",
-      "community": 160,
-      "community_name": "AccessTokenClaims",
+      "community": 59,
+      "community_name": "JwtTokenService",
       "norm_label": "tokenservice"
     },
     {
@@ -2555,8 +3094,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_identity_domain_tokenservice_tokenservice_issueaccesstoken",
-      "community": 160,
-      "community_name": "AccessTokenClaims",
+      "community": 59,
+      "community_name": "JwtTokenService",
       "norm_label": ".issueaccesstoken()"
     },
     {
@@ -2566,8 +3105,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_identity_domain_tokenservice_tokenservice_issuerefreshtoken",
-      "community": 160,
-      "community_name": "AccessTokenClaims",
+      "community": 59,
+      "community_name": "JwtTokenService",
       "norm_label": ".issuerefreshtoken()"
     },
     {
@@ -2577,8 +3116,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_identity_domain_tokenservice_tokenservice_verifyaccesstoken",
-      "community": 160,
-      "community_name": "AccessTokenClaims",
+      "community": 59,
+      "community_name": "JwtTokenService",
       "norm_label": ".verifyaccesstoken()"
     },
     {
@@ -2588,8 +3127,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_identity_domain_tokenservice_accesstokenclaims",
-      "community": 160,
-      "community_name": "AccessTokenClaims",
+      "community": 59,
+      "community_name": "JwtTokenService",
       "norm_label": "accesstokenclaims"
     },
     {
@@ -2962,7 +3501,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_identity_infrastructure_jwttokenservice",
-      "community": 162,
+      "community": 59,
       "community_name": "JwtTokenService",
       "norm_label": "jwttokenservice.kt"
     },
@@ -2973,7 +3512,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_identity_infrastructure_jwttokenservice_jwttokenservice",
-      "community": 162,
+      "community": 59,
       "community_name": "JwtTokenService",
       "norm_label": "jwttokenservice"
     },
@@ -2984,7 +3523,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_identity_infrastructure_jwttokenservice_jwttokenservice_issueaccesstoken",
-      "community": 162,
+      "community": 59,
       "community_name": "JwtTokenService",
       "norm_label": ".issueaccesstoken()"
     },
@@ -2995,7 +3534,7 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_identity_infrastructure_jwttokenservice_jwttokenservice_issuerefreshtoken",
-      "community": 162,
+      "community": 59,
       "community_name": "JwtTokenService",
       "norm_label": ".issuerefreshtoken()"
     },
@@ -3006,7 +3545,7 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_identity_infrastructure_jwttokenservice_jwttokenservice_verifyaccesstoken",
-      "community": 162,
+      "community": 59,
       "community_name": "JwtTokenService",
       "norm_label": ".verifyaccesstoken()"
     },
@@ -3017,7 +3556,7 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_identity_infrastructure_jwttokenservice_jwttokenservice_verify",
-      "community": 162,
+      "community": 59,
       "community_name": "JwtTokenService",
       "norm_label": ".verify()"
     },
@@ -3028,7 +3567,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "decodedjwt",
-      "community": 162,
+      "community": 59,
       "community_name": "JwtTokenService",
       "norm_label": "decodedjwt"
     },
@@ -3039,7 +3578,7 @@
       "source_location": "L87",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_identity_infrastructure_jwttokenservice_jwttokenservice_verifier",
-      "community": 162,
+      "community": 59,
       "community_name": "JwtTokenService",
       "norm_label": ".verifier()"
     },
@@ -3050,7 +3589,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "algorithm",
-      "community": 162,
+      "community": 59,
       "community_name": "JwtTokenService",
       "norm_label": "algorithm"
     },
@@ -3061,7 +3600,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "jwtverifier",
-      "community": 162,
+      "community": 59,
       "community_name": "JwtTokenService",
       "norm_label": "jwtverifier"
     },
@@ -3919,8 +4458,8 @@
       "source_location": "L138",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_sync_api_syncroutes_todto",
-      "community": 123,
-      "community_name": "SyncDtos.kt",
+      "community": 67,
+      "community_name": "create",
       "norm_label": "todto()"
     },
     {
@@ -3941,8 +4480,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_sync_application_pullchanges",
-      "community": 173,
-      "community_name": ".invoke",
+      "community": 111,
+      "community_name": "serverModule",
       "norm_label": "pullchanges.kt"
     },
     {
@@ -3952,8 +4491,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_sync_application_pullchanges_pullchanges",
-      "community": 173,
-      "community_name": ".invoke",
+      "community": 111,
+      "community_name": "serverModule",
       "norm_label": "pullchanges"
     },
     {
@@ -3963,8 +4502,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_sync_application_pullchanges_pullchanges_invoke",
-      "community": 173,
-      "community_name": ".invoke",
+      "community": 111,
+      "community_name": "serverModule",
       "norm_label": ".invoke()"
     },
     {
@@ -3974,8 +4513,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_sync_application_pullchanges_pulledpage",
-      "community": 173,
-      "community_name": ".invoke",
+      "community": 111,
+      "community_name": "serverModule",
       "norm_label": "pulledpage"
     },
     {
@@ -3985,8 +4524,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_sync_application_pushchanges",
-      "community": 44,
-      "community_name": "PasswordNormalizer",
+      "community": 123,
+      "community_name": "SyncDtos.kt",
       "norm_label": "pushchanges.kt"
     },
     {
@@ -3996,8 +4535,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_sync_application_pushchanges_pushchanges",
-      "community": 44,
-      "community_name": "PasswordNormalizer",
+      "community": 123,
+      "community_name": "SyncDtos.kt",
       "norm_label": "pushchanges"
     },
     {
@@ -4007,8 +4546,8 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_sync_application_pushchanges_pushchanges_invoke",
-      "community": 44,
-      "community_name": "PasswordNormalizer",
+      "community": 123,
+      "community_name": "SyncDtos.kt",
       "norm_label": ".invoke()"
     },
     {
@@ -4018,8 +4557,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_sync_application_pushchanges_kt_bytearray",
-      "community": 44,
-      "community_name": "PasswordNormalizer",
+      "community": 123,
+      "community_name": "SyncDtos.kt",
       "norm_label": "bytearray"
     },
     {
@@ -4029,8 +4568,8 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_sync_application_pushchanges_pushchanges_checklimits",
-      "community": 44,
-      "community_name": "PasswordNormalizer",
+      "community": 123,
+      "community_name": "SyncDtos.kt",
       "norm_label": ".checklimits()"
     },
     {
@@ -4040,8 +4579,8 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_sync_application_pushchanges_pushchanges_replay",
-      "community": 44,
-      "community_name": "PasswordNormalizer",
+      "community": 123,
+      "community_name": "SyncDtos.kt",
       "norm_label": ".replay()"
     },
     {
@@ -4051,8 +4590,8 @@
       "source_location": "L64",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_sync_application_pushchanges_pushchanges_applychanges",
-      "community": 44,
-      "community_name": "PasswordNormalizer",
+      "community": 123,
+      "community_name": "SyncDtos.kt",
       "norm_label": ".applychanges()"
     },
     {
@@ -4062,8 +4601,8 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_sync_application_pushchanges_pushchanges_keyreuse",
-      "community": 44,
-      "community_name": "PasswordNormalizer",
+      "community": 123,
+      "community_name": "SyncDtos.kt",
       "norm_label": ".keyreuse()"
     },
     {
@@ -4073,8 +4612,8 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_sync_application_pushchanges_pushchanges_toolarge",
-      "community": 44,
-      "community_name": "PasswordNormalizer",
+      "community": 123,
+      "community_name": "SyncDtos.kt",
       "norm_label": ".toolarge()"
     },
     {
@@ -4084,8 +4623,8 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_sync_application_pushchanges_pushoutcome",
-      "community": 44,
-      "community_name": "PasswordNormalizer",
+      "community": 123,
+      "community_name": "SyncDtos.kt",
       "norm_label": "pushoutcome"
     },
     {
@@ -4095,8 +4634,8 @@
       "source_location": "L96",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_sync_application_pushchanges_appliedchange",
-      "community": 44,
-      "community_name": "PasswordNormalizer",
+      "community": 123,
+      "community_name": "SyncDtos.kt",
       "norm_label": "appliedchange"
     },
     {
@@ -4106,8 +4645,8 @@
       "source_location": "L98",
       "_origin": "ast",
       "id": "server_src_main_kotlin_com_kwazzar_lockruna_server_sync_application_pushchanges_conflict",
-      "community": 44,
-      "community_name": "PasswordNormalizer",
+      "community": 123,
+      "community_name": "SyncDtos.kt",
       "norm_label": "conflict"
     },
     {
@@ -4579,8 +5118,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "server_src_test_kotlin_com_kwazzar_lockruna_server_identity_deviceapitest",
-      "community": 142,
-      "community_name": "requireSession",
+      "community": 104,
+      "community_name": "PendingChange",
       "norm_label": "deviceapitest.kt"
     },
     {
@@ -4590,8 +5129,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "server_src_test_kotlin_com_kwazzar_lockruna_server_identity_deviceapitest_deviceapitest",
-      "community": 142,
-      "community_name": "requireSession",
+      "community": 104,
+      "community_name": "PendingChange",
       "norm_label": "deviceapitest"
     },
     {
@@ -4601,8 +5140,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "server_src_test_kotlin_com_kwazzar_lockruna_server_identity_deviceapitest_deviceapitest_setup",
-      "community": 142,
-      "community_name": "requireSession",
+      "community": 104,
+      "community_name": "PendingChange",
       "norm_label": ".setup()"
     },
     {
@@ -4612,8 +5151,8 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "server_src_test_kotlin_com_kwazzar_lockruna_server_identity_deviceapitest_deviceapitest_devices_lists_the_own_devices_and_marks_the_current_one",
-      "community": 142,
-      "community_name": "requireSession",
+      "community": 104,
+      "community_name": "PendingChange",
       "norm_label": ".`devices lists the own devices and marks the current one`()"
     },
     {
@@ -4623,8 +5162,8 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "server_src_test_kotlin_com_kwazzar_lockruna_server_identity_deviceapitest_deviceapitest_deleting_a_device_blocks_its_access_token_immediately",
-      "community": 142,
-      "community_name": "requireSession",
+      "community": 104,
+      "community_name": "PendingChange",
       "norm_label": ".`deleting a device blocks its access token immediately`()"
     },
     {
@@ -4634,8 +5173,8 @@
       "source_location": "L67",
       "_origin": "ast",
       "id": "server_src_test_kotlin_com_kwazzar_lockruna_server_identity_deviceapitest_deviceapitest_a_device_of_another_user_is_not_revoked",
-      "community": 142,
-      "community_name": "requireSession",
+      "community": 104,
+      "community_name": "PendingChange",
       "norm_label": ".`a device of another user is not revoked`()"
     },
     {
@@ -5118,8 +5657,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "server_src_test_kotlin_com_kwazzar_lockruna_server_identity_infrastructure_refreshtokenrepositorytest",
-      "community": 57,
-      "community_name": "UserRecord",
+      "community": 71,
+      "community_name": "StoredResponse",
       "norm_label": "refreshtokenrepositorytest.kt"
     },
     {
@@ -5129,8 +5668,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "server_src_test_kotlin_com_kwazzar_lockruna_server_identity_infrastructure_refreshtokenrepositorytest_refreshtokenrepositorytest",
-      "community": 57,
-      "community_name": "UserRecord",
+      "community": 71,
+      "community_name": "StoredResponse",
       "norm_label": "refreshtokenrepositorytest"
     },
     {
@@ -5140,8 +5679,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "server_src_test_kotlin_com_kwazzar_lockruna_server_identity_infrastructure_refreshtokenrepositorytest_refreshtokenrepositorytest_setup",
-      "community": 57,
-      "community_name": "UserRecord",
+      "community": 71,
+      "community_name": "StoredResponse",
       "norm_label": ".setup()"
     },
     {
@@ -5151,8 +5690,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "server_src_test_kotlin_com_kwazzar_lockruna_server_identity_infrastructure_refreshtokenrepositorytest_refreshtokenrepositorytest_spending_a_token_twice_fails_the_second_time",
-      "community": 57,
-      "community_name": "UserRecord",
+      "community": 71,
+      "community_name": "StoredResponse",
       "norm_label": ".`spending a token twice fails the second time`()"
     },
     {
@@ -5162,8 +5701,8 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "server_src_test_kotlin_com_kwazzar_lockruna_server_identity_infrastructure_refreshtokenrepositorytest_refreshtokenrepositorytest_spending_a_revoked_token_fails",
-      "community": 57,
-      "community_name": "UserRecord",
+      "community": 71,
+      "community_name": "StoredResponse",
       "norm_label": ".`spending a revoked token fails`()"
     },
     {
@@ -5173,8 +5712,8 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "server_src_test_kotlin_com_kwazzar_lockruna_server_identity_infrastructure_refreshtokenrepositorytest_refreshtokenrepositorytest_a_token_of_another_user_cannot_be_spent",
-      "community": 57,
-      "community_name": "UserRecord",
+      "community": 71,
+      "community_name": "StoredResponse",
       "norm_label": ".`a token of another user cannot be spent`()"
     },
     {
@@ -5184,8 +5723,8 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "server_src_test_kotlin_com_kwazzar_lockruna_server_identity_infrastructure_refreshtokenrepositorytest_refreshtokenrepositorytest_userrecord",
-      "community": 57,
-      "community_name": "UserRecord",
+      "community": 71,
+      "community_name": "StoredResponse",
       "norm_label": ".userrecord()"
     },
     {
@@ -5195,8 +5734,8 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "server_src_test_kotlin_com_kwazzar_lockruna_server_identity_infrastructure_refreshtokenrepositorytest_refreshtokenrepositorytest_devicerecord",
-      "community": 57,
-      "community_name": "UserRecord",
+      "community": 71,
+      "community_name": "StoredResponse",
       "norm_label": ".devicerecord()"
     },
     {
@@ -5206,8 +5745,8 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "server_src_test_kotlin_com_kwazzar_lockruna_server_identity_infrastructure_refreshtokenrepositorytest_refreshtokenrepositorytest_tokenrecord",
-      "community": 57,
-      "community_name": "UserRecord",
+      "community": 71,
+      "community_name": "StoredResponse",
       "norm_label": ".tokenrecord()"
     },
     {
@@ -5734,8 +6273,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "server_src_test_kotlin_com_kwazzar_lockruna_server_support_inmemoryratelimiter",
-      "community": 142,
-      "community_name": "requireSession",
+      "community": 151,
+      "community_name": ".resolveDevice",
       "norm_label": "inmemoryratelimiter.kt"
     },
     {
@@ -5745,8 +6284,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "server_src_test_kotlin_com_kwazzar_lockruna_server_support_inmemoryratelimiter_inmemoryratelimiter",
-      "community": 142,
-      "community_name": "requireSession",
+      "community": 151,
+      "community_name": ".resolveDevice",
       "norm_label": "inmemoryratelimiter"
     },
     {
@@ -5756,8 +6295,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "server_src_test_kotlin_com_kwazzar_lockruna_server_support_inmemoryratelimiter_inmemoryratelimiter_check",
-      "community": 142,
-      "community_name": "requireSession",
+      "community": 151,
+      "community_name": ".resolveDevice",
       "norm_label": ".check()"
     },
     {
@@ -5767,8 +6306,8 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "server_src_test_kotlin_com_kwazzar_lockruna_server_support_inmemoryratelimiter_inmemoryratelimiter_remainingseconds",
-      "community": 142,
-      "community_name": "requireSession",
+      "community": 151,
+      "community_name": ".resolveDevice",
       "norm_label": ".remainingseconds()"
     },
     {
@@ -5778,8 +6317,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "server_src_test_kotlin_com_kwazzar_lockruna_server_support_inmemoryratelimiter_counter",
-      "community": 142,
-      "community_name": "requireSession",
+      "community": 151,
+      "community_name": ".resolveDevice",
       "norm_label": "counter"
     },
     {
@@ -6526,8 +7065,8 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_auth_login_login_invoke",
-      "community": 118,
-      "community_name": ".login",
+      "community": 0,
+      "community_name": "AppError",
       "norm_label": ".invoke()"
     },
     {
@@ -6537,8 +7076,8 @@
       "source_location": "L73",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_auth_login_login_prelogin",
-      "community": 118,
-      "community_name": ".login",
+      "community": 0,
+      "community_name": "AppError",
       "norm_label": ".prelogin()"
     },
     {
@@ -6603,8 +7142,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_auth_register_registeroutcome",
-      "community": 156,
-      "community_name": ".invoke",
+      "community": 106,
+      "community_name": ".weakPasswordReturnsWeakMasterPassword",
       "norm_label": "registeroutcome"
     },
     {
@@ -6636,8 +7175,8 @@
       "source_location": "L91",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_auth_register_register_wrapkey",
-      "community": 156,
-      "community_name": ".invoke",
+      "community": 106,
+      "community_name": ".weakPasswordReturnsWeakMasterPassword",
       "norm_label": ".wrapkey()"
     },
     {
@@ -6647,8 +7186,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_auth_register_kt_bytearray",
-      "community": 156,
-      "community_name": ".invoke",
+      "community": 106,
+      "community_name": ".weakPasswordReturnsWeakMasterPassword",
       "norm_label": "bytearray"
     },
     {
@@ -6713,8 +7252,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_auth_unlockwithpassword_unlockwithpassword_invoke",
-      "community": 0,
-      "community_name": "AppError",
+      "community": 156,
+      "community_name": ".invoke",
       "norm_label": ".invoke()"
     },
     {
@@ -6746,8 +7285,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_identity_validatemasterpassword_validatemasterpassword_invoke",
-      "community": 0,
-      "community_name": "AppError",
+      "community": 156,
+      "community_name": ".invoke",
       "norm_label": ".invoke()"
     },
     {
@@ -7076,8 +7615,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_vault_copysecret",
-      "community": 96,
-      "community_name": "VaultKey",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "copysecret.kt"
     },
     {
@@ -7087,8 +7626,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_vault_copysecret_copysecret",
-      "community": 96,
-      "community_name": "VaultKey",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "copysecret"
     },
     {
@@ -7109,8 +7648,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_vault_createitem",
-      "community": 67,
-      "community_name": "create",
+      "community": 103,
+      "community_name": "AuthTokens",
       "norm_label": "createitem.kt"
     },
     {
@@ -7120,8 +7659,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_vault_createitem_createitemcommand",
-      "community": 67,
-      "community_name": "create",
+      "community": 103,
+      "community_name": "AuthTokens",
       "norm_label": "createitemcommand"
     },
     {
@@ -7131,8 +7670,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_vault_createitem_createitem",
-      "community": 67,
-      "community_name": "create",
+      "community": 103,
+      "community_name": "AuthTokens",
       "norm_label": "createitem"
     },
     {
@@ -7142,8 +7681,8 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_vault_createitem_createitem_invoke",
-      "community": 105,
-      "community_name": ".invoke",
+      "community": 103,
+      "community_name": "AuthTokens",
       "norm_label": ".invoke()"
     },
     {
@@ -7362,8 +7901,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_auth_authdomaintypestest",
-      "community": 103,
-      "community_name": "AuthTokens",
+      "community": 133,
+      "community_name": "DevicePlatform",
       "norm_label": "authdomaintypestest.kt"
     },
     {
@@ -7373,8 +7912,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_auth_authdomaintypestest_authstatestoretest",
-      "community": 175,
-      "community_name": ".createUser",
+      "community": 126,
+      "community_name": ".logoutClearsSessionAndLocks",
       "norm_label": "authstatestoretest"
     },
     {
@@ -7384,8 +7923,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_auth_authdomaintypestest_authstatestoretest_saveloadclearroundtrip",
-      "community": 175,
-      "community_name": ".createUser",
+      "community": 126,
+      "community_name": ".logoutClearsSessionAndLocks",
       "norm_label": ".saveloadclearroundtrip()"
     },
     {
@@ -7395,8 +7934,8 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_auth_authdomaintypestest_authstatestoretest_createuser",
-      "community": 175,
-      "community_name": ".createUser",
+      "community": 126,
+      "community_name": ".logoutClearsSessionAndLocks",
       "norm_label": ".createuser()"
     },
     {
@@ -7406,8 +7945,8 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_auth_authdomaintypestest_biometricpolicystoretest",
-      "community": 103,
-      "community_name": "AuthTokens",
+      "community": 133,
+      "community_name": "DevicePlatform",
       "norm_label": "biometricpolicystoretest"
     },
     {
@@ -7417,8 +7956,8 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_auth_authdomaintypestest_biometricpolicystoretest_failurecounterincrementsandresets",
-      "community": 103,
-      "community_name": "AuthTokens",
+      "community": 133,
+      "community_name": "DevicePlatform",
       "norm_label": ".failurecounterincrementsandresets()"
     },
     {
@@ -7428,8 +7967,8 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_auth_authdomaintypestest_biometricpolicystoretest_lastsuccessfulunlocktimestamp",
-      "community": 103,
-      "community_name": "AuthTokens",
+      "community": 133,
+      "community_name": "DevicePlatform",
       "norm_label": ".lastsuccessfulunlocktimestamp()"
     },
     {
@@ -8418,8 +8957,8 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_support_supportfakestest_supportfakestest_fakeclock_returns_set_values",
-      "community": 136,
-      "community_name": "InMemoryRateLimiter",
+      "community": 147,
+      "community_name": "AuthDtos.kt",
       "norm_label": ".`fakeclock returns set values`()"
     },
     {
@@ -8451,8 +8990,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_support_testfakes",
-      "community": 133,
-      "community_name": "DevicePlatform",
+      "community": 147,
+      "community_name": "AuthDtos.kt",
       "norm_label": "testfakes.kt"
     },
     {
@@ -8517,8 +9056,8 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_support_testfakes_fakeclock",
-      "community": 136,
-      "community_name": "InMemoryRateLimiter",
+      "community": 147,
+      "community_name": "AuthDtos.kt",
       "norm_label": "fakeclock"
     },
     {
@@ -8528,8 +9067,8 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_support_testfakes_fakeclock_nowmillis",
-      "community": 136,
-      "community_name": "InMemoryRateLimiter",
+      "community": 147,
+      "community_name": "AuthDtos.kt",
       "norm_label": ".nowmillis()"
     },
     {
@@ -8539,8 +9078,8 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_support_testfakes_fakeclock_monotonicmillis",
-      "community": 136,
-      "community_name": "InMemoryRateLimiter",
+      "community": 147,
+      "community_name": "AuthDtos.kt",
       "norm_label": ".monotonicmillis()"
     },
     {
@@ -8704,8 +9243,8 @@
       "source_location": "L139",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_support_testfakes_fakebiometricpolicystore",
-      "community": 109,
-      "community_name": "FakeBiometricPolicyStore",
+      "community": 162,
+      "community_name": "JwtTokenService",
       "norm_label": "fakebiometricpolicystore"
     },
     {
@@ -8715,8 +9254,8 @@
       "source_location": "L143",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_support_testfakes_fakebiometricpolicystore_failures",
-      "community": 109,
-      "community_name": "FakeBiometricPolicyStore",
+      "community": 162,
+      "community_name": "JwtTokenService",
       "norm_label": ".failures()"
     },
     {
@@ -8726,8 +9265,8 @@
       "source_location": "L145",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_support_testfakes_fakebiometricpolicystore_recordfailure",
-      "community": 109,
-      "community_name": "FakeBiometricPolicyStore",
+      "community": 162,
+      "community_name": "JwtTokenService",
       "norm_label": ".recordfailure()"
     },
     {
@@ -8737,8 +9276,8 @@
       "source_location": "L149",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_support_testfakes_fakebiometricpolicystore_resetfailures",
-      "community": 109,
-      "community_name": "FakeBiometricPolicyStore",
+      "community": 162,
+      "community_name": "JwtTokenService",
       "norm_label": ".resetfailures()"
     },
     {
@@ -8748,8 +9287,8 @@
       "source_location": "L153",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_support_testfakes_fakebiometricpolicystore_setlastsuccessfulunlock",
-      "community": 109,
-      "community_name": "FakeBiometricPolicyStore",
+      "community": 162,
+      "community_name": "JwtTokenService",
       "norm_label": ".setlastsuccessfulunlock()"
     },
     {
@@ -8759,8 +9298,8 @@
       "source_location": "L157",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_support_testfakes_fakebiometricpolicystore_lastsuccessfulunlock",
-      "community": 109,
-      "community_name": "FakeBiometricPolicyStore",
+      "community": 162,
+      "community_name": "JwtTokenService",
       "norm_label": ".lastsuccessfulunlock()"
     },
     {
@@ -8792,8 +9331,8 @@
       "source_location": "L176",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_support_testfakes_fakepasswordnormalizer",
-      "community": 106,
-      "community_name": ".weakPasswordReturnsWeakMasterPassword",
+      "community": 147,
+      "community_name": "AuthDtos.kt",
       "norm_label": "fakepasswordnormalizer"
     },
     {
@@ -8803,8 +9342,8 @@
       "source_location": "L178",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_support_testfakes_fakepasswordnormalizer_normalize",
-      "community": 106,
-      "community_name": ".weakPasswordReturnsWeakMasterPassword",
+      "community": 147,
+      "community_name": "AuthDtos.kt",
       "norm_label": ".normalize()"
     },
     {
@@ -8814,8 +9353,8 @@
       "source_location": "L181",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_support_testfakes_fakebiometricgate",
-      "community": 133,
-      "community_name": "DevicePlatform",
+      "community": 113,
+      "community_name": "PushChanges",
       "norm_label": "fakebiometricgate"
     },
     {
@@ -8825,8 +9364,8 @@
       "source_location": "L185",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_support_testfakes_fakebiometricgate_isavailable",
-      "community": 133,
-      "community_name": "DevicePlatform",
+      "community": 113,
+      "community_name": "PushChanges",
       "norm_label": ".isavailable()"
     },
     {
@@ -8836,8 +9375,8 @@
       "source_location": "L187",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_support_testfakes_fakebiometricgate_authenticate",
-      "community": 133,
-      "community_name": "DevicePlatform",
+      "community": 113,
+      "community_name": "PushChanges",
       "norm_label": ".authenticate()"
     },
     {
@@ -9166,8 +9705,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_vault_copysecrettest",
-      "community": 96,
-      "community_name": "VaultKey",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "copysecrettest.kt"
     },
     {
@@ -9177,8 +9716,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_vault_copysecrettest_copysecrettest",
-      "community": 96,
-      "community_name": "VaultKey",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "copysecrettest"
     },
     {
@@ -9188,8 +9727,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_vault_copysecrettest_copysecrettest_missing_item_fails_with_item_not_found",
-      "community": 96,
-      "community_name": "VaultKey",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": ".`missing item fails with item not found`()"
     },
     {
@@ -9199,8 +9738,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_vault_copysecrettest_copysecrettest_item_without_a_secret_fails_with_invalid_item",
-      "community": 96,
-      "community_name": "VaultKey",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": ".`item without a secret fails with invalid item`()"
     },
     {
@@ -9210,8 +9749,8 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_vault_copysecrettest_copysecrettest_item_with_a_secret_is_copied",
-      "community": 96,
-      "community_name": "VaultKey",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": ".`item with a secret is copied`()"
     },
     {
@@ -9221,8 +9760,8 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_vault_copysecrettest_copysecrettest_clipboard_failure_is_propagated_as_an_app_error",
-      "community": 96,
-      "community_name": "VaultKey",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": ".`clipboard failure is propagated as an app error`()"
     },
     {
@@ -9232,8 +9771,8 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_vault_copysecrettest_copysecrettest_createitem",
-      "community": 96,
-      "community_name": "VaultKey",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": ".createitem()"
     },
     {
@@ -9243,8 +9782,8 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_vault_copysecrettest_copysecrettest_itemid",
-      "community": 96,
-      "community_name": "VaultKey",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": ".itemid()"
     },
     {
@@ -9254,8 +9793,8 @@
       "source_location": "L79",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_vault_copysecrettest_recordingclipboard",
-      "community": 96,
-      "community_name": "VaultKey",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "recordingclipboard"
     },
     {
@@ -9276,8 +9815,8 @@
       "source_location": "L88",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_vault_copysecrettest_failingclipboard",
-      "community": 96,
-      "community_name": "VaultKey",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "failingclipboard"
     },
     {
@@ -9287,8 +9826,8 @@
       "source_location": "L89",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_vault_copysecrettest_failingclipboard_copysecret",
-      "community": 96,
-      "community_name": "VaultKey",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": ".copysecret()"
     },
     {
@@ -9375,8 +9914,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_vault_vaultcycletest",
-      "community": 67,
-      "community_name": "create",
+      "community": 103,
+      "community_name": "AuthTokens",
       "norm_label": "vaultcycletest.kt"
     },
     {
@@ -9386,8 +9925,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_vault_vaultcycletest_vaultcycletest",
-      "community": 67,
-      "community_name": "create",
+      "community": 103,
+      "community_name": "AuthTokens",
       "norm_label": "vaultcycletest"
     },
     {
@@ -9397,8 +9936,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_vault_vaultcycletest_vaultcycletest_create_update_and_delete_keep_the_server_version_and_mark_the_item_dirty",
-      "community": 67,
-      "community_name": "create",
+      "community": 103,
+      "community_name": "AuthTokens",
       "norm_label": ".`create update and delete keep the server version and mark the item dirty`()"
     },
     {
@@ -9408,8 +9947,8 @@
       "source_location": "L66",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_vault_vaultcycletest_vaultcycletest_save_is_refused_while_the_session_is_locked",
-      "community": 67,
-      "community_name": "create",
+      "community": 103,
+      "community_name": "AuthTokens",
       "norm_label": ".`save is refused while the session is locked`()"
     },
     {
@@ -9419,8 +9958,8 @@
       "source_location": "L86",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_vault_vaultcycletest_lockedawareinmemoryrepository",
-      "community": 105,
-      "community_name": ".invoke",
+      "community": 103,
+      "community_name": "AuthTokens",
       "norm_label": "lockedawareinmemoryrepository"
     },
     {
@@ -9430,8 +9969,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_vault_vaultcycletest_kt_vaultitemrepository",
-      "community": 105,
-      "community_name": ".invoke",
+      "community": 103,
+      "community_name": "AuthTokens",
       "norm_label": "vaultitemrepository"
     },
     {
@@ -9441,8 +9980,8 @@
       "source_location": "L90",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_vault_vaultcycletest_lockedawareinmemoryrepository_save",
-      "community": 105,
-      "community_name": ".invoke",
+      "community": 103,
+      "community_name": "AuthTokens",
       "norm_label": ".save()"
     },
     {
@@ -9452,8 +9991,8 @@
       "source_location": "L97",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_vault_vaultcycletest_lockedawareinmemoryrepository_get",
-      "community": 105,
-      "community_name": ".invoke",
+      "community": 103,
+      "community_name": "AuthTokens",
       "norm_label": ".get()"
     },
     {
@@ -9463,8 +10002,8 @@
       "source_location": "L99",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_vault_vaultcycletest_lockedawareinmemoryrepository_observeall",
-      "community": 105,
-      "community_name": ".invoke",
+      "community": 103,
+      "community_name": "AuthTokens",
       "norm_label": ".observeall()"
     },
     {
@@ -9474,8 +10013,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_vault_vaultcycletest_kt_flow",
-      "community": 105,
-      "community_name": ".invoke",
+      "community": 103,
+      "community_name": "AuthTokens",
       "norm_label": "flow"
     },
     {
@@ -9529,8 +10068,8 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_vault_vaultusecasestest_vaultusecasestest_create_rejects_login_without_secret",
-      "community": 67,
-      "community_name": "create",
+      "community": 103,
+      "community_name": "AuthTokens",
       "norm_label": ".`create rejects login without secret`()"
     },
     {
@@ -9617,7 +10156,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_auth_authapifactory",
-      "community": 95,
+      "community": 83,
       "community_name": ".invoke",
       "norm_label": "androidmain/kotlin/com/kwazzar/lockruna/data/auth/authapifactory.kt"
     },
@@ -9628,7 +10167,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_auth_authapifactory_createauthapi",
-      "community": 95,
+      "community": 83,
       "community_name": ".invoke",
       "norm_label": "createauthapi()"
     },
@@ -9639,7 +10178,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_auth_authapifactory_kt_httpclient",
-      "community": 95,
+      "community": 83,
       "community_name": ".invoke",
       "norm_label": "httpclient"
     },
@@ -9650,8 +10189,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_db_databasedriverfactory",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "androidmain/kotlin/com/kwazzar/lockruna/data/db/databasedriverfactory.kt"
     },
     {
@@ -9661,8 +10200,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_db_databasedriverfactory_databasedriverfactory",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "databasedriverfactory"
     },
     {
@@ -9672,8 +10211,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_db_databasedriverfactory_kt_context",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "context"
     },
     {
@@ -9683,8 +10222,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_db_databasedriverfactory_databasedriverfactory_initialize",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": ".initialize()"
     },
     {
@@ -9694,8 +10233,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_db_databasedriverfactory_databasedriverfactory_create",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": ".create()"
     },
     {
@@ -9705,8 +10244,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_db_databasedriverfactory_kt_sqldriver",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "sqldriver"
     },
     {
@@ -9716,8 +10255,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_di_androidplatformmodule",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "androidplatformmodule.kt"
     },
     {
@@ -9727,8 +10266,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_di_androidplatformmodule_androidplatformmodule",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "androidplatformmodule()"
     },
     {
@@ -9738,8 +10277,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_di_androidplatformmodule_kt_context",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "context"
     },
     {
@@ -9749,8 +10288,41 @@
       "source_location": "",
       "_origin": "ast",
       "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_di_androidplatformmodule_kt_module",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 102,
+      "community_name": "toDomain",
+      "norm_label": "module"
+    },
+    {
+      "label": "androidMain/kotlin/com/kwazzar/lockruna/data/di/PlatformModule.kt",
+      "file_type": "code",
+      "source_file": "shared/data/src/androidMain/kotlin/com/kwazzar/lockruna/data/di/PlatformModule.kt",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_di_platformmodule",
+      "community": 170,
+      "community_name": ".resolveDevice",
+      "norm_label": "androidmain/kotlin/com/kwazzar/lockruna/data/di/platformmodule.kt"
+    },
+    {
+      "label": "platformModule()",
+      "file_type": "code",
+      "source_file": "shared/data/src/androidMain/kotlin/com/kwazzar/lockruna/data/di/PlatformModule.kt",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_di_platformmodule_platformmodule",
+      "community": 170,
+      "community_name": ".resolveDevice",
+      "norm_label": "platformmodule()"
+    },
+    {
+      "label": "Module",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_di_platformmodule_kt_module",
+      "community": 170,
+      "community_name": ".resolveDevice",
       "norm_label": "module"
     },
     {
@@ -9760,8 +10332,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_platform_activityprovider",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "activityprovider.kt"
     },
     {
@@ -9771,8 +10343,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_platform_activityprovider_activityprovider",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "activityprovider"
     },
     {
@@ -9782,8 +10354,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_platform_activityprovider_activityprovider_current",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": ".current()"
     },
     {
@@ -9792,9 +10364,9 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "fragmentactivity",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_platform_activityprovider_kt_fragmentactivity",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "fragmentactivity"
     },
     {
@@ -9947,8 +10519,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_platform_androidclipboard",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "androidclipboard.kt"
     },
     {
@@ -9958,8 +10530,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_platform_androidclipboard_androidclipboard",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "androidclipboard"
     },
     {
@@ -9969,8 +10541,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_platform_androidclipboard_kt_job",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "job"
     },
     {
@@ -9991,8 +10563,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_platform_keystoresecurestorage",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 96,
+      "community_name": "VaultKey",
       "norm_label": "keystoresecurestorage.kt"
     },
     {
@@ -10002,8 +10574,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_platform_keystoresecurestorage_keystoresecurestorage",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 96,
+      "community_name": "VaultKey",
       "norm_label": "keystoresecurestorage"
     },
     {
@@ -10013,8 +10585,8 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_platform_keystoresecurestorage_keystoresecurestorage_read",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 96,
+      "community_name": "VaultKey",
       "norm_label": ".read()"
     },
     {
@@ -10024,8 +10596,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_platform_keystoresecurestorage_kt_bytearray",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 96,
+      "community_name": "VaultKey",
       "norm_label": "bytearray"
     },
     {
@@ -10035,8 +10607,8 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_platform_keystoresecurestorage_keystoresecurestorage_write",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 96,
+      "community_name": "VaultKey",
       "norm_label": ".write()"
     },
     {
@@ -10046,8 +10618,8 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_platform_keystoresecurestorage_keystoresecurestorage_delete",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 96,
+      "community_name": "VaultKey",
       "norm_label": ".delete()"
     },
     {
@@ -10057,8 +10629,8 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_platform_keystoresecurestorage_keystoresecurestorage_secretkey",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 96,
+      "community_name": "VaultKey",
       "norm_label": ".secretkey()"
     },
     {
@@ -10068,8 +10640,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_platform_keystoresecurestorage_kt_secretkey",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 96,
+      "community_name": "VaultKey",
       "norm_label": "secretkey"
     },
     {
@@ -10134,8 +10706,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_auth_authapifactory",
-      "community": 166,
-      "community_name": "authModule",
+      "community": 58,
+      "community_name": "ExposedRefreshTokenRepository",
       "norm_label": "commonmain/kotlin/com/kwazzar/lockruna/data/auth/authapifactory.kt"
     },
     {
@@ -10145,8 +10717,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_auth_authapifactory_createauthapi",
-      "community": 166,
-      "community_name": "authModule",
+      "community": 58,
+      "community_name": "ExposedRefreshTokenRepository",
       "norm_label": "createauthapi()"
     },
     {
@@ -10156,8 +10728,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "io",
-      "community": 166,
-      "community_name": "authModule",
+      "community": 58,
+      "community_name": "ExposedRefreshTokenRepository",
       "norm_label": "io"
     },
     {
@@ -10673,8 +11245,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_crypto_cryptoservicefactory",
-      "community": 171,
-      "community_name": "PlatformNormalizer",
+      "community": 167,
+      "community_name": "Argon2Libsodium",
       "norm_label": "cryptoservicefactory.kt"
     },
     {
@@ -10750,8 +11322,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_crypto_cryptoservicefactory_platformnormalizer",
-      "community": 171,
-      "community_name": "PlatformNormalizer",
+      "community": 43,
+      "community_name": "KdfParams",
       "norm_label": "platformnormalizer"
     },
     {
@@ -10761,8 +11333,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_crypto_cryptoservicefactory_platformnormalizer_normalize",
-      "community": 171,
-      "community_name": "PlatformNormalizer",
+      "community": 43,
+      "community_name": "KdfParams",
       "norm_label": ".normalize()"
     },
     {
@@ -10772,8 +11344,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_crypto_cryptoservicefactory_argon2factory",
-      "community": 171,
-      "community_name": "PlatformNormalizer",
+      "community": 167,
+      "community_name": "Argon2Libsodium",
       "norm_label": "argon2factory"
     },
     {
@@ -10783,8 +11355,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_crypto_cryptoservicefactory_argon2factory_create",
-      "community": 171,
-      "community_name": "PlatformNormalizer",
+      "community": 167,
+      "community_name": "Argon2Libsodium",
       "norm_label": ".create()"
     },
     {
@@ -11069,8 +11641,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_di_authmodule",
-      "community": 166,
-      "community_name": "authModule",
+      "community": 58,
+      "community_name": "ExposedRefreshTokenRepository",
       "norm_label": "authmodule.kt"
     },
     {
@@ -11080,8 +11652,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_di_authmodule_authmodule",
-      "community": 166,
-      "community_name": "authModule",
+      "community": 58,
+      "community_name": "ExposedRefreshTokenRepository",
       "norm_label": "authmodule()"
     },
     {
@@ -11091,8 +11663,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_di_authmodule_kt_httpclient",
-      "community": 166,
-      "community_name": "authModule",
+      "community": 58,
+      "community_name": "ExposedRefreshTokenRepository",
       "norm_label": "httpclient"
     },
     {
@@ -11102,8 +11674,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_di_authmodule_kt_module",
-      "community": 166,
-      "community_name": "authModule",
+      "community": 58,
+      "community_name": "ExposedRefreshTokenRepository",
       "norm_label": "module"
     },
     {
@@ -11129,14 +11701,47 @@
       "norm_label": "coremodule()"
     },
     {
+      "label": "commonMain/kotlin/com/kwazzar/lockruna/data/di/PlatformModule.kt",
+      "file_type": "code",
+      "source_file": "shared/data/src/commonMain/kotlin/com/kwazzar/lockruna/data/di/PlatformModule.kt",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_di_platformmodule",
+      "community": 171,
+      "community_name": "PlatformNormalizer",
+      "norm_label": "commonmain/kotlin/com/kwazzar/lockruna/data/di/platformmodule.kt"
+    },
+    {
+      "label": "platformModule()",
+      "file_type": "code",
+      "source_file": "shared/data/src/commonMain/kotlin/com/kwazzar/lockruna/data/di/PlatformModule.kt",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_di_platformmodule_platformmodule",
+      "community": 171,
+      "community_name": "PlatformNormalizer",
+      "norm_label": "platformmodule()"
+    },
+    {
+      "label": "Module",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_di_platformmodule_kt_module",
+      "community": 171,
+      "community_name": "PlatformNormalizer",
+      "norm_label": "module"
+    },
+    {
       "label": "SyncModule.kt",
       "file_type": "code",
       "source_file": "shared/data/src/commonMain/kotlin/com/kwazzar/lockruna/data/di/SyncModule.kt",
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_di_syncmodule",
-      "community": 98,
-      "community_name": ".respond",
+      "community": 58,
+      "community_name": "ExposedRefreshTokenRepository",
       "norm_label": "syncmodule.kt"
     },
     {
@@ -11146,8 +11751,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_di_syncmodule_syncmodule",
-      "community": 98,
-      "community_name": ".respond",
+      "community": 58,
+      "community_name": "ExposedRefreshTokenRepository",
       "norm_label": "syncmodule()"
     },
     {
@@ -11157,8 +11762,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_di_syncmodule_kt_httpclient",
-      "community": 98,
-      "community_name": ".respond",
+      "community": 58,
+      "community_name": "ExposedRefreshTokenRepository",
       "norm_label": "httpclient"
     },
     {
@@ -11223,8 +11828,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_platform_securestorage",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 96,
+      "community_name": "VaultKey",
       "norm_label": "securestorage.kt"
     },
     {
@@ -11234,8 +11839,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_platform_securestorage_securestorage",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 96,
+      "community_name": "VaultKey",
       "norm_label": "securestorage"
     },
     {
@@ -11245,8 +11850,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_platform_securestorage_securestorage_read",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 96,
+      "community_name": "VaultKey",
       "norm_label": ".read()"
     },
     {
@@ -11256,8 +11861,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_platform_securestorage_kt_bytearray",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 96,
+      "community_name": "VaultKey",
       "norm_label": "bytearray"
     },
     {
@@ -11267,8 +11872,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_platform_securestorage_securestorage_write",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 96,
+      "community_name": "VaultKey",
       "norm_label": ".write()"
     },
     {
@@ -11278,8 +11883,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_platform_securestorage_securestorage_delete",
-      "community": 15,
-      "community_name": "DatabaseDriverFactory",
+      "community": 96,
+      "community_name": "VaultKey",
       "norm_label": ".delete()"
     },
     {
@@ -11454,8 +12059,8 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_sync_sqldelightsyncstore_sqldelightsyncstore_dirtychanges",
-      "community": 157,
-      "community_name": "FakeBiometricPolicyStore",
+      "community": 114,
+      "community_name": "SqlDelightSyncStore",
       "norm_label": ".dirtychanges()"
     },
     {
@@ -11487,8 +12092,8 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_sync_sqldelightsyncstore_sqldelightsyncstore_stageoutbox",
-      "community": 114,
-      "community_name": "SqlDelightSyncStore",
+      "community": 157,
+      "community_name": "FakeBiometricPolicyStore",
       "norm_label": ".stageoutbox()"
     },
     {
@@ -11542,8 +12147,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_sync_syncmapper",
-      "community": 102,
-      "community_name": "toDomain",
+      "community": 67,
+      "community_name": "create",
       "norm_label": "syncmapper.kt"
     },
     {
@@ -11553,8 +12158,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_sync_syncmapper_todto",
-      "community": 102,
-      "community_name": "toDomain",
+      "community": 67,
+      "community_name": "create",
       "norm_label": "todto()"
     },
     {
@@ -11564,8 +12169,8 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_sync_syncmapper_todomain",
-      "community": 102,
-      "community_name": "toDomain",
+      "community": 100,
+      "community_name": "SyncNowTest",
       "norm_label": "todomain()"
     },
     {
@@ -11575,8 +12180,8 @@
       "source_location": "L66",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_sync_syncmapper_toitemtype",
-      "community": 102,
-      "community_name": "toDomain",
+      "community": 67,
+      "community_name": "create",
       "norm_label": "toitemtype()"
     },
     {
@@ -11586,8 +12191,8 @@
       "source_location": "L73",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_sync_syncmapper_parseinstantmillis",
-      "community": 102,
-      "community_name": "toDomain",
+      "community": 67,
+      "community_name": "create",
       "norm_label": "parseinstantmillis()"
     },
     {
@@ -11597,8 +12202,8 @@
       "source_location": "L123",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_sync_syncmapper_invalidinstant",
-      "community": 102,
-      "community_name": "toDomain",
+      "community": 67,
+      "community_name": "create",
       "norm_label": "invalidinstant()"
     },
     {
@@ -11608,8 +12213,8 @@
       "source_location": "L126",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_sync_syncmapper_daysfromcivil",
-      "community": 102,
-      "community_name": "toDomain",
+      "community": 67,
+      "community_name": "create",
       "norm_label": "daysfromcivil()"
     },
     {
@@ -11619,8 +12224,8 @@
       "source_location": "L137",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_sync_syncmapper_daysinmonth",
-      "community": 102,
-      "community_name": "toDomain",
+      "community": 67,
+      "community_name": "create",
       "norm_label": "daysinmonth()"
     },
     {
@@ -11630,8 +12235,8 @@
       "source_location": "L144",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_sync_syncmapper_isleapyear",
-      "community": 102,
-      "community_name": "toDomain",
+      "community": 67,
+      "community_name": "create",
       "norm_label": "isleapyear()"
     },
     {
@@ -11641,8 +12246,8 @@
       "source_location": "L147",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_sync_syncmapper_tobase64",
-      "community": 102,
-      "community_name": "toDomain",
+      "community": 67,
+      "community_name": "create",
       "norm_label": "tobase64()"
     },
     {
@@ -11652,8 +12257,8 @@
       "source_location": "L149",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_sync_syncmapper_frombase64",
-      "community": 102,
-      "community_name": "toDomain",
+      "community": 67,
+      "community_name": "create",
       "norm_label": "frombase64()"
     },
     {
@@ -11663,8 +12268,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_sync_syncmapper_kt_bytearray",
-      "community": 102,
-      "community_name": "toDomain",
+      "community": 67,
+      "community_name": "create",
       "norm_label": "bytearray"
     },
     {
@@ -12433,8 +13038,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_data_src_commontest_kotlin_com_kwazzar_lockruna_data_sync_syncmappertest",
-      "community": 102,
-      "community_name": "toDomain",
+      "community": 67,
+      "community_name": "create",
       "norm_label": "syncmappertest.kt"
     },
     {
@@ -12444,8 +13049,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "shared_data_src_commontest_kotlin_com_kwazzar_lockruna_data_sync_syncmappertest_syncmappertest",
-      "community": 102,
-      "community_name": "toDomain",
+      "community": 67,
+      "community_name": "create",
       "norm_label": "syncmappertest"
     },
     {
@@ -12455,8 +13060,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "shared_data_src_commontest_kotlin_com_kwazzar_lockruna_data_sync_syncmappertest_syncmappertest_parses_server_instants_into_epoch_millis",
-      "community": 102,
-      "community_name": "toDomain",
+      "community": 67,
+      "community_name": "create",
       "norm_label": ".`parses server instants into epoch millis`()"
     },
     {
@@ -12466,8 +13071,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "shared_data_src_commontest_kotlin_com_kwazzar_lockruna_data_sync_syncmappertest_syncmappertest_keeps_millisecond_precision_and_drops_finer_digits",
-      "community": 102,
-      "community_name": "toDomain",
+      "community": 67,
+      "community_name": "create",
       "norm_label": ".`keeps millisecond precision and drops finer digits`()"
     },
     {
@@ -12477,8 +13082,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "shared_data_src_commontest_kotlin_com_kwazzar_lockruna_data_sync_syncmappertest_syncmappertest_rejects_an_instant_the_client_cannot_read",
-      "community": 102,
-      "community_name": "toDomain",
+      "community": 67,
+      "community_name": "create",
       "norm_label": ".`rejects an instant the client cannot read`()"
     },
     {
@@ -12488,8 +13093,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "shared_data_src_commontest_kotlin_com_kwazzar_lockruna_data_sync_syncmappertest_syncmappertest_maps_a_pending_change_to_the_wire_format",
-      "community": 102,
-      "community_name": "toDomain",
+      "community": 67,
+      "community_name": "create",
       "norm_label": ".`maps a pending change to the wire format`()"
     },
     {
@@ -12510,7 +13115,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_data_src_iosmain_kotlin_com_kwazzar_lockruna_data_auth_authapifactory",
-      "community": 95,
+      "community": 83,
       "community_name": ".invoke",
       "norm_label": "iosmain/kotlin/com/kwazzar/lockruna/data/auth/authapifactory.kt"
     },
@@ -12521,7 +13126,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "shared_data_src_iosmain_kotlin_com_kwazzar_lockruna_data_auth_authapifactory_createauthapi",
-      "community": 95,
+      "community": 83,
       "community_name": ".invoke",
       "norm_label": "createauthapi()"
     },
@@ -12532,7 +13137,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "shared_data_src_iosmain_kotlin_com_kwazzar_lockruna_data_auth_authapifactory_kt_httpclient",
-      "community": 95,
+      "community": 83,
       "community_name": ".invoke",
       "norm_label": "httpclient"
     },
@@ -12587,8 +13192,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "shared_data_src_iosmain_kotlin_com_kwazzar_lockruna_data_crypto_argon2factory_argon2libsodium_hash",
-      "community": 167,
-      "community_name": "Argon2Libsodium",
+      "community": 46,
+      "community_name": "withCBytes",
       "norm_label": ".hash()"
     },
     {
@@ -12598,8 +13203,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "shared_data_src_iosmain_kotlin_com_kwazzar_lockruna_data_crypto_argon2factory_kt_bytearray",
-      "community": 167,
-      "community_name": "Argon2Libsodium",
+      "community": 46,
+      "community_name": "withCBytes",
       "norm_label": "bytearray"
     },
     {
@@ -12829,6 +13434,39 @@
       "source_location": "",
       "_origin": "ast",
       "id": "shared_data_src_iosmain_kotlin_com_kwazzar_lockruna_data_di_iosplatformmodule_kt_module",
+      "community": 96,
+      "community_name": "VaultKey",
+      "norm_label": "module"
+    },
+    {
+      "label": "iosMain/kotlin/com/kwazzar/lockruna/data/di/PlatformModule.kt",
+      "file_type": "code",
+      "source_file": "shared/data/src/iosMain/kotlin/com/kwazzar/lockruna/data/di/PlatformModule.kt",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "shared_data_src_iosmain_kotlin_com_kwazzar_lockruna_data_di_platformmodule",
+      "community": 96,
+      "community_name": "VaultKey",
+      "norm_label": "iosmain/kotlin/com/kwazzar/lockruna/data/di/platformmodule.kt"
+    },
+    {
+      "label": "platformModule()",
+      "file_type": "code",
+      "source_file": "shared/data/src/iosMain/kotlin/com/kwazzar/lockruna/data/di/PlatformModule.kt",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "shared_data_src_iosmain_kotlin_com_kwazzar_lockruna_data_di_platformmodule_platformmodule",
+      "community": 96,
+      "community_name": "VaultKey",
+      "norm_label": "platformmodule()"
+    },
+    {
+      "label": "Module",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "shared_data_src_iosmain_kotlin_com_kwazzar_lockruna_data_di_platformmodule_kt_module",
       "community": 96,
       "community_name": "VaultKey",
       "norm_label": "module"
@@ -13434,7 +14072,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_data_src_jvmmain_kotlin_com_kwazzar_lockruna_data_auth_authapifactory",
-      "community": 95,
+      "community": 83,
       "community_name": ".invoke",
       "norm_label": "jvmmain/kotlin/com/kwazzar/lockruna/data/auth/authapifactory.kt"
     },
@@ -13445,7 +14083,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "shared_data_src_jvmmain_kotlin_com_kwazzar_lockruna_data_auth_authapifactory_createauthapi",
-      "community": 95,
+      "community": 83,
       "community_name": ".invoke",
       "norm_label": "createauthapi()"
     },
@@ -13456,7 +14094,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "shared_data_src_jvmmain_kotlin_com_kwazzar_lockruna_data_auth_authapifactory_kt_httpclient",
-      "community": 95,
+      "community": 83,
       "community_name": ".invoke",
       "norm_label": "httpclient"
     },
@@ -13503,6 +14141,39 @@
       "community": 24,
       "community_name": "DatabaseDriverFactory",
       "norm_label": "sqldriver"
+    },
+    {
+      "label": "jvmMain/kotlin/com/kwazzar/lockruna/data/di/PlatformModule.kt",
+      "file_type": "code",
+      "source_file": "shared/data/src/jvmMain/kotlin/com/kwazzar/lockruna/data/di/PlatformModule.kt",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "shared_data_src_jvmmain_kotlin_com_kwazzar_lockruna_data_di_platformmodule",
+      "community": 172,
+      "community_name": "PreloginUser",
+      "norm_label": "jvmmain/kotlin/com/kwazzar/lockruna/data/di/platformmodule.kt"
+    },
+    {
+      "label": "platformModule()",
+      "file_type": "code",
+      "source_file": "shared/data/src/jvmMain/kotlin/com/kwazzar/lockruna/data/di/PlatformModule.kt",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "shared_data_src_jvmmain_kotlin_com_kwazzar_lockruna_data_di_platformmodule_platformmodule",
+      "community": 172,
+      "community_name": "PreloginUser",
+      "norm_label": "platformmodule()"
+    },
+    {
+      "label": "Module",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "shared_data_src_jvmmain_kotlin_com_kwazzar_lockruna_data_di_platformmodule_kt_module",
+      "community": 172,
+      "community_name": "PreloginUser",
+      "norm_label": "module"
     },
     {
       "label": "jvmMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt",
@@ -13973,8 +14644,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_data_src_jvmtest_kotlin_com_kwazzar_lockruna_data_di_syncmoduletest",
-      "community": 98,
-      "community_name": ".respond",
+      "community": 61,
+      "community_name": "Result",
       "norm_label": "syncmoduletest.kt"
     },
     {
@@ -13984,8 +14655,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "shared_data_src_jvmtest_kotlin_com_kwazzar_lockruna_data_di_syncmoduletest_testidgenerator",
-      "community": 98,
-      "community_name": ".respond",
+      "community": 61,
+      "community_name": "Result",
       "norm_label": "testidgenerator"
     },
     {
@@ -13995,8 +14666,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "shared_data_src_jvmtest_kotlin_com_kwazzar_lockruna_data_di_syncmoduletest_testidgenerator_newitemid",
-      "community": 98,
-      "community_name": ".respond",
+      "community": 61,
+      "community_name": "Result",
       "norm_label": ".newitemid()"
     },
     {
@@ -14006,8 +14677,8 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "shared_data_src_jvmtest_kotlin_com_kwazzar_lockruna_data_di_syncmoduletest_testidgenerator_newuuid",
-      "community": 98,
-      "community_name": ".respond",
+      "community": 61,
+      "community_name": "Result",
       "norm_label": ".newuuid()"
     },
     {
@@ -14017,8 +14688,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "shared_data_src_jvmtest_kotlin_com_kwazzar_lockruna_data_di_syncmoduletest_syncmoduletest",
-      "community": 98,
-      "community_name": ".respond",
+      "community": 137,
+      "community_name": "RateLimitDecision",
       "norm_label": "syncmoduletest"
     },
     {
@@ -14028,8 +14699,8 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "shared_data_src_jvmtest_kotlin_com_kwazzar_lockruna_data_di_syncmoduletest_syncmoduletest_the_sync_graph_resolves",
-      "community": 98,
-      "community_name": ".respond",
+      "community": 137,
+      "community_name": "RateLimitDecision",
       "norm_label": ".`the sync graph resolves`()"
     },
     {
@@ -14204,8 +14875,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_auth_authapi",
-      "community": 95,
-      "community_name": ".invoke",
+      "community": 0,
+      "community_name": "AppError",
       "norm_label": "authapi.kt"
     },
     {
@@ -14215,8 +14886,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_auth_authapi_authapi",
-      "community": 95,
-      "community_name": ".invoke",
+      "community": 0,
+      "community_name": "AppError",
       "norm_label": "authapi"
     },
     {
@@ -14237,8 +14908,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_auth_authapi_authapi_register",
-      "community": 95,
-      "community_name": ".invoke",
+      "community": 0,
+      "community_name": "AppError",
       "norm_label": ".register()"
     },
     {
@@ -14248,8 +14919,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_auth_authapi_kt_bytearray",
-      "community": 95,
-      "community_name": ".invoke",
+      "community": 0,
+      "community_name": "AppError",
       "norm_label": "bytearray"
     },
     {
@@ -14259,8 +14930,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "domainkdfparams",
-      "community": 95,
-      "community_name": ".invoke",
+      "community": 0,
+      "community_name": "AppError",
       "norm_label": "domainkdfparams"
     },
     {
@@ -14270,8 +14941,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_auth_authapi_authapi_login",
-      "community": 95,
-      "community_name": ".invoke",
+      "community": 0,
+      "community_name": "AppError",
       "norm_label": ".login()"
     },
     {
@@ -14281,8 +14952,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_auth_authapi_authapi_refresh",
-      "community": 95,
-      "community_name": ".invoke",
+      "community": 0,
+      "community_name": "AppError",
       "norm_label": ".refresh()"
     },
     {
@@ -14292,8 +14963,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_auth_authapi_authapi_logout",
-      "community": 95,
-      "community_name": ".invoke",
+      "community": 0,
+      "community_name": "AppError",
       "norm_label": ".logout()"
     },
     {
@@ -14589,8 +15260,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_auth_deviceidentity_deviceidentity",
-      "community": 95,
-      "community_name": ".invoke",
+      "community": 0,
+      "community_name": "AppError",
       "norm_label": "deviceidentity"
     },
     {
@@ -14600,8 +15271,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_auth_deviceidentity_deviceidentity_tostring",
-      "community": 95,
-      "community_name": ".invoke",
+      "community": 0,
+      "community_name": "AppError",
       "norm_label": ".tostring()"
     },
     {
@@ -14732,8 +15403,8 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_crypto_argon2_argon2",
-      "community": 130,
-      "community_name": ".resolveDevice",
+      "community": 167,
+      "community_name": "Argon2Libsodium",
       "norm_label": "argon2"
     },
     {
@@ -14743,8 +15414,8 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_crypto_argon2_argon2_hash",
-      "community": 130,
-      "community_name": ".resolveDevice",
+      "community": 167,
+      "community_name": "Argon2Libsodium",
       "norm_label": ".hash()"
     },
     {
@@ -14754,8 +15425,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_crypto_argon2_kt_bytearray",
-      "community": 130,
-      "community_name": ".resolveDevice",
+      "community": 167,
+      "community_name": "Argon2Libsodium",
       "norm_label": "bytearray"
     },
     {
@@ -15150,8 +15821,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_identity_masterpassword",
-      "community": 0,
-      "community_name": "AppError",
+      "community": 156,
+      "community_name": ".invoke",
       "norm_label": "masterpassword.kt"
     },
     {
@@ -15161,8 +15832,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_identity_masterpassword_masterpassword",
-      "community": 0,
-      "community_name": "AppError",
+      "community": 156,
+      "community_name": ".invoke",
       "norm_label": "masterpassword"
     },
     {
@@ -15172,8 +15843,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_identity_masterpassword_of",
-      "community": 0,
-      "community_name": "AppError",
+      "community": 156,
+      "community_name": ".invoke",
       "norm_label": "of()"
     },
     {
@@ -15964,8 +16635,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_vault_clipboard",
-      "community": 96,
-      "community_name": "VaultKey",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "clipboard.kt"
     },
     {
@@ -15975,8 +16646,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_vault_clipboard_clipboard",
-      "community": 96,
-      "community_name": "VaultKey",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "clipboard"
     },
     {
@@ -17614,8 +18285,8 @@
       "source_location": "L101",
       "_origin": "ast",
       "id": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_vault_itemdetailstore_itemdetailintent",
-      "community": 117,
-      "community_name": "PasswordNormalizer",
+      "community": 166,
+      "community_name": "authModule",
       "norm_label": "itemdetailintent"
     },
     {
@@ -17625,8 +18296,8 @@
       "source_location": "L102",
       "_origin": "ast",
       "id": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_vault_itemdetailstore_reveal",
-      "community": 117,
-      "community_name": "PasswordNormalizer",
+      "community": 166,
+      "community_name": "authModule",
       "norm_label": "reveal"
     },
     {
@@ -17636,8 +18307,8 @@
       "source_location": "L104",
       "_origin": "ast",
       "id": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_vault_itemdetailstore_hide",
-      "community": 117,
-      "community_name": "PasswordNormalizer",
+      "community": 166,
+      "community_name": "authModule",
       "norm_label": "hide"
     },
     {
@@ -17647,8 +18318,8 @@
       "source_location": "L106",
       "_origin": "ast",
       "id": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_vault_itemdetailstore_copy",
-      "community": 117,
-      "community_name": "PasswordNormalizer",
+      "community": 166,
+      "community_name": "authModule",
       "norm_label": "copy"
     },
     {
@@ -17658,8 +18329,8 @@
       "source_location": "L108",
       "_origin": "ast",
       "id": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_vault_itemdetailstore_edit",
-      "community": 117,
-      "community_name": "PasswordNormalizer",
+      "community": 166,
+      "community_name": "authModule",
       "norm_label": "edit"
     },
     {
@@ -17669,8 +18340,8 @@
       "source_location": "L110",
       "_origin": "ast",
       "id": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_vault_itemdetailstore_deleteconfirmed",
-      "community": 117,
-      "community_name": "PasswordNormalizer",
+      "community": 166,
+      "community_name": "authModule",
       "norm_label": "deleteconfirmed"
     },
     {
@@ -17801,8 +18472,8 @@
       "source_location": "L104",
       "_origin": "ast",
       "id": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_vault_itemeditstore_itemeditstore_create",
-      "community": 129,
-      "community_name": ".get",
+      "community": 23,
+      "community_name": "DatabaseDriverFactory",
       "norm_label": ".create()"
     },
     {
@@ -17812,8 +18483,8 @@
       "source_location": "L121",
       "_origin": "ast",
       "id": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_vault_itemeditstore_itemeditstore_update",
-      "community": 129,
-      "community_name": ".get",
+      "community": 23,
+      "community_name": "DatabaseDriverFactory",
       "norm_label": ".update()"
     },
     {
@@ -17823,8 +18494,8 @@
       "source_location": "L140",
       "_origin": "ast",
       "id": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_vault_itemeditstore_itemeditstore_parsefolderid",
-      "community": 129,
-      "community_name": ".get",
+      "community": 23,
+      "community_name": "DatabaseDriverFactory",
       "norm_label": ".parsefolderid()"
     },
     {
@@ -18769,8 +19440,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "shared_presentation_src_commontest_kotlin_com_kwazzar_lockruna_presentation_support_authtestsupport_fakeauthapi",
-      "community": 95,
-      "community_name": ".invoke",
+      "community": 0,
+      "community_name": "AppError",
       "norm_label": "fakeauthapi"
     },
     {
@@ -18802,8 +19473,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "shared_presentation_src_commontest_kotlin_com_kwazzar_lockruna_presentation_support_authtestsupport_fakeauthapi_register",
-      "community": 95,
-      "community_name": ".invoke",
+      "community": 0,
+      "community_name": "AppError",
       "norm_label": ".register()"
     },
     {
@@ -18824,8 +19495,8 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "shared_presentation_src_commontest_kotlin_com_kwazzar_lockruna_presentation_support_authtestsupport_fakeauthapi_login",
-      "community": 95,
-      "community_name": ".invoke",
+      "community": 0,
+      "community_name": "AppError",
       "norm_label": ".login()"
     },
     {
@@ -18835,8 +19506,8 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "shared_presentation_src_commontest_kotlin_com_kwazzar_lockruna_presentation_support_authtestsupport_fakeauthapi_refresh",
-      "community": 95,
-      "community_name": ".invoke",
+      "community": 0,
+      "community_name": "AppError",
       "norm_label": ".refresh()"
     },
     {
@@ -18846,8 +19517,8 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "shared_presentation_src_commontest_kotlin_com_kwazzar_lockruna_presentation_support_authtestsupport_fakeauthapi_logout",
-      "community": 95,
-      "community_name": ".invoke",
+      "community": 0,
+      "community_name": "AppError",
       "norm_label": ".logout()"
     },
     {
@@ -18945,8 +19616,8 @@
       "source_location": "L87",
       "_origin": "ast",
       "id": "shared_presentation_src_commontest_kotlin_com_kwazzar_lockruna_presentation_support_authtestsupport_fakebiometricgate",
-      "community": 149,
-      "community_name": "FakeBiometricGate",
+      "community": 113,
+      "community_name": "PushChanges",
       "norm_label": "fakebiometricgate"
     },
     {
@@ -18956,8 +19627,8 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "shared_presentation_src_commontest_kotlin_com_kwazzar_lockruna_presentation_support_authtestsupport_fakebiometricgate_isavailable",
-      "community": 149,
-      "community_name": "FakeBiometricGate",
+      "community": 113,
+      "community_name": "PushChanges",
       "norm_label": ".isavailable()"
     },
     {
@@ -18967,8 +19638,8 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "shared_presentation_src_commontest_kotlin_com_kwazzar_lockruna_presentation_support_authtestsupport_fakebiometricgate_authenticate",
-      "community": 149,
-      "community_name": "FakeBiometricGate",
+      "community": 113,
+      "community_name": "PushChanges",
       "norm_label": ".authenticate()"
     },
     {
@@ -19693,8 +20364,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_presentation_src_commontest_kotlin_com_kwazzar_lockruna_presentation_vault_itemuimappingtest",
-      "community": 145,
-      "community_name": "ItemUiMappingTest",
+      "community": 105,
+      "community_name": ".invoke",
       "norm_label": "itemuimappingtest.kt"
     },
     {
@@ -19704,8 +20375,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "shared_presentation_src_commontest_kotlin_com_kwazzar_lockruna_presentation_vault_itemuimappingtest_itemuimappingtest",
-      "community": 145,
-      "community_name": "ItemUiMappingTest",
+      "community": 105,
+      "community_name": ".invoke",
       "norm_label": "itemuimappingtest"
     },
     {
@@ -19715,8 +20386,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "shared_presentation_src_commontest_kotlin_com_kwazzar_lockruna_presentation_vault_itemuimappingtest_itemuimappingtest_vault_item_maps_to_item_ui_without_its_secret",
-      "community": 145,
-      "community_name": "ItemUiMappingTest",
+      "community": 105,
+      "community_name": ".invoke",
       "norm_label": ".`vault item maps to item ui without its secret`()"
     },
     {
@@ -19726,8 +20397,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "shared_presentation_src_commontest_kotlin_com_kwazzar_lockruna_presentation_vault_itemuimappingtest_itemuimappingtest_createloginitem",
-      "community": 145,
-      "community_name": "ItemUiMappingTest",
+      "community": 105,
+      "community_name": ".invoke",
       "norm_label": ".createloginitem()"
     },
     {
@@ -19905,6 +20576,116 @@
       "community": 42,
       "community_name": "umbrella/build.gradle.kts",
       "norm_label": "umbrella/build.gradle.kts"
+    },
+    {
+      "label": "LockrunaIos.kt",
+      "file_type": "code",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios",
+      "community": 142,
+      "community_name": "requireSession",
+      "norm_label": "lockrunaios.kt"
+    },
+    {
+      "label": "LockrunaIos",
+      "file_type": "code",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L18",
+      "_origin": "ast",
+      "id": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios",
+      "community": 142,
+      "community_name": "requireSession",
+      "norm_label": "lockrunaios"
+    },
+    {
+      "label": ".start()",
+      "file_type": "code",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L27",
+      "_origin": "ast",
+      "id": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_start",
+      "community": 142,
+      "community_name": "requireSession",
+      "norm_label": ".start()"
+    },
+    {
+      "label": ".stop()",
+      "file_type": "code",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L48",
+      "_origin": "ast",
+      "id": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_stop",
+      "community": 142,
+      "community_name": "requireSession",
+      "norm_label": ".stop()"
+    },
+    {
+      "label": ".sessionStore()",
+      "file_type": "code",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L60",
+      "_origin": "ast",
+      "id": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_sessionstore",
+      "community": 142,
+      "community_name": "requireSession",
+      "norm_label": ".sessionstore()"
+    },
+    {
+      "label": ".loginStore()",
+      "file_type": "code",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L61",
+      "_origin": "ast",
+      "id": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_loginstore",
+      "community": 142,
+      "community_name": "requireSession",
+      "norm_label": ".loginstore()"
+    },
+    {
+      "label": ".unlockStore()",
+      "file_type": "code",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L62",
+      "_origin": "ast",
+      "id": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_unlockstore",
+      "community": 142,
+      "community_name": "requireSession",
+      "norm_label": ".unlockstore()"
+    },
+    {
+      "label": ".vaultListStore()",
+      "file_type": "code",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L63",
+      "_origin": "ast",
+      "id": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_vaultliststore",
+      "community": 142,
+      "community_name": "requireSession",
+      "norm_label": ".vaultliststore()"
+    },
+    {
+      "label": ".itemDetailStore()",
+      "file_type": "code",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L64",
+      "_origin": "ast",
+      "id": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_itemdetailstore",
+      "community": 142,
+      "community_name": "requireSession",
+      "norm_label": ".itemdetailstore()"
+    },
+    {
+      "label": ".itemEditStore()",
+      "file_type": "code",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L65",
+      "_origin": "ast",
+      "id": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_itemeditstore",
+      "community": 142,
+      "community_name": "requireSession",
+      "norm_label": ".itemeditstore()"
     },
     {
       "label": "SharedCore.kt",
@@ -22639,8 +23420,89 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/LockrunaApplication.kt",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_lockrunaapplication",
+      "target": "androidapp_src_main_kotlin_com_kwazzar_lockruna_lockrunaapplication_lockrunaapplication",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/LockrunaApplication.kt",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_lockrunaapplication_lockrunaapplication",
+      "target": "androidapp_src_main_kotlin_com_kwazzar_lockruna_lockrunaapplication_lockrunaapplication_oncreate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/LockrunaApplication.kt",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_lockrunaapplication_lockrunaapplication",
+      "target": "application",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/LockrunaApplication.kt",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_lockrunaapplication_lockrunaapplication_oncreate",
+      "target": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_di_androidplatformmodule_androidplatformmodule"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/LockrunaApplication.kt",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_lockrunaapplication_lockrunaapplication_oncreate",
+      "target": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_di_authmodule_authmodule"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/LockrunaApplication.kt",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_lockrunaapplication_lockrunaapplication_oncreate",
+      "target": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_di_coremodule_coremodule"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/LockrunaApplication.kt",
+      "source_location": "L26",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_lockrunaapplication_lockrunaapplication_oncreate",
+      "target": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_di_syncmodule_syncmodule"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/MainActivity.kt",
-      "source_location": "L12",
+      "source_location": "L10",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_mainactivity",
@@ -22648,10 +23510,21 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/MainActivity.kt",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_mainactivity_mainactivity",
+      "target": "androidapp_src_main_kotlin_com_kwazzar_lockruna_mainactivity_kt_fragmentactivity",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/MainActivity.kt",
-      "source_location": "L13",
+      "source_location": "L11",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_mainactivity_mainactivity",
@@ -22659,26 +23532,361 @@
       "confidence_score": 1.0
     },
     {
-      "relation": "inherits",
+      "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/MainActivity.kt",
-      "source_location": "L12",
+      "source_location": "L30",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_mainactivity_mainactivity",
-      "target": "componentactivity",
+      "target": "androidapp_src_main_kotlin_com_kwazzar_lockruna_mainactivity_mainactivity_ondestroy",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/MainActivity.kt",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_mainactivity_mainactivity",
+      "target": "androidapp_src_main_kotlin_com_kwazzar_lockruna_mainactivity_mainactivity_onpause",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/MainActivity.kt",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_mainactivity_mainactivity",
+      "target": "androidapp_src_main_kotlin_com_kwazzar_lockruna_mainactivity_mainactivity_onresume",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/MainActivity.kt",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_mainactivity_mainactivity_oncreate",
+      "target": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_approot_approot"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/MainActivity.kt",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_mainactivity_mainactivity_oncreate",
+      "target": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_theme_theme"
     },
     {
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/MainActivity.kt",
-      "source_location": "L13",
+      "source_location": "L11",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_mainactivity_mainactivity_oncreate",
       "target": "bundle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/platform/CurrentActivityProvider.kt",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_platform_currentactivityprovider",
+      "target": "androidapp_src_main_kotlin_com_kwazzar_lockruna_platform_currentactivityprovider_currentactivityprovider",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/platform/CurrentActivityProvider.kt",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_platform_currentactivityprovider_currentactivityprovider",
+      "target": "androidapp_src_main_kotlin_com_kwazzar_lockruna_platform_currentactivityprovider_currentactivityprovider_current",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/platform/CurrentActivityProvider.kt",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_platform_currentactivityprovider_currentactivityprovider",
+      "target": "androidapp_src_main_kotlin_com_kwazzar_lockruna_platform_currentactivityprovider_currentactivityprovider_set",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/platform/CurrentActivityProvider.kt",
+      "source_location": "L7",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_platform_currentactivityprovider_currentactivityprovider",
+      "target": "androidapp_src_main_kotlin_com_kwazzar_lockruna_platform_currentactivityprovider_kt_fragmentactivity",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/platform/CurrentActivityProvider.kt",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_platform_currentactivityprovider_currentactivityprovider",
+      "target": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_platform_activityprovider_activityprovider",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/platform/CurrentActivityProvider.kt",
+      "source_location": "L14",
+      "weight": 1.0,
+      "context": "return_type",
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_platform_currentactivityprovider_currentactivityprovider_current",
+      "target": "androidapp_src_main_kotlin_com_kwazzar_lockruna_platform_currentactivityprovider_kt_fragmentactivity",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/platform/CurrentActivityProvider.kt",
+      "source_location": "L10",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_platform_currentactivityprovider_currentactivityprovider_set",
+      "target": "androidapp_src_main_kotlin_com_kwazzar_lockruna_platform_currentactivityprovider_kt_fragmentactivity",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/AppRoot.kt",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_approot",
+      "target": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_approot_approot",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/AppRoot.kt",
+      "source_location": "L86",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_approot_approot",
+      "target": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_itemdetailscreen_itemdetailscreen"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/AppRoot.kt",
+      "source_location": "L94",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_approot_approot",
+      "target": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_itemeditscreen_itemeditscreen"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/AppRoot.kt",
+      "source_location": "L73",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_approot_approot",
+      "target": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_loginscreen_loginscreen"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/AppRoot.kt",
+      "source_location": "L72",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_approot_approot",
+      "target": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_unlockscreen_unlockscreen"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/AppRoot.kt",
+      "source_location": "L75",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_approot_approot",
+      "target": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_vaultlistscreen_vaultlistscreen"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/AppRoot.kt",
+      "source_location": "L61",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_approot_approot",
+      "target": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_app_appscreen_startscreen"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/ItemDetailScreen.kt",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_itemdetailscreen",
+      "target": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_itemdetailscreen_itemdetailscreen",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/ItemDetailScreen.kt",
+      "source_location": "L24",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_itemdetailscreen_itemdetailscreen",
+      "target": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_vault_itemdetailstore_itemdetailstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/ItemEditScreen.kt",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_itemeditscreen",
+      "target": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_itemeditscreen_itemeditscreen",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/ItemEditScreen.kt",
+      "source_location": "L25",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_itemeditscreen_itemeditscreen",
+      "target": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_vault_itemeditstore_itemeditstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/LoginScreen.kt",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_loginscreen",
+      "target": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_loginscreen_loginscreen",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/LoginScreen.kt",
+      "source_location": "L32",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_loginscreen_loginscreen",
+      "target": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_auth_loginstore_loginstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/Theme.kt",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_theme",
+      "target": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_theme_theme",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/UnlockScreen.kt",
+      "source_location": "L33",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_unlockscreen",
+      "target": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_unlockscreen_unlockscreen",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/UnlockScreen.kt",
+      "source_location": "L33",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_unlockscreen_unlockscreen",
+      "target": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_auth_unlockstore_unlockstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/VaultListScreen.kt",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_vaultlistscreen",
+      "target": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_vaultlistscreen_vaultlistscreen",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/VaultListScreen.kt",
+      "source_location": "L30",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "_origin": "ast",
+      "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_vaultlistscreen_vaultlistscreen",
+      "target": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_vault_vaultliststore_vaultliststore",
       "confidence_score": 1.0
     },
     {
@@ -23666,6 +24874,72 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L143",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "iosapp_lockruna_contentview",
+      "target": "iosapp_lockruna_contentview_itemdetailview",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L161",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "iosapp_lockruna_contentview",
+      "target": "iosapp_lockruna_contentview_itemeditview",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L72",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "iosapp_lockruna_contentview",
+      "target": "iosapp_lockruna_contentview_loginview",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L43",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "iosapp_lockruna_contentview",
+      "target": "iosapp_lockruna_contentview_unlockview",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L99",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "iosapp_lockruna_contentview",
+      "target": "iosapp_lockruna_contentview_vaultcontainer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L115",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "iosapp_lockruna_contentview",
+      "target": "iosapp_lockruna_contentview_vaultlistview",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -23702,10 +24976,46 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "iosapp_lockruna_lockrunaapp",
+      "target": "shared",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L9",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "iosapp_lockruna_contentview_contentview",
+      "target": "iosapp_lockruna_contentview_swift_string",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "iosApp/Lockruna/ContentView.swift",
       "source_location": "L5",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "iosapp_lockruna_contentview_contentview",
+      "target": "iosapp_lockruna_lockrunaapp_appmodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L11",
       "weight": 1.0,
       "_origin": "ast",
       "context": "field",
@@ -23714,10 +25024,237 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L147",
+      "weight": 1.0,
+      "_origin": "ast",
+      "context": "field",
+      "source": "iosapp_lockruna_contentview_itemdetailview",
+      "target": "view",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L166",
+      "weight": 1.0,
+      "_origin": "ast",
+      "context": "field",
+      "source": "iosapp_lockruna_contentview_itemeditview",
+      "target": "view",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L78",
+      "weight": 1.0,
+      "_origin": "ast",
+      "context": "field",
+      "source": "iosapp_lockruna_contentview_loginview",
+      "target": "view",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L48",
+      "weight": 1.0,
+      "_origin": "ast",
+      "context": "field",
+      "source": "iosapp_lockruna_contentview_unlockview",
+      "target": "view",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L104",
+      "weight": 1.0,
+      "_origin": "ast",
+      "context": "field",
+      "source": "iosapp_lockruna_contentview_vaultcontainer",
+      "target": "view",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L120",
+      "weight": 1.0,
+      "_origin": "ast",
+      "context": "field",
+      "source": "iosapp_lockruna_contentview_vaultlistview",
+      "target": "view",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L145",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "iosapp_lockruna_contentview_itemdetailview",
+      "target": "iosapp_lockruna_contentview_swift_string",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L164",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "iosapp_lockruna_contentview_itemeditview",
+      "target": "iosapp_lockruna_contentview_swift_string",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L76",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "iosapp_lockruna_contentview_loginview",
+      "target": "iosapp_lockruna_contentview_swift_string",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L46",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "iosapp_lockruna_contentview_unlockview",
+      "target": "iosapp_lockruna_contentview_swift_string",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L102",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "iosapp_lockruna_contentview_vaultcontainer",
+      "target": "iosapp_lockruna_contentview_swift_string",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L118",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "iosapp_lockruna_contentview_vaultlistview",
+      "target": "iosapp_lockruna_contentview_swift_string",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L44",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "iosapp_lockruna_contentview_unlockview",
+      "target": "iosapp_lockruna_lockrunaapp_appmodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L73",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "iosapp_lockruna_contentview_loginview",
+      "target": "iosapp_lockruna_lockrunaapp_appmodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L100",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "iosapp_lockruna_contentview_vaultcontainer",
+      "target": "iosapp_lockruna_lockrunaapp_appmodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L116",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "iosapp_lockruna_contentview_vaultlistview",
+      "target": "iosapp_lockruna_lockrunaapp_appmodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L144",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "iosapp_lockruna_contentview_itemdetailview",
+      "target": "iosapp_lockruna_lockrunaapp_appmodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/ContentView.swift",
+      "source_location": "L162",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "iosapp_lockruna_contentview_itemeditview",
+      "target": "iosapp_lockruna_lockrunaapp_appmodel",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "iosApp/Lockruna/LockrunaApp.swift",
-      "source_location": "L3",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "iosapp_lockruna_lockrunaapp",
+      "target": "iosapp_lockruna_lockrunaapp_appmodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
+      "source_location": "L40",
       "weight": 1.0,
       "_origin": "ast",
       "source": "iosapp_lockruna_lockrunaapp",
@@ -23725,10 +25262,295 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
+      "source_location": "L8",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "iosapp_lockruna_lockrunaapp_appmodel",
+      "target": "bool",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
+      "source_location": "L7",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "iosapp_lockruna_lockrunaapp_appmodel",
+      "target": "date",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "iosapp_lockruna_lockrunaapp_appmodel",
+      "target": "iosapp_lockruna_lockrunaapp_appmodel_deinit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "iosapp_lockruna_lockrunaapp_appmodel",
+      "target": "iosapp_lockruna_lockrunaapp_appmodel_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
+      "source_location": "L6",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "iosapp_lockruna_lockrunaapp_appmodel",
+      "target": "iosapp_lockruna_lockrunaapp_swift_string",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
+      "source_location": "L17",
+      "weight": 1.0,
+      "context": "generic_arg",
+      "_origin": "ast",
+      "source": "iosapp_lockruna_lockrunaapp_appmodel",
+      "target": "never",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "iosapp_lockruna_lockrunaapp_appmodel",
+      "target": "observableobject",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
+      "source_location": "L14",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "iosapp_lockruna_lockrunaapp_appmodel",
+      "target": "presentationitemdetailstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
+      "source_location": "L15",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "iosapp_lockruna_lockrunaapp_appmodel",
+      "target": "presentationitemeditstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
+      "source_location": "L11",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "iosapp_lockruna_lockrunaapp_appmodel",
+      "target": "presentationloginstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
+      "source_location": "L10",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "iosapp_lockruna_lockrunaapp_appmodel",
+      "target": "presentationsessionstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
+      "source_location": "L12",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "iosapp_lockruna_lockrunaapp_appmodel",
+      "target": "presentationunlockstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
+      "source_location": "L13",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "iosapp_lockruna_lockrunaapp_appmodel",
+      "target": "presentationvaultliststore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
+      "source_location": "L17",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "iosapp_lockruna_lockrunaapp_appmodel",
+      "target": "task",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
+      "source_location": "L17",
+      "weight": 1.0,
+      "context": "generic_arg",
+      "_origin": "ast",
+      "source": "iosapp_lockruna_lockrunaapp_appmodel",
+      "target": "void",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
+      "source_location": "L42",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "iosapp_lockruna_lockrunaapp_lockrunaapp",
+      "target": "iosapp_lockruna_lockrunaapp_appmodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
+      "source_location": "L28",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "iosapp_lockruna_lockrunaapp_appmodel_init",
+      "target": "task",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "iosapp_lockruna_lockrunaapp_appmodel_init",
+      "target": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_itemdetailstore"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
+      "source_location": "L26",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "iosapp_lockruna_lockrunaapp_appmodel_init",
+      "target": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_itemeditstore"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "iosapp_lockruna_lockrunaapp_appmodel_init",
+      "target": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_loginstore"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "iosapp_lockruna_lockrunaapp_appmodel_init",
+      "target": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_sessionstore"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "iosapp_lockruna_lockrunaapp_appmodel_init",
+      "target": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_start"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "iosapp_lockruna_lockrunaapp_appmodel_init",
+      "target": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_unlockstore"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "iosApp/Lockruna/LockrunaApp.swift",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "iosapp_lockruna_lockrunaapp_appmodel_init",
+      "target": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_vaultliststore"
+    },
+    {
       "relation": "implements",
       "confidence": "EXTRACTED",
       "source_file": "iosApp/Lockruna/LockrunaApp.swift",
-      "source_location": "L3",
+      "source_location": "L40",
       "weight": 1.0,
       "_origin": "ast",
       "source": "iosapp_lockruna_lockrunaapp_lockrunaapp",
@@ -23739,7 +25561,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "iosApp/Lockruna/LockrunaApp.swift",
-      "source_location": "L5",
+      "source_location": "L44",
       "weight": 1.0,
       "context": "field",
       "_origin": "ast",
@@ -41951,6 +43773,29 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "shared/data/src/androidMain/kotlin/com/kwazzar/lockruna/data/di/PlatformModule.kt",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_di_platformmodule",
+      "target": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_di_platformmodule_platformmodule",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "shared/data/src/androidMain/kotlin/com/kwazzar/lockruna/data/di/PlatformModule.kt",
+      "source_location": "L5",
+      "weight": 1.0,
+      "context": "return_type",
+      "_origin": "ast",
+      "source": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_di_platformmodule_platformmodule",
+      "target": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_di_platformmodule_kt_module",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "shared/data/src/androidMain/kotlin/com/kwazzar/lockruna/data/platform/ActivityProvider.kt",
       "source_location": "L6",
       "weight": 1.0,
@@ -41979,7 +43824,7 @@
       "context": "return_type",
       "_origin": "ast",
       "source": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_platform_activityprovider_activityprovider_current",
-      "target": "fragmentactivity",
+      "target": "shared_data_src_androidmain_kotlin_com_kwazzar_lockruna_data_platform_activityprovider_kt_fragmentactivity",
       "confidence_score": 1.0
     },
     {
@@ -44960,6 +46805,18 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_start",
+      "target": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_di_authmodule_authmodule"
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "shared/data/src/commonMain/kotlin/com/kwazzar/lockruna/data/di/CoreModule.kt",
@@ -45043,6 +46900,41 @@
       "target": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_di_coremodule_coremodule"
     },
     {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_start",
+      "target": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_di_coremodule_coremodule"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "shared/data/src/commonMain/kotlin/com/kwazzar/lockruna/data/di/PlatformModule.kt",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_di_platformmodule",
+      "target": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_di_platformmodule_platformmodule",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "shared/data/src/commonMain/kotlin/com/kwazzar/lockruna/data/di/PlatformModule.kt",
+      "source_location": "L6",
+      "weight": 1.0,
+      "context": "return_type",
+      "_origin": "ast",
+      "source": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_di_platformmodule_platformmodule",
+      "target": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_di_platformmodule_kt_module",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "shared/data/src/commonMain/kotlin/com/kwazzar/lockruna/data/di/SyncModule.kt",
@@ -45099,6 +46991,18 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "shared_data_src_jvmtest_kotlin_com_kwazzar_lockruna_data_di_syncmoduletest_syncmoduletest_the_sync_graph_resolves",
+      "target": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_di_syncmodule_syncmodule"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L35",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_start",
       "target": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_di_syncmodule_syncmodule"
     },
     {
@@ -48245,6 +50149,41 @@
       "target": "shared_data_src_iosmain_kotlin_com_kwazzar_lockruna_data_platform_keychainsecurestorage_keychainsecurestorage"
     },
     {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "shared/data/src/iosMain/kotlin/com/kwazzar/lockruna/data/di/PlatformModule.kt",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "shared_data_src_iosmain_kotlin_com_kwazzar_lockruna_data_di_platformmodule_platformmodule",
+      "target": "shared_data_src_iosmain_kotlin_com_kwazzar_lockruna_data_di_iosplatformmodule_iosplatformmodule"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "shared/data/src/iosMain/kotlin/com/kwazzar/lockruna/data/di/PlatformModule.kt",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "shared_data_src_iosmain_kotlin_com_kwazzar_lockruna_data_di_platformmodule",
+      "target": "shared_data_src_iosmain_kotlin_com_kwazzar_lockruna_data_di_platformmodule_platformmodule",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "shared/data/src/iosMain/kotlin/com/kwazzar/lockruna/data/di/PlatformModule.kt",
+      "source_location": "L5",
+      "weight": 1.0,
+      "context": "return_type",
+      "_origin": "ast",
+      "source": "shared_data_src_iosmain_kotlin_com_kwazzar_lockruna_data_di_platformmodule_platformmodule",
+      "target": "shared_data_src_iosmain_kotlin_com_kwazzar_lockruna_data_di_platformmodule_kt_module",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "shared/data/src/iosMain/kotlin/com/kwazzar/lockruna/data/platform/IosBiometricVault.kt",
@@ -49264,6 +51203,29 @@
       "_origin": "ast",
       "source": "shared_data_src_jvmmain_kotlin_com_kwazzar_lockruna_data_db_databasedriverfactory_databasedriverfactory_create",
       "target": "shared_data_src_jvmmain_kotlin_com_kwazzar_lockruna_data_db_databasedriverfactory_kt_sqldriver",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "shared/data/src/jvmMain/kotlin/com/kwazzar/lockruna/data/di/PlatformModule.kt",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "shared_data_src_jvmmain_kotlin_com_kwazzar_lockruna_data_di_platformmodule",
+      "target": "shared_data_src_jvmmain_kotlin_com_kwazzar_lockruna_data_di_platformmodule_platformmodule",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "shared/data/src/jvmMain/kotlin/com/kwazzar/lockruna/data/di/PlatformModule.kt",
+      "source_location": "L5",
+      "weight": 1.0,
+      "context": "return_type",
+      "_origin": "ast",
+      "source": "shared_data_src_jvmmain_kotlin_com_kwazzar_lockruna_data_di_platformmodule_platformmodule",
+      "target": "shared_data_src_jvmmain_kotlin_com_kwazzar_lockruna_data_di_platformmodule_kt_module",
       "confidence_score": 1.0
     },
     {
@@ -55681,6 +57643,30 @@
     {
       "relation": "references",
       "confidence": "EXTRACTED",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L21",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios",
+      "target": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_auth_loginstore_loginstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L61",
+      "weight": 1.0,
+      "context": "return_type",
+      "_origin": "ast",
+      "source": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_loginstore",
+      "target": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_auth_loginstore_loginstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
       "source_file": "shared/presentation/src/commonMain/kotlin/com/kwazzar/lockruna/presentation/auth/LoginStore.kt",
       "source_location": "L30",
       "weight": 1.0,
@@ -55912,6 +57898,30 @@
       "_origin": "ast",
       "source": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_auth_unlockstore_unlockstore",
       "target": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_auth_unlockstore_unlockstore_unlockbypassword",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L22",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios",
+      "target": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_auth_unlockstore_unlockstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L62",
+      "weight": 1.0,
+      "context": "return_type",
+      "_origin": "ast",
+      "source": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_unlockstore",
+      "target": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_auth_unlockstore_unlockstore",
       "confidence_score": 1.0
     },
     {
@@ -56154,6 +58164,30 @@
     {
       "relation": "references",
       "confidence": "EXTRACTED",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L20",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios",
+      "target": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_session_sessionstore_sessionstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L60",
+      "weight": 1.0,
+      "context": "return_type",
+      "_origin": "ast",
+      "source": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_sessionstore",
+      "target": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_session_sessionstore_sessionstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
       "source_file": "shared/presentation/src/commonMain/kotlin/com/kwazzar/lockruna/presentation/session/SessionStore.kt",
       "source_location": "L43",
       "weight": 1.0,
@@ -56337,6 +58371,30 @@
       "_origin": "ast",
       "source": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_vault_itemdetailstore_itemdetailstore",
       "target": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_vault_itemdetailstore_itemdetailstore_reveal",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L24",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios",
+      "target": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_vault_itemdetailstore_itemdetailstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L64",
+      "weight": 1.0,
+      "context": "return_type",
+      "_origin": "ast",
+      "source": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_itemdetailstore",
+      "target": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_vault_itemdetailstore_itemdetailstore",
       "confidence_score": 1.0
     },
     {
@@ -56822,6 +58880,30 @@
       "target": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_vault_itemeditstore_itemeditstore"
     },
     {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L25",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios",
+      "target": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_vault_itemeditstore_itemeditstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L65",
+      "weight": 1.0,
+      "context": "return_type",
+      "_origin": "ast",
+      "source": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_itemeditstore",
+      "target": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_vault_itemeditstore_itemeditstore",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -57229,6 +59311,30 @@
       "_origin": "ast",
       "source": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_vault_vaultliststore_vaultliststore",
       "target": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_vault_vaultliststore_vaultliststore_updateitems",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L23",
+      "weight": 1.0,
+      "context": "field",
+      "_origin": "ast",
+      "source": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios",
+      "target": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_vault_vaultliststore_vaultliststore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L63",
+      "weight": 1.0,
+      "context": "return_type",
+      "_origin": "ast",
+      "source": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_vaultliststore",
+      "target": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_vault_vaultliststore_vaultliststore",
       "confidence_score": 1.0
     },
     {
@@ -59818,6 +61924,105 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios",
+      "target": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L64",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios",
+      "target": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_itemdetailstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L65",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios",
+      "target": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_itemeditstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L61",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios",
+      "target": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_loginstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L60",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios",
+      "target": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_sessionstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios",
+      "target": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_start",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L48",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios",
+      "target": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_stop",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L62",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios",
+      "target": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_unlockstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/ios/LockrunaIos.kt",
+      "source_location": "L63",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios",
+      "target": "shared_umbrella_src_commonmain_kotlin_com_kwazzar_lockruna_ios_lockrunaios_lockrunaios_vaultliststore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "shared/umbrella/src/commonMain/kotlin/com/kwazzar/lockruna/umbrella/SharedCore.kt",
       "source_location": "L9",
       "weight": 1.0,
@@ -62259,5 +64464,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "df4f0ee518130ff337064a49712e4e3b6d7a7295"
+  "built_at_commit": "860e07758563b502e2f746856c80cc4fb1979c78"
 }
