@@ -1,3 +1,5 @@
+@file:Suppress("FunctionNaming", "LongMethod")
+
 package com.kwazzar.lockruna.ui
 
 import androidx.compose.foundation.layout.Column
