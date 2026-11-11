@@ -1,7 +1,7 @@
-# Graph Report - client-presentation  (2026-11-10)
+# Graph Report - client-presentation  (2026-11-11)
 
 ## Corpus Check
-- 193 files · ~50,128 words
+- 193 files · ~50,138 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `6aef6a89`
+- Built from commit: `0ea9ebda`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -340,8 +340,8 @@ Cohesion: 0.19
 Nodes (4): IdentityApiTest, ByteArray, HttpResponse, JsonObject
 
 ### Community 79 - "PushChanges"
-Cohesion: 0.13
-Nodes (9): RefreshRequest, ByteArray, TokenFlowTest, bearer(), IdentityClient, json(), HttpResponse, JsonObject (+1 more)
+Cohesion: 0.21
+Nodes (3): ByteArray, TokenFlowTest, Timestamp
 
 ### Community 80 - "StoredResponse"
 Cohesion: 0.27
@@ -360,12 +360,12 @@ Cohesion: 0.22
 Nodes (3): DeviceDenylist, AutoCloseable, RedisDeviceDenylist
 
 ### Community 85 - "VaultListStoreTest"
-Cohesion: 0.23
-Nodes (9): AuthResponseDto, DeviceInfoDto, LoginRequest, PreloginRequest, PreloginResponse, RegisterRequest, TokenPairDto, ByteArray (+1 more)
+Cohesion: 0.17
+Nodes (13): AuthResponseDto, DeviceInfoDto, LoginRequest, PreloginRequest, PreloginResponse, RefreshRequest, RegisterRequest, TokenPairDto (+5 more)
 
 ### Community 88 - "installStatusPages"
-Cohesion: 0.24
-Nodes (4): DataSource, main(), module(), DeviceApiTest
+Cohesion: 0.19
+Nodes (6): DataSource, main(), module(), DeviceApiTest, json(), JsonObject
 
 ### Community 89 - "InMemoryVaultItemRepository"
 Cohesion: 0.11
