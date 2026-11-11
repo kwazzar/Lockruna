@@ -18,14 +18,17 @@ import com.kwazzar.lockruna.presentation.support.FakeClock
 import com.kwazzar.lockruna.presentation.support.FakeCryptoService
 import com.kwazzar.lockruna.presentation.support.FakePasswordNormalizer
 import com.kwazzar.lockruna.presentation.support.FakeSecureKeyStore
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.yield
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -127,12 +130,47 @@ class UnlockStoreTest {
         store.dispatch(UnlockIntent.EmailChanged("user@example.com"))
         store.dispatch(UnlockIntent.PasswordChanged(password))
         store.dispatch(UnlockIntent.SubmitPassword)
-        val effect = async(start = CoroutineStart.UNDISPATCHED) { store.effects.first() }
+        val effect = async(start = CoroutineStart.UNDISPATCHED) {
+            store.effects.first { it == UnlockEffect.BiometricsEnabled }
+        }
 
         store.dispatch(UnlockIntent.EnableBiometrics)
 
         assertEquals(UnlockEffect.BiometricsEnabled, effect.await())
         assertNotNull(secureKeyStore.storedKey)
+    }
+
+    @Test
+    fun `a wrong password reports invalid credentials instead of crashing`() = runTest {
+        authStateStore.saveSession(user())
+        normalizer.normalized = password
+        crypto.decryptGcmFails = true
+        store.dispatch(UnlockIntent.EmailChanged("user@example.com"))
+        store.dispatch(UnlockIntent.PasswordChanged(password))
+
+        store.dispatch(UnlockIntent.SubmitPassword)
+
+        assertEquals(AppError.InvalidCredentials, store.state.value.error)
+        assertFalse(store.state.value.isUnlocking)
+        assertEquals(VaultSession.State.Locked, session.state)
+    }
+
+    @Test
+    fun `enabling biometrics twice shows one system prompt`() = runTest {
+        authStateStore.saveSession(user())
+        normalizer.normalized = password
+        store.dispatch(UnlockIntent.EmailChanged("user@example.com"))
+        store.dispatch(UnlockIntent.PasswordChanged(password))
+        store.dispatch(UnlockIntent.SubmitPassword)
+        biometricGate.authenticateGate = CompletableDeferred()
+
+        val first = launch { store.dispatch(UnlockIntent.EnableBiometrics) }
+        yield()
+        store.dispatch(UnlockIntent.EnableBiometrics)
+        biometricGate.authenticateGate?.complete(Unit)
+        first.join()
+
+        assertEquals(1, biometricGate.authenticateCalls)
     }
 
     @Test

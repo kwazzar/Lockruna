@@ -72,6 +72,17 @@ class SessionStoreTest {
     }
 
     @Test
+    fun `a resume with no background timestamp keeps the just unlocked session`() = runTest {
+        session.unlock(VaultKey.from(ByteArray(32) { 1 }))
+        awaitLocked(false)
+
+        store.dispatch(SessionIntent.Resumed(backgroundedAtMonotonicMillis = null))
+
+        assertFalse(store.state.value.isLocked)
+        assertTrue(session.currentVaultKey() != null)
+    }
+
+    @Test
     fun `the lock intent locks the vault`() = runTest {
         session.unlock(VaultKey.from(ByteArray(32) { 1 }))
         awaitLocked(false)

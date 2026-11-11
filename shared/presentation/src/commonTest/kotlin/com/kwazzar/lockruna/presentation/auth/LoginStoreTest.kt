@@ -19,8 +19,9 @@ import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.yield
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -86,7 +87,7 @@ class LoginStoreTest {
         store.dispatch(LoginIntent.PasswordChanged(password))
 
         val first = launch { store.dispatch(LoginIntent.Submit) }
-        runCurrent()
+        yield()
         store.dispatch(LoginIntent.Submit)
         authApi.loginGate?.complete(Unit)
         first.join()
@@ -102,6 +103,19 @@ class LoginStoreTest {
         assertFalse(store.state.value.toString().contains(password))
         assertFalse(LoginIntent.PasswordChanged(password).toString().contains(password))
         assertTrue(store.state.value.hasPassword)
+    }
+
+    @Test
+    fun `an effect emitted before the screen subscribes is not lost`() = runTest {
+        authApi.loginResult = Result.Success(user())
+        normalizer.normalized = password
+        store.dispatch(LoginIntent.EmailChanged("user@example.com"))
+        store.dispatch(LoginIntent.PasswordChanged(password))
+
+        store.dispatch(LoginIntent.Submit)
+
+        val effect = withTimeout(1_000) { store.effects.first() }
+        assertEquals(LoginEffect.LoggedIn, effect)
     }
 
     @Test

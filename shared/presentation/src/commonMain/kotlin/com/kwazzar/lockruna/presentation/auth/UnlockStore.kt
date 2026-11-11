@@ -10,10 +10,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 
@@ -25,12 +26,12 @@ class UnlockStore(
 ) {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private val _state = MutableStateFlow(UnlockState())
-    private val _effects = MutableSharedFlow<UnlockEffect>(extraBufferCapacity = 0, replay = 0)
+    private val _effects = Channel<UnlockEffect>(Channel.BUFFERED)
     private var draftPassword: String = ""
     private val unlockMutex = Mutex()
 
     val state = _state.asStateFlow()
-    val effects = _effects.asSharedFlow()
+    val effects: Flow<UnlockEffect> = _effects.receiveAsFlow()
 
     init {
         scope.launch {
@@ -69,7 +70,7 @@ class UnlockStore(
                 is Result.Success -> {
                     draftPassword = ""
                     _state.value = _state.value.copy(isUnlocking = false, hasPassword = false)
-                    _effects.emit(UnlockEffect.Unlocked)
+                    _effects.send(UnlockEffect.Unlocked)
                 }
 
                 is Result.Failure -> {
@@ -90,7 +91,7 @@ class UnlockStore(
                 is Result.Success -> {
                     draftPassword = ""
                     _state.value = _state.value.copy(isUnlocking = false, hasPassword = false)
-                    _effects.emit(UnlockEffect.Unlocked)
+                    _effects.send(UnlockEffect.Unlocked)
                 }
 
                 is Result.Failure -> {
@@ -103,11 +104,16 @@ class UnlockStore(
     }
 
     private suspend fun enableBiometricsNow() {
-        _state.value = _state.value.copy(error = null)
-        val result = enableBiometrics(ENABLE_REASON)
-        when (result) {
-            is Result.Success -> _effects.emit(UnlockEffect.BiometricsEnabled)
-            is Result.Failure -> _state.value = _state.value.copy(error = result.error)
+        if (!unlockMutex.tryLock()) return
+        try {
+            _state.value = _state.value.copy(error = null)
+            val result = enableBiometrics(ENABLE_REASON)
+            when (result) {
+                is Result.Success -> _effects.send(UnlockEffect.BiometricsEnabled)
+                is Result.Failure -> _state.value = _state.value.copy(error = result.error)
+            }
+        } finally {
+            unlockMutex.unlock()
         }
     }
 

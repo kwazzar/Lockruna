@@ -87,10 +87,16 @@ class FakeAuthStateStore : AuthStateStore {
 class FakeBiometricGate : BiometricGate {
     var isAvailableResult = true
     var authenticateResult = true
+    var authenticateCalls = 0
+    var authenticateGate: CompletableDeferred<Unit>? = null
 
     override suspend fun isAvailable(): Boolean = isAvailableResult
 
-    override suspend fun authenticate(reason: String): Boolean = authenticateResult
+    override suspend fun authenticate(reason: String): Boolean {
+        authenticateCalls++
+        authenticateGate?.await()
+        return authenticateResult
+    }
 }
 
 class FakeSecureKeyStore : SecureKeyStore {

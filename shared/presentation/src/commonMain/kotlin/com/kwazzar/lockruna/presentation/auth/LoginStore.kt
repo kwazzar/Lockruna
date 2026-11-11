@@ -5,20 +5,21 @@ import com.kwazzar.lockruna.application.auth.Login
 import com.kwazzar.lockruna.domain.auth.DevicePlatform
 import com.kwazzar.lockruna.domain.core.Result
 import com.kwazzar.lockruna.domain.error.AppError
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.sync.Mutex
 
 class LoginStore(private val login: Login, private val platform: DevicePlatform) {
     private val _state = MutableStateFlow(LoginState())
-    private val _effects = MutableSharedFlow<LoginEffect>(extraBufferCapacity = 0, replay = 0)
+    private val _effects = Channel<LoginEffect>(Channel.BUFFERED)
     private var draftPassword: String = ""
     private val submitMutex = Mutex()
 
     val state = _state.asStateFlow()
-    val effects = _effects.asSharedFlow()
+    val effects: Flow<LoginEffect> = _effects.receiveAsFlow()
 
     /** The screen is gone: drop the draft password. The store starts no background work. */
     fun close() {
@@ -57,7 +58,7 @@ class LoginStore(private val login: Login, private val platform: DevicePlatform)
                 is Result.Success -> {
                     draftPassword = ""
                     _state.value = _state.value.copy(isSubmitting = false, hasPassword = false)
-                    _effects.emit(LoginEffect.LoggedIn)
+                    _effects.send(LoginEffect.LoggedIn)
                 }
 
                 is Result.Failure -> {

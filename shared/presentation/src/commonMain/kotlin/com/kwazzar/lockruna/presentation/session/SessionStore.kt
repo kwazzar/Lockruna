@@ -8,10 +8,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class SessionStore(
@@ -21,10 +22,10 @@ class SessionStore(
 ) {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private val _state = MutableStateFlow(SessionState())
-    private val _effects = MutableSharedFlow<SessionEffect>(extraBufferCapacity = 0, replay = 0)
+    private val _effects = Channel<SessionEffect>(Channel.BUFFERED)
 
     val state = _state.asStateFlow()
-    val effects = _effects.asSharedFlow()
+    val effects: Flow<SessionEffect> = _effects.receiveAsFlow()
 
     init {
         scope.launch {
@@ -43,12 +44,13 @@ class SessionStore(
         when (intent) {
             SessionIntent.Lock -> {
                 lockVault()
-                _effects.emit(SessionEffect.Locked)
+                _effects.send(SessionEffect.Locked)
             }
 
             is SessionIntent.Resumed -> {
-                if (applyAutoLockPolicy(intent.backgroundedAtMonotonicMillis)) {
-                    _effects.emit(SessionEffect.Locked)
+                val backgroundedAt = intent.backgroundedAtMonotonicMillis ?: return
+                if (applyAutoLockPolicy(backgroundedAt)) {
+                    _effects.send(SessionEffect.Locked)
                 }
             }
         }
@@ -60,7 +62,8 @@ data class SessionState(val isLocked: Boolean = true)
 sealed interface SessionIntent {
     data object Lock : SessionIntent
 
-    data class Resumed(val backgroundedAtMonotonicMillis: Long) : SessionIntent
+    /** [backgroundedAtMonotonicMillis] is null when the app was never in the background. */
+    data class Resumed(val backgroundedAtMonotonicMillis: Long?) : SessionIntent
 }
 
 sealed interface SessionEffect {
