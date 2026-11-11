@@ -220,8 +220,8 @@
     "semantic_hash": ""
   },
   "docs/adr/003-cryptography.md": {
-    "mtime": 1794318767.1886222,
-    "ast_hash": "12ca099e68661e208ab169ead9a88753",
+    "mtime": 1794385708.2654107,
+    "ast_hash": "dde795985c3c04fe55def77f2321f963",
     "semantic_hash": ""
   },
   "docs/adr/004-backend.md": {
@@ -710,8 +710,8 @@
     "semantic_hash": ""
   },
   "server/src/test/kotlin/com/kwazzar/lockruna/server/support/PostgresTest.kt": {
-    "mtime": 1794252050.1796682,
-    "ast_hash": "806cf0670f7defe666e53c332832a953",
+    "mtime": 1794372626.7486134,
+    "ast_hash": "249c4067919e72b7ea4ecc6034d4b860",
     "semantic_hash": ""
   },
   "server/src/test/kotlin/com/kwazzar/lockruna/server/support/SyncClient.kt": {
@@ -770,8 +770,8 @@
     "semantic_hash": ""
   },
   "shared/application/src/commonTest/kotlin/com/kwazzar/lockruna/application/support/FakeCryptoService.kt": {
-    "mtime": 1794318767.1966743,
-    "ast_hash": "d5c7427c7ab21e301207fd655f1ba0dd",
+    "mtime": 1794385708.2681463,
+    "ast_hash": "8af35f75537adb3ea19187d77376caa8",
     "semantic_hash": ""
   },
   "shared/application/src/commonTest/kotlin/com/kwazzar/lockruna/application/support/SupportFakesTest.kt": {
@@ -780,8 +780,8 @@
     "semantic_hash": ""
   },
   "shared/application/src/commonTest/kotlin/com/kwazzar/lockruna/application/support/TestFakes.kt": {
-    "mtime": 1794368082.3110387,
-    "ast_hash": "36d5a382e0e930e0352a1155557d11f4",
+    "mtime": 1794385708.268463,
+    "ast_hash": "388169cd46e99b6362eec4c0ec88ed32",
     "semantic_hash": ""
   },
   "shared/application/src/commonTest/kotlin/com/kwazzar/lockruna/application/vault/VaultCycleTest.kt": {
@@ -910,13 +910,13 @@
     "semantic_hash": ""
   },
   "shared/application/src/commonMain/kotlin/com/kwazzar/lockruna/application/auth/KeyDerivation.kt": {
-    "mtime": 1794365547.2901962,
-    "ast_hash": "f45e2bb3bc47d2d784b15c3124e28787",
+    "mtime": 1794385708.2662604,
+    "ast_hash": "bbd25fe38560fdef477df7d851dc4628",
     "semantic_hash": ""
   },
   "shared/application/src/commonMain/kotlin/com/kwazzar/lockruna/application/auth/Login.kt": {
-    "mtime": 1794318767.192511,
-    "ast_hash": "bac104c0fc140059b3dc911f8ddc39aa",
+    "mtime": 1794385708.266588,
+    "ast_hash": "06fd72c592c3811741a3006edc15f8f0",
     "semantic_hash": ""
   },
   "shared/application/src/commonMain/kotlin/com/kwazzar/lockruna/application/auth/Logout.kt": {
@@ -925,8 +925,8 @@
     "semantic_hash": ""
   },
   "shared/application/src/commonMain/kotlin/com/kwazzar/lockruna/application/auth/Register.kt": {
-    "mtime": 1794365547.2905984,
-    "ast_hash": "348b2e4e5a0f3ed45d6458b6dcbffd85",
+    "mtime": 1794385708.2668233,
+    "ast_hash": "c59df1e6eca08b9ce4a78fed1ec25119",
     "semantic_hash": ""
   },
   "shared/application/src/commonMain/kotlin/com/kwazzar/lockruna/application/auth/UnlockWithBiometrics.kt": {
@@ -935,8 +935,8 @@
     "semantic_hash": ""
   },
   "shared/application/src/commonMain/kotlin/com/kwazzar/lockruna/application/auth/UnlockWithPassword.kt": {
-    "mtime": 1794318767.1938975,
-    "ast_hash": "d2490bec691788c945396d3b2e92b66a",
+    "mtime": 1794385708.2670577,
+    "ast_hash": "a6bda07b463dd59db96c4c9c0dd50977",
     "semantic_hash": ""
   },
   "shared/application/src/commonMain/kotlin/com/kwazzar/lockruna/application/sync/SyncNow.kt": {
@@ -955,8 +955,8 @@
     "semantic_hash": ""
   },
   "shared/application/src/commonTest/kotlin/com/kwazzar/lockruna/application/auth/LoginTest.kt": {
-    "mtime": 1794365547.2914379,
-    "ast_hash": "ba20cb5bc73c4f83a1fd437857e9ca2e",
+    "mtime": 1794385708.2679842,
+    "ast_hash": "f9aa4add47c34df630d3ebb5ac7278be",
     "semantic_hash": ""
   },
   "shared/application/src/commonTest/kotlin/com/kwazzar/lockruna/application/auth/RegisterTest.kt": {
@@ -1010,8 +1010,8 @@
     "semantic_hash": ""
   },
   "shared/data/src/commonMain/kotlin/com/kwazzar/lockruna/data/di/AuthModule.kt": {
-    "mtime": 1794347550.0790133,
-    "ast_hash": "8c056954f25758f739c6a5f6fe46ba1d",
+    "mtime": 1794385708.268691,
+    "ast_hash": "946caa4f97cb1cc19dc44d76531575d9",
     "semantic_hash": ""
   },
   "shared/data/src/commonMain/kotlin/com/kwazzar/lockruna/data/di/SyncModule.kt": {
@@ -1115,8 +1115,8 @@
     "semantic_hash": ""
   },
   "architecture-tests/src/test/kotlin/com/kwazzar/lockruna/architecture/PresentationLayerTest.kt": {
-    "mtime": 1794360504.0863633,
-    "ast_hash": "805ade264149319d5badf9ceb6d39354",
+    "mtime": 1794385708.2650099,
+    "ast_hash": "c78076f946b0a1dba3a62eaa40812162",
     "semantic_hash": ""
   },
   "shared/application/src/commonMain/kotlin/com/kwazzar/lockruna/application/session/ObserveVaultState.kt": {
@@ -1150,8 +1150,8 @@
     "semantic_hash": ""
   },
   "shared/presentation/src/commonMain/kotlin/com/kwazzar/lockruna/presentation/di/PresentationModule.kt": {
-    "mtime": 1794360504.108746,
-    "ast_hash": "5be2b8386f2a6bf1784991a4c35bdc7b",
+    "mtime": 1794385708.2703884,
+    "ast_hash": "b1814be356d54c41e811b217296909da",
     "semantic_hash": ""
   },
   "shared/presentation/src/commonMain/kotlin/com/kwazzar/lockruna/presentation/vault/ItemDetailStore.kt": {
@@ -1175,13 +1175,13 @@
     "semantic_hash": ""
   },
   "shared/presentation/src/commonTest/kotlin/com/kwazzar/lockruna/presentation/di/PresentationModuleTest.kt": {
-    "mtime": 1794360504.112402,
-    "ast_hash": "2556a7a1bd934c65b23121fe5230a62a",
+    "mtime": 1794385708.2719865,
+    "ast_hash": "4cdfd0092d09c3713bb943490e26c141",
     "semantic_hash": ""
   },
   "shared/presentation/src/commonTest/kotlin/com/kwazzar/lockruna/presentation/support/TestSupport.kt": {
-    "mtime": 1794360504.1127129,
-    "ast_hash": "a6946ecd82ff3cd46a50d493d846f3d1",
+    "mtime": 1794385708.272495,
+    "ast_hash": "2e7a96606973f92c90afb2a37b0521d3",
     "semantic_hash": ""
   },
   "shared/presentation/src/commonTest/kotlin/com/kwazzar/lockruna/presentation/vault/InMemoryVaultItemRepository.kt": {
@@ -1222,6 +1222,81 @@
   "shared/data/src/iosMain/kotlin/com/kwazzar/lockruna/data/auth/AuthApiFactory.kt": {
     "mtime": 1794366205.3867114,
     "ast_hash": "d113d7ced749768249e259a62de70651",
+    "semantic_hash": ""
+  },
+  "shared/application/src/commonMain/kotlin/com/kwazzar/lockruna/application/auth/HasStoredSession.kt": {
+    "mtime": 1794385708.265937,
+    "ast_hash": "2ce3754804bc50f6bad50ef01ae0e38d",
+    "semantic_hash": ""
+  },
+  "shared/application/src/commonTest/kotlin/com/kwazzar/lockruna/application/auth/HasStoredSessionTest.kt": {
+    "mtime": 1794385708.267767,
+    "ast_hash": "3253d48651365818bed359f16e5f9fc9",
+    "semantic_hash": ""
+  },
+  "shared/domain/src/commonMain/kotlin/com/kwazzar/lockruna/domain/auth/Email.kt": {
+    "mtime": 1794385708.2688138,
+    "ast_hash": "1192188af9dd6941b4c56be75c49ad5c",
+    "semantic_hash": ""
+  },
+  "shared/presentation/src/commonMain/kotlin/com/kwazzar/lockruna/presentation/app/AppScreen.kt": {
+    "mtime": 1794385708.2691538,
+    "ast_hash": "c4a2a8750116ca508d5cb1614004a0b7",
+    "semantic_hash": ""
+  },
+  "shared/presentation/src/commonMain/kotlin/com/kwazzar/lockruna/presentation/auth/LoginStore.kt": {
+    "mtime": 1794385708.2693672,
+    "ast_hash": "07ec96a5699768922b4b870a72334b5c",
+    "semantic_hash": ""
+  },
+  "shared/presentation/src/commonMain/kotlin/com/kwazzar/lockruna/presentation/auth/UnlockStore.kt": {
+    "mtime": 1794385708.2695653,
+    "ast_hash": "7358e00bb3dfbfa131011941fc73e8b5",
+    "semantic_hash": ""
+  },
+  "shared/presentation/src/commonMain/kotlin/com/kwazzar/lockruna/presentation/session/SessionStore.kt": {
+    "mtime": 1794385708.270556,
+    "ast_hash": "24c10a1b19e0f672ea72b8d38ec7daea",
+    "semantic_hash": ""
+  },
+  "shared/presentation/src/commonTest/kotlin/com/kwazzar/lockruna/presentation/app/AppScreenTest.kt": {
+    "mtime": 1794385708.2707825,
+    "ast_hash": "f6c894af40725d3c8e1da4ae4d32043f",
+    "semantic_hash": ""
+  },
+  "shared/presentation/src/commonTest/kotlin/com/kwazzar/lockruna/presentation/auth/LoginStoreTest.kt": {
+    "mtime": 1794385708.2717183,
+    "ast_hash": "3e4e8ade8e57c89385136af5aad5da34",
+    "semantic_hash": ""
+  },
+  "shared/presentation/src/commonTest/kotlin/com/kwazzar/lockruna/presentation/auth/UnlockStoreTest.kt": {
+    "mtime": 1794385708.2718427,
+    "ast_hash": "d118dd0e27784d43235d3fc4d0bbd0dc",
+    "semantic_hash": ""
+  },
+  "shared/presentation/src/commonTest/kotlin/com/kwazzar/lockruna/presentation/session/SessionStoreTest.kt": {
+    "mtime": 1794385708.2721417,
+    "ast_hash": "e3f87c85903d105d1ef377b8eca811b6",
+    "semantic_hash": ""
+  },
+  "shared/presentation/src/commonTest/kotlin/com/kwazzar/lockruna/presentation/support/AuthTestSupport.kt": {
+    "mtime": 1794385708.2722769,
+    "ast_hash": "0c9afafab70a4abed4e2bf8f3bc35c45",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-11-11-client-auth-session-presentation.md": {
+    "mtime": 1794385708.2657359,
+    "ast_hash": "98b4d1b1220352fa1529981578bfe27a",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-11-11-native-platform-layer.md": {
+    "mtime": 1794371396.2018273,
+    "ast_hash": "262eeb75210e3643d0849db9e1b8a665",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-11-11-native-ui.md": {
+    "mtime": 1794371396.2021654,
+    "ast_hash": "3269ec6213a4e7910290389779479a5a",
     "semantic_hash": ""
   }
 }

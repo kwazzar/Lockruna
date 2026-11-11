@@ -26,13 +26,19 @@ internal object KeyDerivation {
     fun kek(masterKey: ByteArray, crypto: CryptoService): ByteArray =
         crypto.hkdfSha256(masterKey, null, HkdfLabels.KEK, HKDF_OUTPUT_LENGTH)
 
-    fun unwrapVaultKey(kek: ByteArray, blob: ByteArray, aadEmail: String, crypto: CryptoService): ByteArray {
+    /**
+     * Returns null when the GCM tag check fails — the key, the blob or the AAD do not match.
+     * The caller maps that to invalid credentials; the failure must not escape as an exception.
+     */
+    fun unwrapVaultKey(kek: ByteArray, blob: ByteArray, aadEmail: String, crypto: CryptoService): ByteArray? = try {
         val sealed = SealedBlob.unpack(blob)
         val ciphertext = GcmCiphertext(
             ciphertext = sealed.payload.copyOfRange(0, sealed.payload.size - 16),
             nonce = sealed.nonce,
             tag = sealed.payload.copyOfRange(sealed.payload.size - 16, sealed.payload.size),
         )
-        return crypto.decryptGcm(kek, ciphertext, aadEmail.encodeToByteArray())
+        crypto.decryptGcm(kek, ciphertext, aadEmail.encodeToByteArray())
+    } catch (_: IllegalArgumentException) {
+        null
     }
 }
