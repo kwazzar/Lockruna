@@ -158,5 +158,21 @@
   "156": ".invoke",
   "157": "FakeBiometricPolicyStore",
   "158": "WeakPasswordReason",
-  "159": "HasStoredSession"
+  "159": "HasStoredSession",
+  "160": "AccessTokenClaims",
+  "161": "StoredResponse",
+  "162": "JwtTokenService",
+  "163": ".graph",
+  "164": "from",
+  "165": "InMemoryVaultItemRepository",
+  "166": "authModule",
+  "167": "Argon2Libsodium",
+  "168": "AuthTestSupport.kt",
+  "169": "FakeBiometricPolicyStore",
+  "170": ".resolveDevice",
+  "171": "PlatformNormalizer",
+  "172": "PreloginUser",
+  "173": ".invoke",
+  "174": "HasStoredSessionTest",
+  "175": ".createUser"
 }

@@ -100,8 +100,8 @@
     "semantic_hash": ""
   },
   "shared/data/build.gradle.kts": {
-    "mtime": 1794347550.0782235,
-    "ast_hash": "6ada6178aaeda372f5b1675f87d0feed",
+    "mtime": 1794417262.2907407,
+    "ast_hash": "55a6994b8631aa8f8d562239a5a37d94",
     "semantic_hash": ""
   },
   "shared/data/src/androidMain/kotlin/com/kwazzar/lockruna/data/db/DatabaseDriverFactory.kt": {
@@ -1010,13 +1010,13 @@
     "semantic_hash": ""
   },
   "shared/data/src/commonMain/kotlin/com/kwazzar/lockruna/data/di/AuthModule.kt": {
-    "mtime": 1794385708.268691,
-    "ast_hash": "946caa4f97cb1cc19dc44d76531575d9",
+    "mtime": 1794417262.295068,
+    "ast_hash": "618a86034469e3fea0f7a8dc8417e9f6",
     "semantic_hash": ""
   },
   "shared/data/src/commonMain/kotlin/com/kwazzar/lockruna/data/di/SyncModule.kt": {
-    "mtime": 1794347550.0795057,
-    "ast_hash": "8de17234f9716b1c5edea740bcd2d3ff",
+    "mtime": 1794417262.295662,
+    "ast_hash": "41386753a8b27ca28a30286557c3a96e",
     "semantic_hash": ""
   },
   "shared/data/src/commonMain/kotlin/com/kwazzar/lockruna/data/sync/KtorSyncApi.kt": {
@@ -1055,8 +1055,8 @@
     "semantic_hash": ""
   },
   "shared/data/src/jvmTest/kotlin/com/kwazzar/lockruna/data/di/SyncModuleTest.kt": {
-    "mtime": 1794347550.083986,
-    "ast_hash": "d98043f14015459a62cc7fe735b04336",
+    "mtime": 1794417262.3036559,
+    "ast_hash": "70ba7e1277be8ef9a184fc06b91f9bbf",
     "semantic_hash": ""
   },
   "shared/data/src/jvmTest/kotlin/com/kwazzar/lockruna/data/sync/SqlDelightSyncStoreTest.kt": {
@@ -1297,6 +1297,111 @@
   "docs/superpowers/plans/2026-11-11-native-ui.md": {
     "mtime": 1794371396.2021654,
     "ast_hash": "3269ec6213a4e7910290389779479a5a",
+    "semantic_hash": ""
+  },
+  "shared/data/src/androidMain/kotlin/com/kwazzar/lockruna/data/di/AndroidPlatformModule.kt": {
+    "mtime": 1794417262.2912734,
+    "ast_hash": "a1ebf14b62c009cba813dd5dbe882aaf",
+    "semantic_hash": ""
+  },
+  "shared/data/src/androidMain/kotlin/com/kwazzar/lockruna/data/platform/ActivityProvider.kt": {
+    "mtime": 1794417262.2916448,
+    "ast_hash": "821918e155bb800ae5acef7deaa071fa",
+    "semantic_hash": ""
+  },
+  "shared/data/src/androidMain/kotlin/com/kwazzar/lockruna/data/platform/AndroidBiometricVault.kt": {
+    "mtime": 1794417262.2927608,
+    "ast_hash": "969c886aa288d044cdc2791295e698e0",
+    "semantic_hash": ""
+  },
+  "shared/data/src/androidMain/kotlin/com/kwazzar/lockruna/data/platform/AndroidClipboard.kt": {
+    "mtime": 1794417262.2930055,
+    "ast_hash": "304615ced31780cda4061ebd8db82707",
+    "semantic_hash": ""
+  },
+  "shared/data/src/androidMain/kotlin/com/kwazzar/lockruna/data/platform/KeystoreSecureStorage.kt": {
+    "mtime": 1794417262.2932255,
+    "ast_hash": "1742bc3f3a0cbb19223870bd68bc8d01",
+    "semantic_hash": ""
+  },
+  "shared/data/src/androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt": {
+    "mtime": 1794417262.2936728,
+    "ast_hash": "d822664c1320ad7888a41bbe7744d39a",
+    "semantic_hash": ""
+  },
+  "shared/data/src/commonMain/kotlin/com/kwazzar/lockruna/data/auth/AuthSessionCodec.kt": {
+    "mtime": 1794417262.294152,
+    "ast_hash": "f194a702cef2c47d51ad952f5b957a35",
+    "semantic_hash": ""
+  },
+  "shared/data/src/commonMain/kotlin/com/kwazzar/lockruna/data/auth/SecureAuthStateStore.kt": {
+    "mtime": 1794417262.294564,
+    "ast_hash": "37bbe9c29feb11e8f7dd477dc4ddb78a",
+    "semantic_hash": ""
+  },
+  "shared/data/src/commonMain/kotlin/com/kwazzar/lockruna/data/di/CoreModule.kt": {
+    "mtime": 1794417262.2953537,
+    "ast_hash": "0fd11d345e0a778b6c9ff9b8abc0d2a9",
+    "semantic_hash": ""
+  },
+  "shared/data/src/commonMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt": {
+    "mtime": 1794417262.2961297,
+    "ast_hash": "2470fd3cd6e57b00c9141881646259db",
+    "semantic_hash": ""
+  },
+  "shared/data/src/commonMain/kotlin/com/kwazzar/lockruna/data/platform/SecureStorage.kt": {
+    "mtime": 1794417262.2964072,
+    "ast_hash": "dfaaf1dbb4c2be018e91f5da5fb20660",
+    "semantic_hash": ""
+  },
+  "shared/data/src/commonTest/kotlin/com/kwazzar/lockruna/data/auth/SecureAuthStateStoreTest.kt": {
+    "mtime": 1794417262.2968657,
+    "ast_hash": "0ab76657727d82f85706a951ea04e8bf",
+    "semantic_hash": ""
+  },
+  "shared/data/src/commonTest/kotlin/com/kwazzar/lockruna/data/platform/InMemorySecureStorage.kt": {
+    "mtime": 1794417262.2977057,
+    "ast_hash": "597f14621d675839e5343be1e2cebb9b",
+    "semantic_hash": ""
+  },
+  "shared/data/src/iosMain/kotlin/com/kwazzar/lockruna/data/di/IosPlatformModule.kt": {
+    "mtime": 1794417262.2985642,
+    "ast_hash": "b6c399e0e7e9bcf8929ee61939d6a3fb",
+    "semantic_hash": ""
+  },
+  "shared/data/src/iosMain/kotlin/com/kwazzar/lockruna/data/platform/IosBiometricVault.kt": {
+    "mtime": 1794417262.299127,
+    "ast_hash": "072463375060bcdc53a5a91722e07783",
+    "semantic_hash": ""
+  },
+  "shared/data/src/iosMain/kotlin/com/kwazzar/lockruna/data/platform/IosClipboard.kt": {
+    "mtime": 1794417262.29952,
+    "ast_hash": "3220b7f6523f9a640d59de5cb4eb1100",
+    "semantic_hash": ""
+  },
+  "shared/data/src/iosMain/kotlin/com/kwazzar/lockruna/data/platform/KeychainSecureStorage.kt": {
+    "mtime": 1794417262.3006701,
+    "ast_hash": "cffc91a350c3247a736e3b4fa9dd8405",
+    "semantic_hash": ""
+  },
+  "shared/data/src/iosMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt": {
+    "mtime": 1794417262.3011076,
+    "ast_hash": "bddb88bab00c811c67a49d0021d28ca3",
+    "semantic_hash": ""
+  },
+  "shared/data/src/iosTest/kotlin/com/kwazzar/lockruna/data/platform/KeychainSecureStorageTest.kt": {
+    "mtime": 1794417262.3018563,
+    "ast_hash": "263f9a75b93df5764db9d04906787aa7",
+    "semantic_hash": ""
+  },
+  "shared/data/src/jvmMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt": {
+    "mtime": 1794417262.3022032,
+    "ast_hash": "cba398d0665871faeb301c51fffae73a",
+    "semantic_hash": ""
+  },
+  "shared/data/src/jvmTest/kotlin/com/kwazzar/lockruna/data/di/CoreModuleTest.kt": {
+    "mtime": 1794417262.302864,
+    "ast_hash": "727785058385974a243af43251143a8e",
     "semantic_hash": ""
   }
 }
