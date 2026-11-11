@@ -8,6 +8,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import android.os.SystemClock
 import com.kwazzar.lockruna.domain.auth.AuthStateStore
 import com.kwazzar.lockruna.presentation.app.AppScreen
 import com.kwazzar.lockruna.presentation.app.startScreen
@@ -34,6 +38,22 @@ fun AppRoot() {
     var route by remember { mutableStateOf("list") }
     var selectedId by remember { mutableStateOf<String?>(null) }
 
+    val lifecycleOwner = LocalLifecycleOwner.current
+    var backgroundedAt by remember { mutableStateOf<Long?>(null) }
+    LaunchedEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_STOP -> backgroundedAt = SystemClock.elapsedRealtime()
+                Lifecycle.Event.ON_START -> {
+                    val ts = backgroundedAt
+                    backgroundedAt = null
+                    kotlinx.coroutines.runBlocking { sessionStore.dispatch(com.kwazzar.lockruna.presentation.session.SessionIntent.Resumed(ts)) }
+                }
+                else -> {}
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+    }
     LaunchedEffect(Unit) {
         val hasSession = authStateStore.loadSession() != null
         screen = startScreen(isLocked = true, hasSession = hasSession)
