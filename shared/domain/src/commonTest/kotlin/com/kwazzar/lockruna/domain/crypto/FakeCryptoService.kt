@@ -11,4 +11,6 @@ class FakeCryptoService : CryptoService {
         ciphertext.ciphertext
 
     override fun randomBytes(size: Int): ByteArray = ByteArray(size)
+
+    override fun sha256(input: ByteArray): ByteArray = ByteArray(32)
 }

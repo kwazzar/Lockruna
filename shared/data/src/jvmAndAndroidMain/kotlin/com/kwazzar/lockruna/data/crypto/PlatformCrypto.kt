@@ -62,4 +62,12 @@ actual class PlatformCrypto actual constructor() : CryptoService {
     }
 
     actual override fun randomBytes(size: Int): ByteArray = ByteArray(size).also(secureRandom::nextBytes)
+
+    actual override fun sha256(input: ByteArray): ByteArray {
+        val digest = SHA256Digest()
+        digest.update(input, 0, input.size)
+        val out = ByteArray(digest.digestSize)
+        digest.doFinal(out, 0)
+        return out
+    }
 }

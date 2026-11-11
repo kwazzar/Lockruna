@@ -10,6 +10,7 @@ expect class PlatformCrypto() : CryptoService {
     override fun encryptGcm(key: ByteArray, plaintext: ByteArray, aad: ByteArray): GcmCiphertext
     override fun decryptGcm(key: ByteArray, ciphertext: GcmCiphertext, aad: ByteArray): ByteArray
     override fun randomBytes(size: Int): ByteArray
+    override fun sha256(input: ByteArray): ByteArray
 }
 
 expect class PlatformNormalizer() : PasswordNormalizer {

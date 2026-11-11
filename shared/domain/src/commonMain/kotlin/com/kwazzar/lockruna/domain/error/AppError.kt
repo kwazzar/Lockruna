@@ -24,6 +24,9 @@ sealed interface AppError {
 
     data object ClipboardUnavailable : AppError
 
+    /** A recovery key does not decode: wrong word count, unknown word or bad checksum. */
+    data class InvalidRecoveryKey(val reason: String) : AppError
+
     data class InvalidItem(val reason: String) : AppError
 
     data class WeakKdfParams(val actual: String) : AppError

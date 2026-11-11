@@ -119,4 +119,21 @@ class CryptoServiceTest {
             crypto.decryptGcm(key, encrypted.copy(tag = tamperedTag), aad)
         }
     }
+
+    @Test
+    fun `sha256 matches the reference vectors`() {
+        assertEquals(32, crypto.sha256(ByteArray(0)).size)
+        assertEquals(
+            "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            crypto.sha256(ByteArray(0)).toHex(),
+        )
+        assertEquals(
+            "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+            crypto.sha256("abc".encodeToByteArray()).toHex(),
+        )
+        assertEquals(
+            "cdc76e5c9914fb9281a1c7e284d73e67f1809a48a497200e046d39ccc7112cd0",
+            crypto.sha256(ByteArray(1_000_000) { 'a'.code.toByte() }).toHex(),
+        )
+    }
 }

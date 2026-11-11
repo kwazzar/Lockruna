@@ -55,6 +55,8 @@ class FakeCryptoService : CryptoService {
     override fun randomBytes(size: Int): ByteArray = ByteArray(size) { i -> ((randomCounter + i) * 31 + 7).toByte() }
         .also { randomCounter += size }
 
+    override fun sha256(input: ByteArray): ByteArray = ByteArray(32)
+
     // The nonce derives from the AAD, so a decrypt with the wrong AAD is detected byte for byte.
     private fun nonceFrom(aad: ByteArray): ByteArray = ByteArray(FAKE_NONCE_SIZE) { i -> aad[i % aad.size] }
 

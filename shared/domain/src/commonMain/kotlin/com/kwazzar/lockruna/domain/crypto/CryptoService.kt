@@ -27,4 +27,7 @@ interface CryptoService {
     fun encryptGcm(key: ByteArray, plaintext: ByteArray, aad: ByteArray): GcmCiphertext
     fun decryptGcm(key: ByteArray, ciphertext: GcmCiphertext, aad: ByteArray): ByteArray
     fun randomBytes(size: Int): ByteArray
+
+    /** SHA-256 digest (32 bytes). Used for BIP39 checksum only. */
+    fun sha256(input: ByteArray): ByteArray
 }

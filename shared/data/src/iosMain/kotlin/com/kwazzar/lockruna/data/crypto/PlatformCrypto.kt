@@ -8,6 +8,7 @@ import kotlinx.cinterop.addressOf
 import kotlinx.cinterop.usePinned
 import libsodium.crypto_aead_aes256gcm_decrypt
 import libsodium.crypto_aead_aes256gcm_encrypt
+import libsodium.crypto_hash_sha256
 import libsodium.crypto_kdf_hkdf_sha256_expand
 import libsodium.crypto_kdf_hkdf_sha256_extract
 import libsodium.randombytes_buf
@@ -124,5 +125,16 @@ actual class PlatformCrypto actual constructor() : CryptoService {
             randombytes_buf(pointer, size.toULong())
         }
         return bytes
+    }
+
+    actual override fun sha256(input: ByteArray): ByteArray {
+        val out = ByteArray(32)
+        val rc = withCBytes(input) { inPointer ->
+            out.asUByteArray().usePinned { outPinned ->
+                crypto_hash_sha256(outPinned.addressOf(0), inPointer, input.size.toULong())
+            }
+        }
+        check(rc == 0) { "crypto_hash_sha256 failed" }
+        return out
     }
 }
