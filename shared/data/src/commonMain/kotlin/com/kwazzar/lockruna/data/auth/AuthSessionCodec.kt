@@ -3,8 +3,8 @@ package com.kwazzar.lockruna.data.auth
 import com.kwazzar.lockruna.domain.auth.AuthTokens
 import com.kwazzar.lockruna.domain.auth.AuthenticatedUser
 import com.kwazzar.lockruna.domain.crypto.KdfParams
-import kotlinx.serialization.SerializationException
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import kotlin.io.encoding.Base64
 
@@ -13,8 +13,7 @@ internal object AuthSessionCodec {
 
     private val json = Json { ignoreUnknownKeys = true }
 
-    fun encode(user: AuthenticatedUser): ByteArray =
-        json.encodeToString(SessionRecord.from(user)).encodeToByteArray()
+    fun encode(user: AuthenticatedUser): ByteArray = json.encodeToString(SessionRecord.from(user)).encodeToByteArray()
 
     /** Returns null for anything that is not a record this build understands. */
     fun decode(bytes: ByteArray): AuthenticatedUser? = try {
