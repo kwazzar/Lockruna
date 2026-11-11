@@ -3,7 +3,7 @@ package com.kwazzar.lockruna.presentation.app
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class AppGateTest {
+class AppScreenTest {
 
     @Test
     fun `a locked vault with a stored session asks for the unlock screen`() {

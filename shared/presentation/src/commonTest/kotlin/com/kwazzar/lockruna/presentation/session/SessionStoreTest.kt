@@ -11,9 +11,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
-import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -27,7 +27,11 @@ class SessionStoreTest {
     private val store = SessionStore(
         observeVaultState = ObserveVaultState(session),
         lockVault = LockVault(session),
-        applyAutoLockPolicy = ApplyAutoLockPolicy(session, clock, com.kwazzar.lockruna.domain.session.AutoLockPolicy.ONE_MINUTE),
+        applyAutoLockPolicy = ApplyAutoLockPolicy(
+            session,
+            clock,
+            com.kwazzar.lockruna.domain.session.AutoLockPolicy.ONE_MINUTE,
+        ),
     )
 
     @Test

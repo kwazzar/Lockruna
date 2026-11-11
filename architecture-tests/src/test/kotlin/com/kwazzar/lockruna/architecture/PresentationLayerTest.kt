@@ -101,4 +101,24 @@ class PresentationLayerTest {
             )
         }
     }
+
+    @Test
+    fun `state never names a secret property`() {
+        val forbiddenNames = listOf("password", "secret", "vaultkey")
+        val states = scope.classesAndInterfacesAndObjects().filter { declaration ->
+            declaration.name.endsWith("State") && declaration.projectPath.contains("/presentation/")
+        }
+
+        assertTrue(states.isNotEmpty(), "presentation states were not found")
+        states.forEach { state ->
+            val forbiddenProperties = state.properties()
+                .map { property -> property.name }
+                .filter { name -> forbiddenNames.any { it.equals(name, ignoreCase = true) } }
+
+            assertTrue(
+                forbiddenProperties.isEmpty(),
+                "presentation state ${state.projectPath} holds secret properties: $forbiddenProperties",
+            )
+        }
+    }
 }

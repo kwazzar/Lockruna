@@ -11,10 +11,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.sync.Mutex
 
-class LoginStore(
-    private val login: Login,
-    private val platform: DevicePlatform,
-) {
+class LoginStore(private val login: Login, private val platform: DevicePlatform) {
     private val _state = MutableStateFlow(LoginState())
     private val _effects = MutableSharedFlow<LoginEffect>(extraBufferCapacity = 0, replay = 0)
     private var draftPassword: String = ""
