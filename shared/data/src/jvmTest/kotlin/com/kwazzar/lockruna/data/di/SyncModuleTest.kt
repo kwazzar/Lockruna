@@ -41,14 +41,16 @@ class SyncModuleTest {
                 syncModule(
                     httpClient = HttpClient(MockEngine { error("no request expected") }),
                     baseUrl = "https://api.test",
-                    accessTokenProvider = object : AccessTokenProvider {
-                        override suspend fun token(): String? = "token"
-                    },
                 ),
                 module {
                     single { database }
                     single<IdGenerator> { TestIdGenerator }
                     single<Clock> { FakeClock() }
+                    single<AccessTokenProvider> {
+                        object : AccessTokenProvider {
+                            override suspend fun token(): String? = "token"
+                        }
+                    }
                 },
             )
         }
