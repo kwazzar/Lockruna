@@ -17,7 +17,7 @@ object PostgresTest {
     }
 
     val dataSource: HikariDataSource by lazy {
-        val url = System.getenv("TEST_DATABASE_URL") ?: container.jdbcUrl
+        val url = System.getenv("TEST_DATABASE_URL") ?: container.apply { start() }.jdbcUrl
         val user = System.getenv("TEST_DATABASE_USER") ?: container.username
         val password = System.getenv("TEST_DATABASE_PASSWORD") ?: container.password
         DatabaseFactory.createDataSource(url, user, password)
