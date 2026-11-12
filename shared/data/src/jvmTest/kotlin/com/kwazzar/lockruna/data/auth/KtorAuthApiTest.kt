@@ -13,12 +13,6 @@ import kotlin.test.assertNull
 private val <T, E> Result<T, E>.isSuccess: Boolean
     get() = this is Result.Success
 
-private val <T, E> Result<T, E>.isFailure: Boolean
-    get() = this is Result.Failure
-
-private val <T, E> Result<T, E>.error: E?
-    get() = if (this is Result.Failure) this.error else null
-
 class InMemoryAuthStateStoreTest {
 
     private val store = InMemoryAuthStateStore()
@@ -29,7 +23,6 @@ class InMemoryAuthStateStoreTest {
             userId = "user-1",
             deviceId = "device-1",
             wrappedVaultKey = SealedBlob.pack(ByteArray(12), ByteArray(32)),
-            keyNonce = ByteArray(12),
             kdfSalt = ByteArray(16),
             kdfParams = KdfParams.SUPPORTED,
             tokens = AuthTokens("access", "refresh", 3600),
@@ -54,7 +47,6 @@ class SessionAccessTokenProviderTest {
             userId = "user-1",
             deviceId = "device-1",
             wrappedVaultKey = SealedBlob.pack(ByteArray(12), ByteArray(32)),
-            keyNonce = ByteArray(12),
             kdfSalt = ByteArray(16),
             kdfParams = KdfParams.SUPPORTED,
             tokens = AuthTokens("access-token", "refresh-token", 3600),

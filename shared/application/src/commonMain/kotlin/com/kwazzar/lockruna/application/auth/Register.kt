@@ -7,6 +7,7 @@ import com.kwazzar.lockruna.domain.auth.SealedBlob
 import com.kwazzar.lockruna.domain.auth.canonicalEmail
 import com.kwazzar.lockruna.domain.core.Result
 import com.kwazzar.lockruna.domain.crypto.CryptoService
+import com.kwazzar.lockruna.domain.crypto.Bip39
 import com.kwazzar.lockruna.domain.crypto.HkdfLabels
 import com.kwazzar.lockruna.domain.crypto.KdfParams
 import com.kwazzar.lockruna.domain.error.AppError
@@ -14,9 +15,19 @@ import com.kwazzar.lockruna.domain.session.IdGenerator
 import com.kwazzar.lockruna.domain.session.VaultKey
 import com.kwazzar.lockruna.domain.session.VaultSession
 
-data class RegisterCommand(val email: String, val password: String, val deviceName: String, val deviceId: String?)
+data class RegisterCommand(
+    val email: String,
+    val password: String,
+    val deviceName: String,
+    val deviceId: String?,
+    val platform: DevicePlatform,
+) {
+    override fun toString(): String =
+        "RegisterCommand(email=$email, deviceName=$deviceName, deviceId=$deviceId, platform=$platform)"
+}
 
-data class RegisterOutcome(val recoveryKey: ByteArray)
+/** The recovery key as 12 BIP39 words; the user confirms them by typing them back (US-01, US-03). */
+data class RegisterOutcome(val recoveryWords: List<String>)
 
 class Register(
     private val authApi: com.kwazzar.lockruna.domain.auth.AuthApi,
@@ -60,7 +71,7 @@ class Register(
         val device = DeviceIdentity(
             deviceId = command.deviceId ?: idGenerator.newUuid(),
             name = command.deviceName,
-            platform = DevicePlatform.ANDROID,
+            platform = command.platform,
         )
 
         val registerResult = authApi.register(
@@ -85,7 +96,7 @@ class Register(
         authStateStore.saveSession(user)
         session.unlock(VaultKey.from(unwrappedVaultKey))
 
-        return Result.Success(RegisterOutcome(recoveryKey))
+        return Result.Success(RegisterOutcome(Bip39.encode(recoveryKey, crypto)))
     }
 
     private fun wrapKey(key: ByteArray, plaintext: ByteArray, aad: ByteArray, crypto: CryptoService): ByteArray {

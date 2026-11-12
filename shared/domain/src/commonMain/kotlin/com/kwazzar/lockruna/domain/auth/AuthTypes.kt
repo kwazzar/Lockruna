@@ -13,7 +13,6 @@ data class AuthenticatedUser(
     val userId: String,
     val deviceId: String,
     val wrappedVaultKey: ByteArray,
-    val keyNonce: ByteArray,
     val kdfSalt: ByteArray,
     val kdfParams: DomainKdfParams,
     val tokens: AuthTokens,

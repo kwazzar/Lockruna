@@ -8,8 +8,10 @@ import com.kwazzar.lockruna.application.support.FakeIdGenerator
 import com.kwazzar.lockruna.application.support.FakePasswordNormalizer
 import com.kwazzar.lockruna.domain.auth.AuthTokens
 import com.kwazzar.lockruna.domain.auth.AuthenticatedUser
+import com.kwazzar.lockruna.domain.auth.DevicePlatform
 import com.kwazzar.lockruna.domain.auth.SealedBlob
 import com.kwazzar.lockruna.domain.core.Result
+import com.kwazzar.lockruna.domain.crypto.Bip39
 import com.kwazzar.lockruna.domain.crypto.GcmCiphertext
 import com.kwazzar.lockruna.domain.crypto.HkdfLabels
 import com.kwazzar.lockruna.domain.crypto.KdfParams
@@ -17,6 +19,7 @@ import com.kwazzar.lockruna.domain.error.AppError
 import com.kwazzar.lockruna.domain.session.VaultSession
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
+import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
@@ -72,7 +75,6 @@ class RegisterTest {
             userId = "user-1",
             deviceId = "device-1",
             wrappedVaultKey = wrappedVaultKey,
-            keyNonce = ByteArray(12),
             kdfSalt = salt,
             kdfParams = KdfParams.SUPPORTED,
             tokens = AuthTokens("access-token", "refresh-token", 3600),
@@ -91,7 +93,7 @@ class RegisterTest {
     }
 
     @Test
-    fun successfulRegisterUnlocksSessionAndReturnsRecoveryKey() = runBlocking {
+    fun successfulRegisterUnlocksSessionAndReturnsRecoveryWords() = runBlocking {
         val register = setupSuccessfulRegister()
 
         val result = register(
@@ -100,6 +102,7 @@ class RegisterTest {
                 password = "password1234",
                 deviceName = "Test Device",
                 deviceId = "device-1",
+                platform = DevicePlatform.ANDROID,
             ),
         )
 
@@ -108,9 +111,30 @@ class RegisterTest {
             is Result.Success -> result.value
             is Result.Failure -> throw AssertionError("Expected success but got failure: ${result.error}")
         }
-        assertEquals(16, outcome.recoveryKey.size)
+        // 12 BIP39 words that decode back into the exact 16 bytes the account was sealed with.
+        assertEquals(12, outcome.recoveryWords.size)
+        val decoded = Bip39.decode(outcome.recoveryWords, crypto)
+        assertTrue(decoded is Result.Success)
+        assertContentEquals(ByteArray(16) { 6 }, (decoded as Result.Success).value)
         assertNotNull(session.currentVaultKey())
         assertEquals(ByteArray(32) { 5 }.contentToString(), session.currentVaultKey()!!.bytes.contentToString())
+    }
+
+    @Test
+    fun theDeviceRecordsThePlatformItRunsOn() = runBlocking {
+        val register = setupSuccessfulRegister()
+
+        register(
+            RegisterCommand(
+                email = "user@example.com",
+                password = "password1234",
+                deviceName = "Test Device",
+                deviceId = null,
+                platform = DevicePlatform.IOS,
+            ),
+        )
+
+        assertEquals(DevicePlatform.IOS, authApi.lastRegisterDevice?.platform)
     }
 
     @Test
@@ -140,6 +164,7 @@ class RegisterTest {
                 password = "short", // Too short
                 deviceName = "Test Device",
                 deviceId = "device-1",
+                platform = DevicePlatform.ANDROID,
             ),
         )
 
@@ -193,6 +218,7 @@ class RegisterTest {
                 password = password,
                 deviceName = "Test Device",
                 deviceId = "device-1",
+                platform = DevicePlatform.ANDROID,
             ),
         )
 

@@ -16,6 +16,7 @@ import com.kwazzar.lockruna.domain.crypto.Argon2
 import com.kwazzar.lockruna.domain.crypto.CryptoService
 import com.kwazzar.lockruna.domain.crypto.PasswordNormalizer
 import com.kwazzar.lockruna.domain.session.AutoLockPolicy
+import com.kwazzar.lockruna.domain.session.AutoLockSettingsStore
 import com.kwazzar.lockruna.domain.session.BiometricGate
 import com.kwazzar.lockruna.domain.session.Clock
 import com.kwazzar.lockruna.domain.session.IdGenerator
@@ -103,7 +104,13 @@ class PresentationModuleTest {
         single { Login(get(), get(), get(), get(), get(), get()) }
         single { UnlockWithPassword(get(), get(), get(), get(), get()) }
         single { UnlockWithBiometrics(get(), get(), get(), get(), get()) }
-        single { EnableBiometrics(get(), get(), get()) }
+        single { EnableBiometrics(get(), get(), get(), get(), get()) }
+        single<AutoLockSettingsStore> {
+            object : AutoLockSettingsStore {
+                override suspend fun load(): AutoLockPolicy = AutoLockPolicy.ONE_MINUTE
+                override suspend fun save(policy: AutoLockPolicy) = Unit
+            }
+        }
         single { ObserveVaultState(get()) }
         single { LockVault(get()) }
         single { ApplyAutoLockPolicy(get(), get(), get()) }

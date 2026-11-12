@@ -18,5 +18,8 @@ data class AutoLockPolicy(val timeoutMillis: Long) {
         val ONE_MINUTE = AutoLockPolicy(ONE_MINUTE_MILLIS)
         val FIVE_MINUTES = AutoLockPolicy(FIVE_MINUTES_MILLIS)
         val FIFTEEN_MINUTES = AutoLockPolicy(FIFTEEN_MINUTES_MILLIS)
+
+        /** The choices the settings screen offers (US-08). */
+        val ALL = listOf(IMMEDIATE, ONE_MINUTE, FIVE_MINUTES, FIFTEEN_MINUTES)
     }
 }

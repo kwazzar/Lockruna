@@ -3,6 +3,8 @@ package com.kwazzar.lockruna.presentation.session
 import com.kwazzar.lockruna.application.session.ApplyAutoLockPolicy
 import com.kwazzar.lockruna.application.session.LockVault
 import com.kwazzar.lockruna.application.session.ObserveVaultState
+import com.kwazzar.lockruna.domain.session.AutoLockPolicy
+import com.kwazzar.lockruna.domain.session.AutoLockSettingsStore
 import com.kwazzar.lockruna.domain.session.VaultKey
 import com.kwazzar.lockruna.domain.session.VaultSession
 import com.kwazzar.lockruna.presentation.support.FakeClock
@@ -30,7 +32,10 @@ class SessionStoreTest {
         applyAutoLockPolicy = ApplyAutoLockPolicy(
             session,
             clock,
-            com.kwazzar.lockruna.domain.session.AutoLockPolicy.ONE_MINUTE,
+            object : AutoLockSettingsStore {
+                override suspend fun load(): AutoLockPolicy = AutoLockPolicy.ONE_MINUTE
+                override suspend fun save(policy: AutoLockPolicy) = Unit
+            },
         ),
     )
 

@@ -134,7 +134,6 @@ class LoginStoreTest {
         userId = "user-1",
         deviceId = "device-1",
         wrappedVaultKey = SealedBlob.pack(ByteArray(12), vaultKey + ByteArray(16)),
-        keyNonce = ByteArray(12),
         kdfSalt = ByteArray(16),
         kdfParams = KdfParams.SUPPORTED,
         tokens = AuthTokens("access", "refresh", 3600),

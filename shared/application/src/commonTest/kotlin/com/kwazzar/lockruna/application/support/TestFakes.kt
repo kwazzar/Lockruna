@@ -84,6 +84,7 @@ class FakeAuthApi(
 ) : AuthApi {
     var lastPreloginEmail: String? = null
     var lastRegisterEmail: String? = null
+    var lastRegisterDevice: DeviceIdentity? = null
     var lastLoginEmail: String? = null
     var lastLoginDevice: DeviceIdentity? = null
 
@@ -103,6 +104,7 @@ class FakeAuthApi(
         device: DeviceIdentity,
     ): Result<AuthenticatedUser, AppError> {
         lastRegisterEmail = email
+        lastRegisterDevice = device
         return registerResult ?: Result.Failure(AppError.InvalidCredentials)
     }
 

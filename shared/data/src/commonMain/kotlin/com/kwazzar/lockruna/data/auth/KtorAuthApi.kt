@@ -1,5 +1,14 @@
 package com.kwazzar.lockruna.data.auth
 
+import com.kwazzar.lockruna.contract.AuthResponseDto
+import com.kwazzar.lockruna.contract.DeviceInfoDto
+import com.kwazzar.lockruna.contract.KdfParamsDto
+import com.kwazzar.lockruna.contract.LoginRequest
+import com.kwazzar.lockruna.contract.PreloginRequest
+import com.kwazzar.lockruna.contract.PreloginResponse
+import com.kwazzar.lockruna.contract.RefreshRequest
+import com.kwazzar.lockruna.contract.RegisterRequest
+import com.kwazzar.lockruna.contract.TokenPairDto
 import com.kwazzar.lockruna.domain.auth.AuthApi
 import com.kwazzar.lockruna.domain.auth.AuthTokens
 import com.kwazzar.lockruna.domain.auth.AuthenticatedUser
@@ -15,12 +24,20 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
+/**
+ * The auth endpoints of the server. Bytes travel as Base64, exactly as `openapi.yaml` says.
+ */
+@OptIn(ExperimentalEncodingApi::class)
 class KtorAuthApi(private val httpClient: HttpClient, private val baseUrl: String) : AuthApi {
 
     private val client: HttpClient = HttpClient(httpClient.engine) {
@@ -34,22 +51,16 @@ class KtorAuthApi(private val httpClient: HttpClient, private val baseUrl: Strin
             header(HttpHeaders.ContentType, ContentType.Application.Json)
             setBody(PreloginRequest(email))
         }
+        if (!response.status.isSuccess()) return response.toFailure()
         val dto = response.body<PreloginResponse>()
         Result.Success(
             PreLoginData(
-                kdfSalt = dto.kdfSalt.hexToByteArray(),
-                kdfParams = KdfParams(
-                    alg = dto.kdfParams.alg,
-                    memoryKiB = dto.kdfParams.memoryKiB,
-                    iterations = dto.kdfParams.iterations,
-                    parallelism = dto.kdfParams.parallelism,
-                    saltLength = dto.kdfParams.saltLength,
-                    outputLength = dto.kdfParams.outputLength,
-                ),
+                kdfSalt = Base64.decode(dto.kdfSalt),
+                kdfParams = dto.kdfParams.toDomain(),
             ),
         )
     } catch (e: Exception) {
-        return handleException(e)
+        handleException(e)
     }
 
     override suspend fun register(
@@ -67,34 +78,23 @@ class KtorAuthApi(private val httpClient: HttpClient, private val baseUrl: Strin
             setBody(
                 RegisterRequest(
                     email = email,
-                    authKey = authKey.hex(),
-                    recoveryAuthKey = recoveryAuthKey.hex(),
-                    kdfSalt = kdfSalt.hex(),
-                    kdfParams = KdfParamsDto(
-                        alg = kdfParams.alg,
-                        memoryKiB = kdfParams.memoryKiB,
-                        iterations = kdfParams.iterations,
-                        parallelism = kdfParams.parallelism,
-                        saltLength = kdfParams.saltLength,
-                        outputLength = kdfParams.outputLength,
-                    ),
-                    wrappedVaultKey = wrappedVaultKey.hex(),
-                    recoveryWrappedVaultKey = recoveryWrappedVaultKey.hex(),
-                    device = DeviceDto(
-                        deviceId = device.deviceId ?: "",
-                        name = device.name,
-                        platform = when (device.platform) {
-                            DevicePlatform.IOS -> "ios"
-                            DevicePlatform.ANDROID -> "android"
-                        },
-                    ),
+                    authKey = Base64.encode(authKey),
+                    recoveryAuthKey = Base64.encode(recoveryAuthKey),
+                    kdfSalt = Base64.encode(kdfSalt),
+                    kdfParams = kdfParams.toDto(),
+                    wrappedVaultKey = Base64.encode(wrappedVaultKey),
+                    recoveryWrappedVaultKey = Base64.encode(recoveryWrappedVaultKey),
+                    device = device.toDto(),
                 ),
             )
         }
-        val dto = response.body<AuthResponse>()
-        Result.Success(toAuthenticatedUser(dto))
+        if (response.status == HttpStatusCode.Conflict) {
+            return Result.Failure(AppError.EmailAlreadyRegistered)
+        }
+        if (!response.status.isSuccess()) return response.toFailure()
+        Result.Success(response.body<AuthResponseDto>().toDomain())
     } catch (e: Exception) {
-        return handleException(e)
+        handleException(e)
     }
 
     override suspend fun login(
@@ -107,22 +107,15 @@ class KtorAuthApi(private val httpClient: HttpClient, private val baseUrl: Strin
             setBody(
                 LoginRequest(
                     email = email,
-                    authKey = authKey.hex(),
-                    device = DeviceDto(
-                        deviceId = device.deviceId ?: "",
-                        name = device.name,
-                        platform = when (device.platform) {
-                            DevicePlatform.IOS -> "ios"
-                            DevicePlatform.ANDROID -> "android"
-                        },
-                    ),
+                    authKey = Base64.encode(authKey),
+                    device = device.toDto(),
                 ),
             )
         }
-        val dto = response.body<AuthResponse>()
-        Result.Success(toAuthenticatedUser(dto))
+        if (!response.status.isSuccess()) return response.toFailure()
+        Result.Success(response.body<AuthResponseDto>().toDomain())
     } catch (e: Exception) {
-        return handleException(e)
+        handleException(e)
     }
 
     override suspend fun refresh(refreshToken: String): Result<AuthTokens, AppError> = try {
@@ -130,105 +123,64 @@ class KtorAuthApi(private val httpClient: HttpClient, private val baseUrl: Strin
             header(HttpHeaders.ContentType, ContentType.Application.Json)
             setBody(RefreshRequest(refreshToken))
         }
-        val dto = response.body<TokenPairResponse>()
-        Result.Success(AuthTokens(dto.accessToken, dto.refreshToken, dto.expiresInSeconds))
+        if (!response.status.isSuccess()) return response.toFailure()
+        val dto = response.body<TokenPairDto>()
+        Result.Success(AuthTokens(dto.accessToken, dto.refreshToken, dto.expiresIn))
     } catch (e: Exception) {
-        return handleException(e)
+        handleException(e)
     }
 
     override suspend fun logout(): Result<Unit, AppError> = try {
-        client.post("$baseUrl/auth/logout") {
+        val response = client.post("$baseUrl/auth/logout") {
             header(HttpHeaders.ContentType, ContentType.Application.Json)
         }
+        if (!response.status.isSuccess()) return response.toFailure()
         Result.Success(Unit)
     } catch (e: Exception) {
-        return handleException(e)
+        handleException(e)
     }
-
-    private fun toAuthenticatedUser(dto: AuthResponse): AuthenticatedUser = AuthenticatedUser(
-        userId = dto.userId,
-        deviceId = dto.deviceId,
-        wrappedVaultKey = dto.wrappedVaultKey.hexToByteArray(),
-        keyNonce = dto.keyNonce.hexToByteArray(),
-        kdfSalt = dto.kdfSalt.hexToByteArray(),
-        kdfParams = KdfParams(
-            alg = dto.kdfParams.alg,
-            memoryKiB = dto.kdfParams.memoryKiB,
-            iterations = dto.kdfParams.iterations,
-            parallelism = dto.kdfParams.parallelism,
-            saltLength = dto.kdfParams.saltLength,
-            outputLength = dto.kdfParams.outputLength,
-        ),
-        tokens = AuthTokens(dto.accessToken, dto.refreshToken, dto.expiresInSeconds),
-    )
-
-    private fun <T> handleException(exception: Exception): Result<T, AppError> =
-        Result.Failure(AppError.NetworkUnavailable)
 }
 
-@Serializable
-data class PreloginRequest(val email: String)
-
-@Serializable
-data class PreloginResponse(val kdfSalt: String, val kdfParams: KdfParamsDto)
-
-@Serializable
-data class RegisterRequest(
-    val email: String,
-    val authKey: String,
-    val recoveryAuthKey: String,
-    val kdfSalt: String,
-    val kdfParams: KdfParamsDto,
-    val wrappedVaultKey: String,
-    val recoveryWrappedVaultKey: String,
-    val device: DeviceDto,
+internal fun DeviceIdentity.toDto() = DeviceInfoDto(
+    deviceId = deviceId ?: "",
+    name = name,
+    platform = when (platform) {
+        DevicePlatform.IOS -> "ios"
+        DevicePlatform.ANDROID -> "android"
+    },
 )
 
-@Serializable
-data class LoginRequest(val email: String, val authKey: String, val device: DeviceDto)
-
-@Serializable
-data class RefreshRequest(val refreshToken: String)
-
-@Serializable
-data class AuthResponse(
-    val userId: String,
-    val deviceId: String,
-    val wrappedVaultKey: String,
-    val keyNonce: String,
-    val kdfSalt: String,
-    val kdfParams: KdfParamsDto,
-    val accessToken: String,
-    val refreshToken: String,
-    val expiresInSeconds: Int,
+internal fun KdfParams.toDto() = KdfParamsDto(
+    alg = alg,
+    memoryKiB = memoryKiB,
+    iterations = iterations,
+    parallelism = parallelism,
 )
 
-@Serializable
-data class TokenPairResponse(val accessToken: String, val refreshToken: String, val expiresInSeconds: Int)
-
-@Serializable
-data class KdfParamsDto(
-    val alg: String,
-    val memoryKiB: Int,
-    val iterations: Int,
-    val parallelism: Int,
-    val saltLength: Int,
-    val outputLength: Int,
+internal fun KdfParamsDto.toDomain() = KdfParams(
+    alg = alg,
+    memoryKiB = memoryKiB,
+    iterations = iterations,
+    parallelism = parallelism,
 )
 
-@Serializable
-data class DeviceDto(val deviceId: String, val name: String, val platform: String)
+@OptIn(ExperimentalEncodingApi::class)
+internal fun AuthResponseDto.toDomain() = AuthenticatedUser(
+    userId = userId,
+    deviceId = deviceId,
+    wrappedVaultKey = Base64.decode(wrappedVaultKey),
+    kdfSalt = Base64.decode(kdfSalt),
+    kdfParams = kdfParams.toDomain(),
+    tokens = AuthTokens(accessToken, refreshToken, expiresIn),
+)
 
-private const val HEX_CHUNK_SIZE = 2
-private const val HEX_RADIX = 16
-private const val HEX_DIGITS = "0123456789abcdef"
-private const val HEX_NIBBLE_SHIFT = 4
-
-private fun String.hexToByteArray(): ByteArray =
-    chunked(HEX_CHUNK_SIZE).map { it.toInt(HEX_RADIX).toByte() }.toByteArray()
-
-/** Lowercase hex, two digits per byte — matches the previous `String.format("%02x")` output. */
-private fun ByteArray.hex(): String = joinToString("") { byte ->
-    val value = byte.toInt() and 0xFF
-    "${HEX_DIGITS[value shr HEX_NIBBLE_SHIFT]}${HEX_DIGITS[value and 0x0F]}"
+/** Maps an HTTP failure to the error the domain understands. */
+internal fun HttpResponse.toFailure(): Result<Nothing, AppError> = when (status) {
+    HttpStatusCode.Unauthorized -> Result.Failure(AppError.InvalidCredentials)
+    HttpStatusCode.Conflict -> Result.Failure(AppError.EmailAlreadyRegistered)
+    HttpStatusCode.TooManyRequests -> Result.Failure(AppError.RateLimited(retryAfterSeconds = 60))
+    else -> Result.Failure(AppError.NetworkUnavailable)
 }
+
+private fun <T> handleException(exception: Exception): Result<T, AppError> =
+    Result.Failure(AppError.NetworkUnavailable)

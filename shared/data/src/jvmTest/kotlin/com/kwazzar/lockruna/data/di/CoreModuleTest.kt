@@ -9,11 +9,13 @@ import com.kwazzar.lockruna.data.db.PassKeeperDatabase
 import com.kwazzar.lockruna.domain.core.Result
 import com.kwazzar.lockruna.domain.error.AppError
 import com.kwazzar.lockruna.domain.session.AutoLockPolicy
+import com.kwazzar.lockruna.domain.session.AutoLockSettingsStore
 import com.kwazzar.lockruna.domain.session.Clock
 import com.kwazzar.lockruna.domain.session.VaultKey
 import com.kwazzar.lockruna.domain.session.VaultSession
 import com.kwazzar.lockruna.domain.vault.Clipboard
 import com.kwazzar.lockruna.domain.vault.VaultItemRepository
+import kotlinx.coroutines.test.runTest
 import org.koin.core.KoinApplication
 import org.koin.dsl.koinApplication
 import org.koin.dsl.module
@@ -26,7 +28,7 @@ import kotlin.test.assertTrue
 class CoreModuleTest {
 
     @Test
-    fun `the core graph resolves`() {
+    fun `the core graph resolves`() = runTest {
         val application = graph(AutoLockPolicy.ONE_MINUTE)
 
         try {
@@ -42,7 +44,7 @@ class CoreModuleTest {
     }
 
     @Test
-    fun `the auto lock policy is the one the module was given`() {
+    fun `the auto lock policy is the one the settings store holds`() = runTest {
         val immediate = graph(AutoLockPolicy.IMMEDIATE)
         val oneMinute = graph(AutoLockPolicy.ONE_MINUTE)
 
@@ -69,10 +71,17 @@ class CoreModuleTest {
         val database = PassKeeperDatabase(driver)
         return koinApplication {
             modules(
-                coreModule(autoLockPolicy = autoLockPolicy),
+                coreModule(),
                 module {
                     single { database }
                     single<Clipboard> { FakeClipboard() }
+                    // The platform module owns this binding in the real apps.
+                    single<AutoLockSettingsStore> {
+                        object : AutoLockSettingsStore {
+                            override suspend fun load(): AutoLockPolicy = autoLockPolicy
+                            override suspend fun save(policy: AutoLockPolicy) = Unit
+                        }
+                    }
                 },
             )
         }

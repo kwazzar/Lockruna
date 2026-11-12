@@ -21,7 +21,6 @@ class SecureAuthStateStoreTest {
         userId = "user-$suffix",
         deviceId = "device-$suffix",
         wrappedVaultKey = byteArrayOf(0x11, 0x22, 0x33, 0x44, 0x55),
-        keyNonce = byteArrayOf(0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C),
         kdfSalt = byteArrayOf(0x21, 0x22, 0x23, 0x24),
         kdfParams = KdfParams(memoryKiB = 65536, iterations = 3, parallelism = 1),
         tokens = AuthTokens(accessToken = "access-$suffix", refreshToken = "refresh-$suffix", expiresInSeconds = 900),
@@ -38,7 +37,6 @@ class SecureAuthStateStoreTest {
         assertEquals(user.userId, loaded?.userId)
         assertEquals(user.deviceId, loaded?.deviceId)
         assertContentEquals(user.wrappedVaultKey, loaded?.wrappedVaultKey)
-        assertContentEquals(user.keyNonce, loaded?.keyNonce)
         assertContentEquals(user.kdfSalt, loaded?.kdfSalt)
         assertEquals(user.kdfParams, loaded?.kdfParams)
         assertEquals(user.tokens, loaded?.tokens)

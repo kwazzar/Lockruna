@@ -21,7 +21,6 @@ import com.kwazzar.lockruna.data.platform.platformIdGenerator
 import com.kwazzar.lockruna.domain.crypto.Argon2
 import com.kwazzar.lockruna.domain.crypto.CryptoService
 import com.kwazzar.lockruna.domain.crypto.PasswordNormalizer
-import com.kwazzar.lockruna.domain.session.AutoLockPolicy
 import com.kwazzar.lockruna.domain.session.Clock
 import com.kwazzar.lockruna.domain.session.IdGenerator
 import com.kwazzar.lockruna.domain.session.VaultSession
@@ -32,7 +31,7 @@ import org.koin.dsl.module
  * Koin bindings of the client core: clock, ids, crypto, the local database and the vault use cases.
  * The platform module owns the driver factory, the clipboard and the secure storages.
  */
-fun coreModule(autoLockPolicy: AutoLockPolicy = AutoLockPolicy.ONE_MINUTE) = module {
+fun coreModule() = module {
     single<Clock> { platformClock() }
     single<IdGenerator> { platformIdGenerator() }
     single { VaultSession() }
@@ -52,5 +51,5 @@ fun coreModule(autoLockPolicy: AutoLockPolicy = AutoLockPolicy.ONE_MINUTE) = mod
     single { CopySecret(get(), get()) }
     single { ObserveVaultState(get()) }
     single { LockVault(get()) }
-    single { ApplyAutoLockPolicy(get(), get(), autoLockPolicy) }
+    single { ApplyAutoLockPolicy(get(), get(), get()) }
 }

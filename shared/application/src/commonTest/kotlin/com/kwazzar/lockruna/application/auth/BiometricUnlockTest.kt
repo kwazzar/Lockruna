@@ -27,14 +27,16 @@ class EnableBiometricsTest {
 
     private val biometricGate = FakeBiometricGate()
     private val secureKeyStore = FakeSecureKeyStore()
+    private val policyStore = FakeBiometricPolicyStore()
     private val session = VaultSession()
+    private val clock = FakeClock(wallMillis = 1_700_000_000_000L)
 
     @Test
     fun biometricsUnavailableWhenGateNotAvailable() {
         runBlocking {
             biometricGate.isAvailableResult = false
 
-            val enable = EnableBiometrics(biometricGate, secureKeyStore, session)
+            val enable = enable()
             val result = enable("reason")
 
             assertTrue(result.isFailure)
@@ -47,7 +49,7 @@ class EnableBiometricsTest {
         runBlocking {
             biometricGate.authenticateResult = false
 
-            val enable = EnableBiometrics(biometricGate, secureKeyStore, session)
+            val enable = enable()
             val result = enable("reason")
 
             assertTrue(result.isFailure)
@@ -61,7 +63,7 @@ class EnableBiometricsTest {
             biometricGate.isAvailableResult = true
             biometricGate.authenticateResult = true
 
-            val enable = EnableBiometrics(biometricGate, secureKeyStore, session)
+            val enable = enable()
             val result = enable("reason")
 
             assertTrue(result.isFailure)
@@ -76,13 +78,32 @@ class EnableBiometricsTest {
             biometricGate.authenticateResult = true
             session.unlock(VaultKey.from(ByteArray(32)))
 
-            val enable = EnableBiometrics(biometricGate, secureKeyStore, session)
+            val enable = enable()
             val result = enable("reason")
 
             assertTrue(result.isSuccess)
             assertNotNull(secureKeyStore.storedKey)
         }
     }
+
+    @Test
+    fun enablingRecordsTheUnlockSoTheFirstBiometricUnlockPassesTheGate() {
+        runBlocking {
+            biometricGate.isAvailableResult = true
+            biometricGate.authenticateResult = true
+            session.unlock(VaultKey.from(ByteArray(32)))
+
+            val enable = enable()
+            val result = enable("reason")
+
+            assertTrue(result.isSuccess)
+            // Without this the very first biometric unlock fails before the user ever tried it.
+            assertEquals(clock.nowMillis(), policyStore.lastSuccessfulUnlock())
+            assertEquals(0, policyStore.failures())
+        }
+    }
+
+    private fun enable() = EnableBiometrics(biometricGate, secureKeyStore, policyStore, session, clock)
 }
 
 class UnlockWithBiometricsTest {

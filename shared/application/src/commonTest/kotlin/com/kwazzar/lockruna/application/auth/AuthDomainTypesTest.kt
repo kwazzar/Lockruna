@@ -32,7 +32,6 @@ class AuthStateStoreTest {
         userId = "user-1",
         deviceId = "device-1",
         wrappedVaultKey = SealedBlob.pack(ByteArray(12), ByteArray(32)),
-        keyNonce = ByteArray(12),
         kdfSalt = ByteArray(16),
         kdfParams = KdfParams.SUPPORTED,
         tokens = AuthTokens("access", "refresh", 3600),

@@ -52,7 +52,13 @@ class UnlockStoreTest {
     private val store = UnlockStore(
         unlockWithPassword = UnlockWithPassword(argon2, normalizer, crypto, authStateStore, session),
         unlockWithBiometrics = UnlockWithBiometrics(biometricGate, secureKeyStore, policyStore, session, clock),
-        enableBiometrics = EnableBiometrics(biometricGate, secureKeyStore, session),
+        enableBiometrics = EnableBiometrics(
+            biometricGate,
+            secureKeyStore,
+            policyStore,
+            session,
+            clock,
+        ),
         biometricGate = biometricGate,
     )
 
@@ -191,7 +197,6 @@ class UnlockStoreTest {
         userId = "user-1",
         deviceId = "device-1",
         wrappedVaultKey = SealedBlob.pack(ByteArray(12), vaultKey + ByteArray(16)),
-        keyNonce = ByteArray(12),
         kdfSalt = ByteArray(16),
         kdfParams = KdfParams.SUPPORTED,
         tokens = AuthTokens("access", "refresh", 3600),

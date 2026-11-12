@@ -25,3 +25,5 @@ class FakeCryptoService : CryptoService {
     override fun randomBytes(size: Int): ByteArray = randomBytesResults[size] ?: ByteArray(size)
 
     override fun sha256(input: ByteArray): ByteArray = ByteArray(32)
+}
+

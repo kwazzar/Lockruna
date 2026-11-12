@@ -30,7 +30,6 @@ private data class SessionRecord(
     val userId: String,
     val deviceId: String,
     val wrappedVaultKey: String,
-    val keyNonce: String,
     val kdfSalt: String,
     val kdfParams: KdfParamsRecord,
     val accessToken: String,
@@ -41,7 +40,6 @@ private data class SessionRecord(
         userId = userId,
         deviceId = deviceId,
         wrappedVaultKey = Base64.decode(wrappedVaultKey),
-        keyNonce = Base64.decode(keyNonce),
         kdfSalt = Base64.decode(kdfSalt),
         kdfParams = kdfParams.toDomain(),
         tokens = AuthTokens(
@@ -56,7 +54,6 @@ private data class SessionRecord(
             userId = user.userId,
             deviceId = user.deviceId,
             wrappedVaultKey = Base64.encode(user.wrappedVaultKey),
-            keyNonce = Base64.encode(user.keyNonce),
             kdfSalt = Base64.encode(user.kdfSalt),
             kdfParams = KdfParamsRecord.from(user.kdfParams),
             accessToken = user.tokens.accessToken,
