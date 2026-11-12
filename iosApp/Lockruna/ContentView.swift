@@ -219,7 +219,13 @@ struct ItemEditView: View {
     @State private var title: String = ""
     @State private var typeIndex: Int = 0
 
-    private let types: [(String, DomainVaultItemType)] = [("Login", .login), ("Card", .card), ("Note", .note)]
+    private let types: [(String, DomainVaultItemType)] = [("Login", .login), ("Card", .card), ("Note", .note), ("Folder", .folder)]
+
+    private var folders: [(String, String)] {
+        model.vaultListStore.state.value.items
+            .filter { $0.type == .folder }
+            .map { ($0.id, $0.title) }
+    }
 
     var body: some View {
         VStack {
@@ -237,6 +243,30 @@ struct ItemEditView: View {
                 }
             }
             TextField("Title", text: $title).textFieldStyle(.roundedBorder)
+            VStack(alignment: .leading) {
+                Text("Folder").font(.headline)
+                if folders.isEmpty {
+                    Text("No folders yet").font(.caption)
+                }
+                ForEach(folders, id: \.0) { folder in
+                    Button(folder.1) {
+                        Task {
+                            try await model.itemEditStore.dispatch(
+                                intent: PresentationItemEditIntentFolderSelected(folderId: folder.0)
+                            )
+                        }
+                    }
+                }
+                if model.itemEditStore.state.value.folderId != nil {
+                    Button("No folder") {
+                        Task {
+                            try await model.itemEditStore.dispatch(
+                                intent: PresentationItemEditIntentFolderSelected(folderId: nil)
+                            )
+                        }
+                    }
+                }
+            }
             Button("Save") {
                 Task {
                     try await model.itemEditStore.dispatch(intent: PresentationItemEditIntentTitleChanged(value: title))
