@@ -99,6 +99,7 @@ struct LockrunaApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView(model: model)
+                .privacyShield()
         }
     }
 }
