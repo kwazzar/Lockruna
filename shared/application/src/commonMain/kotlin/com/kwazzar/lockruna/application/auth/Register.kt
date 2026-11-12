@@ -96,7 +96,7 @@ class Register(
         // Unwrap and unlock session
         val unwrappedVaultKey = KeyDerivation.unwrapVaultKey(kek, user.wrappedVaultKey, email, crypto)
             ?: return Result.Failure(AppError.InvalidCredentials)
-        authStateStore.saveSession(user)
+        authStateStore.saveSession(user.copy(email = email))
         session.unlock(VaultKey.from(unwrappedVaultKey))
 
         return Result.Success(RegisterOutcome(Bip39.encode(recoveryKey, crypto)))

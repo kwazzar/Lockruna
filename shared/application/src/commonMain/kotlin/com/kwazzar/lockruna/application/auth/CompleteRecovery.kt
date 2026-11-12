@@ -86,7 +86,7 @@ class CompleteRecovery(
             is Result.Success -> complete.value
         }
 
-        authStateStore.saveSession(user)
+        authStateStore.saveSession(user.copy(email = email))
         session.unlock(VaultKey.from(vaultKeyBytes))
         return Result.Success(Unit)
     }

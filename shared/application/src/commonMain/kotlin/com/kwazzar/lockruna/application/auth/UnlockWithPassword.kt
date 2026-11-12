@@ -2,7 +2,6 @@ package com.kwazzar.lockruna.application.auth
 
 import com.kwazzar.lockruna.domain.auth.AuthStateStore
 import com.kwazzar.lockruna.domain.auth.BiometricPolicyStore
-import com.kwazzar.lockruna.domain.auth.canonicalEmail
 import com.kwazzar.lockruna.domain.core.Result
 import com.kwazzar.lockruna.domain.crypto.Argon2
 import com.kwazzar.lockruna.domain.crypto.CryptoService
@@ -31,7 +30,7 @@ class UnlockWithPassword(
             normalizer,
         )
         val kek = KeyDerivation.kek(masterKey, crypto)
-        val vaultKeyBytes = KeyDerivation.unwrapVaultKey(kek, user.wrappedVaultKey, canonicalEmail(email), crypto)
+        val vaultKeyBytes = KeyDerivation.unwrapVaultKey(kek, user.wrappedVaultKey, user.email, crypto)
             ?: return Result.Failure(AppError.InvalidCredentials)
 
         session.unlock(VaultKey.from(vaultKeyBytes))

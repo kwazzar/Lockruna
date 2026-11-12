@@ -71,6 +71,7 @@ class LoginTest {
             kdfSalt = salt,
             kdfParams = KdfParams.SUPPORTED,
             tokens = AuthTokens("access-token", "refresh-token", 3600),
+            email = "user@example.com",
         )
         authApi.loginResult = Result.Success(user)
 
@@ -527,5 +528,7 @@ class UnlockWithPasswordTest {
         kdfSalt = ByteArray(16),
         kdfParams = KdfParams.SUPPORTED,
         tokens = AuthTokens("access-token", "refresh-token", 3600),
+        // Sealed with the canonical email: the AAD comes from the session, not the field.
+        email = "user@example.com",
     )
 }

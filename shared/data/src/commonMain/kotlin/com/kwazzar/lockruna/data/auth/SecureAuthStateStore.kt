@@ -14,8 +14,11 @@ class SecureAuthStateStore(private val storage: SecureStorage) : AuthStateStore 
     override suspend fun loadSession(): AuthenticatedUser? {
         val bytes = storage.read(KEY) ?: return null
         val user = AuthSessionCodec.decode(bytes)
-        if (user == null) {
+        // A record without the AAD email can never unwrap the vault key: drop it and
+        // let the user sign in again rather than offer an unlock that always fails.
+        if (user == null || user.email.isEmpty()) {
             storage.delete(KEY)
+            return null
         }
         return user
     }

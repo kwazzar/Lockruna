@@ -24,6 +24,7 @@ class SecureAuthStateStoreTest {
         kdfSalt = byteArrayOf(0x21, 0x22, 0x23, 0x24),
         kdfParams = KdfParams(memoryKiB = 65536, iterations = 3, parallelism = 1),
         tokens = AuthTokens(accessToken = "access-$suffix", refreshToken = "refresh-$suffix", expiresInSeconds = 900),
+        email = "user-$suffix@example.com",
     )
 
     @Test
@@ -92,4 +93,26 @@ class SecureAuthStateStoreTest {
         assertFalse(rendered.contains(user.tokens.accessToken))
         assertFalse(rendered.contains(user.tokens.refreshToken))
     }
+
+    @Test
+    fun `a session without the aad email is dropped`() = runTest {
+        val storage = InMemorySecureStorage()
+        val store = SecureAuthStateStore(storage)
+        storage.write("auth_session", legacySessionJson())
+
+        assertNull(store.loadSession())
+        assertNull(storage.read("auth_session"))
+    }
+
+    private fun legacySessionJson(): ByteArray = AuthSessionCodec.encode(
+        AuthenticatedUser(
+            userId = "user-1",
+            deviceId = "device-1",
+            wrappedVaultKey = byteArrayOf(0x11, 0x22, 0x33),
+            kdfSalt = byteArrayOf(0x21, 0x22, 0x23),
+            kdfParams = KdfParams(memoryKiB = 65536, iterations = 3, parallelism = 1),
+            tokens = AuthTokens(accessToken = "a", refreshToken = "r", expiresInSeconds = 900),
+            email = "",
+        ),
+    )
 }

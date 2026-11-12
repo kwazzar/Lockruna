@@ -35,6 +35,7 @@ private data class SessionRecord(
     val accessToken: String,
     val refreshToken: String,
     val expiresInSeconds: Int,
+    val email: String = "",
 ) {
     fun toDomain() = AuthenticatedUser(
         userId = userId,
@@ -47,6 +48,7 @@ private data class SessionRecord(
             refreshToken = refreshToken,
             expiresInSeconds = expiresInSeconds,
         ),
+        email = email,
     )
 
     companion object {
@@ -59,6 +61,7 @@ private data class SessionRecord(
             accessToken = user.tokens.accessToken,
             refreshToken = user.tokens.refreshToken,
             expiresInSeconds = user.tokens.expiresInSeconds,
+            email = user.email,
         )
     }
 }

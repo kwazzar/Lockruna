@@ -16,6 +16,8 @@ data class AuthenticatedUser(
     val kdfSalt: ByteArray,
     val kdfParams: DomainKdfParams,
     val tokens: AuthTokens,
+    /** The canonical email the wrapped keys are sealed with (AAD, ADR-003). */
+    val email: String = "",
 ) {
     override fun toString() = "AuthenticatedUser(userId=$userId)"
 }

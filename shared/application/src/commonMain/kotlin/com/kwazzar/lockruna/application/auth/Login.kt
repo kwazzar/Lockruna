@@ -68,7 +68,7 @@ class Login(
         val vaultKeyBytes = KeyDerivation.unwrapVaultKey(kek, user.wrappedVaultKey, email, crypto)
             ?: return Result.Failure(AppError.InvalidCredentials)
 
-        authStateStore.saveSession(user)
+        authStateStore.saveSession(user.copy(email = email))
         session.unlock(VaultKey.from(vaultKeyBytes))
         // Signing in with the master password re-arms the biometric path (US-07).
         biometricPolicyStore.resetFailures()
