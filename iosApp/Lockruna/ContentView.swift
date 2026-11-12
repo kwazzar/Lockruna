@@ -13,6 +13,8 @@ struct ContentView: View {
         ZStack {
             Group {
                 switch model.screen {
+                case "":
+                    ProgressView()
                 case "unlock":
                     UnlockView(model: model)
                 case "login":
@@ -55,6 +57,7 @@ struct UnlockView: View {
     @ObservedObject var model: AppModel
     @State private var email: String = ""
     @State private var password: String = ""
+    @State private var task: Task<Void, Error>?
 
     var body: some View {
         VStack(spacing: 12) {
@@ -62,20 +65,25 @@ struct UnlockView: View {
             TextField("Email", text: $email).textFieldStyle(.roundedBorder)
             SecureField("Password", text: $password).textFieldStyle(.roundedBorder)
             Button("Unlock") {
-                Task {
-                    try await model.unlockStore.dispatch(intent: PresentationUnlockIntentEmailChanged(value: email))
-                    try await model.unlockStore.dispatch(intent: PresentationUnlockIntentPasswordChanged(value: password))
-                    try await model.unlockStore.dispatch(intent: PresentationUnlockIntentSubmitPassword())
-                    model.screen = "vault"
-                    model.sync()
+                task?.cancel()
+                task = Task {
+                    do {
+                        try await model.unlockStore.dispatch(intent: PresentationUnlockIntentEmailChanged(value: email))
+                        try await model.unlockStore.dispatch(intent: PresentationUnlockIntentPasswordChanged(value: password))
+                        try await model.unlockStore.dispatch(intent: PresentationUnlockIntentSubmitPassword())
+                    } catch {
+                        print("unlock failed: \(error)")
+                    }
                 }
             }
             if model.unlockStore.state.value.biometricAvailable {
                 Button("Use biometrics") {
                     Task {
-                        try await model.unlockStore.dispatch(intent: PresentationUnlockIntentSubmitBiometrics())
-                        model.screen = "vault"
-                        model.sync()
+                        do {
+                            try await model.unlockStore.dispatch(intent: PresentationUnlockIntentSubmitBiometrics())
+                        } catch {
+                            print("biometric unlock failed: \(error)")
+                        }
                     }
                 }
             }
@@ -83,6 +91,15 @@ struct UnlockView: View {
                 Text("Invalid credentials").foregroundColor(.red)
             }
         }.padding()
+        .onDisappear { task?.cancel() }
+        // The vault key opened: leave the unlock screen.
+        .onChange(of: model.vaultUnlocked) { _, unlocked in
+            if unlocked && model.screen == "unlock" {
+                password = ""
+                model.screen = "vault"
+                model.sync()
+            }
+        }
     }
 }
 
@@ -91,6 +108,7 @@ struct LoginView: View {
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var deviceName: String = UIDevice.current.name
+    @State private var task: Task<Void, Error>?
 
     var body: some View {
         VStack(spacing: 12) {
@@ -99,13 +117,16 @@ struct LoginView: View {
             SecureField("Password", text: $password).textFieldStyle(.roundedBorder)
             TextField("Device name", text: $deviceName).textFieldStyle(.roundedBorder)
             Button("Sign in") {
-                Task {
-                    try await model.loginStore.dispatch(intent: PresentationLoginIntentEmailChanged(value: email))
-                    try await model.loginStore.dispatch(intent: PresentationLoginIntentPasswordChanged(value: password))
-                    try await model.loginStore.dispatch(intent: PresentationLoginIntentDeviceNameChanged(value: deviceName))
-                    try await model.loginStore.dispatch(intent: PresentationLoginIntentSubmit())
-                    model.screen = "vault"
-                    model.sync()
+                task?.cancel()
+                task = Task {
+                    do {
+                        try await model.loginStore.dispatch(intent: PresentationLoginIntentEmailChanged(value: email))
+                        try await model.loginStore.dispatch(intent: PresentationLoginIntentPasswordChanged(value: password))
+                        try await model.loginStore.dispatch(intent: PresentationLoginIntentDeviceNameChanged(value: deviceName))
+                        try await model.loginStore.dispatch(intent: PresentationLoginIntentSubmit())
+                    } catch {
+                        print("sign in failed: \(error)")
+                    }
                 }
             }
             Button("Create account") { model.screen = "register" }
@@ -114,6 +135,14 @@ struct LoginView: View {
                 Text("Login failed").foregroundColor(.red)
             }
         }.padding()
+        .onDisappear { task?.cancel() }
+        .onChange(of: model.vaultUnlocked) { _, unlocked in
+            if unlocked && model.screen == "login" {
+                password = ""
+                model.screen = "vault"
+                model.sync()
+            }
+        }
     }
 }
 
@@ -190,7 +219,7 @@ struct ItemEditView: View {
     @State private var title: String = ""
     @State private var typeIndex: Int = 0
 
-    private let types: [(String, VaultItemType)] = [("Login", .login), ("Card", .card), ("Note", .note)]
+    private let types: [(String, DomainVaultItemType)] = [("Login", .login), ("Card", .card), ("Note", .note)]
 
     var body: some View {
         VStack {

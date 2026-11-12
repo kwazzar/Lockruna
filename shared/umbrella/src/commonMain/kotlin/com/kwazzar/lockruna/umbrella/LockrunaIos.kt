@@ -1,5 +1,6 @@
 package com.kwazzar.lockruna.umbrella
 
+import com.kwazzar.lockruna.application.auth.HasStoredSession
 import com.kwazzar.lockruna.application.sync.SyncNow
 import com.kwazzar.lockruna.data.di.authModule
 import com.kwazzar.lockruna.data.di.coreModule
@@ -33,6 +34,7 @@ object LockrunaIos {
     private var devicesStoreRef: DevicesStore? = null
     private var settingsStoreRef: SettingsStore? = null
     private var syncNowRef: SyncNow? = null
+    private var hasStoredSessionRef: HasStoredSession? = null
 
     fun start(baseUrl: String = "http://localhost:8080") {
         if (started) return
@@ -57,6 +59,7 @@ object LockrunaIos {
         devicesStoreRef = koin.get()
         settingsStoreRef = koin.get()
         syncNowRef = koin.get()
+        hasStoredSessionRef = koin.get()
         started = true
     }
 
@@ -74,6 +77,7 @@ object LockrunaIos {
         devicesStoreRef = null
         settingsStoreRef = null
         syncNowRef = null
+        hasStoredSessionRef = null
         started = false
     }
 
@@ -91,4 +95,7 @@ object LockrunaIos {
     /** The sync engine (US-09): the UI calls it on unlock, resume, after a save and by hand. */
     suspend fun sync(): com.kwazzar.lockruna.domain.core.Result<Unit, com.kwazzar.lockruna.domain.error.AppError> =
         syncNowRef?.invoke() ?: error("LockrunaIos not started")
+
+    /** Whether a session is stored: a new user belongs on the sign-in screen (US-01). */
+    suspend fun hasStoredSession(): Boolean = hasStoredSessionRef?.invoke() ?: error("LockrunaIos not started")
 }

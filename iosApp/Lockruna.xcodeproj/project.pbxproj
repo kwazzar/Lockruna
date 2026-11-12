@@ -9,11 +9,13 @@
 /* Begin PBXBuildFile section */
 		1A0000000000000000000009 /* LockrunaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000000000000000000006 /* LockrunaApp.swift */; };
 		1A000000000000000000000A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000000000000000000007 /* ContentView.swift */; };
+		1A0000000000000000000020 /* AccountViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000000000000000000015 /* AccountViews.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		1A0000000000000000000006 /* LockrunaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockrunaApp.swift; sourceTree = "<group>"; };
 		1A0000000000000000000007 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		1A0000000000000000000015 /* AccountViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViews.swift; sourceTree = "<group>"; };
 		1A0000000000000000000008 /* Lockruna.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lockruna.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -41,6 +43,7 @@
 			children = (
 				1A0000000000000000000006 /* LockrunaApp.swift */,
 				1A0000000000000000000007 /* ContentView.swift */,
+				1A0000000000000000000015 /* AccountViews.swift */,
 			);
 			path = Lockruna;
 			sourceTree = "<group>";
@@ -140,6 +143,7 @@
 			files = (
 				1A0000000000000000000009 /* LockrunaApp.swift in Sources */,
 				1A000000000000000000000A /* ContentView.swift in Sources */,
+				1A0000000000000000000020 /* AccountViews.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

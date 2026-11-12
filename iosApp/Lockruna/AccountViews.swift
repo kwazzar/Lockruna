@@ -13,15 +13,32 @@ struct RegisterView: View {
     @State private var deviceName: String = UIDevice.current.name
     @State private var recoveryWords: [String] = []
     @State private var confirmation: String = ""
-    @State private var task: Task<Void, Never>?
+    @State private var task: Task<Void, Error>?
 
     private var store: PresentationRegisterStore { model.registerStore }
 
     var body: some View {
-        if recoveryWords.isEmpty {
-            form
-        } else {
-            recovery
+        Group {
+            if recoveryWords.isEmpty {
+                form
+            } else {
+                recovery
+            }
+        }
+        // Only when the whole screen leaves: SwiftUI calls onDisappear on the branch it
+        // replaces, so clearing there would throw the words away the moment they appear.
+        .onDisappear {
+            forget()
+            store.close()
+        }
+        .onAppear { watchEffects() }
+        .onChange(of: model.vaultUnlocked) { _, unlocked in
+            if unlocked && model.screen == "register" {
+                forget()
+                store.close()
+                model.screen = "vault"
+                model.sync()
+            }
         }
     }
 
@@ -60,19 +77,19 @@ struct RegisterView: View {
                 Button("I saved them") { confirm() }
             }
         }
-        .onDisappear {
-            forget()
-            store.close()
-        }
     }
 
     private func submit() {
         task?.cancel()
         task = Task {
-            try await store.dispatch(intent: PresentationRegisterIntentEmailChanged(value: email))
-            try await store.dispatch(intent: PresentationRegisterIntentPasswordChanged(value: password))
-            try await store.dispatch(intent: PresentationRegisterIntentDeviceNameChanged(value: deviceName))
-            try await store.dispatch(intent: PresentationRegisterIntentSubmit())
+            do {
+                try await store.dispatch(intent: PresentationRegisterIntentEmailChanged(value: email))
+                try await store.dispatch(intent: PresentationRegisterIntentPasswordChanged(value: password))
+                try await store.dispatch(intent: PresentationRegisterIntentDeviceNameChanged(value: deviceName))
+                try await store.dispatch(intent: PresentationRegisterIntentSubmit())
+            } catch {
+                print("register failed: \(error)")
+            }
         }
     }
 
@@ -113,7 +130,7 @@ struct RecoveryView: View {
     @State private var words: String = ""
     @State private var password: String = ""
     @State private var deviceName: String = UIDevice.current.name
-    @State private var task: Task<Void, Never>?
+    @State private var task: Task<Void, Error>?
 
     private var store: PresentationRecoveryStore { model.recoveryStore }
 
@@ -176,6 +193,9 @@ struct DevicesView: View {
 
     var body: some View {
         List {
+            if store.state.value.isLoading {
+                ProgressView()
+            }
             ForEach(store.state.value.devices, id: \.id) { device in
                 HStack {
                     VStack(alignment: .leading) {
@@ -191,9 +211,22 @@ struct DevicesView: View {
                     }
                 }
             }
+            if let error = store.state.value.error {
+                // The access token lives 15 minutes; a refresh is a later wave, so an
+                // expired session surfaces as invalid credentials here.
+                Text("Could not load the devices. \(describe(error))")
+                    .foregroundColor(.red)
+            }
         }
+        .navigationTitle("Devices")
         .onAppear {
-            Task { try await store.dispatch(intent: PresentationDevicesIntentLoad()) }
+            Task {
+                do {
+                    try await store.dispatch(intent: PresentationDevicesIntentLoad())
+                } catch {
+                    print("devices load failed: \(error)")
+                }
+            }
         }
         .alert("Revoke this device?", isPresented: Binding(
             get: { revoking != nil },
@@ -217,7 +250,7 @@ struct SettingsView: View {
     @ObservedObject var model: AppModel
     @State private var deletionPassword: String = ""
     @State private var showDeleteForm = false
-    @State private var task: Task<Void, Never>?
+    @State private var task: Task<Void, Error>?
 
     private var store: PresentationSettingsStore { model.settingsStore }
     private var state: PresentationSettingsState { store.state.value }
@@ -225,7 +258,7 @@ struct SettingsView: View {
     var body: some View {
         Form {
             Section("Auto-lock") {
-                ForEach(Array(AutoLockPolicy.companion.ALL.enumerated()), id: \.offset) { _, policy in
+                ForEach(Array(DomainAutoLockPolicy.companion.ALL.enumerated()), id: \.offset) { _, policy in
                     Button {
                         Task { try await store.dispatch(intent: PresentationSettingsIntentPolicyChanged(policy: policy)) }
                     } label: {
@@ -302,13 +335,17 @@ struct SettingsView: View {
         }
     }
 
-    private func label(for policy: AutoLockPolicy) -> String {
-        switch policy.timeoutMillis {
-        case AutoLockPolicy.companion.IMMEDIATE_MILLIS: return "Immediately"
-        case AutoLockPolicy.companion.ONE_MINUTE_MILLIS: return "After 1 minute"
-        case AutoLockPolicy.companion.FIVE_MINUTES_MILLIS: return "After 5 minutes"
-        case AutoLockPolicy.companion.FIFTEEN_MINUTES_MILLIS: return "After 15 minutes"
+    private func label(for policy: DomainAutoLockPolicy) -> String {        switch policy.timeoutMillis {
+        case DomainAutoLockPolicy.companion.IMMEDIATE_MILLIS: return "Immediately"
+        case DomainAutoLockPolicy.companion.ONE_MINUTE_MILLIS: return "After 1 minute"
+        case DomainAutoLockPolicy.companion.FIVE_MINUTES_MILLIS: return "After 5 minutes"
+        case DomainAutoLockPolicy.companion.FIFTEEN_MINUTES_MILLIS: return "After 15 minutes"
         default: return "After \(policy.timeoutMillis / 1000) seconds"
         }
     }
+}
+
+/// A Kotlin error as text the user can read: the SDK prints `AppErrorInvalidCredentials`.
+private func describe(_ error: Any) -> String {
+    String(describing: error).replacingOccurrences(of: "AppError", with: "")
 }
