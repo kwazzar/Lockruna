@@ -182,4 +182,5 @@ internal fun HttpResponse.toFailure(): Result<Nothing, AppError> = when (status)
     else -> Result.Failure(AppError.NetworkUnavailable)
 }
 
-internal fun <T> handleException(exception: Exception): Result<T, AppError> = Result.Failure(AppError.NetworkUnavailable)
+internal fun <T> handleException(exception: Exception): Result<T, AppError> =
+    Result.Failure(AppError.NetworkUnavailable)

@@ -54,8 +54,9 @@ class RegisterStoreTest {
         assertEquals(12, (ready as RegisterEffect.RecoveryKeyReady).words.size)
         assertTrue(store.state.value.hasRecoveryWords)
         assertFalse(store.state.value.isSubmitting)
-        // The words never live in the observable state.
+        // The words never live in the observable state, and the effect never prints them.
         assertFalse(store.state.value.toString().contains(ready.words.first()))
+        assertFalse(ready.toString().contains(ready.words.first()))
     }
 
     @Test

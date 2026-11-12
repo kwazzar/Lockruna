@@ -21,6 +21,7 @@ import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
@@ -113,6 +114,8 @@ class RegisterTest {
         }
         // 12 BIP39 words that decode back into the exact 16 bytes the account was sealed with.
         assertEquals(12, outcome.recoveryWords.size)
+        // The words are the recovery key: the outcome never prints them.
+        assertFalse(outcome.toString().contains(outcome.recoveryWords.first()))
         val decoded = Bip39.decode(outcome.recoveryWords, crypto)
         assertTrue(decoded is Result.Success)
         assertContentEquals(ByteArray(16) { 6 }, (decoded as Result.Success).value)

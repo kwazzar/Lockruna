@@ -135,7 +135,10 @@ sealed interface RegisterIntent {
 
 sealed interface RegisterEffect {
     /** The 12 words, shown once. The user proves they kept them by typing them back (US-03). */
-    data class RecoveryKeyReady(val words: List<String>) : RegisterEffect
+    data class RecoveryKeyReady(val words: List<String>) : RegisterEffect {
+        /** The words are the recovery key: never log, print or snapshot them. */
+        override fun toString(): String = "RecoveryKeyReady(size=${words.size})"
+    }
 
     data object Registered : RegisterEffect
 }

@@ -27,7 +27,10 @@ data class RegisterCommand(
 }
 
 /** The recovery key as 12 BIP39 words; the user confirms them by typing them back (US-01, US-03). */
-data class RegisterOutcome(val recoveryWords: List<String>)
+data class RegisterOutcome(val recoveryWords: List<String>) {
+    /** The words are the recovery key: they must never reach a log, an exception or a snapshot. */
+    override fun toString(): String = "RegisterOutcome(recoveryWords=<redacted:${recoveryWords.size}>)"
+}
 
 class Register(
     private val authApi: com.kwazzar.lockruna.domain.auth.AuthApi,
