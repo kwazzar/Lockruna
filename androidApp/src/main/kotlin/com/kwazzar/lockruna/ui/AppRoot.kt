@@ -17,6 +17,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.kwazzar.lockruna.application.sync.SyncNow
 import com.kwazzar.lockruna.domain.auth.AuthStateStore
 import com.kwazzar.lockruna.domain.core.Result
+import com.kwazzar.lockruna.domain.error.AppError
 import com.kwazzar.lockruna.domain.vault.VaultItemType
 import com.kwazzar.lockruna.presentation.app.AppScreen
 import com.kwazzar.lockruna.presentation.app.startScreen
@@ -58,13 +59,16 @@ fun AppRoot() {
     var syncMessage by remember { mutableStateOf<String?>(null) }
     var syncJob by remember { mutableStateOf<kotlinx.coroutines.Job?>(null) }
 
+    /** A failed sync is "offline" unless there is no account to sync. */
+    fun syncMessageFor(result: Result<Unit, com.kwazzar.lockruna.domain.error.AppError>): String? = when (result) {
+        is Result.Success -> null
+        is Result.Failure -> if (result.error is AppError.Unauthorized) null else "Offline"
+    }
+
     fun runSync() {
         syncJob?.cancel()
         syncJob = scope.launch {
-            syncMessage = when (val result = syncNow()) {
-                is Result.Success -> null
-                is Result.Failure -> "Offline"
-            }
+            syncMessage = syncMessageFor(syncNow())
         }
     }
 
@@ -73,10 +77,7 @@ fun AppRoot() {
         syncJob?.cancel()
         syncJob = scope.launch {
             kotlinx.coroutines.delay(SYNC_DEBOUNCE_MILLIS)
-            syncMessage = when (val result = syncNow()) {
-                is Result.Success -> null
-                is Result.Failure -> "Offline"
-            }
+            syncMessage = syncMessageFor(syncNow())
         }
     }
 
