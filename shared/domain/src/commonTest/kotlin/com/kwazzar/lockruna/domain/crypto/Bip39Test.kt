@@ -10,10 +10,12 @@ import kotlin.test.assertTrue
 
 /** SHA-256 stands in for the platform digest here: the codec must match BIP39's spec, not a fake. */
 private class Sha256Crypto : CryptoService {
-    override fun hkdfSha256(inputKey: ByteArray, salt: ByteArray?, info: String, length: Int): ByteArray = ByteArray(length)
+    override fun hkdfSha256(inputKey: ByteArray, salt: ByteArray?, info: String, length: Int): ByteArray =
+        ByteArray(length)
     override fun encryptGcm(key: ByteArray, plaintext: ByteArray, aad: ByteArray): GcmCiphertext =
         GcmCiphertext(ciphertext = plaintext, nonce = ByteArray(12), tag = ByteArray(16))
-    override fun decryptGcm(key: ByteArray, ciphertext: GcmCiphertext, aad: ByteArray): ByteArray = ciphertext.ciphertext
+    override fun decryptGcm(key: ByteArray, ciphertext: GcmCiphertext, aad: ByteArray): ByteArray =
+        ciphertext.ciphertext
     override fun randomBytes(size: Int): ByteArray = ByteArray(size)
     override fun sha256(input: ByteArray): ByteArray = MessageDigest.getInstance("SHA-256").digest(input)
 }
@@ -36,7 +38,10 @@ class Bip39Test {
     fun `the all-ff entropy encodes to the known BIP39 vector`() {
         val words = Bip39.encode(ByteArray(Bip39.ENTROPY_BYTES) { 0x7f }, crypto)
 
-        assertEquals("legal winner thank year wave sausage worth useful legal winner thank yellow", words.joinToString(" "))
+        assertEquals(
+            "legal winner thank year wave sausage worth useful legal winner thank yellow",
+            words.joinToString(" "),
+        )
     }
 
     @Test

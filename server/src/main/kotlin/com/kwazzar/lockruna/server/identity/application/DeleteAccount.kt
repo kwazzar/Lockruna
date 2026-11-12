@@ -4,6 +4,7 @@ import com.kwazzar.lockruna.server.identity.domain.ACCESS_TOKEN_SECONDS
 import com.kwazzar.lockruna.server.identity.domain.AuthKeys
 import com.kwazzar.lockruna.server.identity.domain.DeviceDenylist
 import com.kwazzar.lockruna.server.identity.domain.DeviceRepository
+import com.kwazzar.lockruna.server.identity.domain.UserRecord
 import com.kwazzar.lockruna.server.identity.domain.UserRepository
 import com.kwazzar.lockruna.server.platform.config.ServerSettings
 import com.kwazzar.lockruna.server.platform.error.Problem
@@ -21,17 +22,23 @@ class DeleteAccount(
     private val settings: ServerSettings,
 ) {
     suspend operator fun invoke(userId: String, authKey: ByteArray) {
-        val user = users.findById(userId) ?: throw invalidCredentials()
-        val providedHash = AuthKeys.hash(settings.pepper, authKey)
-        if (!AuthKeys.constantTimeEquals(providedHash, user.authHash)) {
-            throw invalidCredentials()
-        }
+        val user = verifyAuthKey(userId, authKey)
+
         val knownDevices = devices.listByUser(userId).map { it.id }
         if (!users.deleteById(userId)) {
             throw invalidCredentials()
         }
         val accessTtl = Duration.ofSeconds(ACCESS_TOKEN_SECONDS.toLong())
         knownDevices.forEach { denylist.revoke(it, accessTtl) }
+    }
+
+    private suspend fun verifyAuthKey(userId: String, authKey: ByteArray): UserRecord {
+        val user = users.findById(userId) ?: throw invalidCredentials()
+        val providedHash = AuthKeys.hash(settings.pepper, authKey)
+        if (!AuthKeys.constantTimeEquals(providedHash, user.authHash)) {
+            throw invalidCredentials()
+        }
+        return user
     }
 
     private fun invalidCredentials(): ProblemException =

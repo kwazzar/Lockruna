@@ -1,16 +1,16 @@
 package com.kwazzar.lockruna.server.platform.di
 
 import com.kwazzar.lockruna.server.identity.application.AuthenticateSession
+import com.kwazzar.lockruna.server.identity.application.CompleteRecovery
+import com.kwazzar.lockruna.server.identity.application.DeleteAccount
 import com.kwazzar.lockruna.server.identity.application.ListDevices
 import com.kwazzar.lockruna.server.identity.application.LoginUser
 import com.kwazzar.lockruna.server.identity.application.LogoutSession
-import com.kwazzar.lockruna.server.identity.application.CompleteRecovery
-import com.kwazzar.lockruna.server.identity.application.DeleteAccount
 import com.kwazzar.lockruna.server.identity.application.PreloginUser
-import com.kwazzar.lockruna.server.identity.application.StartRecovery
 import com.kwazzar.lockruna.server.identity.application.RefreshSession
 import com.kwazzar.lockruna.server.identity.application.RegisterUser
 import com.kwazzar.lockruna.server.identity.application.RevokeDevice
+import com.kwazzar.lockruna.server.identity.application.StartRecovery
 import com.kwazzar.lockruna.server.identity.domain.DeviceDenylist
 import com.kwazzar.lockruna.server.identity.domain.DeviceRepository
 import com.kwazzar.lockruna.server.identity.domain.RateLimiter

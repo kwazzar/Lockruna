@@ -25,7 +25,6 @@ import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
-import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.isSuccess
@@ -42,7 +41,9 @@ class KtorRecoveryApi(
     private val httpClient: HttpClient,
     private val baseUrl: String,
     private val accessTokenProvider: AccessTokenProvider,
-) : RecoveryApi, DeviceApi, AccountApi {
+) : RecoveryApi,
+    DeviceApi,
+    AccountApi {
 
     private val client: HttpClient = HttpClient(httpClient.engine) {
         install(ContentNegotiation) {
@@ -64,7 +65,7 @@ class KtorRecoveryApi(
             ),
         )
     } catch (e: Exception) {
-        Result.Failure(AppError.NetworkUnavailable)
+        handleException(e)
     }
 
     override suspend fun complete(
@@ -93,7 +94,7 @@ class KtorRecoveryApi(
         if (!response.status.isSuccess()) return response.toFailure()
         Result.Success(response.body<AuthResponseDto>().toDomain())
     } catch (e: Exception) {
-        Result.Failure(AppError.NetworkUnavailable)
+        handleException(e)
     }
 
     override suspend fun list(): Result<List<DeviceInfo>, AppError> = try {
@@ -115,7 +116,7 @@ class KtorRecoveryApi(
             },
         )
     } catch (e: Exception) {
-        Result.Failure(AppError.NetworkUnavailable)
+        handleException(e)
     }
 
     override suspend fun revoke(deviceId: String): Result<Unit, AppError> = try {
@@ -126,7 +127,7 @@ class KtorRecoveryApi(
         if (!response.status.isSuccess()) return response.toFailure()
         Result.Success(Unit)
     } catch (e: Exception) {
-        Result.Failure(AppError.NetworkUnavailable)
+        handleException(e)
     }
 
     override suspend fun delete(authKey: ByteArray): Result<Unit, AppError> = try {
@@ -139,6 +140,6 @@ class KtorRecoveryApi(
         if (!response.status.isSuccess()) return response.toFailure()
         Result.Success(Unit)
     } catch (e: Exception) {
-        Result.Failure(AppError.NetworkUnavailable)
+        handleException(e)
     }
 }

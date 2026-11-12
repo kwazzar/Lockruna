@@ -28,7 +28,6 @@ import io.ktor.server.testing.testApplication
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import java.security.SecureRandom
 import java.util.Base64
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -266,10 +265,9 @@ class RecoveryAccountApiTest {
             )
         }
 
-    private suspend fun ApplicationTestBuilder.devices(accessToken: String): HttpResponse =
-        client.get("/devices") {
-            header(HttpHeaders.Authorization, "Bearer $accessToken")
-        }
+    private suspend fun ApplicationTestBuilder.devices(accessToken: String): HttpResponse = client.get("/devices") {
+        header(HttpHeaders.Authorization, "Bearer $accessToken")
+    }
 
     private fun userIdOf(email: String): String = storedRow(email)?.get("id") as String
 
@@ -300,8 +298,7 @@ class RecoveryAccountApiTest {
 
     private fun base64(bytes: ByteArray): String = Base64.getEncoder().encodeToString(bytes)
 
-    private suspend fun HttpResponse.accessToken(): String =
-        parsed()["accessToken"]!!.jsonPrimitive.content
+    private suspend fun HttpResponse.accessToken(): String = parsed()["accessToken"]!!.jsonPrimitive.content
 
     private suspend fun HttpResponse.parsed(): JsonObject = json()
 }

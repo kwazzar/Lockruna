@@ -244,3 +244,84 @@ class ItemEditStoreTest {
         override fun observeAll(): Flow<List<VaultItem>> = emptyFlow()
     }
 }
+
+class ItemEditTypeTest {
+
+    private val repository = InMemoryVaultItemRepository()
+    private val store = ItemEditStore(
+        createItem = CreateItem(repository, FixedItemIdGenerator(), FakeClock(wallMillis = 1_000)),
+        updateItem = UpdateItem(repository, FakeClock(wallMillis = 2_000)),
+        getItem = GetItem(repository),
+    )
+
+    @Test
+    fun `a card is created without a secret`() = runTest {
+        store.dispatch(ItemEditIntent.TypeChanged(VaultItemType.CARD))
+        store.dispatch(ItemEditIntent.TitleChanged("Visa"))
+        val effect = async(start = CoroutineStart.UNDISPATCHED) { store.effects.first() }
+
+        store.dispatch(ItemEditIntent.Save)
+
+        assertEquals(ItemEditEffect.Saved("00000000-0000-4000-8000-000000000001"), effect.await())
+        val saved = assertIs<Result.Success<VaultItem>>(repository.get(itemId())).value
+        assertEquals(VaultItemType.CARD, saved.type)
+    }
+
+    @Test
+    fun `a note is created with the note body as the secret`() = runTest {
+        store.dispatch(ItemEditIntent.TypeChanged(VaultItemType.NOTE))
+        store.dispatch(ItemEditIntent.TitleChanged("Wifi"))
+        store.dispatch(ItemEditIntent.SecretChanged("the password of the guest network"))
+        val effect = async(start = CoroutineStart.UNDISPATCHED) { store.effects.first() }
+
+        store.dispatch(ItemEditIntent.Save)
+
+        assertEquals(ItemEditEffect.Saved("00000000-0000-4000-8000-000000000001"), effect.await())
+        val saved = assertIs<Result.Success<VaultItem>>(repository.get(itemId())).value
+        assertEquals(VaultItemType.NOTE, saved.type)
+        assertEquals("the password of the guest network", saved.secret?.value)
+    }
+
+    @Test
+    fun `a login still requires a secret`() = runTest {
+        store.dispatch(ItemEditIntent.TypeChanged(VaultItemType.LOGIN))
+        store.dispatch(ItemEditIntent.TitleChanged("GitHub"))
+        val effect = async(start = CoroutineStart.UNDISPATCHED) { store.effects.first() }
+
+        store.dispatch(ItemEditIntent.Save)
+
+        val validation = effect.await()
+        assertIs<ItemEditEffect.ValidationError>(validation)
+        assertTrue((validation as ItemEditEffect.ValidationError).error is AppError.InvalidItem)
+    }
+
+    @Test
+    fun `editing an item shows the type it was created with`() = runTest {
+        repository.save(
+            assertIs<Result.Success<VaultItem>>(
+                VaultItem.create(
+                    id = itemId(),
+                    type = VaultItemType.NOTE,
+                    title = (Title.of("Wifi") as Result.Success).value,
+                    username = null,
+                    secret = null,
+                    url = null,
+                    folderId = null,
+                    nowMillis = 1,
+                ),
+            ).value,
+        )
+
+        store.begin("00000000-0000-4000-8000-000000000001")
+
+        assertEquals(VaultItemType.NOTE, store.state.value.type)
+    }
+
+    private fun itemId(): ItemId = (ItemId.of("00000000-0000-4000-8000-000000000001") as Result.Success).value
+}
+
+private class FixedItemIdGenerator : IdGenerator {
+    override fun newItemId(): ItemId = (ItemId.of("00000000-0000-4000-8000-000000000001") as Result.Success).value
+
+    override fun newUuid(): String = "00000000-0000-4000-8000-000000000001"
+}

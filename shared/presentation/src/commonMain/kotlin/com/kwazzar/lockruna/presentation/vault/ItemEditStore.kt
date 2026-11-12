@@ -51,6 +51,7 @@ class ItemEditStore(
         } else {
             ItemEditState(
                 existingId = item.id.value,
+                type = item.type,
                 title = item.title.value,
                 username = item.username.orEmpty(),
                 url = item.url?.value.orEmpty(),
@@ -61,6 +62,7 @@ class ItemEditStore(
 
     suspend fun dispatch(intent: ItemEditIntent) {
         when (intent) {
+            is ItemEditIntent.TypeChanged -> updateState { copy(type = intent.type) }
             is ItemEditIntent.TitleChanged -> updateState { copy(title = intent.value) }
             is ItemEditIntent.UsernameChanged -> updateState { copy(username = intent.value) }
             is ItemEditIntent.SecretChanged -> {
@@ -104,7 +106,7 @@ class ItemEditStore(
     private suspend fun create(): Result<ItemId, AppError> {
         val result = createItem(
             CreateItemCommand(
-                type = VaultItemType.LOGIN,
+                type = _state.value.type,
                 title = _state.value.title,
                 username = _state.value.username.takeIf { it.isNotBlank() },
                 secret = if (secretDraftChanged) draftSecret else null,
@@ -158,6 +160,7 @@ class ItemEditStore(
 
 data class ItemEditState(
     val existingId: String? = null,
+    val type: VaultItemType = VaultItemType.LOGIN,
     val title: String = "",
     val username: String = "",
     val url: String = "",
@@ -167,6 +170,8 @@ data class ItemEditState(
 )
 
 sealed interface ItemEditIntent {
+    data class TypeChanged(val type: VaultItemType) : ItemEditIntent
+
     data class TitleChanged(val value: String) : ItemEditIntent
 
     data class UsernameChanged(val value: String) : ItemEditIntent

@@ -18,7 +18,13 @@ data class RecoveryStartData(val userId: String, val recoveryWrappedVaultKey: By
 }
 
 /** A device of the user, as the settings screen shows it. [lastSeen] is an ISO-8601 timestamp. */
-data class DeviceInfo(val id: String, val name: String, val platform: String, val lastSeen: String?, val current: Boolean)
+data class DeviceInfo(
+    val id: String,
+    val name: String,
+    val platform: String,
+    val lastSeen: String?,
+    val current: Boolean,
+)
 
 /** Account recovery (US-03) and device management (US-10) talk to the server through this port. */
 interface RecoveryApi {

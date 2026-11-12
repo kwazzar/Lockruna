@@ -13,6 +13,8 @@ import com.kwazzar.lockruna.domain.session.VaultSession
 /**
  * Deletes the account (US-11). The master password is required again, and the local
  * session dies with the server-side account.
+ *
+ * The salt comes from the stored session: the key never leaves the device.
  */
 class DeleteAccount(
     private val accountApi: AccountApi,
@@ -22,11 +24,11 @@ class DeleteAccount(
     private val authStateStore: AuthStateStore,
     private val session: VaultSession,
 ) {
-    suspend operator fun invoke(email: String, password: String): Result<Unit, AppError> {
+    suspend operator fun invoke(password: String): Result<Unit, AppError> {
         val passwordValidation = ValidateMasterPassword()(password)
         if (passwordValidation is Result.Failure) return passwordValidation
 
-        val authKey = when (val result = authKeyFor(email, password)) {
+        val authKey = when (val result = authKeyFor(password)) {
             is Result.Failure -> return result
             is Result.Success -> result.value
         }
@@ -41,7 +43,7 @@ class DeleteAccount(
         }
     }
 
-    private suspend fun authKeyFor(email: String, password: String): Result<ByteArray, AppError> {
+    private suspend fun authKeyFor(password: String): Result<ByteArray, AppError> {
         val session = authStateStore.loadSession() ?: return Result.Failure(AppError.Unauthorized)
         val masterKey = KeyDerivation.normalizeAndDerive(
             password,

@@ -26,4 +26,3 @@ class FakeCryptoService : CryptoService {
 
     override fun sha256(input: ByteArray): ByteArray = ByteArray(32)
 }
-

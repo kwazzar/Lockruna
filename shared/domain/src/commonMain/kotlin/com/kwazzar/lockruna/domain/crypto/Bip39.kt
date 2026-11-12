@@ -52,7 +52,10 @@ object Bip39 {
             val bit = (word shr (BITS_PER_WORD - 1 - index % BITS_PER_WORD)) and 1 == 1
             if (index < ENTROPY_BITS) {
                 val byteIndex = index / Byte.SIZE_BITS
-                if (bit) entropy[byteIndex] = (entropy[byteIndex].toInt() or (1 shl (Byte.SIZE_BITS - 1 - index % Byte.SIZE_BITS))).toByte()
+                if (bit) {
+                    entropy[byteIndex] =
+                        (entropy[byteIndex].toInt() or (1 shl (Byte.SIZE_BITS - 1 - index % Byte.SIZE_BITS))).toByte()
+                }
             } else if (bit) {
                 checksum[index - ENTROPY_BITS] = 1
             }

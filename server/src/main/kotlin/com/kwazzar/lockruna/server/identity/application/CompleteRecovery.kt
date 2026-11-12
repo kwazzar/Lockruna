@@ -9,11 +9,11 @@ import com.kwazzar.lockruna.server.identity.domain.DeviceRepository
 import com.kwazzar.lockruna.server.identity.domain.RateLimiter
 import com.kwazzar.lockruna.server.identity.domain.RefreshTokenRepository
 import com.kwazzar.lockruna.server.identity.domain.TokenService
+import com.kwazzar.lockruna.server.identity.domain.UserRecord
 import com.kwazzar.lockruna.server.identity.domain.UserRepository
 import com.kwazzar.lockruna.server.platform.config.ServerSettings
 import com.kwazzar.lockruna.server.platform.error.Problem
 import com.kwazzar.lockruna.server.platform.error.ProblemException
-import kotlinx.serialization.json.Json
 import java.time.Clock
 import java.time.Duration
 import java.util.UUID
@@ -33,15 +33,7 @@ class CompleteRecovery(
     private val clock: Clock = Clock.systemUTC(),
 ) {
     suspend operator fun invoke(command: CompleteRecoveryCommand): AuthSession {
-        val email = command.email.trim().lowercase()
-        rateLimiter.requireAllowed("recovery:email", AuthKeys.emailKey(email), RECOVERY_LIMIT, RECOVERY_WINDOW)
-        rateLimiter.requireAllowed("recovery:ip", command.clientIp, RECOVERY_LIMIT, RECOVERY_WINDOW)
-
-        val user = users.findByEmail(email) ?: throw invalidCredentials()
-        val providedHash = AuthKeys.hash(settings.pepper, command.recoveryAuthKey)
-        if (!AuthKeys.constantTimeEquals(providedHash, user.recoveryAuthHash)) {
-            throw invalidCredentials()
-        }
+        val user = verifyRecoveryKey(command)
 
         val now = clock.instant()
         val others = devices.listByUser(user.id).map { it.id }
@@ -84,6 +76,20 @@ class CompleteRecovery(
 
     private fun invalidCredentials(): ProblemException =
         ProblemException(problem = Problem(status = 401, code = "invalid_credentials", title = "Invalid credentials"))
+
+    /** The rate limit runs first, the email and the recovery key are checked the same way for everyone. */
+    private suspend fun verifyRecoveryKey(command: CompleteRecoveryCommand): UserRecord {
+        val email = command.email.trim().lowercase()
+        rateLimiter.requireAllowed("recovery:email", AuthKeys.emailKey(email), RECOVERY_LIMIT, RECOVERY_WINDOW)
+        rateLimiter.requireAllowed("recovery:ip", command.clientIp, RECOVERY_LIMIT, RECOVERY_WINDOW)
+
+        val user = users.findByEmail(email) ?: throw invalidCredentials()
+        val providedHash = AuthKeys.hash(settings.pepper, command.recoveryAuthKey)
+        if (!AuthKeys.constantTimeEquals(providedHash, user.recoveryAuthHash)) {
+            throw invalidCredentials()
+        }
+        return user
+    }
 }
 
 data class CompleteRecoveryCommand(

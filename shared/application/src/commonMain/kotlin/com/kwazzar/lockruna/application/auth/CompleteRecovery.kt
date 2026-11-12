@@ -51,11 +51,48 @@ class CompleteRecovery(
         val passwordValidation = ValidateMasterPassword()(command.newPassword)
         if (passwordValidation is Result.Failure) return passwordValidation
 
+        return recover(command, email)
+    }
+
+    private suspend fun recover(command: RecoverCommand, email: String): Result<Unit, AppError> {
         val recoveryKey = when (val decoded = Bip39.decode(command.recoveryWords, crypto)) {
             is Result.Failure -> return decoded
             is Result.Success -> decoded.value
         }
 
+        val vaultKeyBytes = when (val unwrapped = unwrapVaultKey(email, recoveryKey)) {
+            is Result.Failure -> return unwrapped
+            is Result.Success -> unwrapped.value
+        }
+
+        val rotated = rotateMasterPassword(command, vaultKeyBytes, email, recoveryKey)
+        val device = DeviceIdentity(
+            deviceId = command.deviceId ?: idGenerator.newUuid(),
+            name = command.deviceName,
+            platform = command.platform,
+        )
+        val user = when (
+            val complete = recoveryApi.complete(
+                email = email,
+                recoveryAuthKey = rotated.recoveryAuthKey,
+                newAuthKey = rotated.authKey,
+                newKdfSalt = rotated.kdfSalt,
+                newKdfParams = KdfParams.SUPPORTED,
+                newWrappedVaultKey = rotated.wrappedVaultKey,
+                device = device,
+            )
+        ) {
+            is Result.Failure -> return complete
+            is Result.Success -> complete.value
+        }
+
+        authStateStore.saveSession(user)
+        session.unlock(VaultKey.from(vaultKeyBytes))
+        return Result.Success(Unit)
+    }
+
+    /** Fetches the recovery wrapper and opens it with the key the 12 words decode to. */
+    private suspend fun unwrapVaultKey(email: String, recoveryKey: ByteArray): Result<ByteArray, AppError> {
         val started = when (val result = recoveryApi.start(email)) {
             is Result.Failure -> return result
             is Result.Success -> result.value
@@ -69,37 +106,24 @@ class CompleteRecovery(
             crypto = crypto,
         ) ?: return Result.Failure(AppError.InvalidCredentials)
 
+        return Result.Success(vaultKeyBytes)
+    }
+
+    /** Derives the new master password keys and re-seals the vault key under them. */
+    private suspend fun rotateMasterPassword(
+        command: RecoverCommand,
+        vaultKeyBytes: ByteArray,
+        email: String,
+        recoveryKey: ByteArray,
+    ): RotatedKeys {
         val newKdfSalt = crypto.randomBytes(KdfParams.DEFAULT_SALT_LENGTH)
         val masterKey = KeyDerivation.normalizeAndDerive(command.newPassword, newKdfSalt, argon2, normalizer)
-        val newAuthKey = KeyDerivation.authKey(masterKey, crypto)
-        val newKek = KeyDerivation.kek(masterKey, crypto)
-        val newWrappedVaultKey = wrapKey(newKek, vaultKeyBytes, email, crypto)
-        val recoveryAuthKey = crypto.hkdfSha256(recoveryKey, null, HkdfLabels.RECOVERY_AUTH, HKDF_OUTPUT_LENGTH)
-
-        val device = DeviceIdentity(
-            deviceId = command.deviceId ?: idGenerator.newUuid(),
-            name = command.deviceName,
-            platform = command.platform,
+        return RotatedKeys(
+            kdfSalt = newKdfSalt,
+            authKey = KeyDerivation.authKey(masterKey, crypto),
+            wrappedVaultKey = wrapKey(KeyDerivation.kek(masterKey, crypto), vaultKeyBytes, email, crypto),
+            recoveryAuthKey = crypto.hkdfSha256(recoveryKey, null, HkdfLabels.RECOVERY_AUTH, HKDF_OUTPUT_LENGTH),
         )
-
-        val user = when (
-            val result = recoveryApi.complete(
-                email = email,
-                recoveryAuthKey = recoveryAuthKey,
-                newAuthKey = newAuthKey,
-                newKdfSalt = newKdfSalt,
-                newKdfParams = KdfParams.SUPPORTED,
-                newWrappedVaultKey = newWrappedVaultKey,
-                device = device,
-            )
-        ) {
-            is Result.Failure -> return result
-            is Result.Success -> result.value
-        }
-
-        authStateStore.saveSession(user)
-        session.unlock(VaultKey.from(vaultKeyBytes))
-        return Result.Success(Unit)
     }
 
     private fun wrapKey(key: ByteArray, plaintext: ByteArray, aad: String, crypto: CryptoService): ByteArray {
@@ -110,3 +134,11 @@ class CompleteRecovery(
 }
 
 private const val HKDF_OUTPUT_LENGTH = 32
+
+/** The key material a recovered account switches to. */
+private data class RotatedKeys(
+    val kdfSalt: ByteArray,
+    val authKey: ByteArray,
+    val wrappedVaultKey: ByteArray,
+    val recoveryAuthKey: ByteArray,
+)

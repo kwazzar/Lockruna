@@ -24,7 +24,10 @@ class StartRecovery(
         return if (user == null) {
             RecoveryStartResult(
                 userId = UUID.nameUUIDFromBytes(AuthKeys.hash(authFakeSecret, normalized.toByteArray())).toString(),
-                recoveryWrappedVaultKey = AuthKeys.hash(authFakeSecret, ("recovery-wrap:" + normalized).toByteArray()).copyOf(FAKE_WRAPPED_BYTES),
+                recoveryWrappedVaultKey = AuthKeys.hash(
+                    authFakeSecret,
+                    ("recovery-wrap:" + normalized).toByteArray(),
+                ).copyOf(FAKE_WRAPPED_BYTES),
             )
         } else {
             RecoveryStartResult(

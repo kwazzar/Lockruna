@@ -11,11 +11,11 @@ import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.MockRequestHandleScope
 import io.ktor.client.engine.mock.respond
 import io.ktor.client.engine.mock.respondOk
-import io.ktor.http.HttpStatusCode
-import io.ktor.http.headersOf
-import io.ktor.http.content.TextContent
 import io.ktor.client.request.HttpRequestData
 import io.ktor.client.request.HttpResponseData
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.content.TextContent
+import io.ktor.http.headersOf
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -35,10 +35,11 @@ private val <T, E> Result<T, E>.error: E?
  */
 class KtorAuthApiHttpTest {
 
-    private val authResponseJson = """{"accessToken":"a","refreshToken":"r","expiresIn":900,"userId":"u","deviceId":"d",""" +
-        """"kdfSalt":"AAECAwQFBgcHCQ==",""" +
-        """"kdfParams":{"alg":"argon2id","m":65536,"t":3,"p":1},""" +
-        """"wrappedVaultKey":"AQIDBAUGBwgJCg=="}"""
+    private val authResponseJson =
+        """{"accessToken":"a","refreshToken":"r","expiresIn":900,"userId":"u","deviceId":"d",""" +
+            """"kdfSalt":"AAECAwQFBgcHCQ==",""" +
+            """"kdfParams":{"alg":"argon2id","m":65536,"t":3,"p":1},""" +
+            """"wrappedVaultKey":"AQIDBAUGBwgJCg=="}"""
 
     @Test
     fun `register sends base64 keys, never hex`() = runBlocking {
@@ -121,15 +122,13 @@ class KtorAuthApiHttpTest {
         assertEquals(10, (result as Result.Success).value.kdfSalt.size)
     }
 
-    private fun api(
-        handler: suspend MockRequestHandleScope.(HttpRequestData) -> HttpResponseData,
-    ): KtorAuthApi = KtorAuthApi(
-        HttpClient(MockEngine) { engine { addHandler(handler) } },
-        "https://api.example.com",
-    )
+    private fun api(handler: suspend MockRequestHandleScope.(HttpRequestData) -> HttpResponseData): KtorAuthApi =
+        KtorAuthApi(
+            HttpClient(MockEngine) { engine { addHandler(handler) } },
+            "https://api.example.com",
+        )
 
-    private fun HttpRequestData.bodyText(): String =
-        (body as? TextContent)?.text ?: body.toString()
+    private fun HttpRequestData.bodyText(): String = (body as? TextContent)?.text ?: body.toString()
 }
 
 /** The recovery, device and account endpoints (US-03, US-10, US-11). */
@@ -221,7 +220,8 @@ class KtorRecoveryApiHttpTest {
         val api = recoveryApi("access-token") { request ->
             authorization = request.headers["Authorization"]
             respond(
-                """[{"id":"device-1","name":"Phone","platform":"ios","lastSeen":"2026-11-11T10:00:00Z","current":true},""" +
+                """[{"id":"device-1","name":"Phone","platform":"ios",""" +
+                    """"lastSeen":"2026-11-11T10:00:00Z","current":true},""" +
                     """{"id":"device-2","name":"Tablet","platform":"android","current":false}]""",
                 HttpStatusCode.OK,
                 headersOf("Content-Type" to listOf("application/json")),
@@ -305,6 +305,5 @@ class KtorRecoveryApiHttpTest {
         return KtorRecoveryApi(client, "https://api.example.com", provider)
     }
 
-    private fun HttpRequestData.bodyText(): String =
-        (body as? TextContent)?.text ?: body.toString()
+    private fun HttpRequestData.bodyText(): String = (body as? TextContent)?.text ?: body.toString()
 }

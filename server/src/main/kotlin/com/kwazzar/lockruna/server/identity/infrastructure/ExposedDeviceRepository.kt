@@ -56,18 +56,19 @@ class ExposedDeviceRepository(private val transactions: TransactionRunner) : Dev
         } > 0
     }
 
-    override suspend fun revokeAllForUser(userId: String, exceptDeviceId: String?, revokedAt: Instant): Int = transactions.transaction {
-        val now = OffsetDateTime.now(ZoneOffset.UTC)
-        if (exceptDeviceId == null) {
-            Devices.update({ Devices.userId eq userId.toUuid() }) {
-                it[Devices.revokedAt] = now
-            }
-        } else {
-            Devices.update({ (Devices.userId eq userId.toUuid()) and (Devices.id neq exceptDeviceId.toUuid()) }) {
-                it[Devices.revokedAt] = now
+    override suspend fun revokeAllForUser(userId: String, exceptDeviceId: String?, revokedAt: Instant): Int =
+        transactions.transaction {
+            val now = OffsetDateTime.now(ZoneOffset.UTC)
+            if (exceptDeviceId == null) {
+                Devices.update({ Devices.userId eq userId.toUuid() }) {
+                    it[Devices.revokedAt] = now
+                }
+            } else {
+                Devices.update({ (Devices.userId eq userId.toUuid()) and (Devices.id neq exceptDeviceId.toUuid()) }) {
+                    it[Devices.revokedAt] = now
+                }
             }
         }
-    }
 
     private fun ResultRow.toRecord() = DeviceRecord(
         id = this[Devices.id].toString(),

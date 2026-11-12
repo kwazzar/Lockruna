@@ -1,5 +1,6 @@
 package com.kwazzar.lockruna.server
 
+import com.kwazzar.lockruna.server.identity.api.accountRoutes
 import com.kwazzar.lockruna.server.identity.api.deviceRoutes
 import com.kwazzar.lockruna.server.identity.api.identityRoutes
 import com.kwazzar.lockruna.server.identity.domain.DeviceDenylist
@@ -60,6 +61,7 @@ fun Application.module(
             call.respondText("""{"status":"ok"}""", ContentType.Application.Json)
         }
         identityRoutes()
+        accountRoutes()
         deviceRoutes()
         syncRoutes()
     }

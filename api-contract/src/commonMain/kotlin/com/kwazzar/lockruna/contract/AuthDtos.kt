@@ -45,10 +45,7 @@ data class AuthResponseDto(
 )
 
 @Serializable
-data class RecoveryStartResponseDto(
-    val userId: String,
-    val recoveryWrappedVaultKey: String,
-)
+data class RecoveryStartResponseDto(val userId: String, val recoveryWrappedVaultKey: String)
 
 @Serializable
 data class RecoveryCompleteRequest(

@@ -10,7 +10,6 @@ import com.kwazzar.lockruna.domain.auth.DevicePlatform
 import com.kwazzar.lockruna.domain.auth.SealedBlob
 import com.kwazzar.lockruna.domain.core.Result
 import com.kwazzar.lockruna.domain.crypto.Bip39
-import com.kwazzar.lockruna.domain.crypto.HkdfLabels
 import com.kwazzar.lockruna.domain.error.AppError
 import com.kwazzar.lockruna.domain.session.VaultSession
 import kotlinx.coroutines.runBlocking
@@ -58,7 +57,7 @@ class CompleteRecoveryTest {
             com.kwazzar.lockruna.domain.auth.RecoveryStartData(
                 userId = "user-1",
                 recoveryWrappedVaultKey = SealedBlob.pack(ByteArray(12), ByteArray(48)),
-        ),
+            ),
         )
         return CompleteRecovery(
             recoveryApi = recoveryApi,

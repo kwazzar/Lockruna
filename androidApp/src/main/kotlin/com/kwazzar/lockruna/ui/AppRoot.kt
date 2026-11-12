@@ -99,5 +99,7 @@ fun AppRoot() {
             }
             else -> Text("Vault")
         }
+        // Registration, recovery, devices and settings are not wired on Android yet.
+        else -> Text("Vault")
     }
 }

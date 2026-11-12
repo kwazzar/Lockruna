@@ -89,19 +89,18 @@ class ExposedRefreshTokenRepository(private val transactions: TransactionRunner)
             }
         }
 
-    override suspend fun revokeAllForUser(userId: String, revokedAt: Instant): Int =
-        transactions.transaction {
-            val deviceIds = Devices.select(Devices.id)
-                .where { Devices.userId eq userId.toUuid() }
-                .map { it[Devices.id] }
-            if (deviceIds.isEmpty()) return@transaction 0
+    override suspend fun revokeAllForUser(userId: String, revokedAt: Instant): Int = transactions.transaction {
+        val deviceIds = Devices.select(Devices.id)
+            .where { Devices.userId eq userId.toUuid() }
+            .map { it[Devices.id] }
+        if (deviceIds.isEmpty()) return@transaction 0
 
-            RefreshTokens.update({
-                (RefreshTokens.deviceId inList deviceIds) and RefreshTokens.revokedAt.isNull()
-            }) {
-                it[RefreshTokens.revokedAt] = revokedAt.toColumn()
-            }
+        RefreshTokens.update({
+            (RefreshTokens.deviceId inList deviceIds) and RefreshTokens.revokedAt.isNull()
+        }) {
+            it[RefreshTokens.revokedAt] = revokedAt.toColumn()
         }
+    }
 
     private fun ResultRow.toRecord(userId: String) = RefreshTokenRecord(
         id = this[RefreshTokens.id].toString(),

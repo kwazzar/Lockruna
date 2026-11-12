@@ -13,19 +13,32 @@ import com.kwazzar.lockruna.domain.crypto.KdfParams
 import com.kwazzar.lockruna.domain.crypto.PasswordNormalizer
 import com.kwazzar.lockruna.domain.error.AppError
 import com.kwazzar.lockruna.domain.session.BiometricGate
+import com.kwazzar.lockruna.domain.session.IdGenerator
 import com.kwazzar.lockruna.domain.session.SecureKeyStore
 import com.kwazzar.lockruna.domain.session.VaultKey
+import com.kwazzar.lockruna.domain.vault.ItemId
 import kotlinx.coroutines.CompletableDeferred
+
+/** Deterministic ids for the store tests. */
+class FixedIdGenerator : IdGenerator {
+    override fun newItemId(): ItemId = (ItemId.of("00000000-0000-4000-8000-000000000001") as Result.Success).value
+
+    override fun newUuid(): String = "00000000-0000-4000-8000-000000000001"
+}
 
 class FakeAuthApi(
     var preloginResult: Result<PreLoginData, AppError> = Result.Success(
         PreLoginData(ByteArray(16), KdfParams.SUPPORTED),
     ),
     var loginResult: Result<AuthenticatedUser, AppError>? = null,
+    var registerResult: Result<AuthenticatedUser, AppError>? = null,
 ) : AuthApi {
     var loginCalls = 0
+    var registerCalls = 0
     var lastLoginDevice: DeviceIdentity? = null
+    var lastRegisterDevice: DeviceIdentity? = null
     var loginGate: CompletableDeferred<Unit>? = null
+    var registerGate: CompletableDeferred<Unit>? = null
 
     override suspend fun prelogin(email: String): Result<PreLoginData, AppError> = preloginResult
 
@@ -38,7 +51,21 @@ class FakeAuthApi(
         wrappedVaultKey: ByteArray,
         recoveryWrappedVaultKey: ByteArray,
         device: DeviceIdentity,
-    ): Result<AuthenticatedUser, AppError> = Result.Failure(AppError.InvalidCredentials)
+    ): Result<AuthenticatedUser, AppError> {
+        registerGate?.await()
+        registerCalls++
+        lastRegisterDevice = device
+        return registerResult ?: Result.Success(
+            AuthenticatedUser(
+                userId = "user-1",
+                deviceId = device.deviceId ?: "device-1",
+                wrappedVaultKey = wrappedVaultKey,
+                kdfSalt = kdfSalt,
+                kdfParams = KdfParams.SUPPORTED,
+                tokens = AuthTokens("access-token", "refresh-token", 3600),
+            ),
+        )
+    }
 
     override suspend fun login(
         email: String,

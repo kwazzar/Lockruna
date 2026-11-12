@@ -23,7 +23,8 @@ class SecureAutoLockSettingsStore(private val storage: SecureStorage) : AutoLock
 }
 
 /** A store with a fixed policy, used where no platform storage exists (tests, tools). */
-class FixedAutoLockSettingsStore(private val policy: AutoLockPolicy = AutoLockPolicy.ONE_MINUTE) : AutoLockSettingsStore {
+class FixedAutoLockSettingsStore(private val policy: AutoLockPolicy = AutoLockPolicy.ONE_MINUTE) :
+    AutoLockSettingsStore {
     override suspend fun load(): AutoLockPolicy = policy
 
     override suspend fun save(policy: AutoLockPolicy) = Unit

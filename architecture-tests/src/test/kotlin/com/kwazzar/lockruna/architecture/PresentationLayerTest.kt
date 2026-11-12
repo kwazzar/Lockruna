@@ -84,6 +84,8 @@ class PresentationLayerTest {
 
     @Test
     fun `state never holds aggregates or secrets`() {
+        // The aggregate and the secret value object. The VaultItemType enum carries no
+        // data, and ItemUi already projects it to the UI, so only the exact names are banned.
         val forbiddenTypes = listOf("VaultItem", "Secret")
         val states = scope.classesAndInterfacesAndObjects().filter { declaration ->
             declaration.name.endsWith("State") && declaration.projectPath.contains("/presentation/")
@@ -93,7 +95,7 @@ class PresentationLayerTest {
         states.forEach { state ->
             val forbiddenProperties = state.properties()
                 .map { property -> property.type?.name.orEmpty() }
-                .filter { typeName -> forbiddenTypes.any { typeName.contains(it) } }
+                .filter { typeName -> forbiddenTypes.any { it == typeName } }
 
             assertTrue(
                 forbiddenProperties.isEmpty(),

@@ -12,7 +12,10 @@ import com.kwazzar.lockruna.domain.core.Result
 import com.kwazzar.lockruna.domain.crypto.KdfParams
 import com.kwazzar.lockruna.domain.error.AppError
 
-class FakeRecoveryApi : RecoveryApi, DeviceApi, AccountApi {
+class FakeRecoveryApi :
+    RecoveryApi,
+    DeviceApi,
+    AccountApi {
     var startResult: Result<RecoveryStartData, AppError> = Result.Success(
         RecoveryStartData("user-1", ByteArray(48)),
     )

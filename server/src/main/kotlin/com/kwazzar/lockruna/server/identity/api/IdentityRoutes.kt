@@ -1,26 +1,26 @@
 package com.kwazzar.lockruna.server.identity.api
 
 import com.kwazzar.lockruna.contract.AuthResponseDto
-import com.kwazzar.lockruna.contract.LoginRequest
 import com.kwazzar.lockruna.contract.DeleteAccountRequest
+import com.kwazzar.lockruna.contract.LoginRequest
 import com.kwazzar.lockruna.contract.PreloginRequest
+import com.kwazzar.lockruna.contract.PreloginResponse
 import com.kwazzar.lockruna.contract.RecoveryCompleteRequest
 import com.kwazzar.lockruna.contract.RecoveryStartResponseDto
-import com.kwazzar.lockruna.contract.PreloginResponse
 import com.kwazzar.lockruna.contract.RefreshRequest
 import com.kwazzar.lockruna.contract.RegisterRequest
 import com.kwazzar.lockruna.contract.TokenPairDto
 import com.kwazzar.lockruna.server.identity.application.AuthSession
 import com.kwazzar.lockruna.server.identity.application.AuthenticateSession
+import com.kwazzar.lockruna.server.identity.application.CompleteRecovery
+import com.kwazzar.lockruna.server.identity.application.CompleteRecoveryCommand
+import com.kwazzar.lockruna.server.identity.application.DeleteAccount
 import com.kwazzar.lockruna.server.identity.application.LoginCommand
 import com.kwazzar.lockruna.server.identity.application.LoginUser
 import com.kwazzar.lockruna.server.identity.application.LogoutSession
 import com.kwazzar.lockruna.server.identity.application.PreloginUser
 import com.kwazzar.lockruna.server.identity.application.RefreshSession
 import com.kwazzar.lockruna.server.identity.application.RegisterCommand
-import com.kwazzar.lockruna.server.identity.application.CompleteRecovery
-import com.kwazzar.lockruna.server.identity.application.CompleteRecoveryCommand
-import com.kwazzar.lockruna.server.identity.application.DeleteAccount
 import com.kwazzar.lockruna.server.identity.application.RegisterUser
 import com.kwazzar.lockruna.server.identity.application.StartRecovery
 import com.kwazzar.lockruna.server.platform.error.Problem
@@ -41,7 +41,7 @@ import org.koin.ktor.ext.inject
 import java.util.Base64
 
 /**
- * Identity endpoints: prelogin, register and login.
+ * Identity endpoints: prelogin, register, login, refresh, logout, recovery.
  */
 fun Route.identityRoutes() {
     val preloginUser by inject<PreloginUser>()
@@ -52,7 +52,6 @@ fun Route.identityRoutes() {
     val authenticate by inject<AuthenticateSession>()
     val startRecovery by inject<StartRecovery>()
     val completeRecovery by inject<CompleteRecovery>()
-    val deleteAccount by inject<DeleteAccount>()
 
     route("/auth") {
         post("/prelogin") {
@@ -122,6 +121,12 @@ fun Route.identityRoutes() {
             call.respond(HttpStatusCode.NoContent)
         }
     }
+}
+
+/** Deleting the account and everything under it (US-11). */
+fun Route.accountRoutes() {
+    val authenticate by inject<AuthenticateSession>()
+    val deleteAccount by inject<DeleteAccount>()
 
     delete("/account") {
         val claims = call.requireSession(authenticate)

@@ -65,7 +65,7 @@ class DeleteAccountTest {
     fun deletingSendsTheDerivedAuthKeyAndKillsTheLocalSession() = runBlocking {
         val delete = wireUp()
 
-        val result = delete("user@example.com", "password1234")
+        val result = delete("password1234")
 
         assertTrue(result.isSuccess, "expected success, got ${result.error}")
         assertContentEquals(authKey, api.lastDeleteAuthKey)
@@ -77,7 +77,7 @@ class DeleteAccountTest {
     fun aWeakPasswordIsRejectedBeforeAnyCall() = runBlocking {
         val delete = wireUp()
 
-        val result = delete("user@example.com", "short")
+        val result = delete("short")
 
         assertTrue(result.isFailure)
         assertTrue(result.error is AppError.WeakMasterPassword)
@@ -90,7 +90,7 @@ class DeleteAccountTest {
         val delete = wireUp()
         authStateStore.clear()
 
-        val result = delete("user@example.com", "password1234")
+        val result = delete("password1234")
 
         assertTrue(result.isFailure)
         assertEquals(AppError.Unauthorized, result.error)
@@ -102,7 +102,7 @@ class DeleteAccountTest {
         val delete = wireUp()
         api.deleteResult = Result.Failure(AppError.NetworkUnavailable)
 
-        val result = delete("user@example.com", "password1234")
+        val result = delete("password1234")
 
         assertTrue(result.isFailure)
         assertEquals(AppError.NetworkUnavailable, result.error)
@@ -115,7 +115,8 @@ class DeviceUseCasesTest {
 
     @Test
     fun listDevicesReturnsWhatTheApiReturns() = runBlocking {
-        val devices = listOf(DeviceInfo(id = "device-1", name = "Phone", platform = "ios", lastSeen = null, current = true))
+        val devices =
+            listOf(DeviceInfo(id = "device-1", name = "Phone", platform = "ios", lastSeen = null, current = true))
         val api = FakeRecoveryApi().apply { listResult = Result.Success(devices) }
 
         val result = ListDevices(api)()
