@@ -127,9 +127,10 @@ class CompleteRecovery(
     }
 
     private fun wrapKey(key: ByteArray, plaintext: ByteArray, aad: String, crypto: CryptoService): ByteArray {
-        val nonce = crypto.randomBytes(12)
+        // The nonce the ciphertext actually used is the one it returns; a freshly drawn
+        // nonce here would not match and the tag would never verify.
         val ciphertext = crypto.encryptGcm(key, plaintext, aad.encodeToByteArray())
-        return SealedBlob.pack(nonce, ciphertext.ciphertext + ciphertext.tag)
+        return SealedBlob.pack(ciphertext.nonce, ciphertext.ciphertext + ciphertext.tag)
     }
 }
 
