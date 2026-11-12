@@ -5,8 +5,20 @@ import com.kwazzar.lockruna.domain.crypto.KdfParams as DomainKdfParams
 private const val NONCE_SIZE = 12
 private const val AES_GCM_TAG_SIZE = 16
 
-data class AuthTokens(val accessToken: String, val refreshToken: String, val expiresInSeconds: Int) {
+data class AuthTokens(
+    val accessToken: String,
+    val refreshToken: String,
+    val expiresInSeconds: Int,
+    val issuedAtMillis: Long = 0,
+) {
     override fun toString() = "AuthTokens(redacted)"
+
+    /** True when [nowMillis] is at or past expiry minus [marginSec] seconds (or issuance is unknown). */
+    fun isExpired(nowMillis: Long, marginSec: Int = 60): Boolean {
+        if (issuedAtMillis == 0L) return true
+        val refreshAt = issuedAtMillis + (expiresInSeconds - marginSec) * 1000L
+        return nowMillis >= refreshAt
+    }
 }
 
 data class AuthenticatedUser(

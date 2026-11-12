@@ -4,6 +4,7 @@ import com.kwazzar.lockruna.data.platform.InMemorySecureStorage
 import com.kwazzar.lockruna.domain.auth.AuthTokens
 import com.kwazzar.lockruna.domain.auth.AuthenticatedUser
 import com.kwazzar.lockruna.domain.crypto.KdfParams
+import com.kwazzar.lockruna.domain.session.Clock
 import kotlinx.coroutines.test.runTest
 import kotlin.io.encoding.Base64
 import kotlin.test.Test
@@ -15,6 +16,11 @@ import kotlin.test.assertTrue
 
 class SecureAuthStateStoreTest {
 
+    private class FakeClock : Clock {
+        override fun nowMillis(): Long = 1_000_000L
+        override fun monotonicMillis(): Long = 0L
+    }
+
     private val sessionKey = "auth_session"
 
     private fun sampleUser(suffix: String = "1") = AuthenticatedUser(
@@ -23,13 +29,13 @@ class SecureAuthStateStoreTest {
         wrappedVaultKey = byteArrayOf(0x11, 0x22, 0x33, 0x44, 0x55),
         kdfSalt = byteArrayOf(0x21, 0x22, 0x23, 0x24),
         kdfParams = KdfParams(memoryKiB = 65536, iterations = 3, parallelism = 1),
-        tokens = AuthTokens(accessToken = "access-$suffix", refreshToken = "refresh-$suffix", expiresInSeconds = 900),
+        tokens = AuthTokens(accessToken = "access-$suffix", refreshToken = "refresh-$suffix", expiresInSeconds = 900, issuedAtMillis = 1_000_000),
         email = "user-$suffix@example.com",
     )
 
     @Test
     fun `a saved session round-trips with every field`() = runTest {
-        val store = SecureAuthStateStore(InMemorySecureStorage())
+        val store = SecureAuthStateStore(InMemorySecureStorage(), FakeClock())
         val user = sampleUser()
 
         store.saveSession(user)
@@ -45,7 +51,7 @@ class SecureAuthStateStoreTest {
 
     @Test
     fun `no saved session loads as null without throwing`() = runTest {
-        val store = SecureAuthStateStore(InMemorySecureStorage())
+        val store = SecureAuthStateStore(InMemorySecureStorage(), FakeClock())
 
         assertNull(store.loadSession())
     }
@@ -53,7 +59,7 @@ class SecureAuthStateStoreTest {
     @Test
     fun `clear drops the saved session`() = runTest {
         val storage = InMemorySecureStorage()
-        val store = SecureAuthStateStore(storage)
+        val store = SecureAuthStateStore(storage, FakeClock())
         store.saveSession(sampleUser())
 
         store.clear()
@@ -65,7 +71,7 @@ class SecureAuthStateStoreTest {
     @Test
     fun `saving twice overwrites the single record`() = runTest {
         val storage = InMemorySecureStorage()
-        val store = SecureAuthStateStore(storage)
+        val store = SecureAuthStateStore(storage, FakeClock())
         store.saveSession(sampleUser("1"))
 
         store.saveSession(sampleUser("2"))
@@ -77,7 +83,7 @@ class SecureAuthStateStoreTest {
     @Test
     fun `a corrupted record loads as null and is deleted`() = runTest {
         val storage = InMemorySecureStorage(mapOf(sessionKey to "not json".encodeToByteArray()))
-        val store = SecureAuthStateStore(storage)
+        val store = SecureAuthStateStore(storage, FakeClock())
 
         assertNull(store.loadSession())
         assertTrue(storage.keys.isEmpty())
@@ -97,7 +103,7 @@ class SecureAuthStateStoreTest {
     @Test
     fun `a session without the aad email is dropped`() = runTest {
         val storage = InMemorySecureStorage()
-        val store = SecureAuthStateStore(storage)
+        val store = SecureAuthStateStore(storage, FakeClock())
         storage.write("auth_session", legacySessionJson())
 
         assertNull(store.loadSession())

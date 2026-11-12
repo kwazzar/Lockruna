@@ -29,7 +29,7 @@ fun androidPlatformModule(context: Context, activityProvider: ActivityProvider):
         DatabaseDriverFactory().apply { initialize(context) }
     }
     single<SecureStorage> { KeystoreSecureStorage(context) }
-    single<AuthStateStore> { SecureAuthStateStore(get()) }
+    single<AuthStateStore> { SecureAuthStateStore(get(), get()) }
     single<AutoLockSettingsStore> { SecureAutoLockSettingsStore(get()) }
     single<BiometricPolicyStore> { SecureBiometricPolicyStore(get()) }
     single<Clipboard> { AndroidClipboard(context) }

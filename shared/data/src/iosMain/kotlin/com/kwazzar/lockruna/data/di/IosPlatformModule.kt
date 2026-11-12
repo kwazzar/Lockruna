@@ -21,7 +21,7 @@ import org.koin.dsl.module
 fun iosPlatformModule(): Module = module {
     single { DatabaseDriverFactory() }
     single<SecureStorage> { KeychainSecureStorage() }
-    single<AuthStateStore> { SecureAuthStateStore(get()) }
+    single<AuthStateStore> { SecureAuthStateStore(get(), get()) }
     single<AutoLockSettingsStore> { SecureAutoLockSettingsStore(get()) }
     single<BiometricPolicyStore> { SecureBiometricPolicyStore(get()) }
     single<Clipboard> { IosClipboard() }

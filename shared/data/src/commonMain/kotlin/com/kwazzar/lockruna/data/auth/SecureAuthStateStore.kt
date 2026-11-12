@@ -3,12 +3,14 @@ package com.kwazzar.lockruna.data.auth
 import com.kwazzar.lockruna.data.platform.SecureStorage
 import com.kwazzar.lockruna.domain.auth.AuthStateStore
 import com.kwazzar.lockruna.domain.auth.AuthenticatedUser
+import com.kwazzar.lockruna.domain.session.Clock
 
 /** Keeps the session in the platform secure storage; a record that cannot be decoded is dropped. */
-class SecureAuthStateStore(private val storage: SecureStorage) : AuthStateStore {
+class SecureAuthStateStore(private val storage: SecureStorage, private val clock: Clock) : AuthStateStore {
 
     override suspend fun saveSession(user: AuthenticatedUser) {
-        storage.write(KEY, AuthSessionCodec.encode(user))
+        val stamped = user.copy(tokens = user.tokens.copy(issuedAtMillis = clock.nowMillis()))
+        storage.write(KEY, AuthSessionCodec.encode(stamped))
     }
 
     override suspend fun loadSession(): AuthenticatedUser? {

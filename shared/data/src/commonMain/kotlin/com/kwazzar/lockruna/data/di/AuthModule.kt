@@ -31,7 +31,7 @@ fun authModule(httpClient: HttpClient, baseUrl: String): Module = module {
     single<RecoveryApi> { get<KtorRecoveryApi>() }
     single<DeviceApi> { get<KtorRecoveryApi>() }
     single<AccountApi> { get<KtorRecoveryApi>() }
-    single<AccessTokenProvider> { SessionAccessTokenProvider(get()) }
+    single<AccessTokenProvider> { SessionAccessTokenProvider(get(), get(), get()) }
 
     includes(authUseCasesModule)
 }
