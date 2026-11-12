@@ -12,6 +12,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -30,7 +31,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginScreen(store: LoginStore, onLoggedIn: () -> Unit) {
+fun LoginScreen(store: LoginStore, onLoggedIn: () -> Unit, onRegister: () -> Unit, onRecovery: () -> Unit) {
     val state by store.state.collectAsState()
     val scope = rememberCoroutineScope()
     var password by remember { mutableStateOf("") }
@@ -80,5 +81,7 @@ fun LoginScreen(store: LoginStore, onLoggedIn: () -> Unit) {
                 scope.launch { store.dispatch(LoginIntent.Submit) }
             }) { Text("Sign in") }
         }
+        TextButton(onClick = onRegister) { Text("Create account") }
+        TextButton(onClick = onRecovery) { Text("Lost access") }
     }
 }

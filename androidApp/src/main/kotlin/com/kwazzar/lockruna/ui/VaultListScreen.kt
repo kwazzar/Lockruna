@@ -15,6 +15,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,13 +24,23 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.kwazzar.lockruna.presentation.vault.ItemUi
 import com.kwazzar.lockruna.presentation.vault.VaultListIntent
 import com.kwazzar.lockruna.presentation.vault.VaultListStore
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VaultListScreen(store: VaultListStore, onOpenItem: (String) -> Unit, onNewItem: () -> Unit, onLock: () -> Unit) {
+fun VaultListScreen(
+    store: VaultListStore,
+    onOpenItem: (String) -> Unit,
+    onNewItem: () -> Unit,
+    onLock: () -> Unit,
+    onDevices: () -> Unit,
+    onSettings: () -> Unit,
+    onSync: () -> Unit,
+    syncMessage: String?,
+) {
     val state by store.state.collectAsState()
     val scope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
@@ -46,6 +57,9 @@ fun VaultListScreen(store: VaultListStore, onOpenItem: (String) -> Unit, onNewIt
             TopAppBar(title = {
                 Text("Vault")
             }, actions = {
+                TextButton(onClick = onSync) { Text("Sync") }
+                TextButton(onClick = onDevices) { Text("Devices") }
+                TextButton(onClick = onSettings) { Text("Settings") }
                 IconButton(onClick = { scope.launch { store.dispatch(VaultListIntent.Lock) } }) { Text("Lock") }
             })
         },
@@ -58,20 +72,27 @@ fun VaultListScreen(store: VaultListStore, onOpenItem: (String) -> Unit, onNewIt
                 label = { Text("Search") },
                 modifier = Modifier.padding(8.dp),
             )
-            LazyColumn {
-                items(state.items) { item ->
-                    Row(
-                        Modifier.clickable {
-                            scope.launch { store.dispatch(VaultListIntent.ItemClicked(item.id)) }
-                        }.padding(12.dp),
-                    ) {
-                        Column {
-                            Text(item.title)
-                            Text(item.username ?: "")
-                        }
-                    }
-                }
+            if (syncMessage != null) {
+                Text(syncMessage, modifier = Modifier.padding(horizontal = 8.dp))
             }
+            LazyColumn {
+                items(state.items) { item -> ItemRow(item, store) }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ItemRow(item: ItemUi, store: VaultListStore) {
+    val scope = rememberCoroutineScope()
+    Row(
+        Modifier.clickable {
+            scope.launch { store.dispatch(VaultListIntent.ItemClicked(item.id)) }
+        }.padding(12.dp),
+    ) {
+        Column {
+            Text(item.title)
+            Text(item.username ?: "")
         }
     }
 }

@@ -3,65 +3,77 @@
 package com.kwazzar.lockruna.ui
 
 import android.os.SystemClock
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import com.kwazzar.lockruna.application.sync.SyncNow
 import com.kwazzar.lockruna.domain.auth.AuthStateStore
+import com.kwazzar.lockruna.domain.core.Result
+import com.kwazzar.lockruna.domain.vault.VaultItemType
 import com.kwazzar.lockruna.presentation.app.AppScreen
 import com.kwazzar.lockruna.presentation.app.startScreen
 import com.kwazzar.lockruna.presentation.auth.LoginStore
+import com.kwazzar.lockruna.presentation.auth.RecoveryStore
+import com.kwazzar.lockruna.presentation.auth.RegisterStore
 import com.kwazzar.lockruna.presentation.auth.UnlockStore
+import com.kwazzar.lockruna.presentation.session.SessionEffect
+import com.kwazzar.lockruna.presentation.session.SessionIntent
 import com.kwazzar.lockruna.presentation.session.SessionStore
+import com.kwazzar.lockruna.presentation.vault.DevicesStore
 import com.kwazzar.lockruna.presentation.vault.ItemDetailStore
 import com.kwazzar.lockruna.presentation.vault.ItemEditStore
+import com.kwazzar.lockruna.presentation.vault.SettingsStore
 import com.kwazzar.lockruna.presentation.vault.VaultListStore
+import kotlinx.coroutines.launch
 import org.koin.core.context.GlobalContext
 
 @Composable
 fun AppRoot() {
-    val authStateStore = GlobalContext.get().get<AuthStateStore>()
-    val sessionStore = remember { GlobalContext.get().get<SessionStore>() }
-    val unlockStore = remember { GlobalContext.get().get<UnlockStore>() }
-    val loginStore = remember { GlobalContext.get().get<LoginStore>() }
-    val vaultListStore = remember { GlobalContext.get().get<VaultListStore>() }
-    val itemDetailStore = remember { GlobalContext.get().get<ItemDetailStore>() }
-    val itemEditStore = remember { GlobalContext.get().get<ItemEditStore>() }
+    val koin = GlobalContext.get()
+    val authStateStore = koin.get<AuthStateStore>()
+    val sessionStore = remember { koin.get<SessionStore>() }
+    val unlockStore = remember { koin.get<UnlockStore>() }
+    val loginStore = remember { koin.get<LoginStore>() }
+    val registerStore = remember { koin.get<RegisterStore>() }
+    val recoveryStore = remember { koin.get<RecoveryStore>() }
+    val vaultListStore = remember { koin.get<VaultListStore>() }
+    val itemDetailStore = remember { koin.get<ItemDetailStore>() }
+    val itemEditStore = remember { koin.get<ItemEditStore>() }
+    val devicesStore = remember { koin.get<DevicesStore>() }
+    val settingsStore = remember { koin.get<SettingsStore>() }
+    val syncNow = remember { koin.get<SyncNow>() }
+    val scope = rememberCoroutineScope()
 
     var screen by remember { mutableStateOf(AppScreen.UNLOCK) }
     var route by remember { mutableStateOf("list") }
     var selectedId by remember { mutableStateOf<String?>(null) }
+    var syncMessage by remember { mutableStateOf<String?>(null) }
 
-    val lifecycleOwner = LocalLifecycleOwner.current
-    var backgroundedAt by remember { mutableStateOf<Long?>(null) }
-    LaunchedEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            when (event) {
-                Lifecycle.Event.ON_STOP -> backgroundedAt = SystemClock.elapsedRealtime()
-                Lifecycle.Event.ON_START -> {
-                    val ts = backgroundedAt
-                    backgroundedAt = null
-                    kotlinx.coroutines.runBlocking {
-                        sessionStore.dispatch(com.kwazzar.lockruna.presentation.session.SessionIntent.Resumed(ts))
-                    }
-                }
-                else -> {}
+    fun runSync() {
+        scope.launch {
+            syncMessage = when (val result = syncNow()) {
+                is Result.Success -> null
+                is Result.Failure -> "Offline"
             }
         }
-        lifecycleOwner.lifecycle.addObserver(observer)
     }
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    AppLifecycleEffects(sessionStore = sessionStore, onResume = { runSync() }, owner = lifecycleOwner)
     LaunchedEffect(Unit) {
         val hasSession = authStateStore.loadSession() != null
         screen = startScreen(isLocked = true, hasSession = hasSession)
         sessionStore.effects.collect { effect ->
             when (effect) {
-                com.kwazzar.lockruna.presentation.session.SessionEffect.Locked -> {
+                is SessionEffect.Locked -> {
                     screen = startScreen(isLocked = true, hasSession = authStateStore.loadSession() != null)
                 }
             }
@@ -69,37 +81,129 @@ fun AppRoot() {
     }
 
     when (screen) {
-        AppScreen.UNLOCK -> UnlockScreen(unlockStore) { screen = AppScreen.VAULT }
-        AppScreen.LOGIN -> LoginScreen(loginStore) { screen = AppScreen.VAULT }
-        AppScreen.VAULT -> when (route) {
-            "list" -> VaultListScreen(
-                store = vaultListStore,
-                onOpenItem = { id ->
-                    selectedId = id
-                    route = "detail"
-                },
-                onNewItem = { route = "edit" },
-                onLock = { },
-            )
-            "detail" -> {
-                LaunchedEffect(selectedId) { selectedId?.let { itemDetailStore.open(it) } }
-                ItemDetailScreen(
-                    store = itemDetailStore,
-                    onBack = { route = "list" },
-                    onEdit = { route = "edit" },
-                )
-            }
-            "edit" -> {
-                LaunchedEffect(selectedId) { itemEditStore.begin(selectedId) }
-                ItemEditScreen(
-                    store = itemEditStore,
-                    onSaved = { route = "list" },
-                    onBack = { route = "list" },
-                )
-            }
-            else -> Text("Vault")
+        AppScreen.UNLOCK -> UnlockScreen(unlockStore) {
+            screen = AppScreen.VAULT
+            route = "list"
+            runSync()
         }
-        // Registration, recovery, devices and settings are not wired on Android yet.
-        else -> Text("Vault")
+        AppScreen.LOGIN -> LoginScreen(
+            store = loginStore,
+            onLoggedIn = {
+                screen = AppScreen.VAULT
+                route = "list"
+            },
+            onRegister = { screen = AppScreen.REGISTER },
+            onRecovery = { screen = AppScreen.RECOVERY },
+        )
+        AppScreen.REGISTER -> RegisterScreen(registerStore) {
+            screen = AppScreen.VAULT
+            route = "list"
+        }
+        AppScreen.RECOVERY -> RecoveryScreen(recoveryStore) {
+            screen = AppScreen.VAULT
+            route = "list"
+        }
+        AppScreen.DEVICES -> DevicesScreen(devicesStore)
+        AppScreen.SETTINGS -> SettingsScreen(settingsStore) {
+            screen = startScreen(isLocked = true, hasSession = false)
+        }
+        AppScreen.VAULT -> VaultRoutes(
+            route = route,
+            selectedId = selectedId,
+            vaultListStore = vaultListStore,
+            itemDetailStore = itemDetailStore,
+            itemEditStore = itemEditStore,
+            onOpenItem = { id ->
+                selectedId = id
+                route = "detail"
+            },
+            onNewItem = { route = "edit" },
+            onDevices = { screen = AppScreen.DEVICES },
+            onSettings = { screen = AppScreen.SETTINGS },
+            onSync = { runSync() },
+            syncMessage = syncMessage,
+            onSaved = {
+                route = "list"
+                runSync()
+            },
+            onBack = { route = "list" },
+        )
+    }
+}
+
+/**
+ * The auto-lock and sync lifecycle wiring: the monotonic time of the background is
+ * captured on stop, and the resume applies the user's timeout (US-08) and syncs (US-09).
+ */
+@Composable
+private fun AppLifecycleEffects(
+    sessionStore: SessionStore,
+    onResume: () -> Unit,
+    owner: androidx.lifecycle.LifecycleOwner,
+) {
+    val scope = rememberCoroutineScope()
+    var backgroundedAt by remember { mutableStateOf<Long?>(null) }
+    val observer = remember(owner) {
+        LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_STOP -> backgroundedAt = SystemClock.elapsedRealtime()
+                Lifecycle.Event.ON_START -> {
+                    val ts = backgroundedAt
+                    backgroundedAt = null
+                    scope.launch { sessionStore.dispatch(SessionIntent.Resumed(ts)) }
+                    onResume()
+                }
+                else -> {}
+            }
+        }
+    }
+    DisposableEffect(owner) {
+        owner.lifecycle.addObserver(observer)
+        onDispose { owner.lifecycle.removeObserver(observer) }
+    }
+}
+
+@Composable
+private fun VaultRoutes(
+    route: String,
+    selectedId: String?,
+    vaultListStore: VaultListStore,
+    itemDetailStore: ItemDetailStore,
+    itemEditStore: ItemEditStore,
+    onOpenItem: (String) -> Unit,
+    onNewItem: () -> Unit,
+    onDevices: () -> Unit,
+    onSettings: () -> Unit,
+    onSync: () -> Unit,
+    syncMessage: String?,
+    onSaved: () -> Unit,
+    onBack: () -> Unit,
+) {
+    when (route) {
+        "list" -> VaultListScreen(
+            store = vaultListStore,
+            onOpenItem = onOpenItem,
+            onNewItem = onNewItem,
+            onLock = { },
+            onDevices = onDevices,
+            onSettings = onSettings,
+            onSync = onSync,
+            syncMessage = syncMessage,
+        )
+        "detail" -> {
+            LaunchedEffect(selectedId) { selectedId?.let { itemDetailStore.open(it) } }
+            ItemDetailScreen(store = itemDetailStore, onBack = onBack, onEdit = { onNewItem() })
+        }
+        else -> {
+            LaunchedEffect(selectedId) { itemEditStore.begin(selectedId) }
+            ItemEditScreen(
+                store = itemEditStore,
+                folders = vaultListStore.state.value.items
+                    .filter { it.type == VaultItemType.FOLDER }
+                    .map { it.id to it.title },
+                onSaved = onSaved,
+                onBack = onBack,
+            )
+        }
     }
 }
