@@ -8,6 +8,13 @@ if [ -z "${JAVA_HOME:-}" ] && [ -d "/Applications/Android Studio.app/Contents/jb
   export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
 fi
 
+# The server tests run Testcontainers. On a machine where Docker already answers on a
+# socket these stay untouched; an empty value only gets this Colima default.
+: "${DOCKER_HOST:=unix://$HOME/.colima/default/docker.sock}"
+export DOCKER_HOST
+: "${TESTCONTAINERS_RYUK_DISABLED:=true}"
+export TESTCONTAINERS_RYUK_DISABLED
+
 GRADLE="./gradlew"
 
 echo "==> Tests"
