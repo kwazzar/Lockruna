@@ -29,7 +29,12 @@ class SecureAuthStateStoreTest {
         wrappedVaultKey = byteArrayOf(0x11, 0x22, 0x33, 0x44, 0x55),
         kdfSalt = byteArrayOf(0x21, 0x22, 0x23, 0x24),
         kdfParams = KdfParams(memoryKiB = 65536, iterations = 3, parallelism = 1),
-        tokens = AuthTokens(accessToken = "access-$suffix", refreshToken = "refresh-$suffix", expiresInSeconds = 900, issuedAtMillis = 1_000_000),
+        tokens = AuthTokens(
+            accessToken = "access-$suffix",
+            refreshToken = "refresh-$suffix",
+            expiresInSeconds = 900,
+            issuedAtMillis = 1_000_000,
+        ),
         email = "user-$suffix@example.com",
     )
 

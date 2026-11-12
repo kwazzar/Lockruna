@@ -5,8 +5,8 @@ import com.kwazzar.lockruna.domain.auth.AuthTokens
 import com.kwazzar.lockruna.domain.auth.AuthenticatedUser
 import com.kwazzar.lockruna.domain.auth.SealedBlob
 import com.kwazzar.lockruna.domain.core.Result
-import com.kwazzar.lockruna.domain.error.AppError
 import com.kwazzar.lockruna.domain.crypto.KdfParams
+import com.kwazzar.lockruna.domain.error.AppError
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -64,8 +64,7 @@ class SessionAccessTokenProviderTest {
             authKey: ByteArray,
             device: com.kwazzar.lockruna.domain.auth.DeviceIdentity,
         ) = Result.Failure<AppError>(AppError.NetworkUnavailable)
-        override suspend fun refresh(refreshToken: String) =
-            refreshResult ?: Result.Failure(AppError.Unauthorized)
+        override suspend fun refresh(refreshToken: String) = refreshResult ?: Result.Failure(AppError.Unauthorized)
         override suspend fun logout() = Result.Success(Unit)
     }
 
@@ -128,7 +127,8 @@ class SessionAccessTokenProviderTest {
         )
         authStateStore.saveSession(user)
 
-        val provider = SessionAccessTokenProvider(authStateStore, fakeAuthApi(Result.Failure(AppError.Unauthorized)), fixedClock)
+        val provider =
+            SessionAccessTokenProvider(authStateStore, fakeAuthApi(Result.Failure(AppError.Unauthorized)), fixedClock)
         val token = provider.token()
 
         assertNull(token)

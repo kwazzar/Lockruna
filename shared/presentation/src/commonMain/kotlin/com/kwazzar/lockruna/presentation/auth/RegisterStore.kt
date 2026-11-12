@@ -36,7 +36,8 @@ class RegisterStore(private val register: Register, private val platform: Device
         draftPassword = ""
         draftConfirmation = ""
         recoveryWords = emptyList()
-        _state.value = _state.value.copy(hasPassword = false, hasRecoveryWords = false, passwordStrength = null, strength = null)
+        _state.value =
+            _state.value.copy(hasPassword = false, hasRecoveryWords = false, passwordStrength = null, strength = null)
     }
 
     suspend fun dispatch(intent: RegisterIntent) {

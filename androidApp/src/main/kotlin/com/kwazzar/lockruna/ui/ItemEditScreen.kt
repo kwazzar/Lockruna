@@ -80,7 +80,12 @@ fun ItemEditScreen(
                     modifier = Modifier.padding(bottom = 8.dp),
                 )
                 ExposedDropdownMenu(expanded = typeMenuOpen, onDismissRequest = { typeMenuOpen = false }) {
-                    listOf(VaultItemType.LOGIN, VaultItemType.CARD, VaultItemType.NOTE, VaultItemType.FOLDER).forEach { type ->
+                    listOf(
+                        VaultItemType.LOGIN,
+                        VaultItemType.CARD,
+                        VaultItemType.NOTE,
+                        VaultItemType.FOLDER,
+                    ).forEach { type ->
                         DropdownMenuItem(
                             text = { Text(typeLabel(type)) },
                             onClick = {

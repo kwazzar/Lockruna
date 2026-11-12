@@ -98,9 +98,16 @@ fun RegisterScreen(store: RegisterStore, onRegistered: () -> Unit) {
             )
             val strength = state.strength ?: state.passwordStrength
             if (strength != null && password.isNotEmpty()) {
-                Text("Strength: ${strength.level}/4", style = androidx.compose.material3.MaterialTheme.typography.bodySmall)
+                Text(
+                    "Strength: ${strength.level}/4",
+                    style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
+                )
                 if (strength.warnings.isNotEmpty()) {
-                    Text(strength.warnings.joinToString(", "), color = androidx.compose.material3.MaterialTheme.colorScheme.error, style = androidx.compose.material3.MaterialTheme.typography.bodySmall)
+                    Text(
+                        strength.warnings.joinToString(", "),
+                        color = androidx.compose.material3.MaterialTheme.colorScheme.error,
+                        style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
+                    )
                 }
             }
             Spacer(Modifier.height(8.dp))
@@ -223,9 +230,16 @@ fun RecoveryScreen(store: RecoveryStore, onRecovered: () -> Unit) {
         )
         val recoveryStrength = state.strength ?: state.passwordStrength
         if (recoveryStrength != null && password.isNotEmpty()) {
-            Text("Strength: ${recoveryStrength.level}/4", style = androidx.compose.material3.MaterialTheme.typography.bodySmall)
+            Text(
+                "Strength: ${recoveryStrength.level}/4",
+                style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
+            )
             if (recoveryStrength.warnings.isNotEmpty()) {
-                Text(recoveryStrength.warnings.joinToString(", "), color = androidx.compose.material3.MaterialTheme.colorScheme.error, style = androidx.compose.material3.MaterialTheme.typography.bodySmall)
+                Text(
+                    recoveryStrength.warnings.joinToString(", "),
+                    color = androidx.compose.material3.MaterialTheme.colorScheme.error,
+                    style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
+                )
             }
         }
         Spacer(Modifier.height(8.dp))

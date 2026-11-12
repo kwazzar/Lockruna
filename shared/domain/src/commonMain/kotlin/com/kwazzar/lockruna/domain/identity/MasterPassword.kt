@@ -14,6 +14,9 @@ import kotlin.jvm.JvmInline
 value class MasterPassword private constructor(val value: String) {
     companion object {
         const val MIN_LENGTH: Int = 12
+        private const val BONUS_LENGTH: Int = 16
+        private const val COMMON_PATTERN_MIN_LENGTH: Int = 4
+        private const val HALF: Int = 2
 
         fun of(raw: String): Result<MasterPassword, AppError> = if (raw.length < MIN_LENGTH) {
             Result.Failure(AppError.WeakMasterPassword(WeakPasswordReason.TOO_SHORT))
@@ -29,7 +32,7 @@ value class MasterPassword private constructor(val value: String) {
                 warnings += "too short"
             } else {
                 score += 1
-                if (raw.length >= 16) score += 1
+                if (raw.length >= BONUS_LENGTH) score += 1
             }
 
             val hasDigit = raw.any { it.isDigit() }
@@ -40,7 +43,9 @@ value class MasterPassword private constructor(val value: String) {
 
             val hasUpper = raw.any { it.isUpperCase() }
             val hasLower = raw.any { it.isLowerCase() }
-            if (hasUpper && hasLower) score += 1 else {
+            if (hasUpper && hasLower) {
+                score += 1
+            } else {
                 if (!hasUpper) warnings += "no uppercase"
                 if (!hasLower) warnings += "no lowercase"
             }
@@ -59,18 +64,16 @@ value class MasterPassword private constructor(val value: String) {
             val lower = raw.lowercase()
             if (raw.toSet().size == 1) return true
             val mostCommonCount = raw.groupingBy { it }.eachCount().values.maxOrNull() ?: 0
-            if (raw.length >= 4 && mostCommonCount > raw.length / 2) return true
+            if (raw.length >= COMMON_PATTERN_MIN_LENGTH && mostCommonCount > raw.length / HALF) return true
             val common = listOf(
                 "password", "qwerty", "123456", "12345678", "letmein", "admin",
                 "welcome", "iloveyou", "abc123", "monkey", "dragon",
             )
-            if (common.any { lower.contains(it) }) return true
-            if (isSequential(lower)) return true
-            return false
+            return common.any { lower.contains(it) } || isSequential(lower)
         }
 
         private fun isSequential(s: String): Boolean {
-            if (s.length < 4) return false
+            if (s.length < COMMON_PATTERN_MIN_LENGTH) return false
             var asc = true
             var desc = true
             for (i in 1 until s.length) {

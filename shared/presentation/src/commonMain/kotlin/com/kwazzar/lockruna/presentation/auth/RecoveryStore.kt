@@ -32,7 +32,8 @@ class RecoveryStore(private val completeRecovery: CompleteRecovery, private val 
     fun close() {
         draftRecoveryWords = emptyList()
         draftPassword = ""
-        _state.value = _state.value.copy(hasRecoveryWords = false, hasPassword = false, passwordStrength = null, strength = null)
+        _state.value =
+            _state.value.copy(hasRecoveryWords = false, hasPassword = false, passwordStrength = null, strength = null)
     }
 
     suspend fun dispatch(intent: RecoveryIntent) {
