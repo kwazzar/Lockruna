@@ -24,8 +24,9 @@ import org.koin.core.module.Module
 import org.koin.dsl.module
 
 fun authModule(httpClient: HttpClient, baseUrl: String): Module = module {
-    single { createAuthApi(httpClient, baseUrl) }
-    single<AuthApi> { get() }
+    // One definition per type: a second `single<AuthApi> { get() }` resolves to itself
+    // and recurses until the stack overflows on the first store resolution.
+    single<AuthApi> { createAuthApi(httpClient, baseUrl) }
     single { KtorRecoveryApi(httpClient, baseUrl, get()) }
     single<RecoveryApi> { get<KtorRecoveryApi>() }
     single<DeviceApi> { get<KtorRecoveryApi>() }

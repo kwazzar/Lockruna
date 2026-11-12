@@ -88,6 +88,6 @@ class CoreModuleTest {
     }
 }
 
-private class FakeClipboard : Clipboard {
+class FakeClipboard : Clipboard {
     override suspend fun copySecret(value: String): Result<Unit, AppError> = Result.Success(Unit)
 }

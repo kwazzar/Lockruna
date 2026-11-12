@@ -7,7 +7,9 @@ import com.kwazzar.lockruna.data.platform.IosClipboard
 import com.kwazzar.lockruna.data.platform.KeychainSecureStorage
 import com.kwazzar.lockruna.data.platform.SecureStorage
 import com.kwazzar.lockruna.data.session.SecureAutoLockSettingsStore
+import com.kwazzar.lockruna.data.session.SecureBiometricPolicyStore
 import com.kwazzar.lockruna.domain.auth.AuthStateStore
+import com.kwazzar.lockruna.domain.auth.BiometricPolicyStore
 import com.kwazzar.lockruna.domain.auth.DevicePlatform
 import com.kwazzar.lockruna.domain.session.AutoLockSettingsStore
 import com.kwazzar.lockruna.domain.session.BiometricGate
@@ -21,6 +23,7 @@ fun iosPlatformModule(): Module = module {
     single<SecureStorage> { KeychainSecureStorage() }
     single<AuthStateStore> { SecureAuthStateStore(get()) }
     single<AutoLockSettingsStore> { SecureAutoLockSettingsStore(get()) }
+    single<BiometricPolicyStore> { SecureBiometricPolicyStore(get()) }
     single<Clipboard> { IosClipboard() }
     single { IosBiometricVault(get()) }
     single<BiometricGate> { get<IosBiometricVault>() }

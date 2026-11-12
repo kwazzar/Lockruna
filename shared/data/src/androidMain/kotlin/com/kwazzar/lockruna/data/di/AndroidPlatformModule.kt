@@ -9,7 +9,9 @@ import com.kwazzar.lockruna.data.platform.AndroidClipboard
 import com.kwazzar.lockruna.data.platform.KeystoreSecureStorage
 import com.kwazzar.lockruna.data.platform.SecureStorage
 import com.kwazzar.lockruna.data.session.SecureAutoLockSettingsStore
+import com.kwazzar.lockruna.data.session.SecureBiometricPolicyStore
 import com.kwazzar.lockruna.domain.auth.AuthStateStore
+import com.kwazzar.lockruna.domain.auth.BiometricPolicyStore
 import com.kwazzar.lockruna.domain.auth.DevicePlatform
 import com.kwazzar.lockruna.domain.session.AutoLockSettingsStore
 import com.kwazzar.lockruna.domain.session.BiometricGate
@@ -29,6 +31,7 @@ fun androidPlatformModule(context: Context, activityProvider: ActivityProvider):
     single<SecureStorage> { KeystoreSecureStorage(context) }
     single<AuthStateStore> { SecureAuthStateStore(get()) }
     single<AutoLockSettingsStore> { SecureAutoLockSettingsStore(get()) }
+    single<BiometricPolicyStore> { SecureBiometricPolicyStore(get()) }
     single<Clipboard> { AndroidClipboard(context) }
     single {
         AndroidBiometricVault(context, activityProvider, get())
