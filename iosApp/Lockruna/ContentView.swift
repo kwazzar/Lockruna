@@ -1,5 +1,6 @@
 import SwiftUI
 import Shared
+import UIKit
 
 struct ContentView: View {
     @ObservedObject var model: AppModel
@@ -11,11 +12,20 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             Group {
-                if model.screen == "unlock" {
+                switch model.screen {
+                case "unlock":
                     UnlockView(model: model)
-                } else if model.screen == "login" {
+                case "login":
                     LoginView(model: model)
-                } else {
+                case "register":
+                    RegisterView(model: model)
+                case "recovery":
+                    RecoveryView(model: model)
+                case "devices":
+                    DevicesView(model: model)
+                case "settings":
+                    SettingsView(model: model)
+                default:
                     VaultContainer(model: model, route: $route, selectedId: $selectedId)
                 }
             }
@@ -30,6 +40,7 @@ struct ContentView: View {
                 model.backgroundedAt = Date()
             } else if newPhase == .active {
                 model.showBlur = false
+                model.sync()
                 if let ts = model.backgroundedAt {
                     let mono = Int64(ts.timeIntervalSince1970 * 1000)
                     Task { try await model.sessionStore.dispatch(intent: PresentationSessionIntentResumed(backgroundedAtMonotonicMillis: KotlinLong(value: mono))) }
@@ -55,11 +66,17 @@ struct UnlockView: View {
                     try await model.unlockStore.dispatch(intent: PresentationUnlockIntentEmailChanged(value: email))
                     try await model.unlockStore.dispatch(intent: PresentationUnlockIntentPasswordChanged(value: password))
                     try await model.unlockStore.dispatch(intent: PresentationUnlockIntentSubmitPassword())
+                    model.screen = "vault"
+                    model.sync()
                 }
             }
             if model.unlockStore.state.value.biometricAvailable {
                 Button("Use biometrics") {
-                    Task { try await model.unlockStore.dispatch(intent: PresentationUnlockIntentSubmitBiometrics()) }
+                    Task {
+                        try await model.unlockStore.dispatch(intent: PresentationUnlockIntentSubmitBiometrics())
+                        model.screen = "vault"
+                        model.sync()
+                    }
                 }
             }
             if model.unlockStore.state.value.error != nil {
@@ -73,7 +90,7 @@ struct LoginView: View {
     @ObservedObject var model: AppModel
     @State private var email: String = ""
     @State private var password: String = ""
-    @State private var deviceName: String = "iPhone"
+    @State private var deviceName: String = UIDevice.current.name
 
     var body: some View {
         VStack(spacing: 12) {
@@ -87,8 +104,12 @@ struct LoginView: View {
                     try await model.loginStore.dispatch(intent: PresentationLoginIntentPasswordChanged(value: password))
                     try await model.loginStore.dispatch(intent: PresentationLoginIntentDeviceNameChanged(value: deviceName))
                     try await model.loginStore.dispatch(intent: PresentationLoginIntentSubmit())
+                    model.screen = "vault"
+                    model.sync()
                 }
             }
+            Button("Create account") { model.screen = "register" }
+            Button("Lost access") { model.screen = "recovery" }
             if model.loginStore.state.value.error != nil {
                 Text("Login failed").foregroundColor(.red)
             }
@@ -129,11 +150,16 @@ struct VaultListView: View {
                     route = "detail"
                 }
             }
-            Button("Lock") {
-                Task {
-                    try await model.sessionStore.dispatch(intent: PresentationSessionIntentLock())
-                    model.screen = "unlock"
+            HStack {
+                Button("Lock") {
+                    Task {
+                        try await model.sessionStore.dispatch(intent: PresentationSessionIntentLock())
+                        model.screen = "unlock"
+                    }
                 }
+                Button("Sync") { model.sync() }
+                Button("Devices") { model.screen = "devices" }
+                Button("Settings") { model.screen = "settings" }
             }
             Button("New item") { route = "edit" }
         }.padding()
@@ -162,15 +188,32 @@ struct ItemEditView: View {
     @ObservedObject var model: AppModel
     @Binding var route: String
     @State private var title: String = ""
+    @State private var typeIndex: Int = 0
+
+    private let types: [(String, VaultItemType)] = [("Login", .login), ("Card", .card), ("Note", .note)]
 
     var body: some View {
         VStack {
             Text("Edit").font(.title)
+            Picker("Type", selection: $typeIndex) {
+                ForEach(types.indices, id: \.self) { index in
+                    Text(types[index].0).tag(index)
+                }
+            }
+            .onChange(of: typeIndex) { _, index in
+                Task {
+                    try await model.itemEditStore.dispatch(
+                        intent: PresentationItemEditIntentTypeChanged(type: types[index].1)
+                    )
+                }
+            }
             TextField("Title", text: $title).textFieldStyle(.roundedBorder)
             Button("Save") {
                 Task {
                     try await model.itemEditStore.dispatch(intent: PresentationItemEditIntentTitleChanged(value: title))
                     try await model.itemEditStore.dispatch(intent: PresentationItemEditIntentSave())
+                    route = "list"
+                    model.sync()
                 }
             }
             Button("Back") { route = "list" }

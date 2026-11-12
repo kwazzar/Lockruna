@@ -56,9 +56,11 @@ fun AppRoot() {
     var route by remember { mutableStateOf("list") }
     var selectedId by remember { mutableStateOf<String?>(null) }
     var syncMessage by remember { mutableStateOf<String?>(null) }
+    var syncJob by remember { mutableStateOf<kotlinx.coroutines.Job?>(null) }
 
     fun runSync() {
-        scope.launch {
+        syncJob?.cancel()
+        syncJob = scope.launch {
             syncMessage = when (val result = syncNow()) {
                 is Result.Success -> null
                 is Result.Failure -> "Offline"
@@ -66,8 +68,25 @@ fun AppRoot() {
         }
     }
 
+    /** A local save waits for the next keystroke to be over before it hits the network. */
+    fun scheduleSync() {
+        syncJob?.cancel()
+        syncJob = scope.launch {
+            kotlinx.coroutines.delay(SYNC_DEBOUNCE_MILLIS)
+            syncMessage = when (val result = syncNow()) {
+                is Result.Success -> null
+                is Result.Failure -> "Offline"
+            }
+        }
+    }
+
+    DisposableEffect(Unit) {
+        onDispose { syncJob?.cancel() }
+    }
+
     val lifecycleOwner = LocalLifecycleOwner.current
     AppLifecycleEffects(sessionStore = sessionStore, onResume = { runSync() }, owner = lifecycleOwner)
+    AppNetworkSync(onAvailable = { runSync() })
     LaunchedEffect(Unit) {
         val hasSession = authStateStore.loadSession() != null
         screen = startScreen(isLocked = true, hasSession = hasSession)
@@ -80,54 +99,130 @@ fun AppRoot() {
         }
     }
 
-    when (screen) {
-        AppScreen.UNLOCK -> UnlockScreen(unlockStore) {
+    AppScreens(
+        screen = screen,
+        route = route,
+        selectedId = selectedId,
+        syncMessage = syncMessage,
+        unlockStore = unlockStore,
+        loginStore = loginStore,
+        registerStore = registerStore,
+        recoveryStore = recoveryStore,
+        vaultListStore = vaultListStore,
+        itemDetailStore = itemDetailStore,
+        itemEditStore = itemEditStore,
+        devicesStore = devicesStore,
+        settingsStore = settingsStore,
+        onUnlocked = {
             screen = AppScreen.VAULT
             route = "list"
             runSync()
-        }
+        },
+        onLoggedIn = {
+            screen = AppScreen.VAULT
+            route = "list"
+        },
+        onRegister = { screen = AppScreen.REGISTER },
+        onRecovery = { screen = AppScreen.RECOVERY },
+        onRegistered = {
+            screen = AppScreen.VAULT
+            route = "list"
+        },
+        onRecovered = {
+            screen = AppScreen.VAULT
+            route = "list"
+        },
+        onAccountDeleted = { screen = startScreen(isLocked = true, hasSession = false) },
+        onOpenItem = { id ->
+            selectedId = id
+            route = "detail"
+        },
+        onNewItem = { route = "edit" },
+        onDevices = { screen = AppScreen.DEVICES },
+        onSettings = { screen = AppScreen.SETTINGS },
+        onSync = { runSync() },
+        onSaved = {
+            route = "list"
+            scheduleSync()
+        },
+        onBack = { route = "list" },
+    )
+}
+
+@Composable
+private fun AppScreens(
+    screen: AppScreen,
+    route: String,
+    selectedId: String?,
+    syncMessage: String?,
+    unlockStore: UnlockStore,
+    loginStore: LoginStore,
+    registerStore: RegisterStore,
+    recoveryStore: RecoveryStore,
+    vaultListStore: VaultListStore,
+    itemDetailStore: ItemDetailStore,
+    itemEditStore: ItemEditStore,
+    devicesStore: DevicesStore,
+    settingsStore: SettingsStore,
+    onUnlocked: () -> Unit,
+    onLoggedIn: () -> Unit,
+    onRegister: () -> Unit,
+    onRecovery: () -> Unit,
+    onRegistered: () -> Unit,
+    onRecovered: () -> Unit,
+    onAccountDeleted: () -> Unit,
+    onOpenItem: (String) -> Unit,
+    onNewItem: () -> Unit,
+    onDevices: () -> Unit,
+    onSettings: () -> Unit,
+    onSync: () -> Unit,
+    onSaved: () -> Unit,
+    onBack: () -> Unit,
+) {
+    when (screen) {
+        AppScreen.UNLOCK -> UnlockScreen(unlockStore) { onUnlocked() }
         AppScreen.LOGIN -> LoginScreen(
             store = loginStore,
-            onLoggedIn = {
-                screen = AppScreen.VAULT
-                route = "list"
-            },
-            onRegister = { screen = AppScreen.REGISTER },
-            onRecovery = { screen = AppScreen.RECOVERY },
+            onLoggedIn = onLoggedIn,
+            onRegister = onRegister,
+            onRecovery = onRecovery,
         )
-        AppScreen.REGISTER -> RegisterScreen(registerStore) {
-            screen = AppScreen.VAULT
-            route = "list"
-        }
-        AppScreen.RECOVERY -> RecoveryScreen(recoveryStore) {
-            screen = AppScreen.VAULT
-            route = "list"
-        }
+        AppScreen.REGISTER -> RegisterScreen(registerStore) { onRegistered() }
+        AppScreen.RECOVERY -> RecoveryScreen(recoveryStore) { onRecovered() }
         AppScreen.DEVICES -> DevicesScreen(devicesStore)
-        AppScreen.SETTINGS -> SettingsScreen(settingsStore) {
-            screen = startScreen(isLocked = true, hasSession = false)
-        }
+        AppScreen.SETTINGS -> SettingsScreen(settingsStore) { onAccountDeleted() }
         AppScreen.VAULT -> VaultRoutes(
             route = route,
             selectedId = selectedId,
             vaultListStore = vaultListStore,
             itemDetailStore = itemDetailStore,
             itemEditStore = itemEditStore,
-            onOpenItem = { id ->
-                selectedId = id
-                route = "detail"
-            },
-            onNewItem = { route = "edit" },
-            onDevices = { screen = AppScreen.DEVICES },
-            onSettings = { screen = AppScreen.SETTINGS },
-            onSync = { runSync() },
+            onOpenItem = onOpenItem,
+            onNewItem = onNewItem,
+            onDevices = onDevices,
+            onSettings = onSettings,
+            onSync = onSync,
             syncMessage = syncMessage,
-            onSaved = {
-                route = "list"
-                runSync()
-            },
-            onBack = { route = "list" },
+            onSaved = onSaved,
+            onBack = onBack,
         )
+    }
+}
+
+/** Sync when the network comes back (US-09, foreground only in this wave). */
+@Composable
+private fun AppNetworkSync(onAvailable: () -> Unit) {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    DisposableEffect(Unit) {
+        val manager = context.getSystemService(android.content.Context.CONNECTIVITY_SERVICE)
+            as android.net.ConnectivityManager
+        val callback = object : android.net.ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: android.net.Network) {
+                onAvailable()
+            }
+        }
+        manager.registerDefaultNetworkCallback(callback)
+        onDispose { manager.unregisterNetworkCallback(callback) }
     }
 }
 
@@ -207,3 +302,5 @@ private fun VaultRoutes(
         }
     }
 }
+
+private const val SYNC_DEBOUNCE_MILLIS = 2_000L
