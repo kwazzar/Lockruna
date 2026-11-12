@@ -443,10 +443,13 @@ components:
         userId:
           type: string
           format: uuid
-          description: Потрібен клієнту як AAD для розгортання ключа
+          description: >
+            Непрозорий ідентифікатор акаунта. Не використовується як AAD:
+            обгортка розпечатовується з AAD = canonical_email (UTF-8), див. ADR-003.
         recoveryWrappedVaultKey:
           type: string
           format: byte
+          description: AES-GCM(recoveryWrapKey, vaultKey), AAD = canonical_email
 
     RegisterRequest:
       type: object
