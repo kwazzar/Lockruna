@@ -42,9 +42,9 @@ PassKeeper це zero-knowledge менеджер паролів. Сервер з�
 - `recovery_wrapped_vault_key = AES-GCM(recoveryWrapKey, vaultKey)`, AAD = `canonical_email` (UTF-8 bytes)
 - Сервер зберігає `HMAC(pepper, recoveryAuthKey)`. Скидання пароля вимагає `recoveryAuthKey`, а не лише email.
 - Відновлення: клієнт розгортає `vaultKey` через `recoveryWrapKey`, користувач задає новий майстер-пароль, клієнт генерує новий `kdf_salt`, виводить нові `authKey` і `kek`, перезагортає `vaultKey`. Сервер замінює ключовий матеріал і відкликає всі інші пристрої.
+- Єдине доповнення крипто-порту для цього: `CryptoService.sha256()` — лише для 4-бітного checksum BIP39 (BouncyCastle/JCA на Android і JVM, `crypto_hash_sha256` в libsodium на iOS), з KAT-вектором для обох платформ. Жодних інших операцій хешування порт не надає.
 
 ### 5. Argon2id: гібрид за портом `Argon2`
-
 - iOS: ionspin libsodium bindings (`crypto_pwhash`), версія 0.9.2. Android: Bouncy Castle (`Argon2BytesGenerator`).
 - Обмеження libsodium: `p = 1`, salt рівно 16 байт, без `secret` та associated data. Вони закріплені в порту й у `kdf_params`.
 - Збіг результатів перевіряє спільний тест із еталонними векторами, згенерованими референсною C-реалізацією (argon2-cffi, p = 1, без secret/AD). Вектори RFC 9106 напряму не підходять, бо використовують secret, AD і p > 1.
