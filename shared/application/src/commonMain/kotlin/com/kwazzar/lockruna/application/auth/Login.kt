@@ -2,6 +2,7 @@ package com.kwazzar.lockruna.application.auth
 
 import com.kwazzar.lockruna.domain.auth.AuthApi
 import com.kwazzar.lockruna.domain.auth.AuthStateStore
+import com.kwazzar.lockruna.domain.auth.BiometricPolicyStore
 import com.kwazzar.lockruna.domain.auth.DeviceIdentity
 import com.kwazzar.lockruna.domain.auth.DevicePlatform
 import com.kwazzar.lockruna.domain.auth.PreLoginData
@@ -12,6 +13,7 @@ import com.kwazzar.lockruna.domain.crypto.CryptoService
 import com.kwazzar.lockruna.domain.crypto.KdfParams
 import com.kwazzar.lockruna.domain.crypto.PasswordNormalizer
 import com.kwazzar.lockruna.domain.error.AppError
+import com.kwazzar.lockruna.domain.session.Clock
 import com.kwazzar.lockruna.domain.session.VaultKey
 import com.kwazzar.lockruna.domain.session.VaultSession
 
@@ -32,7 +34,9 @@ class Login(
     private val normalizer: PasswordNormalizer,
     private val crypto: CryptoService,
     private val authStateStore: AuthStateStore,
+    private val biometricPolicyStore: BiometricPolicyStore,
     private val session: VaultSession,
+    private val clock: Clock,
 ) {
     suspend operator fun invoke(command: CredentialsCommand): Result<Unit, AppError> {
         val email = canonicalEmail(command.email)
@@ -66,6 +70,9 @@ class Login(
 
         authStateStore.saveSession(user)
         session.unlock(VaultKey.from(vaultKeyBytes))
+        // Signing in with the master password re-arms the biometric path (US-07).
+        biometricPolicyStore.resetFailures()
+        biometricPolicyStore.setLastSuccessfulUnlock(clock.nowMillis())
 
         return Result.Success(Unit)
     }

@@ -38,9 +38,9 @@ fun authModule(httpClient: HttpClient, baseUrl: String): Module = module {
 
 /** Application use cases of the auth flow. */
 private val authUseCasesModule = module {
-    single { Login(get(), get(), get(), get(), get(), get()) }
+    single { Login(get(), get(), get(), get(), get(), get(), get(), get()) }
     single { Logout(get(), get(), get()) }
-    single { UnlockWithPassword(get(), get(), get(), get(), get()) }
+    single { UnlockWithPassword(get(), get(), get(), get(), get(), get(), get()) }
     single { Register(get(), get(), get(), get(), get(), get(), get()) }
     single { EnableBiometrics(get(), get(), get(), get(), get()) }
     single { UnlockWithBiometrics(get(), get(), get(), get(), get()) }

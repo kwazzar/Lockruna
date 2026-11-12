@@ -101,8 +101,8 @@ class PresentationModuleTest {
         single<BiometricGate> { FakeBiometricGate() }
         single<SecureKeyStore> { FakeSecureKeyStore() }
         single<BiometricPolicyStore> { FakeBiometricPolicyStore() }
-        single { Login(get(), get(), get(), get(), get(), get()) }
-        single { UnlockWithPassword(get(), get(), get(), get(), get()) }
+        single { Login(get(), get(), get(), get(), get(), get(), get(), get()) }
+        single { UnlockWithPassword(get(), get(), get(), get(), get(), get(), get()) }
         single { UnlockWithBiometrics(get(), get(), get(), get(), get()) }
         single { EnableBiometrics(get(), get(), get(), get(), get()) }
         single<AutoLockSettingsStore> {

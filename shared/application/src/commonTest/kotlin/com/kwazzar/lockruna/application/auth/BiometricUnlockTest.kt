@@ -115,6 +115,20 @@ class UnlockWithBiometricsTest {
     private val clock = FakeClock()
 
     @Test
+    fun failsWhenTheMasterPasswordWasNeverEntered() = runBlocking {
+        // US-07: after a restart the master password is required, so the biometric path
+        // stays closed until the password has been entered in this run.
+        biometricGate.authenticateResult = true
+        secureKeyStore.storedKey = VaultKey.from(ByteArray(32))
+
+        val unlock = UnlockWithBiometrics(biometricGate, secureKeyStore, policyStore, session, clock)
+        val result = unlock("reason")
+
+        assertTrue(result.isFailure)
+        assertEquals(AppError.InvalidCredentials, result.error)
+    }
+
+    @Test
     fun failsWhenFailureCountExceeds5() {
         runBlocking {
             policyStore.recordFailure()

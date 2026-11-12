@@ -5,6 +5,7 @@ import com.kwazzar.lockruna.application.auth.Login
 import com.kwazzar.lockruna.application.support.FakeArgon2
 import com.kwazzar.lockruna.application.support.FakeAuthApi
 import com.kwazzar.lockruna.application.support.FakeAuthStateStore
+import com.kwazzar.lockruna.application.support.FakeBiometricPolicyStore
 import com.kwazzar.lockruna.application.support.FakeClock
 import com.kwazzar.lockruna.application.support.FakeCryptoService
 import com.kwazzar.lockruna.application.support.FakeIdGenerator
@@ -43,6 +44,7 @@ class LoginTest {
     private val normalizer = FakePasswordNormalizer()
     private val authApi = FakeAuthApi()
     private val authStateStore = FakeAuthStateStore()
+    private val biometricPolicyStore = FakeBiometricPolicyStore()
     private val session = VaultSession()
 
     @Test
@@ -87,7 +89,9 @@ class LoginTest {
             normalizer = normalizer,
             crypto = crypto,
             authStateStore = authStateStore,
+            biometricPolicyStore = biometricPolicyStore,
             session = session,
+            clock = clock,
         )
 
         val result = login(
@@ -121,7 +125,9 @@ class LoginTest {
             normalizer = normalizer,
             crypto = crypto,
             authStateStore = authStateStore,
+            biometricPolicyStore = biometricPolicyStore,
             session = session,
+            clock = clock,
         )
 
         val result = login(
@@ -154,7 +160,9 @@ class LoginTest {
             normalizer = normalizer,
             crypto = crypto,
             authStateStore = authStateStore,
+            biometricPolicyStore = biometricPolicyStore,
             session = session,
+            clock = clock,
         )
 
         val result = login(
@@ -187,7 +195,9 @@ class LoginTest {
             normalizer = normalizer,
             crypto = crypto,
             authStateStore = authStateStore,
+            biometricPolicyStore = biometricPolicyStore,
             session = session,
+            clock = clock,
         )
 
         val result = login(
@@ -216,7 +226,9 @@ class LoginTest {
             normalizer = normalizer,
             crypto = crypto,
             authStateStore = authStateStore,
+            biometricPolicyStore = biometricPolicyStore,
             session = session,
+            clock = clock,
         )
 
         login(
@@ -298,13 +310,40 @@ class LoginTest {
         assertEquals("user@example.com".encodeToByteArray().decodeToString(), crypto.lastAad?.decodeToString())
     }
 
+    @Test
+    fun signingInWithTheMasterPasswordRearmsTheBiometricPath() = runBlocking {
+        authApi.preloginResult = Result.Success(
+            com.kwazzar.lockruna.domain.auth.PreLoginData(ByteArray(16), KdfParams.SUPPORTED),
+        )
+        authApi.loginResult = Result.Success(authenticatedUser())
+        normalizer.normalized = "password123"
+        biometricPolicyStore.recordFailure()
+
+        val result = loginUseCase()(
+            CredentialsCommand(
+                email = "user@example.com",
+                password = "password123",
+                deviceName = "Test Device",
+                deviceId = null,
+                platform = DevicePlatform.ANDROID,
+            ),
+        )
+
+        assertTrue(result.isSuccess)
+        // US-07: the master password re-arms the biometric path.
+        assertEquals(clock.nowMillis(), biometricPolicyStore.lastSuccessfulUnlock())
+        assertEquals(0, biometricPolicyStore.failures())
+    }
+
     private fun loginUseCase() = Login(
         authApi = authApi,
         argon2 = argon2,
         normalizer = normalizer,
         crypto = crypto,
         authStateStore = authStateStore,
+        biometricPolicyStore = biometricPolicyStore,
         session = session,
+        clock = clock,
     )
 
     private fun authenticatedUser() = AuthenticatedUser(
@@ -352,6 +391,8 @@ class UnlockWithPasswordTest {
     private val normalizer = FakePasswordNormalizer()
     private val crypto = FakeCryptoService()
     private val authStateStore = FakeAuthStateStore()
+    private val biometricPolicyStore = FakeBiometricPolicyStore()
+    private val clock = FakeClock()
     private val session = VaultSession()
 
     @Test
@@ -381,7 +422,7 @@ class UnlockWithPasswordTest {
         crypto.hkdfResults = mapOf("passkeeper/kek/v1" to kek)
         crypto.decryptGcmResult = vaultKey
 
-        val unlock = UnlockWithPassword(argon2, normalizer, crypto, authStateStore, session)
+        val unlock = unlockUseCase()
         val result = unlock(email, password)
 
         assertTrue(result.isSuccess)
@@ -391,7 +432,7 @@ class UnlockWithPasswordTest {
 
     @Test
     fun unlockFailsWhenNoStoredSession() = runBlocking {
-        val unlock = UnlockWithPassword(argon2, normalizer, crypto, authStateStore, session)
+        val unlock = unlockUseCase()
         val result = unlock("user@example.com", "password123")
 
         assertTrue(result.isFailure)
@@ -424,7 +465,7 @@ class UnlockWithPasswordTest {
         crypto.hkdfResults = mapOf("passkeeper/kek/v1" to kek)
         crypto.decryptGcmResult = vaultKey
 
-        val unlock = UnlockWithPassword(argon2, normalizer, crypto, authStateStore, session)
+        val unlock = unlockUseCase()
         val result = unlock(email, password)
 
         assertTrue(result.isSuccess)
@@ -436,7 +477,7 @@ class UnlockWithPasswordTest {
         authStateStore.saveSession(storedUser())
         crypto.decryptGcmFails = true
 
-        val unlock = UnlockWithPassword(argon2, normalizer, crypto, authStateStore, session)
+        val unlock = unlockUseCase()
         val result = unlock("user@example.com", "password123")
 
         assertTrue(result.isFailure)
@@ -448,11 +489,36 @@ class UnlockWithPasswordTest {
     fun theEmailIsCanonicalisedForTheAad() = runBlocking {
         authStateStore.saveSession(storedUser())
 
-        val unlock = UnlockWithPassword(argon2, normalizer, crypto, authStateStore, session)
+        val unlock = unlockUseCase()
         unlock("  User@Example.com  ", "password123")
 
         assertEquals("user@example.com", crypto.lastAad?.decodeToString())
     }
+
+    @Test
+    fun theMasterPasswordRearmsTheBiometricPath() = runBlocking {
+        authStateStore.saveSession(storedUser())
+        normalizer.normalized = "password123"
+        biometricPolicyStore.recordFailure()
+
+        val unlock = unlockUseCase()
+        val result = unlock("user@example.com", "password123")
+
+        assertTrue(result.isSuccess)
+        // US-07: the master password re-arms the biometric path.
+        assertEquals(clock.nowMillis(), biometricPolicyStore.lastSuccessfulUnlock())
+        assertEquals(0, biometricPolicyStore.failures())
+    }
+
+    private fun unlockUseCase() = UnlockWithPassword(
+        argon2,
+        normalizer,
+        crypto,
+        authStateStore,
+        biometricPolicyStore,
+        session,
+        clock,
+    )
 
     private fun storedUser() = AuthenticatedUser(
         userId = "user-1",

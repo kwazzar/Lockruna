@@ -50,7 +50,15 @@ class UnlockStoreTest {
     private val crypto = FakeCryptoService()
 
     private val store = UnlockStore(
-        unlockWithPassword = UnlockWithPassword(argon2, normalizer, crypto, authStateStore, session),
+        unlockWithPassword = UnlockWithPassword(
+            argon2,
+            normalizer,
+            crypto,
+            authStateStore,
+            policyStore,
+            session,
+            clock,
+        ),
         unlockWithBiometrics = UnlockWithBiometrics(biometricGate, secureKeyStore, policyStore, session, clock),
         enableBiometrics = EnableBiometrics(
             biometricGate,

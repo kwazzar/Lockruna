@@ -12,6 +12,8 @@ import com.kwazzar.lockruna.domain.session.VaultSession
 import com.kwazzar.lockruna.presentation.support.FakeArgon2
 import com.kwazzar.lockruna.presentation.support.FakeAuthApi
 import com.kwazzar.lockruna.presentation.support.FakeAuthStateStore
+import com.kwazzar.lockruna.presentation.support.FakeBiometricPolicyStore
+import com.kwazzar.lockruna.presentation.support.FakeClock
 import com.kwazzar.lockruna.presentation.support.FakeCryptoService
 import com.kwazzar.lockruna.presentation.support.FakePasswordNormalizer
 import kotlinx.coroutines.CompletableDeferred
@@ -36,6 +38,8 @@ class LoginStoreTest {
     private val argon2 = FakeArgon2()
     private val normalizer = FakePasswordNormalizer()
     private val authStateStore = FakeAuthStateStore()
+    private val biometricPolicyStore = FakeBiometricPolicyStore()
+    private val clock = FakeClock()
     private val session = VaultSession()
     private val login = Login(
         authApi = authApi,
@@ -43,7 +47,9 @@ class LoginStoreTest {
         normalizer = normalizer,
         crypto = FakeCryptoService(),
         authStateStore = authStateStore,
+        biometricPolicyStore = biometricPolicyStore,
         session = session,
+        clock = clock,
     )
     private val store = LoginStore(login = login, platform = DevicePlatform.IOS)
 
