@@ -5,6 +5,8 @@ import com.kwazzar.lockruna.application.auth.RegisterCommand
 import com.kwazzar.lockruna.domain.auth.DevicePlatform
 import com.kwazzar.lockruna.domain.core.Result
 import com.kwazzar.lockruna.domain.error.AppError
+import com.kwazzar.lockruna.domain.identity.MasterPassword
+import com.kwazzar.lockruna.domain.identity.PasswordStrength
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,7 +36,7 @@ class RegisterStore(private val register: Register, private val platform: Device
         draftPassword = ""
         draftConfirmation = ""
         recoveryWords = emptyList()
-        _state.value = _state.value.copy(hasPassword = false, hasRecoveryWords = false)
+        _state.value = _state.value.copy(hasPassword = false, hasRecoveryWords = false, passwordStrength = null, strength = null)
     }
 
     suspend fun dispatch(intent: RegisterIntent) {
@@ -42,7 +44,13 @@ class RegisterStore(private val register: Register, private val platform: Device
             is RegisterIntent.EmailChanged -> update { copy(email = intent.value) }
             is RegisterIntent.PasswordChanged -> {
                 draftPassword = intent.value
-                update { copy(hasPassword = intent.value.isNotEmpty()) }
+                update {
+                    copy(
+                        hasPassword = intent.value.isNotEmpty(),
+                        passwordStrength = MasterPassword.strength(intent.value),
+                        strength = MasterPassword.strength(intent.value),
+                    )
+                }
             }
 
             is RegisterIntent.DeviceNameChanged -> update { copy(deviceName = intent.value) }
@@ -76,6 +84,8 @@ class RegisterStore(private val register: Register, private val platform: Device
                         isSubmitting = false,
                         hasPassword = false,
                         hasRecoveryWords = true,
+                        passwordStrength = null,
+                        strength = null,
                     )
                     _effects.send(RegisterEffect.RecoveryKeyReady(recoveryWords))
                 }
@@ -111,6 +121,8 @@ data class RegisterState(
     val hasRecoveryWords: Boolean = false,
     val isSubmitting: Boolean = false,
     val error: AppError? = null,
+    val passwordStrength: PasswordStrength? = null,
+    val strength: PasswordStrength? = null,
 )
 
 sealed interface RegisterIntent {

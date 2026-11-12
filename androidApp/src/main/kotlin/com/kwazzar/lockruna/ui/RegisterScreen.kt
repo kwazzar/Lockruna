@@ -96,6 +96,13 @@ fun RegisterScreen(store: RegisterStore, onRegistered: () -> Unit) {
                 supportingText = { Text("At least 12 characters") },
                 visualTransformation = PasswordVisualTransformation(),
             )
+            val strength = state.strength ?: state.passwordStrength
+            if (strength != null && password.isNotEmpty()) {
+                Text("Strength: ${strength.level}/4", style = androidx.compose.material3.MaterialTheme.typography.bodySmall)
+                if (strength.warnings.isNotEmpty()) {
+                    Text(strength.warnings.joinToString(", "), color = androidx.compose.material3.MaterialTheme.colorScheme.error, style = androidx.compose.material3.MaterialTheme.typography.bodySmall)
+                }
+            }
             Spacer(Modifier.height(8.dp))
             OutlinedTextField(value = state.deviceName, onValueChange = {
                 scope.launch { store.dispatch(RegisterIntent.DeviceNameChanged(it)) }
@@ -214,6 +221,13 @@ fun RecoveryScreen(store: RecoveryStore, onRecovered: () -> Unit) {
             label = { Text("New master password") },
             visualTransformation = PasswordVisualTransformation(),
         )
+        val recoveryStrength = state.strength ?: state.passwordStrength
+        if (recoveryStrength != null && password.isNotEmpty()) {
+            Text("Strength: ${recoveryStrength.level}/4", style = androidx.compose.material3.MaterialTheme.typography.bodySmall)
+            if (recoveryStrength.warnings.isNotEmpty()) {
+                Text(recoveryStrength.warnings.joinToString(", "), color = androidx.compose.material3.MaterialTheme.colorScheme.error, style = androidx.compose.material3.MaterialTheme.typography.bodySmall)
+            }
+        }
         Spacer(Modifier.height(8.dp))
         OutlinedTextField(value = state.deviceName, onValueChange = {
             scope.launch {

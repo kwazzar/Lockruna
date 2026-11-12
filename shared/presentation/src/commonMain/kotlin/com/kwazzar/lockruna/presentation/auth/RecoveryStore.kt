@@ -5,6 +5,8 @@ import com.kwazzar.lockruna.application.auth.RecoverCommand
 import com.kwazzar.lockruna.domain.auth.DevicePlatform
 import com.kwazzar.lockruna.domain.core.Result
 import com.kwazzar.lockruna.domain.error.AppError
+import com.kwazzar.lockruna.domain.identity.MasterPassword
+import com.kwazzar.lockruna.domain.identity.PasswordStrength
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,7 +32,7 @@ class RecoveryStore(private val completeRecovery: CompleteRecovery, private val 
     fun close() {
         draftRecoveryWords = emptyList()
         draftPassword = ""
-        _state.value = _state.value.copy(hasRecoveryWords = false, hasPassword = false)
+        _state.value = _state.value.copy(hasRecoveryWords = false, hasPassword = false, passwordStrength = null, strength = null)
     }
 
     suspend fun dispatch(intent: RecoveryIntent) {
@@ -44,7 +46,13 @@ class RecoveryStore(private val completeRecovery: CompleteRecovery, private val 
 
             is RecoveryIntent.NewPasswordChanged -> {
                 draftPassword = intent.value
-                update { copy(hasPassword = intent.value.isNotEmpty()) }
+                update {
+                    copy(
+                        hasPassword = intent.value.isNotEmpty(),
+                        passwordStrength = MasterPassword.strength(intent.value),
+                        strength = MasterPassword.strength(intent.value),
+                    )
+                }
             }
 
             RecoveryIntent.Submit -> submit()
@@ -78,6 +86,8 @@ class RecoveryStore(private val completeRecovery: CompleteRecovery, private val 
                         isSubmitting = false,
                         hasRecoveryWords = false,
                         hasPassword = false,
+                        passwordStrength = null,
+                        strength = null,
                     )
                     _effects.send(RecoveryEffect.Recovered)
                 }
@@ -99,6 +109,8 @@ data class RecoveryState(
     val hasPassword: Boolean = false,
     val isSubmitting: Boolean = false,
     val error: AppError? = null,
+    val passwordStrength: PasswordStrength? = null,
+    val strength: PasswordStrength? = null,
 )
 
 sealed interface RecoveryIntent {

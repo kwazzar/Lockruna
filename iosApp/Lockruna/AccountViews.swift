@@ -48,6 +48,12 @@ struct RegisterView: View {
             TextField("Email", text: $email).textFieldStyle(.roundedBorder)
             SecureField("Master password", text: $password).textFieldStyle(.roundedBorder)
             Text("At least 12 characters").font(.caption)
+            if let s = store.state.value.strength ?? store.state.value.passwordStrength {
+                Text("Strength: \(s.level)/4").font(.caption)
+                if !s.warnings.isEmpty {
+                    Text(s.warnings.joined(separator: ", ")).font(.caption).foregroundColor(.orange)
+                }
+            }
             TextField("Device name", text: $deviceName).textFieldStyle(.roundedBorder)
             if store.state.value.error != nil {
                 Text("Registration failed").foregroundColor(.red)
@@ -140,6 +146,12 @@ struct RecoveryView: View {
             TextField("Email", text: $email).textFieldStyle(.roundedBorder)
             TextField("Recovery key (12 words)", text: $words).textFieldStyle(.roundedBorder)
             SecureField("New master password", text: $password).textFieldStyle(.roundedBorder)
+            if let s = store.state.value.strength ?? store.state.value.passwordStrength {
+                Text("Strength: \(s.level)/4").font(.caption)
+                if !s.warnings.isEmpty {
+                    Text(s.warnings.joined(separator: ", ")).font(.caption).foregroundColor(.orange)
+                }
+            }
             TextField("Device name", text: $deviceName).textFieldStyle(.roundedBorder)
             if store.state.value.error != nil {
                 Text("Recovery failed").foregroundColor(.red)
