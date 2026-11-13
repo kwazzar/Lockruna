@@ -2218,8 +2218,8 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "iosapp_lockruna_darkzentheme_darkzentextfieldstyle",
-      "community": 203,
-      "community_name": "._body",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "darkzentextfieldstyle"
     },
     {
@@ -2229,8 +2229,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "textfieldstyle",
-      "community": 203,
-      "community_name": "._body",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "textfieldstyle"
     },
     {
@@ -2240,8 +2240,8 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "iosapp_lockruna_darkzentheme_darkzentextfieldstyle_body",
-      "community": 203,
-      "community_name": "._body",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "._body()"
     },
     {
@@ -2251,8 +2251,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "textfield",
-      "community": 203,
-      "community_name": "._body",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "textfield"
     },
     {
@@ -2262,8 +2262,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "label",
-      "community": 203,
-      "community_name": "._body",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "_label"
     },
     {
@@ -2328,8 +2328,8 @@
       "source_location": "L91",
       "_origin": "ast",
       "id": "iosapp_lockruna_darkzentheme_darkzenauthshell",
-      "community": 102,
-      "community_name": "toDomain",
+      "community": 169,
+      "community_name": "DarkZenAuthShell",
       "norm_label": "darkzenauthshell"
     },
     {
@@ -2339,8 +2339,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "iosapp_lockruna_darkzentheme_swift_string",
-      "community": 102,
-      "community_name": "toDomain",
+      "community": 169,
+      "community_name": "DarkZenAuthShell",
       "norm_label": "string"
     },
     {
@@ -2350,8 +2350,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "iosapp_lockruna_darkzentheme_swift_content",
-      "community": 102,
-      "community_name": "toDomain",
+      "community": 169,
+      "community_name": "DarkZenAuthShell",
       "norm_label": "content"
     },
     {
@@ -2361,8 +2361,8 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "iosapp_lockruna_darkzentheme_darkzenauthshell_init",
-      "community": 102,
-      "community_name": "toDomain",
+      "community": 169,
+      "community_name": "DarkZenAuthShell",
       "norm_label": ".init()"
     },
     {
@@ -31251,7 +31251,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/LoginScreen.kt",
-      "source_location": "L63",
+      "source_location": "L62",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_loginscreen_loginscreen",
@@ -31311,7 +31311,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/LoginScreen.kt",
-      "source_location": "L101",
+      "source_location": "L100",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_loginscreen_loginscreen",
@@ -86452,5 +86452,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "dd7a0273e63dc64db53eb8a47e2581621fc58dda"
+  "built_at_commit": "45b4df904516f7e41f47e4f703900c82b6ef2ec1"
 }
