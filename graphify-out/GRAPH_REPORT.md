@@ -1,16 +1,16 @@
-# Graph Report - meditate-note-dark-design  (2026-11-13)
+# Graph Report - meditate-note-dark-design  (2026-11-14)
 
 ## Corpus Check
-- 335 files · ~110,596 words
+- 335 files · ~110,640 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2757 nodes · 4873 edges · 214 communities (153 shown, 61 thin omitted)
+- 2757 nodes · 4873 edges · 214 communities (154 shown, 60 thin omitted)
 - Extraction: 86% EXTRACTED · 14% INFERRED · 0% AMBIGUOUS · INFERRED: 705 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `aca34b2c`
+- Built from commit: `3dae165b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -229,17 +229,17 @@
   androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/AppRoot.kt → shared/presentation/src/commonMain/kotlin/com/kwazzar/lockruna/presentation/app/AppScreen.kt
 - `identityRoutes()` --calls--> `PreloginResponse`  [INFERRED]
   server/src/main/kotlin/com/kwazzar/lockruna/server/identity/api/IdentityRoutes.kt → api-contract/src/commonMain/kotlin/com/kwazzar/lockruna/contract/AuthDtos.kt
+- `toDto()` --calls--> `DeviceInfoDto`  [INFERRED]
+  shared/data/src/commonMain/kotlin/com/kwazzar/lockruna/data/auth/KtorAuthApi.kt → api-contract/src/commonMain/kotlin/com/kwazzar/lockruna/contract/AuthDtos.kt
 - `identityRoutes()` --calls--> `TokenPairDto`  [INFERRED]
   server/src/main/kotlin/com/kwazzar/lockruna/server/identity/api/IdentityRoutes.kt → api-contract/src/commonMain/kotlin/com/kwazzar/lockruna/contract/AuthDtos.kt
 - `identityRoutes()` --calls--> `RecoveryStartResponseDto`  [INFERRED]
   server/src/main/kotlin/com/kwazzar/lockruna/server/identity/api/IdentityRoutes.kt → api-contract/src/commonMain/kotlin/com/kwazzar/lockruna/contract/AuthDtos.kt
-- `toDto()` --calls--> `EncryptedItemDto`  [INFERRED]
-  server/src/main/kotlin/com/kwazzar/lockruna/server/sync/api/SyncRoutes.kt → api-contract/src/commonMain/kotlin/com/kwazzar/lockruna/contract/SyncDtos.kt
 
 ## Import Cycles
 - None detected.
 
-## Communities (214 total, 61 thin omitted)
+## Communities (214 total, 60 thin omitted)
 
 ### Community 0 - "AppError"
 Cohesion: 0.10
@@ -338,8 +338,8 @@ Cohesion: 0.16
 Nodes (9): DeleteAccount, ByteArray, ValidateMasterPassword, isCommonPattern(), isSequential(), MasterPassword, of(), strength() (+1 more)
 
 ### Community 43 - "KdfParams"
-Cohesion: 0.13
-Nodes (11): E, DeviceApi, DeviceInfo, Failure, T, Result, Success, FakeArgon2 (+3 more)
+Cohesion: 0.32
+Nodes (3): FakeArgon2, FakeAuthApi, ByteArray
 
 ### Community 44 - "PasswordNormalizer"
 Cohesion: 0.17
@@ -386,8 +386,8 @@ Cohesion: 0.15
 Nodes (7): PostgreSQLContainer, ExposedTransactionRunner, T, TransactionRunner, Database, HikariDataSource, PostgresTest
 
 ### Community 66 - "VaultItem"
-Cohesion: 0.17
-Nodes (7): DataSource, main(), module(), IdentityApiTest, ByteArray, HttpResponse, JsonObject
+Cohesion: 0.16
+Nodes (6): IdentityApiTest, ByteArray, HttpResponse, JsonObject, Counter, InMemoryRateLimiter
 
 ### Community 67 - "create"
 Cohesion: 0.18
@@ -450,7 +450,7 @@ Cohesion: 0.13
 Nodes (12): LoginScreen(), DeviceNameChanged, EmailChanged, ErrorDismissed, Flow, LoggedIn, LoginEffect, LoginIntent (+4 more)
 
 ### Community 95 - ".invoke"
-Cohesion: 0.10
+Cohesion: 0.09
 Nodes (11): DomainKdfParams, FakeAuthApi, createAuthApi(), HttpClient, createAuthApi(), HttpClient, createAuthApi(), HttpClient (+3 more)
 
 ### Community 96 - "VaultKey"
@@ -466,8 +466,8 @@ Cohesion: 0.06
 Nodes (22): LockrunaApplication, Application, io, MockEngine, createAuthApi(), authModule(), HttpClient, Module (+14 more)
 
 ### Community 99 - ".register"
-Cohesion: 0.17
-Nodes (7): DeviceInfoDto, KdfParamsDto, ByteArray, HttpResponse, JsonObject, RecoveryAccountApiTest, toDto()
+Cohesion: 0.19
+Nodes (5): DeviceInfoDto, ByteArray, HttpResponse, JsonObject, RecoveryAccountApiTest
 
 ### Community 100 - "SyncNowTest"
 Cohesion: 0.26
@@ -630,8 +630,8 @@ Cohesion: 0.22
 Nodes (8): Global Constraints, Review Focus, Task 1: Спільне сховище сесії, Task 2: Android Keystore + біометрія + буфер, Task 3: iOS Keychain + біометрія + буфер, Task 4: Фабрики платформи та coreModule, Нативний platform-шар клієнта (Native Platform Layer) — Implementation Plan, Порядок злиття
 
 ### Community 153 - ".invoke"
-Cohesion: 0.09
-Nodes (10): ListDevices, RevokeDevice, DeviceUseCasesTest, FakeRecoveryApi, ByteArray, AccountApi, ByteArray, RecoveryApi (+2 more)
+Cohesion: 0.08
+Nodes (17): E, EnableBiometrics, RevealSecret, FakeRecoveryApi, ByteArray, AccountApi, DeviceApi, DeviceInfo (+9 more)
 
 ### Community 154 - "DevicePlatform"
 Cohesion: 0.16
@@ -667,7 +667,7 @@ Nodes (8): Flow, Lock, Locked, Resumed, SessionEffect, SessionIntent, SessionSta
 
 ### Community 165 - "InMemoryVaultItemRepository"
 Cohesion: 0.06
-Nodes (23): EnableBiometrics, UnlockWithPassword, CopySecret, RevealSecret, InMemoryVaultItemRepository, VaultItemRepository, AppError, BiometricsUnavailable (+15 more)
+Nodes (24): UnlockWithPassword, CopySecret, InMemoryVaultItemRepository, VaultItemRepository, AppError, BiometricsUnavailable, ClipboardUnavailable, EmailAlreadyRegistered (+16 more)
 
 ### Community 166 - "authModule"
 Cohesion: 0.15
@@ -688,6 +688,10 @@ Nodes (3): Cipher, AndroidBiometricVault, SecretKey
 ### Community 173 - "IosBiometricVault"
 Cohesion: 0.26
 Nodes (4): LAContext, IosBiometricVault, CFDataRef, CFStringRef
+
+### Community 174 - "ItemDetailStore"
+Cohesion: 0.29
+Nodes (3): KdfParamsDto, KdfParamsDtoTest, toDto()
 
 ### Community 175 - "ByteArray"
 Cohesion: 0.22
@@ -719,7 +723,7 @@ Nodes (12): File Structure, Global Constraints, Review Focus, Spec coverage, Tas
 
 ### Community 182 - "TokenFlowTest"
 Cohesion: 0.18
-Nodes (5): ByteArray, TokenFlowTest, Counter, InMemoryRateLimiter, Timestamp
+Nodes (6): DataSource, main(), module(), ByteArray, TokenFlowTest, Timestamp
 
 ### Community 183 - "DevicesStore"
 Cohesion: 0.22
@@ -770,8 +774,8 @@ Cohesion: 0.21
 Nodes (5): BiometricPolicyStoreTest, FakeArgon2Test, FakeArgon2, ByteArray, toHexString()
 
 ### Community 199 - "InMemoryVaultItemRepository"
-Cohesion: 0.50
-Nodes (3): WeakPasswordReason, TOO_SHORT, TOO_WEAK
+Cohesion: 0.24
+Nodes (3): ListDevices, RevokeDevice, DeviceUseCasesTest
 
 ### Community 206 - "BiometricSettings.kt"
 Cohesion: 0.40
@@ -784,14 +788,14 @@ Nodes (4): ByteArray, pack(), SealedBlob, unpack()
 ## Knowledge Gaps
 - **382 isolated node(s):** `DarkZenPalette`, `LOGIN`, `CARD`, `NOTE`, `FOLDER` (+377 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **61 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **60 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `module()` connect `VaultItem` to `deviceRoutes`, `DeviceDto.kt`, `.resolveDevice`, `Application.kt`, `HasStoredSession`, `JwtTokenService`, `.graph`, `TokenFlowTest`, `androidPlatformModule`, `iosPlatformModule`, `ServerSettings.kt`, `RedisDeviceDenylist`, `.respond`, `.register`, `PendingChange`, `serverModule`, `SyncRoutes.kt`, `identityRoutes`, `PasswordNormalizer`, `installStatusPages`?**
+- **Why does `module()` connect `TokenFlowTest` to `deviceRoutes`, `DeviceDto.kt`, `.resolveDevice`, `Application.kt`, `HasStoredSession`, `JwtTokenService`, `.graph`, `androidPlatformModule`, `iosPlatformModule`, `ServerSettings.kt`, `VaultItem`, `RedisDeviceDenylist`, `.respond`, `.register`, `PendingChange`, `serverModule`, `SyncRoutes.kt`, `identityRoutes`, `PasswordNormalizer`, `installStatusPages`?**
   _High betweenness centrality (0.220) - this node is a cross-community bridge._
-- **Why does `Result` connect `KdfParams` to `.get`, `RateLimitDecision`, `ItemUiMappingTest`, `.invoke`, `DevicePlatform`, `.push`, `ItemUi.kt`, `AccessTokenClaims`, `InMemoryVaultItemRepository`, `ExposedRefreshTokenRepository`, `VaultUseCasesTest`, `.decode`, `RefreshTokenRepositoryTest`, `PresentationModuleTest`, `BiometricSettings.kt`, `androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt`, `.invoke`, `VaultItemContent`, `.invoke`, `.invoke`, `.unlock`, `.respond`, `AuthTokens`, `.invoke`, `.weakPasswordReturnsWeakMasterPassword`, `PasswordNormalizer`, `.login`, `AuthDtos.kt`?**
+- **Why does `Result` connect `.invoke` to `.get`, `RateLimitDecision`, `ItemUiMappingTest`, `DevicePlatform`, `.push`, `ItemUi.kt`, `AccessTokenClaims`, `InMemoryVaultItemRepository`, `KdfParams`, `ExposedRefreshTokenRepository`, `VaultUseCasesTest`, `.decode`, `RefreshTokenRepositoryTest`, `InMemoryVaultItemRepository`, `PresentationModuleTest`, `BiometricSettings.kt`, `androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt`, `.invoke`, `VaultItemContent`, `.invoke`, `.invoke`, `.unlock`, `.respond`, `AuthTokens`, `.invoke`, `.weakPasswordReturnsWeakMasterPassword`, `PasswordNormalizer`, `.login`, `AuthDtos.kt`?**
   _High betweenness centrality (0.117) - this node is a cross-community bridge._
 - **Why does `AppError` connect `InMemoryVaultItemRepository` to `.get`, `RateLimitDecision`, `ItemUiMappingTest`, `.invoke`, `DevicePlatform`, `.push`, `ItemUi.kt`, `AccessTokenClaims`, `KdfParams`, `ExposedRefreshTokenRepository`, `VaultUseCasesTest`, `.decode`, `RefreshTokenRepositoryTest`, `InMemoryVaultItemRepository`, `PresentationModuleTest`, `BiometricSettings.kt`, `androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt`, `.invoke`, `VaultItemContent`, `.invoke`, `.invoke`, `.unlock`, `.respond`, `AuthTokens`, `.invoke`, `.weakPasswordReturnsWeakMasterPassword`, `PasswordNormalizer`, `.login`, `AuthDtos.kt`?**
   _High betweenness centrality (0.113) - this node is a cross-community bridge._
