@@ -1,6 +1,5 @@
 package com.kwazzar.lockruna.contract
 
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
