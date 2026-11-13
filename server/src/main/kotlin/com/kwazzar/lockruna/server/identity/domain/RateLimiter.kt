@@ -7,6 +7,9 @@ import java.time.Duration
  */
 interface RateLimiter {
     suspend fun check(scope: String, key: String, limit: Int, window: Duration): RateLimitDecision
+
+    /** Removes all rate-limit keys for the given user (best-effort cleanup on account deletion). */
+    suspend fun resetForUser(userId: String)
 }
 
 sealed interface RateLimitDecision {

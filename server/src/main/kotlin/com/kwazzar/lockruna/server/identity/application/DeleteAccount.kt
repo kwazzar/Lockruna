@@ -7,6 +7,7 @@ import com.kwazzar.lockruna.server.identity.domain.ACCESS_TOKEN_SECONDS
 import com.kwazzar.lockruna.server.identity.domain.AuthKeys
 import com.kwazzar.lockruna.server.identity.domain.DeviceDenylist
 import com.kwazzar.lockruna.server.identity.domain.DeviceRepository
+import com.kwazzar.lockruna.server.identity.domain.RateLimiter
 import com.kwazzar.lockruna.server.identity.domain.UserRecord
 import com.kwazzar.lockruna.server.identity.domain.UserRepository
 import com.kwazzar.lockruna.server.platform.config.ServerSettings
@@ -22,6 +23,7 @@ class DeleteAccount(
     private val users: UserRepository,
     private val devices: DeviceRepository,
     private val denylist: DeviceDenylist,
+    private val rateLimiter: RateLimiter,
     private val settings: ServerSettings,
     private val audit: AuditEventRepository,
 ) {
@@ -34,6 +36,7 @@ class DeleteAccount(
         }
         val accessTtl = Duration.ofSeconds(ACCESS_TOKEN_SECONDS.toLong())
         knownDevices.forEach { denylist.revoke(it, accessTtl) }
+        rateLimiter.resetForUser(userId)
         audit.record(
             AuditEvent(
                 userId = userId,

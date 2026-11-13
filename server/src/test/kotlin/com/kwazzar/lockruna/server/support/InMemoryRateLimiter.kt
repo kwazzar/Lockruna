@@ -26,6 +26,10 @@ class InMemoryRateLimiter(private val clock: Clock = Clock.systemUTC()) : RateLi
         }
     }
 
+    override suspend fun resetForUser(userId: String) {
+        counters.keys.filter { it.contains(userId) }.forEach { counters.remove(it) }
+    }
+
     private fun remainingSeconds(expiresAt: Instant, now: Instant): Int =
         ((expiresAt.epochSecond - now.epochSecond).coerceAtLeast(1)).toInt()
 
