@@ -4,19 +4,23 @@ package com.kwazzar.lockruna.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -27,6 +31,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.kwazzar.lockruna.domain.vault.VaultItemType
 import com.kwazzar.lockruna.presentation.vault.ItemEditIntent
@@ -61,7 +66,13 @@ fun ItemEditScreen(
             }
         }
     }
-    Column(Modifier.padding(16.dp).verticalScroll(rememberScrollState())) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .imePadding()
+            .padding(16.dp),
+    ) {
         Text("Item", style = MaterialTheme.typography.titleLarge)
         Spacer(Modifier.height(8.dp))
 
@@ -71,16 +82,28 @@ fun ItemEditScreen(
                 expanded = typeMenuOpen,
                 onExpandedChange = { typeMenuOpen = it },
             ) {
-                OutlinedTextField(
+                DarkZenTextField(
                     value = typeLabel(state.type),
                     onValueChange = {},
+                    label = "Type",
                     readOnly = true,
-                    label = { Text("Type") },
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = typeMenuOpen) },
-                    modifier = Modifier.padding(bottom = 8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp)
+                        .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
                 )
-                ExposedDropdownMenu(expanded = typeMenuOpen, onDismissRequest = { typeMenuOpen = false }) {
-                    listOf(VaultItemType.LOGIN, VaultItemType.CARD, VaultItemType.NOTE, VaultItemType.FOLDER).forEach { type ->
+                ExposedDropdownMenu(
+                    expanded = typeMenuOpen,
+                    onDismissRequest = { typeMenuOpen = false },
+                    containerColor = DarkZenPalette.Background,
+                ) {
+                    listOf(
+                        VaultItemType.LOGIN,
+                        VaultItemType.CARD,
+                        VaultItemType.NOTE,
+                        VaultItemType.FOLDER,
+                    ).forEach { type ->
                         DropdownMenuItem(
                             text = { Text(typeLabel(type)) },
                             onClick = {
@@ -93,21 +116,33 @@ fun ItemEditScreen(
             }
         }
 
-        OutlinedTextField(value = title, onValueChange = {
-            scope.launch {
-                title = it
-                store.dispatch(ItemEditIntent.TitleChanged(it))
-            }
-        }, label = { Text(titleLabel(state.type)) })
-        if (state.type != VaultItemType.NOTE) {
-            OutlinedTextField(value = username, onValueChange = {
+        DarkZenTextField(
+            value = title,
+            onValueChange = {
                 scope.launch {
-                    username = it
-                    store.dispatch(ItemEditIntent.UsernameChanged(it))
+                    title = it
+                    store.dispatch(ItemEditIntent.TitleChanged(it))
                 }
-            }, label = { Text(usernameLabel(state.type)) })
+            },
+            label = titleLabel(state.type),
+            modifier = Modifier.fillMaxWidth(),
+        )
+        if (state.type != VaultItemType.NOTE) {
+            Spacer(Modifier.height(8.dp))
+            DarkZenTextField(
+                value = username,
+                onValueChange = {
+                    scope.launch {
+                        username = it
+                        store.dispatch(ItemEditIntent.UsernameChanged(it))
+                    }
+                },
+                label = usernameLabel(state.type),
+                modifier = Modifier.fillMaxWidth(),
+            )
         }
-        OutlinedTextField(
+        Spacer(Modifier.height(8.dp))
+        DarkZenTextField(
             value = secret,
             onValueChange = {
                 scope.launch {
@@ -115,20 +150,27 @@ fun ItemEditScreen(
                     store.dispatch(ItemEditIntent.SecretChanged(it))
                 }
             },
-            label = { Text(secretLabel(state.type)) },
+            label = secretLabel(state.type),
             visualTransformation = if (state.type == VaultItemType.NOTE) {
-                androidx.compose.ui.text.input.VisualTransformation.None
+                VisualTransformation.None
             } else {
                 PasswordVisualTransformation()
             },
+            modifier = Modifier.fillMaxWidth(),
         )
         if (state.type == VaultItemType.LOGIN) {
-            OutlinedTextField(value = url, onValueChange = {
-                scope.launch {
-                    url = it
-                    store.dispatch(ItemEditIntent.UrlChanged(it))
-                }
-            }, label = { Text("URL") })
+            Spacer(Modifier.height(8.dp))
+            DarkZenTextField(
+                value = url,
+                onValueChange = {
+                    scope.launch {
+                        url = it
+                        store.dispatch(ItemEditIntent.UrlChanged(it))
+                    }
+                },
+                label = "URL",
+                modifier = Modifier.fillMaxWidth(),
+            )
         }
 
         Spacer(Modifier.height(16.dp))
@@ -137,20 +179,38 @@ fun ItemEditScreen(
             Text("No folders yet", style = MaterialTheme.typography.bodySmall)
         }
         folders.forEach { (folderId, folderName) ->
-            OutlinedButton(onClick = {
-                scope.launch { store.dispatch(ItemEditIntent.FolderSelected(folderId)) }
-            }) { Text(folderName) }
+            FilterChip(
+                selected = state.folderId == folderId,
+                onClick = {
+                    scope.launch { store.dispatch(ItemEditIntent.FolderSelected(folderId)) }
+                },
+                label = { Text(folderName) },
+                colors = FilterChipDefaults.filterChipColors(
+                    containerColor = DarkZenPalette.Toolbar,
+                    labelColor = DarkZenPalette.TextSecondary,
+                    selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                    selectedLabelColor = DarkZenPalette.TextPrimary,
+                ),
+            )
         }
         if (state.folderId != null) {
-            OutlinedButton(onClick = {
+            TextButton(onClick = {
                 scope.launch { store.dispatch(ItemEditIntent.FolderSelected(null)) }
-            }) { Text("No folder") }
+            }) {
+                Text("No folder", color = DarkZenPalette.TextSecondary)
+            }
         }
 
         Spacer(Modifier.height(16.dp))
-        Button(onClick = { scope.launch { store.dispatch(ItemEditIntent.Save) } }) { Text("Save") }
+        DarkZenPrimaryButton(
+            onClick = { scope.launch { store.dispatch(ItemEditIntent.Save) } },
+        ) {
+            Text("Save")
+        }
         Spacer(Modifier.height(8.dp))
-        OutlinedButton(onClick = onBack) { Text("Back") }
+        DarkZenSecondaryButton(onClick = onBack) {
+            Text("Back")
+        }
     }
 }
 
