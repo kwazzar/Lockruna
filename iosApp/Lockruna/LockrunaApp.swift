@@ -78,16 +78,16 @@ final class AppModel: ObservableObject {
     }
 
     /// Sync on unlock, resume, after a local save, by hand and when the network comes back (US-09).
-    func sync() {
-        Task.detached(priority: .utility) {
+    func sync() async {
+        await Task.detached(priority: .utility) {
             _ = try? await LockrunaIos.shared.sync()
-        }
+        }.value
     }
 
     private func startNetworkSync() {
         monitor.pathUpdateHandler = { [weak self] path in
             if path.status == .satisfied {
-                Task { @MainActor in self?.sync() }
+                Task { @MainActor in await self?.sync() }
             }
         }
         monitor.start(queue: monitorQueue)
@@ -104,8 +104,10 @@ struct LockrunaApp: App {
                 .privacyShield()
         }
         .backgroundTask(.appRefresh("com.kwazzar.lockruna.sync")) {
-            await model.sync()
-            model.scheduleAppRefresh()
+            Task { @MainActor in
+                await model.sync()
+                model.scheduleAppRefresh()
+            }
         }
     }
 }

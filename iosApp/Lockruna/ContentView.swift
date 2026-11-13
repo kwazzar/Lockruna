@@ -42,7 +42,7 @@ struct ContentView: View {
                 model.backgroundedAt = Date()
             } else if newPhase == .active {
                 model.showBlur = false
-                model.sync()
+                Task { await model.sync() }
                 if let ts = model.backgroundedAt {
                     let mono = Int64(ts.timeIntervalSince1970 * 1000)
                     Task { try await model.sessionStore.dispatch(intent: PresentationSessionIntentResumed(backgroundedAtMonotonicMillis: KotlinLong(value: mono))) }
@@ -97,7 +97,7 @@ struct UnlockView: View {
             if unlocked && model.screen == "unlock" {
                 password = ""
                 model.screen = "vault"
-                model.sync()
+                Task { await model.sync() }
             }
         }
     }
@@ -140,7 +140,7 @@ struct LoginView: View {
             if unlocked && model.screen == "login" {
                 password = ""
                 model.screen = "vault"
-                model.sync()
+                Task { await model.sync() }
             }
         }
     }
@@ -186,7 +186,7 @@ struct VaultListView: View {
                         model.screen = "unlock"
                     }
                 }
-                Button("Sync") { model.sync() }
+                Button("Sync") { Task { await model.sync() } }
                 Button("Devices") { model.screen = "devices" }
                 Button("Settings") { model.screen = "settings" }
             }
@@ -272,7 +272,7 @@ struct ItemEditView: View {
                     try await model.itemEditStore.dispatch(intent: PresentationItemEditIntentTitleChanged(value: title))
                     try await model.itemEditStore.dispatch(intent: PresentationItemEditIntentSave())
                     route = "list"
-                    model.sync()
+                    Task { await model.sync() }
                 }
             }
             Button("Back") { route = "list" }
