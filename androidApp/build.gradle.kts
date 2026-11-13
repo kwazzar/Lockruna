@@ -45,4 +45,5 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.ktor.client.core)
     implementation(libs.androidx.biometric)
+    implementation(libs.androidx.work.runtime.ktx)
 }

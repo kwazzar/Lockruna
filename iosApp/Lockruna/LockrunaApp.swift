@@ -1,5 +1,6 @@
 import SwiftUI
 import Network
+import BackgroundTasks
 import Shared
 
 @MainActor
@@ -62,6 +63,7 @@ final class AppModel: ObservableObject {
             }
         }
         startNetworkSync()
+        scheduleAppRefresh()
     }
 
     @MainActor private func sample() {
@@ -101,5 +103,17 @@ struct LockrunaApp: App {
             ContentView(model: model)
                 .privacyShield()
         }
+        .backgroundTask(.appRefresh("com.kwazzar.lockruna.sync")) {
+            await model.sync()
+            model.scheduleAppRefresh()
+        }
+    }
+}
+
+extension AppModel {
+    func scheduleAppRefresh() {
+        let request = BGAppRefreshTaskRequest(identifier: "com.kwazzar.lockruna.sync")
+        request.earliestBeginDate = Date(timeIntervalSinceNow: 15 * 60)
+        try? BGTaskScheduler.shared.submit(request)
     }
 }
