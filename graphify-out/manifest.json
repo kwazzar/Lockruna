@@ -1430,8 +1430,8 @@
     "semantic_hash": ""
   },
   "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/LoginScreen.kt": {
-    "mtime": 1794597195.5659118,
-    "ast_hash": "427822f13fc6635b14bb631d97d73e60",
+    "mtime": 1794601799.2051358,
+    "ast_hash": "d5677a1b2e0e248fc1d16c99679fe407",
     "semantic_hash": ""
   },
   "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/Theme.kt": {

@@ -1,7 +1,7 @@
 # Graph Report - meditate-note-dark-design  (2026-11-13)
 
 ## Corpus Check
-- 335 files · ~110,297 words
+- 335 files · ~110,294 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `dd7a0273`
+- Built from commit: `45b4df90`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -167,6 +167,7 @@
 - authModule
 - Argon2Libsodium
 - RegisterStoreTest
+- DarkZenAuthShell
 - .resolveDevice
 - PlatformNormalizer
 - PreloginUser
@@ -193,7 +194,6 @@
 - .wireUp
 - PresentationModuleTest
 - .createUser
-- ._body
 - FixedBiometricPolicyStore
 - .invoke
 - BiometricSettings.kt
@@ -467,8 +467,8 @@ Cohesion: 0.27
 Nodes (6): SyncNowTest, AppliedChange, Conflict, PushResult, SyncPage, com
 
 ### Community 102 - "toDomain"
-Cohesion: 0.17
-Nodes (10): ButtonStyle, CGFloat, Configuration, DarkZen, DarkZenAuthShell, DarkZenBackground, DarkZenPrimaryButtonStyle, Content (+2 more)
+Cohesion: 0.14
+Nodes (11): ButtonStyle, CGFloat, Configuration, DarkZen, DarkZenBackground, DarkZenPrimaryButtonStyle, DarkZenTextFieldStyle, _Label (+3 more)
 
 ### Community 103 - "AuthTokens"
 Cohesion: 0.40
@@ -670,6 +670,10 @@ Nodes (4): FakePasswordNormalizer, PlatformNormalizer, PlatformNormalizer, Passw
 Cohesion: 0.20
 Nodes (9): Dark Zen UI для Lockruna — iOS Implementation Plan, File Map, Global Constraints, Review Focus, Task 1: Dark Zen design layer та root shell, Task 2: Темизація authentication screens, Task 3: Темизація vault list, detail та edit, Task 4: Темизація Devices та Settings (+1 more)
 
+### Community 169 - "DarkZenAuthShell"
+Cohesion: 0.83
+Nodes (3): DarkZenAuthShell, Content, String
+
 ### Community 175 - "ByteArray"
 Cohesion: 0.22
 Nodes (3): Bip39Test, ByteArray, Sha256Crypto
@@ -737,10 +741,6 @@ Nodes (4): FakeArgon2Test, FakeArgon2, ByteArray, toHexString()
 ### Community 199 - "InMemoryVaultItemRepository"
 Cohesion: 0.50
 Nodes (3): WeakPasswordReason, TOO_SHORT, TOO_WEAK
-
-### Community 203 - "._body"
-Cohesion: 0.40
-Nodes (4): DarkZenTextFieldStyle, _Label, TextField, TextFieldStyle
 
 ### Community 206 - "BiometricSettings.kt"
 Cohesion: 0.50
