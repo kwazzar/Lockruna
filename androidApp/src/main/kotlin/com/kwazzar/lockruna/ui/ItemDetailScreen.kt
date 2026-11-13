@@ -9,6 +9,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -48,6 +51,8 @@ fun ItemDetailScreen(store: ItemDetailStore, onBack: () -> Unit, onEdit: () -> U
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .safeDrawingPadding()
+            .verticalScroll(rememberScrollState())
             .padding(16.dp),
     ) {
         TextButton(
@@ -109,5 +114,6 @@ fun ItemDetailScreen(store: ItemDetailStore, onBack: () -> Unit, onEdit: () -> U
         ) {
             Text("Delete")
         }
+        Spacer(Modifier.height(16.dp))
     }
 }
