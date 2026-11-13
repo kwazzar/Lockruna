@@ -60,11 +60,11 @@ class SecureAuthStateStore(private val storage: SecureStorage) : AuthStateStore
 - `SecureAuthStateStore` ключ `"auth_session"`: JSON (`@Serializable` DTO, `ByteArray` → Base64) ↔ `AuthenticatedUser`; `loadSession()` на биті байти/невідомий формат → `storage.delete(...)` + `null`.
 - `SecureKeyStore` реалізують платформні vault-об'єкти (Task 2/3), бо ключ vault прив'язаний до біометрії; спільного адаптера для нього немає.
 
-- [ ] **Step 1: Write the failing test.** Round-trip `saveSession` → `loadSession()` (усі поля, `tokens`), `clear()` → `null`, повторний save перезаписує; битий JSON → `null` + сховище порожнє; `AuthenticatedUser.toString()` не містить жодного байта ключа.
-- [ ] **Step 2: Run to verify it fails.** `./gradlew :shared:data:jvmTest --tests '*SecureAuthStateStoreTest*'` — FAIL.
-- [ ] **Step 3: Implement** кодек + сховище над `SecureStorage` (без нових залежностей: `kotlin.io.encoding.Base64`).
-- [ ] **Step 4: Run to verify it passes.** Та сама команда — PASS.
-- [ ] **Step 5: Commit.** `feat(data): secure session and vault key stores over a byte storage`
+- [x] **Step 1: Write the failing test.** Round-trip `saveSession` → `loadSession()` (усі поля, `tokens`), `clear()` → `null`, повторний save перезаписує; битий JSON → `null` + сховище порожнє; `AuthenticatedUser.toString()` не містить жодного байта ключа.
+- [x] **Step 2: Run to verify it fails.** `./gradlew :shared:data:jvmTest --tests '*SecureAuthStateStoreTest*'` — FAIL.
+- [x] **Step 3: Implement** кодек + сховище над `SecureStorage` (без нових залежностей: `kotlin.io.encoding.Base64`).
+- [x] **Step 4: Run to verify it passes.** Та сама команда — PASS.
+- [x] **Step 5: Commit.** `feat(data): secure session and vault key stores over a byte storage`
 
 ---
 
@@ -100,11 +100,11 @@ fun androidPlatformModule(context: Context, activityProvider: ActivityProvider):
 - `AndroidClipboard`: `ClipData` + `ClipDescription.EXTRA_IS_SENSITIVE` (API 33+, `Build.VERSION` guard), очищення `clearPrimaryClip()` через 30 с у власному `CoroutineScope`.
 - `androidPlatformModule` реєструє: `DatabaseDriverFactory` (з `initialize(context)`), `Clipboard`, `SecureStorage`, `AuthStateStore`, `BiometricGate` і `SecureKeyStore` (один інстанс `AndroidBiometricVault`), `DevicePlatform.ANDROID`.
 
-- [ ] **Step 1: Dependency.** Додати `androidx-biometric = { module = "androidx.biometric:biometric", version = "1.1.0" }` і `implementation(libs.androidx.biometric)` у `androidMain` (згадати в коміті).
-- [ ] **Step 2: Implement** три класи + модуль. `BiometricPrompt` — `authenticate(reason)` у `suspendCancellableCoroutine`; `isAvailable()` → `BiometricManager.from(context).canAuthenticate(BIOMETRIC_WEAK) == BIOMETRIC_SUCCESS`.
-- [ ] **Step 3: Compile.** `./gradlew :androidApp:assembleDebug` — BUILD SUCCESSFUL (застосунок ще не підключає модуль, це лише компіляція `shared:data`).
+- [x] **Step 1: Dependency.** Додати `androidx-biometric = { module = "androidx.biometric:biometric", version = "1.1.0" }` і `implementation(libs.androidx.biometric)` у `androidMain` (згадати в коміті).
+- [x] **Step 2: Implement** три класи + модуль. `BiometricPrompt` — `authenticate(reason)` у `suspendCancellableCoroutine`; `isAvailable()` → `BiometricManager.from(context).canAuthenticate(BIOMETRIC_WEAK) == BIOMETRIC_SUCCESS`.
+- [x] **Step 3: Compile.** `./gradlew :androidApp:assembleDebug` — BUILD SUCCESSFUL (застосунок ще не підключає модуль, це лише компіляція `shared:data`).
 - [ ] **Step 4: Manual check (записати в PR).** На пристрої/емуляторі: save → load ключа; після додавання нового відбитка `loadVaultKey() == null`. Якщо пристрою немає — зафіксувати як environmental, не як pass.
-- [ ] **Step 5: Commit.** `feat(data): android keystore, biometrics and sensitive clipboard`
+- [x] **Step 5: Commit.** `feat(data): android keystore, biometrics and sensitive clipboard`
 
 ---
 
@@ -133,12 +133,12 @@ fun iosPlatformModule(): Module
 - `IosBiometricVault` тримає `LAContext` успішної автентифікації й передає його в `SecItemCopyMatching` через `kSecUseAuthenticationContext`, тому промпт один; зміна набору біометрії інвалідує item (`.biometryCurrentSet`).
 - `iosPlatformModule` реєструє `DatabaseDriverFactory`, `Clipboard`, `SecureStorage`, `AuthStateStore`, `BiometricGate`+`SecureKeyStore` (один інстанс), `DevicePlatform.IOS`.
 
-- [ ] **Step 1: Write the failing test.** `KeychainSecureStorageTest`: write/read/delete round-trip для двох різних ключів; повторний write перезаписує; `delete` неіснуючого — без винятку.
-- [ ] **Step 2: Run to verify it fails.** `./gradlew :shared:data:iosSimulatorArm64Test --tests '*KeychainSecureStorageTest*'` — FAIL.
-- [ ] **Step 3: Implement** Keychain-сховище (Kotlin/Native `platform.Security`), потім біометричний vault і буфер (без тестів: Face ID у симуляторі не автоматизується).
-- [ ] **Step 4: Run to verify it passes.** Та сама команда — PASS.
-- [ ] **Step 5: Compile the framework.** `./gradlew :shared:umbrella:assemble` — BUILD SUCCESSFUL.
-- [ ] **Step 6: Commit.** `feat(data): ios keychain, biometric vault and sensitive clipboard`
+- [x] **Step 1: Write the failing test.** `KeychainSecureStorageTest`: write/read/delete round-trip для двох різних ключів; повторний write перезаписує; `delete` неіснуючого — без винятку.
+- [x] **Step 2: Run to verify it fails.** `./gradlew :shared:data:iosSimulatorArm64Test --tests '*KeychainSecureStorageTest*'` — FAIL.
+- [x] **Step 3: Implement** Keychain-сховище (Kotlin/Native `platform.Security`), потім біометричний vault і буфер (без тестів: Face ID у симуляторі не автоматизується).
+- [x] **Step 4: Run to verify it passes.** Та сама команда — PASS.
+- [x] **Step 5: Compile the framework.** `./gradlew :shared:umbrella:assemble` — BUILD SUCCESSFUL.
+- [x] **Step 6: Commit.** `feat(data): ios keychain, biometric vault and sensitive clipboard`
 
 ---
 
@@ -173,12 +173,12 @@ fun syncModule(httpClient: HttpClient, baseUrl: String): Module   // AccessToken
 - `coreModule` реєструє: `Clock`, `IdGenerator`, `VaultSession`, `PlatformCrypto`, `PlatformNormalizer`, `Argon2Factory.create()`, `PassKeeperDatabase` (з `get<DatabaseDriverFactory>().create()`, фабрику реєструє platform-модуль), `VaultItemRepository`, vault use cases (`CreateItem`/`UpdateItem`/`DeleteItem`/`GetItem`/`ObserveItems`/`RevealSecret`/`CopySecret`), `ObserveVaultState`/`LockVault`, `ApplyAutoLockPolicy` (з `autoLockPolicy`).
 - `syncModule` більше не приймає `accessTokenProvider` — усередині `get()` (провайдер реєструє `authModule`).
 
-- [ ] **Step 1: Write the failing test.** У `shared/data/src/jvmTest` — тест графа: `startKoin { modules(coreModule(), jvmPlatformTestModule()) }` (fake `DatabaseDriverFactory` через `PassKeeperDatabase(JdbcSqliteDriver(IN_MEMORY))`, fake `Clipboard`, `AuthStateStore`, `SecureKeyStore`, `BiometricGate`) → `koin.get<VaultItemRepository>()`, `get<CreateItem>()`, `get<ObserveVaultState>()`, `get<ApplyAutoLockPolicy>()` не null.
-- [ ] **Step 2: Run to verify it fails.** `./gradlew :shared:data:jvmTest --tests '*CoreModuleTest*'` — FAIL.
-- [ ] **Step 3: Implement** фабрики + `coreModule`; у `SyncModule` прибрати параметр `accessTokenProvider` (брати `get()`); в `AuthModule` прибрати біндинг `InMemoryAuthStateStore` — `AuthStateStore` реєструє platform-модуль.
-- [ ] **Step 4: Run to verify it passes.** `./gradlew :shared:data:jvmTest :shared:umbrella:assemble :androidApp:assembleDebug` — BUILD SUCCESSFUL.
-- [ ] **Step 5: Full verification.** `./gradlew ktlintCheck detekt` + `./gradlew :shared:data:iosSimulatorArm64Test` — BUILD SUCCESSFUL (iOS-тести: macOS).
-- [ ] **Step 6: Commit.** `feat(data): platform factories and the core koin module`
+- [x] **Step 1: Write the failing test.** У `shared/data/src/jvmTest` — тест графа: `startKoin { modules(coreModule(), jvmPlatformTestModule()) }` (fake `DatabaseDriverFactory` через `PassKeeperDatabase(JdbcSqliteDriver(IN_MEMORY))`, fake `Clipboard`, `AuthStateStore`, `SecureKeyStore`, `BiometricGate`) → `koin.get<VaultItemRepository>()`, `get<CreateItem>()`, `get<ObserveVaultState>()`, `get<ApplyAutoLockPolicy>()` не null.
+- [x] **Step 2: Run to verify it fails.** `./gradlew :shared:data:jvmTest --tests '*CoreModuleTest*'` — FAIL.
+- [x] **Step 3: Implement** фабрики + `coreModule`; у `SyncModule` прибрати параметр `accessTokenProvider` (брати `get()`); в `AuthModule` прибрати біндинг `InMemoryAuthStateStore` — `AuthStateStore` реєструє platform-модуль.
+- [x] **Step 4: Run to verify it passes.** `./gradlew :shared:data:jvmTest :shared:umbrella:assemble :androidApp:assembleDebug` — BUILD SUCCESSFUL.
+- [x] **Step 5: Full verification.** `./gradlew ktlintCheck detekt` + `./gradlew :shared:data:iosSimulatorArm64Test` — BUILD SUCCESSFUL (iOS-тести: macOS).
+- [x] **Step 6: Commit.** `feat(data): platform factories and the core koin module`
 
 ## Порядок злиття
 

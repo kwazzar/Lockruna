@@ -64,10 +64,10 @@
 **Interfaces:**
 - Produces: `CryptoService.sha256(input: ByteArray): ByteArray` (32 байти).
 
-- [ ] **Step 1:** Додати метод у порт.
-- [ ] **Step 2:** Реалізація BouncyCastle (`DigestFactory`/`SHA256Digest`) і libsodium (`crypto_hash_sha256`).
-- [ ] **Step 3:** KAT: SHA-256("") = `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`.
-- [ ] **Step 4:** Commit: `feat(crypto): add sha256 to CryptoService with KAT`.
+- [x] **Step 1:** Додати метод у порт.
+- [x] **Step 2:** Реалізація BouncyCastle (`DigestFactory`/`SHA256Digest`) і libsodium (`crypto_hash_sha256`).
+- [x] **Step 3:** KAT: SHA-256("") = `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`.
+- [x] **Step 4:** Commit: `feat(crypto): add sha256 to CryptoService with KAT`.
 
 ## Task 2: BIP39 кодек
 
@@ -79,9 +79,9 @@
 **Interfaces:**
 - Produces: `object Bip39 { fun encode(entropy: ByteArray): List<String> (12 слів); fun decode(words: List<String>): ByteArray; }` — кидає `AppError.InvalidRecoveryKey` при невірному checksum/слові.
 
-- [ ] **Step 1:** Тест encode/decode round-trip для 16 байт; невірний checksum → failure; невідоме слово → failure.
-- [ ] **Step 2:** Реалізувати: 128 біт → 12 слів (11 біт кожне), 4-бітний checksum SHA-256(entropy) у 12-му слові; decode — зворотне + перевірка checksum.
-- [ ] **Step 3:** Commit: `feat(domain): add BIP39 codec for recovery key`.
+- [x] **Step 1:** Тест encode/decode round-trip для 16 байт; невірний checksum → failure; невідоме слово → failure.
+- [x] **Step 2:** Реалізувати: 128 біт → 12 слів (11 біт кожне), 4-бітний checksum SHA-256(entropy) у 12-му слові; decode — зворотне + перевірка checksum.
+- [x] **Step 3:** Commit: `feat(domain): add BIP39 codec for recovery key`.
 
 ## Task 3: Порти `RecoveryApi`, `DeviceApi`, `AutoLockSettingsStore`
 
@@ -94,9 +94,9 @@
 - `DeviceApi.list(): Result<List<Device>, AppError>`; `DeviceApi.revoke(deviceId): Result<Unit, AppError>`
 - `AutoLockSettingsStore.load(): AutoLockPolicy`; `save(policy)`.
 
-- [ ] **Step 1:** Визначити інтерфейси + доменні типи `RecoveryStartData`, `Device`.
-- [ ] **Step 2:** Konsist-тест (якщо є) на розташування портів.
-- [ ] **Step 3:** Commit: `feat(domain): add recovery, device and auto-lock ports`.
+- [x] **Step 1:** Визначити інтерфейси + доменні типи `RecoveryStartData`, `Device`.
+- [x] **Step 2:** Konsist-тест (якщо є) на розташування портів.
+- [x] **Step 3:** Commit: `feat(domain): add recovery, device and auto-lock ports`.
 
 ## Task 4: Use cases
 
@@ -112,10 +112,10 @@
 - `RevokeDevice(deviceId): Result<Unit, AppError>`
 - `EnableBiometrics`: додати `biometricPolicyStore.setLastSuccessfulUnlock(clock.nowMillis())` після збереження ключа; скинути failures.
 
-- [ ] **Step 1:** Тести на кожен use case з fake-ами (InMemory).
-- [ ] **Step 2:** Реалізація; `CompleteRecovery` використовує `KeyDerivation` (як `Register`/`Login`) і `Bip39` (decode → recoveryKey → HKDF).
-- [ ] **Step 3:** Фікс `EnableBiometrics`.
-- [ ] **Step 4:** Commit: `feat(application): add account lifecycle use cases and fix biometric first-use`.
+- [x] **Step 1:** Тести на кожен use case з fake-ами (InMemory).
+- [x] **Step 2:** Реалізація; `CompleteRecovery` використовує `KeyDerivation` (як `Register`/`Login`) і `Bip39` (decode → recoveryKey → HKDF).
+- [x] **Step 3:** Фікс `EnableBiometrics`.
+- [x] **Step 4:** Commit: `feat(application): add account lifecycle use cases and fix biometric first-use`.
 
 ## Task 5: Data-реалізації
 
@@ -128,9 +128,9 @@
 - Consumes: `HttpClient`, `baseUrl`, DTO з `api-contract`.
 - Produces: реалізації портів; Koin-реєстрація `RecoveryApi`, `DeviceApi`, `AutoLockSettingsStore`, use cases.
 
-- [ ] **Step 1:** Ktor-реалізації з мапінгом DTO ↔ домен (лише тут).
-- [ ] **Step 2:** Koin-реєстрація + тести `AuthModule`/`CoreModule`.
-- [ ] **Step 3:** Commit: `feat(data): implement recovery/device APIs and auto-lock settings`.
+- [x] **Step 1:** Ktor-реалізації з мапінгом DTO ↔ домен (лише тут).
+- [x] **Step 2:** Koin-реєстрація + тести `AuthModule`/`CoreModule`.
+- [x] **Step 3:** Commit: `feat(data): implement recovery/device APIs and auto-lock settings`.
 
 ## Task 6: MVI-стори
 
@@ -147,17 +147,17 @@
 - `DevicesStore`: State (`devices`, `isLoading`, `error`), Intent `Load`, `Revoke(id)`.
 - `SettingsStore`: State (`policy: AutoLockPolicy`, `biometricsEnabled`), Intent `PolicyChanged`, `BiometricsToggled`.
 
-- [ ] **Step 1:** Тести на кожен стор (подвійний Submit, redaction пароля, reveal тощо).
-- [ ] **Step 2:** Реалізація; `ItemEditStore` додає `type: VaultItemType` + поля `cardNumber`, `expiry`, `cvv`, `noteBody` (або узагальнені).
-- [ ] **Step 3:** Koin-реєстрація + Konsist.
-- [ ] **Step 4:** Commit: `feat(presentation): add account lifecycle and settings stores`.
+- [x] **Step 1:** Тести на кожен стор (подвійний Submit, redaction пароля, reveal тощо).
+- [x] **Step 2:** Реалізація; `ItemEditStore` додає `type: VaultItemType` + поля `cardNumber`, `expiry`, `cvv`, `noteBody` (або узагальнені).
+- [x] **Step 3:** Koin-реєстрація + Konsist.
+- [x] **Step 4:** Commit: `feat(presentation): add account lifecycle and settings stores`.
 
 ## Task 7: Перевірка
 
-- [ ] **Step 1:** `./gradlew :shared:domain:jvmTest :shared:application:jvmTest :shared:presentation:jvmTest :shared:data:jvmTest`.
-- [ ] **Step 2:** `./gradlew :architecture-tests:test`.
-- [ ] **Step 3:** `gitleaks detect --source . --no-banner`.
-- [ ] **Step 4:** Commit: `docs(shared): update graphify`.
+- [x] **Step 1:** `./gradlew :shared:domain:jvmTest :shared:application:jvmTest :shared:presentation:jvmTest :shared:data:jvmTest`.
+- [x] **Step 2:** `./gradlew :architecture-tests:test`.
+- [x] **Step 3:** `gitleaks detect --source . --no-banner`.
+- [x] **Step 4:** Commit: `docs(shared): update graphify`.
 
 ## Spec coverage
 

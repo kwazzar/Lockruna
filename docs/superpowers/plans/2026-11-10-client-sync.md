@@ -118,11 +118,11 @@ data class Outbox(val idempotencyKey: String, val changes: List<PendingChange>)
 
 `AppError.kt` — ця хвиля є **єдиним власником** файлу `shared/domain/src/commonMain/kotlin/com/kwazzar/lockruna/domain/error/AppError.kt`: додати дві гілки — `data object IdempotencyConflict : AppError` (409 на повторний Idempotency-Key) і `data object EmailAlreadyRegistered : AppError` (409 на register). Другу гілку додаємо тут, щоб auth-хвиля не редагувала `AppError.kt` і merge був безконфліктним.
 
-- [ ] **Step 1: Write the failing test** — `SyncPortsTest`: `FakeSyncApi` віддає задані страницы/результати; `FakeSyncStore` roundtrip stage→pending→clearOutbox; `dirtyChanges` повертає staged value.
-- [ ] **Step 2: verify fails** `./gradlew :shared:application:jvmTest --tests '*SyncPortsTest*'` — FAIL.
-- [ ] **Step 3: Implement** — ти сами типи/порти, скелет фейків.
-- [ ] **Step 4: verify passes.**
-- [ ] **Step 5: Commit** `feat(domain): sync exchange types and ports`
+- [x] **Step 1: Write the failing test** — `SyncPortsTest`: `FakeSyncApi` віддає задані страницы/результати; `FakeSyncStore` roundtrip stage→pending→clearOutbox; `dirtyChanges` повертає staged value.
+- [x] **Step 2: verify fails** `./gradlew :shared:application:jvmTest --tests '*SyncPortsTest*'` — FAIL.
+- [x] **Step 3: Implement** — ти сами типи/порти, скелет фейків.
+- [x] **Step 4: verify passes.**
+- [x] **Step 5: Commit** `feat(domain): sync exchange types and ports`
 
 ---
 
@@ -156,11 +156,11 @@ resetLocalData();               -- DELETE з vault_item, item_history, outbox; s
 - `stageOutbox` — серіалізація `List<PendingChange>` → JSON `List<ChangeDto>` (DTO з `api-contract`) → `body`; `pendingOutbox` — зворотний парс.
 - `peek` — прямий select по id.
 
-- [ ] **Step 1: failing test** — in-memory SQLite (`JdbcSqliteDriver.IN_MEMORY` + `PassKeeperDatabase.Schema.create(driver)`): roundtrip outbox; applyRemote перезаписує, пише історію, підвищує max_seen_version; dirtyChanges; resetLocalData очищає.
-- [ ] **Step 2: verify fails** `./gradlew :shared:data:jvmTest --tests '*SqlDelightSyncStoreTest*'` — FAIL.
-- [ ] **Step 3: Implement** — SQL-dsl лише тут (тільки ця @Task2 не торкається `SqlDelightVaultItemRepository`).
-- [ ] **Step 4: verify passes.**
-- [ ] **Step 5: Commit** `feat(data): sync store over sqldelight with outbox`
+- [x] **Step 1: failing test** — in-memory SQLite (`JdbcSqliteDriver.IN_MEMORY` + `PassKeeperDatabase.Schema.create(driver)`): roundtrip outbox; applyRemote перезаписує, пише історію, підвищує max_seen_version; dirtyChanges; resetLocalData очищає.
+- [x] **Step 2: verify fails** `./gradlew :shared:data:jvmTest --tests '*SqlDelightSyncStoreTest*'` — FAIL.
+- [x] **Step 3: Implement** — SQL-dsl лише тут (тільки ця @Task2 не торкається `SqlDelightVaultItemRepository`).
+- [x] **Step 4: verify passes.**
+- [x] **Step 5: Commit** `feat(data): sync store over sqldelight with outbox`
 
 ---
 
@@ -192,11 +192,11 @@ class KtorSyncApi(
 - Мапінг результатів (кожен випадок): `200` → success; `409` → `IdempotencyConflict`; `429` → `RateLimited(header Retry-After)`; `401` → `Unauthorized`; інші/транспорт → `NetworkUnavailable`.
 - `RemoteItem.deleted = ciphertext == null || deletedAt != null`; `updatedAt` — ISO-дата `String` → `Long` epoch millis.
 
-- [ ] **Step 1: failing test** — `ktor-client-mock`: один roundtrip push (перевірка боді + header Idempotency-Key + Bearer) і pull (tombstone → `deleted = true`).
-- [ ] **Step 2: verify fails.**
-- [ ] **Step 3: Implement** + toml-рядки.
-- [ ] **Step 4: verify passes** + `./gradlew ktlintCheck detekt` — BUILD SUCCESSFUL.
-- [ ] **Step 5: Commit** `feat(data): ktor sync api with idempotency header`
+- [x] **Step 1: failing test** — `ktor-client-mock`: один roundtrip push (перевірка боді + header Idempotency-Key + Bearer) і pull (tombstone → `deleted = true`).
+- [x] **Step 2: verify fails.**
+- [x] **Step 3: Implement** + toml-рядки.
+- [x] **Step 4: verify passes** + `./gradlew ktlintCheck detekt` — BUILD SUCCESSFUL.
+- [x] **Step 5: Commit** `feat(data): ktor sync api with idempotency header`
 
 ---
 
@@ -238,7 +238,7 @@ class SyncNow(
        - інакше (local wins) → на наступній ітерації re-push того ж `PendingChange` з `baseVersion = conflict.server.version` (без re-шифровки — AAD уже `rowVersion+1`); на id максимум 3 re-push, далі строк лишається dirty і цикл завершується;
    - мережева невдача → `Failure(NetworkUnavailable)`, outbox і ключ НЕ чистяться (наступний виклик використає той самий batch).
 
-- [ ] **Step 1: failing tests** — сценарії:
+- [x] **Step 1: failing tests** — сценарії:
   1. success pull → push (markSynced виклик, поля оновлені);
   2. rollback-skip (serve повертає запис зі старішою версією → applyRemote НЕ викликаний);
   3. LWW remote-wins → applyRemote, dirty=false;
@@ -247,10 +247,10 @@ class SyncNow(
   6. >100 dirty → дві пачки по ≤100;
   7. stale reset → перед pull викликано `resetLocalData()`;
   8. token null → `Unauthorized`, api.pull не викликаний.
-- [ ] **Step 2: verify fails** `./gradlew :shared:application:jvmTest --tests '*SyncNowTest*'`.
-- [ ] **Step 3: Implement** — один use case; LWW/re-push логіка в приватних приватних функціях.
-- [ ] **Step 4: verify passes.**
-- [ ] **Step 5: Commit** `feat(application): sync engine with outbox, lww and rollback guard`
+- [x] **Step 2: verify fails** `./gradlew :shared:application:jvmTest --tests '*SyncNowTest*'`.
+- [x] **Step 3: Implement** — один use case; LWW/re-push логіка в приватних приватних функціях.
+- [x] **Step 4: verify passes.**
+- [x] **Step 5: Commit** `feat(application): sync engine with outbox, lww and rollback guard`
 
 ---
 
@@ -283,14 +283,14 @@ Konsist-тест `SyncLayerTest`:
 - `shared/data/sync/**` не імпортує `com.kwazzar.lockruna.presentation.`;
 - `shared/application/sync/**` не імпортує `io.ktor.`, `app.cash.sqldelight.`.
 
-- [ ] **Step 1: konsist RED** (пустий файл тесту) → run `./gradlew :architecture-tests:test` — зафіксувати FAIL.
-- [ ] **Step 2: модуль + build** → GREEN.
-- [ ] **Step 3: повна верифікація:**
+- [x] **Step 1: konsist RED** (пустий файл тесту) → run `./gradlew :architecture-tests:test` — зафіксувати FAIL.
+- [x] **Step 2: модуль + build** → GREEN.
+- [x] **Step 3: повна верифікація:**
   - `./gradlew ktlintCheck detekt`
   - `./gradlew :shared:domain:jvmTest :shared:application:jvmTest :shared:data:jvmTest :architecture-tests:test`
   - `gitleaks detect --source . --no-banner`
   - Expected: BUILD SUCCESSFUL.
-- [ ] **Step 4: Commit** `feat(sync): di module and architecture guard`
+- [x] **Step 4: Commit** `feat(sync): di module and architecture guard`
 
 ## Не в обсязі цієї хвилі
 

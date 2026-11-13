@@ -59,9 +59,9 @@
 **Interfaces:**
 - Produces: `RecoveryStartResponseDto(userId: String, recoveryWrappedVaultKey: ByteArray)` (base64 у JSON як String), `RecoveryCompleteRequest(email, recoveryAuthKey, newAuthKey, newKdfSalt, newKdfParams, newWrappedVaultKey, device)`, `DeleteAccountRequest(authKey)`.
 
-- [ ] **Step 1:** Додати DTO за схемами `openapi.yaml` (`RecoveryStartResponse`, `RecoveryCompleteRequest`), серіалізацію base64 для байтів.
+- [x] **Step 1:** Додати DTO за схемами `openapi.yaml` (`RecoveryStartResponse`, `RecoveryCompleteRequest`), серіалізацію base64 для байтів.
 - [ ] **Step 2:** Тест round-trip серіалізації.
-- [ ] **Step 3:** Commit: `feat(contract): add recovery and account deletion DTOs`.
+- [x] **Step 3:** Commit: `feat(contract): add recovery and account deletion DTOs`.
 
 ## Task 2: Репозиторії — delete / revoke all
 
@@ -73,10 +73,10 @@
 - Consumes: наявні `UserRecord`, `DeviceRecord`, `RefreshTokenRecord`.
 - Produces: `UserRepository.deleteById(id): Boolean`; `DeviceRepository.revokeAllForUser(userId, exceptDeviceId: String?, revokedAt): Int`; `RefreshTokenRepository.revokeAllForUser(userId, revokedAt): Int`.
 
-- [ ] **Step 1:** Додати сигнатури в інтерфейси.
-- [ ] **Step 2:** Реалізація в Exposed (DELETE users WHERE id = ?; UPDATE devices SET revoked_at = ? WHERE user_id = ? AND (except IS NULL OR id <> ?); UPDATE refresh_tokens SET revoked_at = ? WHERE user_id = ? AND revoked_at IS NULL).
-- [ ] **Step 3:** Юніт/інтеграційний тест (Testcontainers) на каскад.
-- [ ] **Step 4:** Commit: `feat(server): add delete and revoke-all repository methods`.
+- [x] **Step 1:** Додати сигнатури в інтерфейси.
+- [x] **Step 2:** Реалізація в Exposed (DELETE users WHERE id = ?; UPDATE devices SET revoked_at = ? WHERE user_id = ? AND (except IS NULL OR id <> ?); UPDATE refresh_tokens SET revoked_at = ? WHERE user_id = ? AND revoked_at IS NULL).
+- [x] **Step 3:** Юніт/інтеграційний тест (Testcontainers) на каскад.
+- [x] **Step 4:** Commit: `feat(server): add delete and revoke-all repository methods`.
 
 ## Task 3: StartRecovery
 
@@ -88,9 +88,9 @@
 - Produces: `StartRecovery(email, clientIp): RecoveryStartResult(userId: String, recoveryWrappedVaultKey: ByteArray)`.
 
 - [ ] **Step 1:** Написати тест: існуючий email → реальні `userId`/`recoveryWrappedVaultKey`; неіснуючий → фіктивні, але тієї ж форми; rate limit 5/15 хв.
-- [ ] **Step 2:** Реалізувати: rate limit email+IP; якщо user == null → `userId = UUID.nameUUIDFromBytes(AuthKeys.hash(authFakeSecret, email.toByteArray()))` (або HMAC-derived), `recoveryWrappedVaultKey = AuthKeys.hash(authFakeSecret, email.toByteArray()).copyOf(64)`; інакше реальні поля.
+- [x] **Step 2:** Реалізувати: rate limit email+IP; якщо user == null → `userId = UUID.nameUUIDFromBytes(AuthKeys.hash(authFakeSecret, email.toByteArray()))` (або HMAC-derived), `recoveryWrappedVaultKey = AuthKeys.hash(authFakeSecret, email.toByteArray()).copyOf(64)`; інакше реальні поля.
 - [ ] **Step 3:** Перевірити anti-enumeration (час/форма) тестом.
-- [ ] **Step 4:** Commit: `feat(server): implement recovery start with anti-enumeration`.
+- [x] **Step 4:** Commit: `feat(server): implement recovery start with anti-enumeration`.
 
 ## Task 4: CompleteRecovery
 
@@ -101,10 +101,10 @@
 - Consumes: `UserRepository`, `DeviceRepository`, `RefreshTokenRepository`, `TokenService`, `RateLimiter`, `TransactionRunner`, `ServerSettings`, `Clock`.
 - Produces: `CompleteRecovery(command): AuthSession` (новий пристрій + токени).
 
-- [ ] **Step 1:** Тест: невірний `recoveryAuthKey` → 401; вірний → оновлені key material, нові токени, старі пристрої відкликано.
+- [x] **Step 1:** Тест: невірний `recoveryAuthKey` → 401; вірний → оновлені key material, нові токени, старі пристрої відкликано.
 - [ ] **Step 2:** Реалізувати: rate limit; знайти user за email; якщо немає або `AuthKeys.constantTimeEquals(AuthKeys.hash(pepper, recoveryAuthKey), user.recoveryAuthHash)` false → 401; у транзакції: `updateKeyMaterial` (authHash, recoveryAuthHash без змін, kdfSalt, wrappedVaultKey), створити пристрій, випустити токени, `revokeAllForUser` (крім нового пристрою) + `revokeAllForUser` токени.
-- [ ] **Step 3:** Тест на відкликання старих токенів.
-- [ ] **Step 4:** Commit: `feat(server): implement recovery complete`.
+- [x] **Step 3:** Тест на відкликання старих токенів.
+- [x] **Step 4:** Commit: `feat(server): implement recovery complete`.
 
 ## Task 5: DeleteAccount
 
@@ -115,10 +115,10 @@
 - Consumes: `UserRepository`, `DeviceRepository`, `RefreshTokenRepository`, `RateLimiter`, `TransactionRunner`, `ServerSettings`.
 - Produces: `DeleteAccount(userId, authKey): Unit` (кидає 401 при невірному ключі).
 
-- [ ] **Step 1:** Тест: невірний `authKey` → 401; вірний → 204 і каскадне видалення.
-- [ ] **Step 2:** Реалізувати: знайти user за userId; перевірити `AuthKeys.constantTimeEquals(AuthKeys.hash(pepper, authKey), user.authHash)`; при невідповідності 401; `users.deleteById(userId)` (FK cascade).
+- [x] **Step 1:** Тест: невірний `authKey` → 401; вірний → 204 і каскадне видалення.
+- [x] **Step 2:** Реалізувати: знайти user за userId; перевірити `AuthKeys.constantTimeEquals(AuthKeys.hash(pepper, authKey), user.authHash)`; при невідповідності 401; `users.deleteById(userId)` (FK cascade).
 - [ ] **Step 3:** Очистка Redis-ключів rate limit і denylist для цього user (якщо є).
-- [ ] **Step 4:** Commit: `feat(server): implement account deletion`.
+- [x] **Step 4:** Commit: `feat(server): implement account deletion`.
 
 ## Task 6: Маршрути та DI
 
@@ -126,17 +126,17 @@
 - Modify: `server/.../identity/api/IdentityRoutes.kt`
 - Modify: `server/.../platform/di/ServerModule.kt`
 
-- [ ] **Step 1:** Додати `POST /auth/recovery/start`, `POST /auth/recovery/complete`, `DELETE /account` з мапінгом DTO ↔ команди, rate limit, status pages.
-- [ ] **Step 2:** Зареєструвати use cases в Koin.
-- [ ] **Step 3:** Інтеграційні тести `RecoveryApiTest`, `AccountApiTest` (anti-enumeration, cascade, 401).
-- [ ] **Step 4:** Commit: `feat(server): wire recovery and account deletion routes`.
+- [x] **Step 1:** Додати `POST /auth/recovery/start`, `POST /auth/recovery/complete`, `DELETE /account` з мапінгом DTO ↔ команди, rate limit, status pages.
+- [x] **Step 2:** Зареєструвати use cases в Koin.
+- [x] **Step 3:** Інтеграційні тести `RecoveryApiTest`, `AccountApiTest` (anti-enumeration, cascade, 401).
+- [x] **Step 4:** Commit: `feat(server): wire recovery and account deletion routes`.
 
 ## Task 7: Перевірка
 
-- [ ] **Step 1:** `DOCKER_HOST=... TESTCONTAINERS_RYUK_DISABLED=true ./gradlew :server:test`.
-- [ ] **Step 2:** Перевірити, що `openapi.yaml` і DTO збігаються (контрактний тест, якщо є).
-- [ ] **Step 3:** `gitleaks detect --source . --no-banner`.
-- [ ] **Step 4:** Commit: `docs(server): update graphify` (якщо змінювались).
+- [x] **Step 1:** `DOCKER_HOST=... TESTCONTAINERS_RYUK_DISABLED=true ./gradlew :server:test`.
+- [x] **Step 2:** Перевірити, що `openapi.yaml` і DTO збігаються (контрактний тест, якщо є).
+- [x] **Step 3:** `gitleaks detect --source . --no-banner`.
+- [x] **Step 4:** Commit: `docs(server): update graphify` (якщо змінювались).
 
 ## Spec coverage
 

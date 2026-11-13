@@ -40,8 +40,8 @@
 - Modify: `docs/adr/003-cryptography.md` §2 пункт 5 — «AAD = userId» → «AAD = email (UTF-8)»: клієнт отримує `userId` лише у відповідях API, а email відомий і під час реєстрації (wrap іде в запиті), і під час login/recovery (unwrap). Рішення затверджено 2026-11-10.
 - Modify: `docs/threat-model.md` — рядок про swap-захист wrapped_vault_key (AAD): заменить `userId` на `email` для консистентності.
 
-- [ ] **Step 1: Додати правки** (точний рядок з причиною; доки фіксують рішення від 2026-11-10).
-- [ ] **Step 2: Commit** `docs: use email as wrap-key AAD instead of userId`
+- [x] **Step 1: Додати правки** (точний рядок з причиною; доки фіксують рішення від 2026-11-10).
+- [x] **Step 2: Commit** `docs: use email as wrap-key AAD instead of userId`
 > \(This task email documented `docs` — тримаємі тобто в укрідській мовю jazyke цілих речень.\)
 
 ---
@@ -125,11 +125,11 @@ data class SealedBlob(val nonce: ByteArray, val payload: ByteArray) {
 `AppError.kt` — цю хвилю **не редагує**: гілки `IdempotencyConflict` і `EmailAlreadyRegistered` додає client-sync (власник спільного файлу). Тут лише використовувати їх.
 
 - `VaultSession`-порт малий поштовх: до `domain/session/SessionPorts.kt` додати `VaultKey.from(bytes: ByteArray): VaultKey` = compackage of `VaultKey` (конструктор private — це роздолиний дало volition для unlock flow). У `VaultKey` інший оре що `zeroize` існує.
-- [ ] **Step 1: failing test** — `FakeAuthStateStore` save/load/clear roundtrip; `FakeBiometricPolicyStore` counters; `FakeArgon2` детермінований;
-- [ ] **Step 2: verify fails** `./gradlew :shared:application:jvmTest --tests '*AuthStateStore*'`.
-- [ ] **Step 3: Implement** всі domain-типи відповідно вище; нічого мережевого.
-- [ ] **Step 4: verify passes.**
-- [ ] **Step 5: Commit** `feat(domain): auth exchange types and session ports`
+- [x] **Step 1: failing test** — `FakeAuthStateStore` save/load/clear roundtrip; `FakeBiometricPolicyStore` counters; `FakeArgon2` детермінований;
+- [x] **Step 2: verify fails** `./gradlew :shared:application:jvmTest --tests '*AuthStateStore*'`.
+- [x] **Step 3: Implement** всі domain-типи відповідно вище; нічого мережевого.
+- [x] **Step 4: verify passes.**
+- [x] **Step 5: Commit** `feat(domain): auth exchange types and session ports`
 
 ---
 
@@ -199,17 +199,17 @@ class UnlockWithPassword(
 
 Неможливо логин для незвісного email — **идентична обробка** в `FakeAuthApi`/`KtorAuthApi`: `InvalidCredentials`.
 
-- [ ] **Step 1: failing tests:**
+- [x] **Step 1: failing tests:**
   - Login успішний: сесія unlocked, `currentVaultKey() != null` і її bytes рівні fake-crypto roundtrips;
   - `WeakKdfParams` при `isAcceptable == false`;
   - 401 обох сценаріїв → `InvalidCredentials`;
   - 429 → `RateLimited`;
   - Unlock offline з залогиненим сесією, невёл → Unauthorized;
   - Logout → сесія locked, store порожній.
-- [ ] **Step 2: verify fails** `./gradlew :shared:application:jvmTest --tests '*Login*' --tests '*UnlockWithPassword*' --tests '*Logout*'`.
-- [ ] **Step 3: Implement.**
-- [ ] **Step 4: verify passes.**
-- [ ] **Step 5: Commit** `feat(application): login, logout and offline unlock`
+- [x] **Step 2: verify fails** `./gradlew :shared:application:jvmTest --tests '*Login*' --tests '*UnlockWithPassword*' --tests '*Logout*'`.
+- [x] **Step 3: Implement.**
+- [x] **Step 4: verify passes.**
+- [x] **Step 5: Commit** `feat(application): login, logout and offline unlock`
 
 ---
 
@@ -253,12 +253,12 @@ class Register(
 8. Як у Login, кроки 5-6: unwrap через KEK з тим самим AAD (email); `saveSession`; `session.unlock(...)`; `Success(RegisterOutcome(recoveryKey))`.
    - 409 → `Failure(AppError.EmailAlreadyRegistered)`.
 
-- [ ] **Step 1: failing tests:**
+- [x] **Step 1: failing tests:**
   - рiste success: `VaultSession` unlocked; `authStateStore` заповнений; `RegisterOutcome.recoveryKey` розміром 16 байт і НЕ dump у помилку.
   - слабкий password → WeakMasterPassword;
   - vault key, який клієнт зареєстрував, розгортається тим самим KEK (roundtrip через fake crypto);
   - email-register wrap інваріант: спроба запакувати/розпакувати з "EmailDifferent@example.com" return `Failure(...ItemCorrupted)` — фіксисував АДЕ-піняцію.
-- [ ] **Step 2: verify fails / verify passes / Commit** `feat(application): registration with recovery key and aad-email wrap`.
+- [x] **Step 2: verify fails / verify passes / Commit** `feat(application): registration with recovery key and aad-email wrap`.
 
 ---
 
@@ -305,8 +305,8 @@ class UnlockWithBiometrics(
 
 «Після рестарту потрібен пароль»: не реалізується тут кодом — воно природно від `VaultSession` (new instance в Locked); тест-фікс, що нова `VaultSession` починається Locked.
 
-- [ ] **Step 1: failing tests** (гейти 1–5 по одному; EnableBiometrics на locked-сесії → VaultLocked).
-- [ ] **Step 2: verify fails / passes / Commit** `feat(application): biometric enable and unlock with policy gates`
+- [x] **Step 1: failing tests** (гейти 1–5 по одному; EnableBiometrics на locked-сесії → VaultLocked).
+- [x] **Step 2: verify fails / passes / Commit** `feat(application): biometric enable and unlock with policy gates`
 
 ---
 
@@ -349,11 +349,11 @@ class InMemoryAuthStateStore : AuthStateStore   // тестовий, used in jvm
 - toml/build: ktor-клієнт залежності **не додаємо** в цій хвилі — їх додає client-sync (`gradle/libs.versions.toml` + `shared/data/build.gradle.kts`); порядок merge: sync → auth. Тести KtorAuthApi використовують `ktor-client-mock` з того ж набору.
 - Відповідь AuthResponseDto → `AuthenticatedUser`: `kdfSalt`, `kdfParams`, `wrappedVaultKey`; `wrappedVaultKey`-wire формат `nonce||ciphertext||tag` — СЕРВЕР ЛИШЕ КОПІЮВАє байти клієнта, тому формат порядку підтверджується unit-тестом package/unpack.
 
-- [ ] **Step 1: failing test** — mock roundtrips: register 201 (DTO → AuthenticatedUser), login 401 обох видів → InvalidCredentials, register 409 → EmailAlreadyRegistered, 429 → RateLimited з Retry-After, refresh, logout 204.
-- [ ] **Step 2: verify fails / passes.**
-- [ ] **Step 3: Implement.**
-- [ ] **Step 4: verify passes + ktlint/detekt зелено.**
-- [ ] **Step 5: Commit** `feat(data): ktor auth api and session token provider`
+- [x] **Step 1: failing test** — mock roundtrips: register 201 (DTO → AuthenticatedUser), login 401 обох видів → InvalidCredentials, register 409 → EmailAlreadyRegistered, 429 → RateLimited з Retry-After, refresh, logout 204.
+- [x] **Step 2: verify fails / passes.**
+- [x] **Step 3: Implement.**
+- [x] **Step 4: verify passes + ktlint/detekt зелено.**
+- [x] **Step 5: Commit** `feat(data): ktor auth api and session token provider`
 
 ---
 
@@ -390,14 +390,14 @@ Konsist-тест `AuthLayerTest`:
 - `shared/application/auth/**` не імпортує `io.ktor.`, `app.cash.sqldelight.`;
 - `shared/data/auth/**` не імпортує `com.kwazzar.lockruna.presentation.`.
 
-- [ ] **Step 1: konsist RED**
-- [ ] **Step 2: модуль → GREEN**
-- [ ] **Step 3: повна верифікація:**
+- [x] **Step 1: konsist RED**
+- [x] **Step 2: модуль → GREEN**
+- [x] **Step 3: повна верифікація:**
   - `./gradlew ktlintCheck detekt`
   - `./gradlew :shared:domain:jvmTest :shared:application:jvmTest :shared:data:jvmTest :architecture-tests:test`
   - `gitleaks detect --source . --no-banner`
   - Expected: BUILD SUCCESSFUL.
-- [ ] **Step 4: Commit** `feat(auth): di module and architecture guard`
+- [x] **Step 4: Commit** `feat(auth): di module and architecture guard`
 
 ## Не в обсязі цієї хвилі
 

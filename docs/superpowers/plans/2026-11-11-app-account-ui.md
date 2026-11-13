@@ -54,9 +54,9 @@
 - Consumes: стори з WS2.
 - Produces: `LockrunaIos.registerStore()`, `recoveryStore()`, `devicesStore()`, `settingsStore()`.
 
-- [ ] **Step 1:** Додати поля-рефи та getter-и, ініціалізацію в `start()`.
-- [ ] **Step 2:** Скомпілювати `:shared:umbrella:assemble`.
-- [ ] **Step 3:** Commit: `feat(umbrella): expose account lifecycle stores to iOS`.
+- [x] **Step 1:** Додати поля-рефи та getter-и, ініціалізацію в `start()`.
+- [x] **Step 2:** Скомпілювати `:shared:umbrella:assemble`.
+- [x] **Step 3:** Commit: `feat(umbrella): expose account lifecycle stores to iOS`.
 
 ## Task 2: Android — реєстрація та recovery
 
@@ -65,9 +65,9 @@
 - Modify: `androidApp/.../ui/AppRoot.kt`
 
 - [ ] **Step 1:** Екран реєстрації: email/password/confirm, валідація (12+ символів), після успіху — показ 12 слів з `Effect.RecoveryKeyReady`, підтвердження повторним введенням, потім перехід у vault.
-- [ ] **Step 2:** Екран відновлення: email + введення 12 слів + новий пароль → `RecoveryStore` → перехід у vault.
-- [ ] **Step 3:** Навігація `AppScreen` з урахуванням нових станів.
-- [ ] **Step 4:** Commit: `feat(android): add registration and recovery screens`.
+- [x] **Step 2:** Екран відновлення: email + введення 12 слів + новий пароль → `RecoveryStore` → перехід у vault.
+- [x] **Step 3:** Навігація `AppScreen` з урахуванням нових станів.
+- [x] **Step 4:** Commit: `feat(android): add registration and recovery screens`.
 
 ## Task 3: Android — пристрої та налаштування
 
@@ -75,19 +75,19 @@
 - Create: `androidApp/.../ui/DevicesScreen.kt`, `SettingsScreen.kt`
 - Modify: `androidApp/.../ui/VaultListScreen.kt` (меню/кнопки)
 
-- [ ] **Step 1:** Екран пристроїв: список, позначка поточного, відкликання з підтвердженням.
-- [ ] **Step 2:** Екран налаштувань: 4 варіанти автоблокування, перемикач біометрії (виклик `EnableBiometrics`), видалення акаунта з повторним паролем.
-- [ ] **Step 3:** Кнопка ручного Sync + індикатор стану.
-- [ ] **Step 4:** Commit: `feat(android): add devices, settings and manual sync`.
+- [x] **Step 1:** Екран пристроїв: список, позначка поточного, відкликання з підтвердженням.
+- [x] **Step 2:** Екран налаштувань: 4 варіанти автоблокування, перемикач біометрії (виклик `EnableBiometrics`), видалення акаунта з повторним паролем.
+- [x] **Step 3:** Кнопка ручного Sync + індикатор стану.
+- [x] **Step 4:** Commit: `feat(android): add devices, settings and manual sync`.
 
 ## Task 4: Android — CARD/NOTE і папки
 
 **Files:**
 - Modify: `androidApp/.../ui/ItemEditScreen.kt`, `VaultListScreen.kt`
 
-- [ ] **Step 1:** Селектор типу при створенні; додаткові поля для CARD/NOTE.
-- [ ] **Step 2:** Вибір папки при редагуванні; створення папки.
-- [ ] **Step 3:** Commit: `feat(android): add card/note forms and folders`.
+- [x] **Step 1:** Селектор типу при створенні; додаткові поля для CARD/NOTE.
+- [x] **Step 2:** Вибір папки при редагуванні; створення папки.
+- [x] **Step 3:** Commit: `feat(android): add card/note forms and folders`.
 
 ## Task 5: iOS — екрани (SwiftUI)
 
@@ -95,10 +95,10 @@
 - Modify: `iosApp/Lockruna/LockrunaApp.swift`, `iosApp/Lockruna/ContentView.swift`
 - Create: окремі view-файли за потреби
 
-- [ ] **Step 1:** Register/Recovery/Devices/Settings views через фасад.
+- [x] **Step 1:** Register/Recovery/Devices/Settings views через фасад.
 - [ ] **Step 2:** CARD/NOTE-форми, папки.
-- [ ] **Step 3:** Автоблокування з налаштувань, біометрія, ручний Sync.
-- [ ] **Step 4:** Commit: `feat(ios): add account lifecycle screens`.
+- [x] **Step 3:** Автоблокування з налаштувань, біометрія, ручний Sync.
+- [x] **Step 4:** Commit: `feat(ios): add account lifecycle screens`.
 
 ## Task 6: Тригери синхронізації (Android + iOS)
 
@@ -106,19 +106,19 @@
 - Modify: `androidApp/.../ui/AppRoot.kt` (lifecycle observer)
 - Modify: `iosApp/Lockruna/LockrunaApp.swift` (scenePhase + NWPathMonitor)
 
-- [ ] **Step 1:** Android: виклик `SyncNow` на unlock, resume, після збереження запису (debounce 2 с), ручна кнопка, повернення мережі (ConnectivityManager callback).
+- [x] **Step 1:** Android: виклик `SyncNow` на unlock, resume, після збереження запису (debounce 2 с), ручна кнопка, повернення мережі (ConnectivityManager callback).
 - [ ] **Step 2:** iOS: те саме через фасад, `NWPathMonitor` для мережі.
-- [ ] **Step 3:** Переконатися, що виклики не блокують UI (корутини/Task).
-- [ ] **Step 4:** Commit: `feat(apps): wire sync triggers`.
+- [x] **Step 3:** Переконатися, що виклики не блокують UI (корутини/Task).
+- [x] **Step 4:** Commit: `feat(apps): wire sync triggers`.
 
 ## Task 7: Перевірка
 
-- [ ] **Step 1:** `./gradlew :androidApp:assembleDebug`.
-- [ ] **Step 2:** `./gradlew :shared:umbrella:assemble`.
-- [ ] **Step 3:** XcodeBuildMCP: збірка iOS і запуск на симуляторі (AGENTS: не raw xcodebuild).
-- [ ] **Step 4:** `./scripts/verify.sh --ios` (з env-змінними для Docker, якщо потрібні).
-- [ ] **Step 5:** `gitleaks detect --source . --no-banner`.
-- [ ] **Step 6:** Commit: `docs(apps): update graphify`.
+- [x] **Step 1:** `./gradlew :androidApp:assembleDebug`.
+- [x] **Step 2:** `./gradlew :shared:umbrella:assemble`.
+- [x] **Step 3:** XcodeBuildMCP: збірка iOS і запуск на симуляторі (AGENTS: не raw xcodebuild).
+- [x] **Step 4:** `./scripts/verify.sh --ios` (з env-змінними для Docker, якщо потрібні).
+- [x] **Step 5:** `gitleaks detect --source . --no-banner`.
+- [x] **Step 6:** Commit: `docs(apps): update graphify`.
 
 ## Spec coverage
 
