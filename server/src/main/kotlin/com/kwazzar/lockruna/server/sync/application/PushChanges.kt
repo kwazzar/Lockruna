@@ -1,5 +1,8 @@
 package com.kwazzar.lockruna.server.sync.application
 
+import com.kwazzar.lockruna.server.audit.domain.AuditAction
+import com.kwazzar.lockruna.server.audit.domain.AuditEvent
+import com.kwazzar.lockruna.server.audit.domain.AuditEventRepository
 import com.kwazzar.lockruna.server.identity.application.requireAllowed
 import com.kwazzar.lockruna.server.identity.domain.RateLimiter
 import com.kwazzar.lockruna.server.platform.db.TransactionRunner
@@ -25,6 +28,7 @@ class PushChanges(
     private val idempotency: IdempotencyRepository,
     private val transactions: TransactionRunner,
     private val rateLimiter: RateLimiter,
+    private val audit: AuditEventRepository,
     private val clock: Clock = Clock.systemUTC(),
 ) {
     suspend operator fun invoke(
@@ -71,6 +75,17 @@ class PushChanges(
                 is ApplyResult.Applied -> applied += AppliedChange(change.id, result.version, result.updatedAt)
                 is ApplyResult.Conflict -> conflicts += Conflict(change.id, result.server)
             }
+        }
+        // Only record audit event for newly committed pushes (not idempotent replays)
+        if (conflicts.isEmpty() && applied.isNotEmpty()) {
+            audit.record(AuditEvent(
+                userId = userId,
+                deviceId = null, // deviceId not available in sync route
+                action = AuditAction.SYNC_PUSH,
+                ip = null,
+                ts = clock.instant().toEpochMilli(),
+                meta = mapOf("appliedCount" to applied.size.toString(), "conflictCount" to conflicts.size.toString()),
+            ))
         }
         return PushOutcome(applied = applied, conflicts = conflicts)
     }

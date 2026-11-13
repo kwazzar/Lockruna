@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.lettuce.core)
     implementation(libs.micrometer.core)
     implementation(libs.postgresql)
+    implementation(libs.mongodb.driver.kotlin.coroutine)
     runtimeOnly(libs.logback.classic)
 
     testImplementation(kotlin("test"))

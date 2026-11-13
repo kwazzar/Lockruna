@@ -12,3 +12,17 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
+  mongodb:
+    image: mongo:7-jammy
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: lockruna
+      MONGO_INITDB_ROOT_PASSWORD: lockruna_password
+      MONGO_INITDB_DATABASE: lockruna_audit
+    ports:
+      - "27017:27017"
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 5

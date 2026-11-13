@@ -1,5 +1,7 @@
 package com.kwazzar.lockruna.server.platform.di
 
+import com.kwazzar.lockruna.server.audit.domain.AuditEventRepository
+import com.kwazzar.lockruna.server.audit.infrastructure.MongoAuditEventRepository
 import com.kwazzar.lockruna.server.identity.application.AuthenticateSession
 import com.kwazzar.lockruna.server.identity.application.CompleteRecovery
 import com.kwazzar.lockruna.server.identity.application.DeleteAccount
@@ -34,6 +36,7 @@ import com.kwazzar.lockruna.server.sync.infrastructure.ExposedVaultItemRepositor
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.koin.core.module.Module
 import org.koin.dsl.module
+import com.mongodb.kotlin.client.coroutine.MongoClient
 import javax.sql.DataSource
 
 fun serverModule(
@@ -41,9 +44,11 @@ fun serverModule(
     dataSource: DataSource,
     rateLimiter: RateLimiter,
     denylist: DeviceDenylist,
+    mongoClient: MongoClient,
 ): Module = module {
     single { settings }
     single { dataSource }
+    single { mongoClient }
     single<TransactionRunner> {
         DatabaseFactory.migrate(dataSource)
         ExposedTransactionRunner(Database.connect(dataSource))
@@ -56,17 +61,18 @@ fun serverModule(
     single<TokenService> { JwtTokenService(get(), settings) }
     single { PreloginUser(get(), get(), settings.authFakeSecret) }
     single { StartRecovery(get(), get(), settings.authFakeSecret) }
-    single { RegisterUser(get(), get(), get(), get(), get(), settings) }
-    single { CompleteRecovery(get(), get(), get(), get(), get(), get(), settings) }
-    single { DeleteAccount(get(), get(), get(), settings) }
-    single { LoginUser(get(), get(), get(), get(), settings) }
+    single { RegisterUser(get(), get(), get(), get(), get(), settings, get()) }
+    single { CompleteRecovery(get(), get(), get(), get(), get(), get(), settings, get()) }
+    single { DeleteAccount(get(), get(), get(), settings, get()) }
+    single { LoginUser(get(), get(), get(), get(), settings, get()) }
     single { AuthenticateSession(get(), get()) }
-    single { RefreshSession(get(), get(), get()) }
-    single { RevokeDevice(get(), get(), get()) }
+    single { RefreshSession(get(), get(), get(), get()) }
+    single { RevokeDevice(get(), get(), get(), get()) }
     single { ListDevices(get()) }
     single { LogoutSession(get()) }
     single<VaultItemRepository> { ExposedVaultItemRepository(get()) }
     single<IdempotencyRepository> { ExposedIdempotencyRepository(get()) }
+    single<AuditEventRepository> { MongoAuditEventRepository(get(), get()) }
     single { PullChanges(get()) }
-    single { PushChanges(get(), get(), get(), get()) }
+    single { PushChanges(get(), get(), get(), get(), get()) }
 }

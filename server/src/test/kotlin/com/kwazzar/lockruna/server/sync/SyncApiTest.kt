@@ -5,6 +5,7 @@ import com.kwazzar.lockruna.contract.PushResultDto
 import com.kwazzar.lockruna.contract.SyncPageDto
 import com.kwazzar.lockruna.server.module
 import com.kwazzar.lockruna.server.support.IdentityClient
+import com.kwazzar.lockruna.server.support.InMemoryAuditEventRepository
 import com.kwazzar.lockruna.server.support.InMemoryDeviceDenylist
 import com.kwazzar.lockruna.server.support.InMemoryRateLimiter
 import com.kwazzar.lockruna.server.support.PostgresTest
@@ -330,6 +331,7 @@ class SyncApiTest {
             ExposedIdempotencyRepository(PostgresTest.transactions),
             PostgresTest.transactions,
             InMemoryRateLimiter(),
+            InMemoryAuditEventRepository(),
         )
 
         assertFailsWith<IllegalStateException> {
