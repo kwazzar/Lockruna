@@ -42,7 +42,6 @@ fun LoginScreen(store: LoginStore, onLoggedIn: () -> Unit, onRegister: () -> Uni
         store.effects.collectLatest { effect ->
             when (effect) {
                 com.kwazzar.lockruna.presentation.auth.LoginEffect.LoggedIn -> onLoggedIn()
-                else -> {}
             }
         }
     }
