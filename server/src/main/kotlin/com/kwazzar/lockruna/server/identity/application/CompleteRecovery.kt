@@ -15,6 +15,7 @@ import com.kwazzar.lockruna.server.identity.domain.TokenService
 import com.kwazzar.lockruna.server.identity.domain.UserRecord
 import com.kwazzar.lockruna.server.identity.domain.UserRepository
 import com.kwazzar.lockruna.server.platform.config.ServerSettings
+import com.kwazzar.lockruna.server.platform.db.TransactionRunner
 import com.kwazzar.lockruna.server.platform.error.Problem
 import com.kwazzar.lockruna.server.platform.error.ProblemException
 import java.time.Clock
@@ -34,6 +35,7 @@ class CompleteRecovery(
     private val rateLimiter: RateLimiter,
     private val settings: ServerSettings,
     private val audit: AuditEventRepository,
+    private val transactions: TransactionRunner,
     private val clock: Clock = Clock.systemUTC(),
 ) {
     suspend operator fun invoke(command: CompleteRecoveryCommand): AuthSession {

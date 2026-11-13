@@ -62,7 +62,7 @@ fun serverModule(
     single { PreloginUser(get(), get(), settings.authFakeSecret) }
     single { StartRecovery(get(), get(), settings.authFakeSecret) }
     single { RegisterUser(get(), get(), get(), get(), get(), settings, get()) }
-    single { CompleteRecovery(get(), get(), get(), get(), get(), get(), settings, get()) }
+    single { CompleteRecovery(get(), get(), get(), get(), get(), get(), settings, get(), get()) }
     single { DeleteAccount(get(), get(), get(), settings, get()) }
     single { LoginUser(get(), get(), get(), get(), settings, get()) }
     single { AuthenticateSession(get(), get()) }
