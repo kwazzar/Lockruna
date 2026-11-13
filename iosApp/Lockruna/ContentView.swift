@@ -372,35 +372,51 @@ struct ItemEditView: View {
                     Text("No folder").font(.caption).foregroundColor(DarkZen.textSecondary)
                 } else {
                     ForEach(folders, id: \.0) { folder in
-                        HStack {
-                            Image(systemName: model.itemEditStore.state.value.folderId == folder.0 ? "checkmark" : "")
-                                .foregroundColor(model.itemEditStore.state.value.folderId == folder.0 ? DarkZen.accent : DarkZen.textSecondary)
-                            Text(folder.1)
-                                .foregroundColor(model.itemEditStore.state.value.folderId == folder.0 ? DarkZen.accent : DarkZen.textPrimary)
-                            Spacer()
+                        Button {
+                            Task {
+                                try await model.itemEditStore.dispatch(
+                                    intent: PresentationItemEditIntentFolderSelected(folderId: folder.0)
+                                )
+                            }
+                        } label: {
+                            HStack {
+                                Image(systemName: model.itemEditStore.state.value.folderId == folder.0 ? "checkmark" : "")
+                                    .foregroundColor(model.itemEditStore.state.value.folderId == folder.0 ? DarkZen.accent : DarkZen.textSecondary)
+                                Text(folder.1)
+                                    .foregroundColor(model.itemEditStore.state.value.folderId == folder.0 ? DarkZen.accent : DarkZen.textPrimary)
+                                Spacer()
+                            }
+                            .padding(12)
+                            .background(model.itemEditStore.state.value.folderId == folder.0 ? DarkZen.accent.opacity(0.15) : DarkZen.card)
+                            .cornerRadius(DarkZen.cardRadius)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: DarkZen.cardRadius)
+                                    .stroke(model.itemEditStore.state.value.folderId == folder.0 ? DarkZen.accent : Color.clear, lineWidth: 2)
+                            )
+                            .accessibilityAddTraits(.isSelected)
                         }
-                        .padding(12)
-                        .background(model.itemEditStore.state.value.folderId == folder.0 ? DarkZen.accent.opacity(0.15) : DarkZen.card)
-                        .cornerRadius(DarkZen.cardRadius)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: DarkZen.cardRadius)
-                                .stroke(model.itemEditStore.state.value.folderId == folder.0 ? DarkZen.accent : Color.clear, lineWidth: 2)
-                        )
-                        .accessibilityAddTraits(.isSelected)
                     }
                     if model.itemEditStore.state.value.folderId != nil {
-                        HStack {
-                            Text("No folder")
-                                .foregroundColor(DarkZen.textSecondary)
-                            Spacer()
+                        Button {
+                            Task {
+                                try await model.itemEditStore.dispatch(
+                                    intent: PresentationItemEditIntentFolderSelected(folderId: nil)
+                                )
+                            }
+                        } label: {
+                            HStack {
+                                Text("No folder")
+                                    .foregroundColor(DarkZen.textSecondary)
+                                Spacer()
+                            }
+                            .padding(12)
+                            .background(DarkZen.card)
+                            .cornerRadius(DarkZen.cardRadius)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: DarkZen.cardRadius)
+                                    .stroke(DarkZen.divider, lineWidth: 1)
+                            )
                         }
-                        .padding(12)
-                        .background(DarkZen.card)
-                        .cornerRadius(DarkZen.cardRadius)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: DarkZen.cardRadius)
-                                .stroke(DarkZen.divider, lineWidth: 1)
-                        )
                     }
                 }
             }
