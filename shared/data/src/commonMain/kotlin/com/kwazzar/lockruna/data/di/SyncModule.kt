@@ -18,5 +18,5 @@ fun syncModule(httpClient: HttpClient, baseUrl: String) = module {
     single { KtorSyncApi(httpClient, baseUrl, get()) }
     single<SyncApi> { get<KtorSyncApi>() }
     single<SyncStore> { SqlDelightSyncStore(get()) }
-    single { SyncNow(get(), get(), get(), get(), get()) }
+    single { SyncNow(get(), get(), get(), get(), get(), get(), get()) }
 }

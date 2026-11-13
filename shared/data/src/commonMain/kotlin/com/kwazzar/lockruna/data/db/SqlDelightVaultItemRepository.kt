@@ -40,11 +40,14 @@ class SqlDelightVaultItemRepository(
         val stored = encryptRow(item, vaultKey) ?: return Result.Failure(AppError.ItemCorrupted)
 
         if (row != null && row.ciphertext != null && row.nonce != null) {
-            // shortcut: history rows drop the dirty flag, so the sealed AAD version (dirty +1)
-            // cannot be recovered; define history decryption together with the sync wave.
+            // Record historical type and effective AAD version for correct decryption.
+            // The previous row was dirty (local edit), so its AAD version = row.version + 1.
+            val aadVersion = row.version + 1
             database.passKeeperDatabaseQueries.insertItemHistory(
                 item_id = item.id.value,
                 version = row.version,
+                item_type = row.type,
+                aad_version = aadVersion,
                 ciphertext = row.ciphertext,
                 nonce = row.nonce,
                 updated_at = row.updated_at,

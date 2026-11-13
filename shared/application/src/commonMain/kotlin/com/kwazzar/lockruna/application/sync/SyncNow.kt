@@ -1,9 +1,13 @@
 package com.kwazzar.lockruna.application.sync
 
 import com.kwazzar.lockruna.domain.core.Result
+import com.kwazzar.lockruna.domain.crypto.CryptoService
+import com.kwazzar.lockruna.domain.crypto.GcmCiphertext
 import com.kwazzar.lockruna.domain.error.AppError
 import com.kwazzar.lockruna.domain.session.Clock
 import com.kwazzar.lockruna.domain.session.IdGenerator
+import com.kwazzar.lockruna.domain.session.VaultKey
+import com.kwazzar.lockruna.domain.session.VaultSession
 import com.kwazzar.lockruna.domain.sync.AccessTokenProvider
 import com.kwazzar.lockruna.domain.sync.Conflict
 import com.kwazzar.lockruna.domain.sync.PendingChange
@@ -22,6 +26,8 @@ class SyncNow(
     private val accessTokenProvider: AccessTokenProvider,
     private val idGenerator: IdGenerator,
     private val clock: Clock,
+    private val cryptoService: CryptoService,
+    private val session: VaultSession,
 ) {
     suspend operator fun invoke(): Result<Unit, AppError> {
         if (accessTokenProvider.token() == null) return Result.Failure(AppError.Unauthorized)
@@ -155,7 +161,33 @@ class SyncNow(
                     // so an edit made while the request was in flight is not lost.
                     val current = store.dirtyChanges(BATCH_LIMIT).firstOrNull { it.id == conflict.id }
                     val change = current ?: batch.firstOrNull { it.id == conflict.id }
-                    if (change != null) retry += change.copy(baseVersion = conflict.server.version)
+                    if (change != null) {
+                        val stored = change.ciphertext
+                        val nonce = change.nonce
+                        if (stored != null && nonce != null) {
+                            // Re-seal: decrypt with old AAD (baseVersion+1), re-encrypt with new AAD (server.version+1)
+                            val vaultKey = session.currentVaultKey() ?: return ConflictOutcome(retry, exhausted = true)
+                            val oldAadVersion = change.baseVersion + 1
+                            val newAadVersion = conflict.server.version + 1
+                            val oldAad = "${change.id}|${change.type.name}|$oldAadVersion".encodeToByteArray()
+                            val newAad = "${change.id}|${change.type.name}|$newAadVersion".encodeToByteArray()
+                            
+                            // Extract ciphertext, nonce, tag from stored format (ciphertext + tag)
+                            val tagSize = 16
+                            val ciphertext = stored.copyOf(stored.size - tagSize)
+                            val tag = stored.copyOfRange(stored.size - tagSize, stored.size)
+                            
+                            val gcmCiphertext = GcmCiphertext(ciphertext = ciphertext, nonce = nonce, tag = tag)
+                            val plaintext = cryptoService.decryptGcm(vaultKey.bytes, gcmCiphertext, oldAad)
+                            val resealed = cryptoService.encryptGcm(vaultKey.bytes, plaintext, newAad)
+                            
+                            retry += change.copy(
+                                baseVersion = conflict.server.version,
+                                ciphertext = resealed.ciphertext + resealed.tag,
+                                nonce = resealed.nonce,
+                            )
+                        }
+                    }
                 }
             }
         }

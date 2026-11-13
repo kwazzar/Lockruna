@@ -167,6 +167,8 @@ class SqlDelightSyncStoreTest {
         database.passKeeperDatabaseQueries.insertItemHistory(
             item_id = "item-1",
             version = 0,
+            item_type = "login",
+            aad_version = 0,
             ciphertext = byteArrayOf(1),
             nonce = byteArrayOf(2),
             updated_at = 50L,
