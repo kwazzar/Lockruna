@@ -187,8 +187,8 @@ struct VaultListView: View {
     @Binding var selectedId: String?
 
     var body: some View {
-        ZStack(alignment: .top) {
-            VStack {
+        ZStack(alignment: .topLeading) {
+            VStack(alignment: .leading, spacing: 16) {
                 Text("Vault").font(.title).bold()
                 ScrollView {
                     LazyVStack(spacing: 12) {
@@ -225,38 +225,42 @@ struct VaultListView: View {
                         }
                     }
                     .padding(.horizontal, 14)
-                    .padding(.vertical, 12)
                 }
             }
 
-            HStack {
-                Button("Lock") {
-                    Task {
-                        try await model.sessionStore.dispatch(intent: PresentationSessionIntentLock())
-                        model.screen = "unlock"
+            VStack(alignment: .trailing, spacing: 16) {
+                HStack {
+                    Button("Lock") {
+                        Task {
+                            try await model.sessionStore.dispatch(intent: PresentationSessionIntentLock())
+                            model.screen = "unlock"
+                        }
                     }
+                    .buttonStyle(.plain)
+                    .foregroundColor(DarkZen.textSecondary)
+
+                    Button("Sync") { model.sync() }
+                    .buttonStyle(.plain)
+                    .foregroundColor(DarkZen.textSecondary)
+
+                    Button("Devices") { model.screen = "devices" }
+                    .buttonStyle(.plain)
+                    .foregroundColor(DarkZen.textSecondary)
+
+                    Button("Settings") { model.screen = "settings" }
+                    .buttonStyle(.plain)
+                    .foregroundColor(DarkZen.textSecondary)
                 }
-                .buttonStyle(.plain)
-                .foregroundColor(DarkZen.textSecondary)
 
-                Button("Sync") { model.sync() }
-                .buttonStyle(.plain)
-                .foregroundColor(DarkZen.textSecondary)
+                Spacer(minLength: 0)
 
-                Button("Devices") { model.screen = "devices" }
-                .buttonStyle(.plain)
-                .foregroundColor(DarkZen.textSecondary)
-
-                Button("Settings") { model.screen = "settings" }
-                .buttonStyle(.plain)
-                .foregroundColor(DarkZen.textSecondary)
+                Button("New item") { route = "edit" }
+                    .buttonStyle(DarkZenPrimaryButtonStyle())
+                    .frame(maxWidth: .infinity, minHeight: 50)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
             .padding(.horizontal, 14)
-
-            Button("New item") { route = "edit" }
-                .buttonStyle(DarkZenPrimaryButtonStyle())
-                .frame(maxWidth: .infinity, minHeight: 50)
+            .padding(.trailing, 4)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
         }
     }
 }
@@ -267,23 +271,25 @@ struct ItemDetailView: View {
 
     var body: some View {
         VStack(spacing: 20) {
-            Text(model.itemDetailStore.state.value.item?.title ?? "")
-                .font(.title)
-                .bold()
-                .padding(20)
-                .background(DarkZen.panel)
-                .cornerRadius(DarkZen.panelRadius)
-
-            Text(model.itemDetailStore.state.value.item?.username ?? "")
-                .font(.subheadline)
-                .foregroundColor(DarkZen.textSecondary)
+            VStack(alignment: .leading, spacing: 8) {
+                Text(model.itemDetailStore.state.value.item?.title ?? "")
+                    .font(.title)
+                    .bold()
+                    .foregroundColor(DarkZen.textPrimary)
+                Text(model.itemDetailStore.state.value.item?.username ?? "")
+                    .font(.subheadline)
+                    .foregroundColor(DarkZen.textSecondary)
+            }
+            .padding(20)
+            .background(DarkZen.panel)
+            .cornerRadius(DarkZen.panelRadius)
 
             HStack(spacing: 16) {
                 Button("Reveal") {
                     Task { try await model.itemDetailStore.dispatch(intent: PresentationItemDetailIntentReveal()) }
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(DarkZen.accent)
+                .buttonStyle(DarkZenPrimaryButtonStyle())
+                .foregroundColor(DarkZen.textPrimary)
 
                 Button("Copy") {
                     Task { try await model.itemDetailStore.dispatch(intent: PresentationItemDetailIntentCopy()) }
@@ -316,7 +322,7 @@ struct ItemDetailView: View {
                 withAnimation { route = "list" }
             }
             .buttonStyle(.plain)
-            .foregroundColor(DarkZen.textPrimary)
+            .foregroundColor(DarkZen.textSecondary)
             .frame(width: 44, height: 44)
             .accessibilityLabel("Back")
         }.padding(20)
@@ -347,8 +353,15 @@ struct ItemEditView: View {
                 }
             }
             .pickerStyle(.menu)
-            .labelsHidden()
             .accentColor(DarkZen.accent)
+
+            .onChange(of: typeIndex) { _, index in
+                Task {
+                    try await model.itemEditStore.dispatch(
+                        intent: PresentationItemEditIntentTypeChanged(type: types[index].1)
+                    )
+                }
+            }
 
             TextField("Title", text: $title)
                 .textFieldStyle(DarkZenTextFieldStyle())
@@ -360,6 +373,8 @@ struct ItemEditView: View {
                 } else {
                     ForEach(folders, id: \.0) { folder in
                         HStack {
+                            Image(systemName: model.itemEditStore.state.value.folderId == folder.0 ? "checkmark" : "")
+                                .foregroundColor(model.itemEditStore.state.value.folderId == folder.0 ? DarkZen.accent : DarkZen.textSecondary)
                             Text(folder.1)
                                 .foregroundColor(model.itemEditStore.state.value.folderId == folder.0 ? DarkZen.accent : DarkZen.textPrimary)
                             Spacer()
@@ -371,6 +386,7 @@ struct ItemEditView: View {
                             RoundedRectangle(cornerRadius: DarkZen.cardRadius)
                                 .stroke(model.itemEditStore.state.value.folderId == folder.0 ? DarkZen.accent : Color.clear, lineWidth: 2)
                         )
+                        .accessibilityAddTraits(.isSelected)
                     }
                     if model.itemEditStore.state.value.folderId != nil {
                         HStack {
@@ -401,7 +417,7 @@ struct ItemEditView: View {
 
             Button("Back") { route = "list" }
                 .buttonStyle(.plain)
-                .foregroundColor(DarkZen.textPrimary)
+                .foregroundColor(DarkZen.textSecondary)
                 .frame(width: 44, height: 44)
                 .accessibilityLabel("Back")
         }.padding(20)
