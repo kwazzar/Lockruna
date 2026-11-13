@@ -86,6 +86,31 @@ public struct DarkZenPrimaryButtonStyle: ButtonStyle {
     }
 }
 
+// MARK: - Dark Zen Auth Shell
+
+public struct DarkZenAuthShell<Content: View>: View {
+    let title: String
+    let content: Content
+
+    public init(title: String, @ViewBuilder content: () -> Content) {
+        self.title = title
+        self.content = content()
+    }
+
+    public var body: some View {
+        ScrollView {
+            VStack(alignment: .center, spacing: 12) {
+                Text(title)
+                    .font(.title)
+                    .bold()
+                content
+                    .frame(maxWidth: .infinity, alignment: .center)
+            }
+            .padding(24)
+        }
+    }
+}
+
 // MARK: - Preview
 
 #Preview {

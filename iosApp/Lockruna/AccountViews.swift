@@ -18,15 +18,15 @@ struct RegisterView: View {
     private var store: PresentationRegisterStore { model.registerStore }
 
     var body: some View {
-        Group {
-            if recoveryWords.isEmpty {
-                form
-            } else {
-                recovery
+        DarkZenAuthShell(title: "Create account") {
+            VStack(spacing: 12) {
+                if recoveryWords.isEmpty {
+                    form
+                } else {
+                    recovery
+                }
             }
         }
-        // Only when the whole screen leaves: SwiftUI calls onDisappear on the branch it
-        // replaces, so clearing there would throw the words away the moment they appear.
         .onDisappear {
             forget()
             store.close()
@@ -44,43 +44,70 @@ struct RegisterView: View {
 
     private var form: some View {
         VStack(spacing: 12) {
-            Text("Create account").font(.title)
-            TextField("Email", text: $email).textFieldStyle(.roundedBorder)
-            SecureField("Master password", text: $password).textFieldStyle(.roundedBorder)
+            TextField("Email", text: $email)
+                .textFieldStyle(DarkZenTextFieldStyle())
+            SecureField("Master password", text: $password)
+                .textFieldStyle(DarkZenTextFieldStyle())
             Text("At least 12 characters").font(.caption)
             if let s = store.state.value.strength ?? store.state.value.passwordStrength {
-                Text("Strength: \(s.level)/4").font(.caption)
+                Text("Strength: \(s.level)/4").font(.caption).foregroundColor(DarkZen.textSecondary)
                 if !s.warnings.isEmpty {
-                    Text(s.warnings.joined(separator: ", ")).font(.caption).foregroundColor(.orange)
+                    Text(s.warnings.joined(separator: ", ")).font(.caption).foregroundColor(DarkZen.warning)
                 }
             }
-            TextField("Device name", text: $deviceName).textFieldStyle(.roundedBorder)
+            TextField("Device name", text: $deviceName)
+                .textFieldStyle(DarkZenTextFieldStyle())
             if store.state.value.error != nil {
-                Text("Registration failed").foregroundColor(.red)
+                Text("Registration failed")
+                    .foregroundColor(DarkZen.danger)
             }
             if store.state.value.isSubmitting {
                 ProgressView()
+                    .tint(DarkZen.accent)
             } else {
                 Button("Create account") { submit() }
+                    .buttonStyle(DarkZenPrimaryButtonStyle(cornerRadius: 999))
             }
-        }.padding()
-        .onAppear { watchEffects() }
+        }
     }
 
     private var recovery: some View {
-        Form {
-            Section("Your recovery key") {
+        VStack(spacing: 12) {
+            Text("Your recovery key")
+                .font(.title3)
+                .foregroundColor(DarkZen.textSecondary)
+            VStack(alignment: .leading, spacing: 8) {
                 Text("Write these 12 words down. Without them a forgotten password cannot be restored.")
+                    .font(.caption)
+                    .foregroundColor(DarkZen.textSecondary)
                 ForEach(Array(recoveryWords.enumerated()), id: \.offset) { index, word in
-                    Text("\(index + 1). \(word)")
+                    HStack {
+                        Text("\(index + 1).")
+                            .font(.subheadline)
+                            .foregroundColor(DarkZen.textPrimary)
+                        Text(word)
+                            .font(.subheadline)
+                            .foregroundColor(DarkZen.textPrimary)
+                    }
                 }
             }
-            Section {
+            .padding(DarkZen.cardRadius)
+            .background(DarkZen.panel)
+            .overlay(
+                RoundedRectangle(cornerRadius: DarkZen.cardRadius)
+                    .stroke(DarkZen.divider, lineWidth: 1)
+            )
+            .frame(maxWidth: .infinity, alignment: .center)
+
+            if !recoveryWords.isEmpty {
                 TextField("Type the 12 words back", text: $confirmation)
+                    .textFieldStyle(DarkZenTextFieldStyle())
                 if store.state.value.error != nil {
-                    Text("The words do not match").foregroundColor(.red)
+                    Text("The words do not match")
+                        .foregroundColor(DarkZen.danger)
                 }
                 Button("I saved them") { confirm() }
+                    .buttonStyle(DarkZenPrimaryButtonStyle(cornerRadius: 999))
             }
         }
     }
@@ -141,27 +168,35 @@ struct RecoveryView: View {
     private var store: PresentationRecoveryStore { model.recoveryStore }
 
     var body: some View {
-        VStack(spacing: 12) {
-            Text("Recover access").font(.title)
-            TextField("Email", text: $email).textFieldStyle(.roundedBorder)
-            TextField("Recovery key (12 words)", text: $words).textFieldStyle(.roundedBorder)
-            SecureField("New master password", text: $password).textFieldStyle(.roundedBorder)
-            if let s = store.state.value.strength ?? store.state.value.passwordStrength {
-                Text("Strength: \(s.level)/4").font(.caption)
-                if !s.warnings.isEmpty {
-                    Text(s.warnings.joined(separator: ", ")).font(.caption).foregroundColor(.orange)
+        DarkZenAuthShell(title: "Recover access") {
+            VStack(spacing: 12) {
+                TextField("Email", text: $email)
+                    .textFieldStyle(DarkZenTextFieldStyle())
+                TextField("Recovery key (12 words)", text: $words)
+                    .textFieldStyle(DarkZenTextFieldStyle())
+                SecureField("New master password", text: $password)
+                    .textFieldStyle(DarkZenTextFieldStyle())
+                if let s = store.state.value.strength ?? store.state.value.passwordStrength {
+                    Text("Strength: \(s.level)/4").font(.caption).foregroundColor(DarkZen.textSecondary)
+                    if !s.warnings.isEmpty {
+                        Text(s.warnings.joined(separator: ", ")).font(.caption).foregroundColor(DarkZen.warning)
+                    }
+                }
+                TextField("Device name", text: $deviceName)
+                    .textFieldStyle(DarkZenTextFieldStyle())
+                if store.state.value.error != nil {
+                    Text("Recovery failed")
+                        .foregroundColor(DarkZen.danger)
+                }
+                if store.state.value.isSubmitting {
+                    ProgressView()
+                        .tint(DarkZen.accent)
+                } else {
+                    Button("Restore access") { submit() }
+                        .buttonStyle(DarkZenPrimaryButtonStyle(cornerRadius: 999))
                 }
             }
-            TextField("Device name", text: $deviceName).textFieldStyle(.roundedBorder)
-            if store.state.value.error != nil {
-                Text("Recovery failed").foregroundColor(.red)
-            }
-            if store.state.value.isSubmitting {
-                ProgressView()
-            } else {
-                Button("Restore access") { submit() }
-            }
-        }.padding()
+        }
         .onAppear { watchEffects() }
         .onDisappear {
             words = ""

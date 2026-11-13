@@ -62,37 +62,44 @@ struct UnlockView: View {
     @State private var task: Task<Void, Error>?
 
     var body: some View {
-        VStack(spacing: 12) {
-            Text("Unlock").font(.title)
-            TextField("Email", text: $email).textFieldStyle(.roundedBorder)
-            SecureField("Password", text: $password).textFieldStyle(.roundedBorder)
-            Button("Unlock") {
-                task?.cancel()
-                task = Task {
-                    do {
-                        try await model.unlockStore.dispatch(intent: PresentationUnlockIntentEmailChanged(value: email))
-                        try await model.unlockStore.dispatch(intent: PresentationUnlockIntentPasswordChanged(value: password))
-                        try await model.unlockStore.dispatch(intent: PresentationUnlockIntentSubmitPassword())
-                    } catch {
-                        print("unlock failed: \(error)")
-                    }
-                }
-            }
-            if model.unlockStore.state.value.biometricAvailable {
-                Button("Use biometrics") {
-                    Task {
+        DarkZenAuthShell(title: "Unlock") {
+            VStack(spacing: 12) {
+                TextField("Email", text: $email)
+                    .textFieldStyle(DarkZenTextFieldStyle())
+                SecureField("Password", text: $password)
+                    .textFieldStyle(DarkZenTextFieldStyle())
+                Button("Unlock") {
+                    task?.cancel()
+                    task = Task {
                         do {
-                            try await model.unlockStore.dispatch(intent: PresentationUnlockIntentSubmitBiometrics())
+                            try await model.unlockStore.dispatch(intent: PresentationUnlockIntentEmailChanged(value: email))
+                            try await model.unlockStore.dispatch(intent: PresentationUnlockIntentPasswordChanged(value: password))
+                            try await model.unlockStore.dispatch(intent: PresentationUnlockIntentSubmitPassword())
                         } catch {
-                            print("biometric unlock failed: \(error)")
+                            print("unlock failed: \(error)")
                         }
                     }
                 }
+                .buttonStyle(DarkZenPrimaryButtonStyle(cornerRadius: 999))
+                if model.unlockStore.state.value.biometricAvailable {
+                    Button("Use biometrics") {
+                        Task {
+                            do {
+                                try await model.unlockStore.dispatch(intent: PresentationUnlockIntentSubmitBiometrics())
+                            } catch {
+                                print("biometric unlock failed: \(error)")
+                            }
+                        }
+                    }
+                    .buttonStyle(.plain)
+                    .foregroundColor(DarkZen.textSecondary)
+                }
+                if model.unlockStore.state.value.error != nil {
+                    Text("Invalid credentials")
+                        .foregroundColor(DarkZen.danger)
+                }
             }
-            if model.unlockStore.state.value.error != nil {
-                Text("Invalid credentials").foregroundColor(.red)
-            }
-        }.padding()
+        }
         .onDisappear { task?.cancel() }
         // The vault key opened: leave the unlock screen.
         .onChange(of: model.vaultUnlocked) { _, unlocked in
@@ -113,30 +120,40 @@ struct LoginView: View {
     @State private var task: Task<Void, Error>?
 
     var body: some View {
-        VStack(spacing: 12) {
-            Text("Sign in").font(.title)
-            TextField("Email", text: $email).textFieldStyle(.roundedBorder)
-            SecureField("Password", text: $password).textFieldStyle(.roundedBorder)
-            TextField("Device name", text: $deviceName).textFieldStyle(.roundedBorder)
-            Button("Sign in") {
-                task?.cancel()
-                task = Task {
-                    do {
-                        try await model.loginStore.dispatch(intent: PresentationLoginIntentEmailChanged(value: email))
-                        try await model.loginStore.dispatch(intent: PresentationLoginIntentPasswordChanged(value: password))
-                        try await model.loginStore.dispatch(intent: PresentationLoginIntentDeviceNameChanged(value: deviceName))
-                        try await model.loginStore.dispatch(intent: PresentationLoginIntentSubmit())
-                    } catch {
-                        print("sign in failed: \(error)")
+        DarkZenAuthShell(title: "Sign in") {
+            VStack(spacing: 12) {
+                TextField("Email", text: $email)
+                    .textFieldStyle(DarkZenTextFieldStyle())
+                SecureField("Password", text: $password)
+                    .textFieldStyle(DarkZenTextFieldStyle())
+                TextField("Device name", text: $deviceName)
+                    .textFieldStyle(DarkZenTextFieldStyle())
+                Button("Sign in") {
+                    task?.cancel()
+                    task = Task {
+                        do {
+                            try await model.loginStore.dispatch(intent: PresentationLoginIntentEmailChanged(value: email))
+                            try await model.loginStore.dispatch(intent: PresentationLoginIntentPasswordChanged(value: password))
+                            try await model.loginStore.dispatch(intent: PresentationLoginIntentDeviceNameChanged(value: deviceName))
+                            try await model.loginStore.dispatch(intent: PresentationLoginIntentSubmit())
+                        } catch {
+                            print("sign in failed: \(error)")
+                        }
                     }
                 }
+                .buttonStyle(DarkZenPrimaryButtonStyle(cornerRadius: 999))
+                Button("Create account") { model.screen = "register" }
+                    .buttonStyle(.plain)
+                    .foregroundColor(DarkZen.textSecondary)
+                Button("Lost access") { model.screen = "recovery" }
+                    .buttonStyle(.plain)
+                    .foregroundColor(DarkZen.textSecondary)
+                if model.loginStore.state.value.error != nil {
+                    Text("Login failed")
+                        .foregroundColor(DarkZen.danger)
+                }
             }
-            Button("Create account") { model.screen = "register" }
-            Button("Lost access") { model.screen = "recovery" }
-            if model.loginStore.state.value.error != nil {
-                Text("Login failed").foregroundColor(.red)
-            }
-        }.padding()
+        }
         .onDisappear { task?.cancel() }
         .onChange(of: model.vaultUnlocked) { _, unlocked in
             if unlocked && model.screen == "login" {
