@@ -187,17 +187,48 @@ struct VaultListView: View {
     @Binding var selectedId: String?
 
     var body: some View {
-        VStack {
-            Text("Vault").font(.title)
-            List(model.vaultListStore.state.value.items, id: \.id) { item in
-                Button(item.title) {
-                    selectedId = item.id
-                    Task {
-                        try await model.vaultListStore.dispatch(intent: PresentationVaultListIntentItemClicked(id: item.id))
+        ZStack(alignment: .top) {
+            VStack {
+                Text("Vault").font(.title).bold()
+                ScrollView {
+                    LazyVStack(spacing: 12) {
+                        ForEach(model.vaultListStore.state.value.items, id: \.id) { item in
+                            Button(action: {
+                                selectedId = item.id
+                                Task {
+                                    try await model.vaultListStore.dispatch(intent: PresentationVaultListIntentItemClicked(id: item.id))
+                                }
+                                route = "detail"
+                            }) {
+                                HStack {
+                                    VStack(alignment: .leading, spacing: 8) {
+                                        Text(item.title)
+                                            .font(.subheadline)
+                                            .foregroundColor(DarkZen.textPrimary)
+                                        if let username = item.username {
+                                            Text(username)
+                                                .font(.caption)
+                                                .foregroundColor(DarkZen.textSecondary)
+                                        }
+                                    }
+                                    Spacer()
+                                }
+                                .padding(14)
+                                .background(DarkZen.card)
+                                .cornerRadius(DarkZen.cardRadius)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: DarkZen.cardRadius)
+                                        .stroke(DarkZen.divider, lineWidth: 2)
+                                )
+                            }
+                            .buttonStyle(.plain)
+                        }
                     }
-                    route = "detail"
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 12)
                 }
             }
+
             HStack {
                 Button("Lock") {
                     Task {
@@ -205,12 +236,28 @@ struct VaultListView: View {
                         model.screen = "unlock"
                     }
                 }
+                .buttonStyle(.plain)
+                .foregroundColor(DarkZen.textSecondary)
+
                 Button("Sync") { model.sync() }
+                .buttonStyle(.plain)
+                .foregroundColor(DarkZen.textSecondary)
+
                 Button("Devices") { model.screen = "devices" }
+                .buttonStyle(.plain)
+                .foregroundColor(DarkZen.textSecondary)
+
                 Button("Settings") { model.screen = "settings" }
+                .buttonStyle(.plain)
+                .foregroundColor(DarkZen.textSecondary)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+            .padding(.horizontal, 14)
+
             Button("New item") { route = "edit" }
-        }.padding()
+                .buttonStyle(DarkZenPrimaryButtonStyle())
+                .frame(maxWidth: .infinity, minHeight: 50)
+        }
     }
 }
 
@@ -219,16 +266,60 @@ struct ItemDetailView: View {
     @Binding var route: String
 
     var body: some View {
-        VStack {
-            Text(model.itemDetailStore.state.value.item?.title ?? "").font(.title)
+        VStack(spacing: 20) {
+            Text(model.itemDetailStore.state.value.item?.title ?? "")
+                .font(.title)
+                .bold()
+                .padding(20)
+                .background(DarkZen.panel)
+                .cornerRadius(DarkZen.panelRadius)
+
             Text(model.itemDetailStore.state.value.item?.username ?? "")
-            Button("Reveal") { Task { try await model.itemDetailStore.dispatch(intent: PresentationItemDetailIntentReveal()) } }
-            Button("Hide") { Task { try await model.itemDetailStore.dispatch(intent: PresentationItemDetailIntentHide()) } }
-            Button("Copy") { Task { try await model.itemDetailStore.dispatch(intent: PresentationItemDetailIntentCopy()) } }
-            Button("Edit") { Task { try await model.itemDetailStore.dispatch(intent: PresentationItemDetailIntentEdit()) } }
-            Button("Delete") { Task { try await model.itemDetailStore.dispatch(intent: PresentationItemDetailIntentDeleteConfirmed()) } }
-            Button("Back") { route = "list" }
-        }.padding()
+                .font(.subheadline)
+                .foregroundColor(DarkZen.textSecondary)
+
+            HStack(spacing: 16) {
+                Button("Reveal") {
+                    Task { try await model.itemDetailStore.dispatch(intent: PresentationItemDetailIntentReveal()) }
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(DarkZen.accent)
+
+                Button("Copy") {
+                    Task { try await model.itemDetailStore.dispatch(intent: PresentationItemDetailIntentCopy()) }
+                }
+                .buttonStyle(.bordered)
+                .tint(.clear)
+                .foregroundColor(DarkZen.textSecondary)
+
+                Button("Edit") {
+                    Task { try await model.itemDetailStore.dispatch(intent: PresentationItemDetailIntentEdit()) }
+                }
+                .buttonStyle(.bordered)
+                .tint(.clear)
+                .foregroundColor(DarkZen.textSecondary)
+
+                Button("Hide") {
+                    Task { try await model.itemDetailStore.dispatch(intent: PresentationItemDetailIntentHide()) }
+                }
+                .buttonStyle(.plain)
+                .foregroundColor(DarkZen.textSecondary)
+
+                Button("Delete") {
+                    Task { try await model.itemDetailStore.dispatch(intent: PresentationItemDetailIntentDeleteConfirmed()) }
+                }
+                .buttonStyle(.bordered)
+                .tint(DarkZen.danger)
+            }
+
+            Button("Back") {
+                withAnimation { route = "list" }
+            }
+            .buttonStyle(.plain)
+            .foregroundColor(DarkZen.textPrimary)
+            .frame(width: 44, height: 44)
+            .accessibilityLabel("Back")
+        }.padding(20)
     }
 }
 
@@ -247,45 +338,57 @@ struct ItemEditView: View {
     }
 
     var body: some View {
-        VStack {
-            Text("Edit").font(.title)
+        VStack(spacing: 24) {
+            Text("Edit").font(.title).bold()
+
             Picker("Type", selection: $typeIndex) {
                 ForEach(types.indices, id: \.self) { index in
                     Text(types[index].0).tag(index)
                 }
             }
-            .onChange(of: typeIndex) { _, index in
-                Task {
-                    try await model.itemEditStore.dispatch(
-                        intent: PresentationItemEditIntentTypeChanged(type: types[index].1)
-                    )
-                }
-            }
-            TextField("Title", text: $title).textFieldStyle(.roundedBorder)
-            VStack(alignment: .leading) {
+            .pickerStyle(.menu)
+            .labelsHidden()
+            .accentColor(DarkZen.accent)
+
+            TextField("Title", text: $title)
+                .textFieldStyle(DarkZenTextFieldStyle())
+
+            VStack(alignment: .leading, spacing: 8) {
                 Text("Folder").font(.headline)
                 if folders.isEmpty {
-                    Text("No folders yet").font(.caption)
-                }
-                ForEach(folders, id: \.0) { folder in
-                    Button(folder.1) {
-                        Task {
-                            try await model.itemEditStore.dispatch(
-                                intent: PresentationItemEditIntentFolderSelected(folderId: folder.0)
-                            )
+                    Text("No folder").font(.caption).foregroundColor(DarkZen.textSecondary)
+                } else {
+                    ForEach(folders, id: \.0) { folder in
+                        HStack {
+                            Text(folder.1)
+                                .foregroundColor(model.itemEditStore.state.value.folderId == folder.0 ? DarkZen.accent : DarkZen.textPrimary)
+                            Spacer()
                         }
+                        .padding(12)
+                        .background(model.itemEditStore.state.value.folderId == folder.0 ? DarkZen.accent.opacity(0.15) : DarkZen.card)
+                        .cornerRadius(DarkZen.cardRadius)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: DarkZen.cardRadius)
+                                .stroke(model.itemEditStore.state.value.folderId == folder.0 ? DarkZen.accent : Color.clear, lineWidth: 2)
+                        )
                     }
-                }
-                if model.itemEditStore.state.value.folderId != nil {
-                    Button("No folder") {
-                        Task {
-                            try await model.itemEditStore.dispatch(
-                                intent: PresentationItemEditIntentFolderSelected(folderId: nil)
-                            )
+                    if model.itemEditStore.state.value.folderId != nil {
+                        HStack {
+                            Text("No folder")
+                                .foregroundColor(DarkZen.textSecondary)
+                            Spacer()
                         }
+                        .padding(12)
+                        .background(DarkZen.card)
+                        .cornerRadius(DarkZen.cardRadius)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: DarkZen.cardRadius)
+                                .stroke(DarkZen.divider, lineWidth: 1)
+                        )
                     }
                 }
             }
+
             Button("Save") {
                 Task {
                     try await model.itemEditStore.dispatch(intent: PresentationItemEditIntentTitleChanged(value: title))
@@ -294,7 +397,13 @@ struct ItemEditView: View {
                     model.sync()
                 }
             }
+            .buttonStyle(DarkZenPrimaryButtonStyle())
+
             Button("Back") { route = "list" }
-        }.padding()
+                .buttonStyle(.plain)
+                .foregroundColor(DarkZen.textPrimary)
+                .frame(width: 44, height: 44)
+                .accessibilityLabel("Back")
+        }.padding(20)
     }
 }
