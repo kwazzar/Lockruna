@@ -131,6 +131,55 @@ class RegisterStoreTest {
     }
 
     @Test
+    fun `submit with a differing password confirmation emits a validation error and never registers`() = runTest {
+        fillValidForm()
+        store.dispatch(RegisterIntent.PasswordConfirmationChanged("a different phrase"))
+
+        store.dispatch(RegisterIntent.Submit)
+
+        assertEquals(0, authApi.registerCalls, "the registration must not reach the server")
+        assertTrue(store.state.value.error is AppError.InvalidCredentials, "expected a validation error")
+        assertFalse(store.state.value.hasRecoveryWords)
+    }
+
+    @Test
+    fun `submit with an empty password confirmation emits a validation error and never registers`() = runTest {
+        fillValidForm()
+        store.dispatch(RegisterIntent.PasswordConfirmationChanged(""))
+
+        store.dispatch(RegisterIntent.Submit)
+
+        assertEquals(0, authApi.registerCalls, "the registration must not reach the server")
+        assertTrue(store.state.value.error is AppError.InvalidCredentials, "expected a validation error")
+        assertFalse(store.state.value.hasRecoveryWords)
+    }
+
+    @Test
+    fun `submit with a matching password confirmation registers`() = runTest {
+        fillValidForm()
+        store.dispatch(RegisterIntent.PasswordConfirmationChanged("correct horse battery staple"))
+        val effect = async(start = CoroutineStart.UNDISPATCHED) { store.effects.first() }
+
+        store.dispatch(RegisterIntent.Submit)
+
+        val ready = effect.await()
+        assertTrue(ready is RegisterEffect.RecoveryKeyReady, "expected the recovery key, got $ready")
+        assertEquals(1, authApi.registerCalls)
+    }
+
+    @Test
+    fun `submit without any password confirmation still registers`() = runTest {
+        fillValidForm()
+        val effect = async(start = CoroutineStart.UNDISPATCHED) { store.effects.first() }
+
+        store.dispatch(RegisterIntent.Submit)
+
+        val ready = effect.await()
+        assertTrue(ready is RegisterEffect.RecoveryKeyReady, "expected the recovery key, got $ready")
+        assertEquals(1, authApi.registerCalls)
+    }
+
+    @Test
     fun `the password never reaches the state`() = runTest {
         val password = "correct horse battery staple"
 

@@ -50,6 +50,7 @@ fun RegisterScreen(store: RegisterStore, onRegistered: () -> Unit) {
     val state by store.state.collectAsState()
     val scope = rememberCoroutineScope()
     var password by remember { mutableStateOf("") }
+    var passwordConfirmation by remember { mutableStateOf("") }
     var recoveryWords by remember { mutableStateOf<List<String>?>(null) }
     var confirmation by remember { mutableStateOf("") }
 
@@ -69,6 +70,7 @@ fun RegisterScreen(store: RegisterStore, onRegistered: () -> Unit) {
         onDispose {
             recoveryWords = null
             confirmation = ""
+            passwordConfirmation = ""
             store.close()
         }
     }
@@ -110,6 +112,19 @@ fun RegisterScreen(store: RegisterStore, onRegistered: () -> Unit) {
                     )
                 }
             }
+            Spacer(Modifier.height(8.dp))
+            OutlinedTextField(
+                value = passwordConfirmation,
+                onValueChange = {
+                    scope.launch {
+                        passwordConfirmation = it
+                        store.dispatch(RegisterIntent.PasswordConfirmationChanged(it))
+                    }
+                },
+                label = { Text("Repeat master password") },
+                supportingText = { Text("Must match the master password") },
+                visualTransformation = PasswordVisualTransformation(),
+            )
             Spacer(Modifier.height(8.dp))
             OutlinedTextField(value = state.deviceName, onValueChange = {
                 scope.launch { store.dispatch(RegisterIntent.DeviceNameChanged(it)) }
