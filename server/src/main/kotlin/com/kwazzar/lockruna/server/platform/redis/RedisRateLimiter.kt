@@ -29,6 +29,12 @@ class RedisRateLimiter(redisUrl: String) :
             }
         }
 
+    override suspend fun resetForUser(userId: String) = withContext(Dispatchers.IO) {
+        val commands = connection.sync()
+        val keys = commands.keys("rl:*:*$userId*")
+        keys.forEach { commands.del(it) }
+    }
+
     override fun close() {
         client.shutdown()
     }

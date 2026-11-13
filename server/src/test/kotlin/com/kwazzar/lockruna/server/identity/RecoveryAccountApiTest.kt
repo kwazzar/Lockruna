@@ -61,7 +61,7 @@ class RecoveryAccountApiTest {
         assertEquals(first.bodyAsText(), second.bodyAsText())
         val body = first.parsed()
         assertTrue(body["userId"]!!.jsonPrimitive.content.isNotBlank())
-        assertEquals(48, Base64.getDecoder().decode(body["recoveryWrappedVaultKey"]!!.jsonPrimitive.content).size)
+        assertEquals(60, Base64.getDecoder().decode(body["recoveryWrappedVaultKey"]!!.jsonPrimitive.content).size)
     }
 
     @Test
@@ -80,6 +80,42 @@ class RecoveryAccountApiTest {
             body["recoveryWrappedVaultKey"]!!.jsonPrimitive.content,
         )
         assertEquals(userIdOf(email), body["userId"]!!.jsonPrimitive.content)
+    }
+
+    @Test
+    fun `recovery start blocks after the rate limit`() = testApplication {
+        application { module(settings, PostgresTest.dataSource, InMemoryRateLimiter(), InMemoryDeviceDenylist()) }
+
+        val statuses = (1..6).map { recoveryStart("flood@example.com").status }
+
+        assertTrue(statuses.drop(5).all { it == HttpStatusCode.TooManyRequests })
+    }
+
+    @Test
+    fun `recovery start for known and unknown emails has the same shape`() = testApplication {
+        application { module(settings, PostgresTest.dataSource, InMemoryRateLimiter(), InMemoryDeviceDenylist()) }
+        val email = "known@example.com"
+        val wrapped = randomBytes(60)
+        register(email, recoveryWrappedVaultKey = wrapped)
+
+        val known = recoveryStart(email)
+        val unknown = recoveryStart("ghost@example.com")
+
+        assertEquals(HttpStatusCode.OK, known.status)
+        assertEquals(HttpStatusCode.OK, unknown.status)
+
+        val knownBody = known.parsed()
+        val unknownBody = unknown.parsed()
+
+        // Both responses have the same keys
+        assertEquals(setOf("userId", "recoveryWrappedVaultKey"), knownBody.keys)
+        assertEquals(setOf("userId", "recoveryWrappedVaultKey"), unknownBody.keys)
+
+        // Both wrappers have the same size
+        assertEquals(
+            Base64.getDecoder().decode(knownBody["recoveryWrappedVaultKey"]!!.jsonPrimitive.content).size,
+            Base64.getDecoder().decode(unknownBody["recoveryWrappedVaultKey"]!!.jsonPrimitive.content).size,
+        )
     }
 
     @Test

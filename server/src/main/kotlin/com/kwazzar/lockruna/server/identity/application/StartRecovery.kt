@@ -41,5 +41,5 @@ class StartRecovery(
 data class RecoveryStartResult(val userId: String, val recoveryWrappedVaultKey: ByteArray)
 
 private const val RECOVERY_LIMIT = 5
-private const val FAKE_WRAPPED_BYTES = 48
+private const val FAKE_WRAPPED_BYTES = 60
 private val RECOVERY_WINDOW: Duration = Duration.ofMinutes(15)
