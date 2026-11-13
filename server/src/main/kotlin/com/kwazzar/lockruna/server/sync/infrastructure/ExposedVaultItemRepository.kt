@@ -3,6 +3,7 @@ package com.kwazzar.lockruna.server.sync.infrastructure
 import com.kwazzar.lockruna.server.platform.db.TransactionRunner
 import com.kwazzar.lockruna.server.platform.db.Users
 import com.kwazzar.lockruna.server.platform.db.VaultItems
+import com.kwazzar.lockruna.server.platform.db.ItemHistory
 import com.kwazzar.lockruna.server.platform.db.toColumn
 import com.kwazzar.lockruna.server.platform.db.toUuid
 import com.kwazzar.lockruna.server.sync.domain.ApplyResult
@@ -89,6 +90,14 @@ class ExposedVaultItemRepository(private val transactions: TransactionRunner) : 
         newSyncSeq: Long,
         updatedAt: Instant,
     ): ApplyResult {
+        // Archive previous live row before in-place update (for both updates and deletions)
+        val previous = findItem(userId, change.id)
+        if (previous != null && previous.ciphertext != null && previous.nonce != null) {
+            archiveItemHistory(userId, change.id, previous.type, previous.version, previous.ciphertext!!, previous.nonce!!, previous.updatedAt)
+            // TODO: Trim history to 10 versions (requires Exposed raw SQL execution)
+            // Trim history to 10 versions
+        }
+
         val updated = VaultItems.update({
             (VaultItems.userId eq userId.toUuid()) and
                 (VaultItems.id eq change.id.toUuid()) and
@@ -141,4 +150,24 @@ class ExposedVaultItemRepository(private val transactions: TransactionRunner) : 
         deletedAt = this[VaultItems.deletedAt]?.toInstant(),
         updatedAt = this[VaultItems.updatedAt].toInstant(),
     )
+
+    private fun archiveItemHistory(
+        userId: String,
+        itemId: String,
+        type: String,
+        version: Long,
+        ciphertext: ByteArray,
+        nonce: ByteArray,
+        updatedAt: Instant,
+    ) {
+        ItemHistory.insertIgnore {
+            it[ItemHistory.userId] = userId.toUuid()
+            it[ItemHistory.itemId] = itemId.toUuid()
+            it[ItemHistory.type] = type
+            it[ItemHistory.version] = version
+            it[ItemHistory.ciphertext] = ciphertext
+            it[ItemHistory.nonce] = nonce
+            it[ItemHistory.updatedAt] = updatedAt.toColumn()
+        }
+    }
 }

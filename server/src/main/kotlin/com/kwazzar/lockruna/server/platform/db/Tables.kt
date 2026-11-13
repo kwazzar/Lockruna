@@ -62,3 +62,15 @@ object IdempotencyKeys : Table("idempotency_keys") {
 
     override val primaryKey = PrimaryKey(userId, idempotencyKey)
 }
+
+object ItemHistory : Table("item_history") {
+    val userId = javaUUID("user_id")
+    val itemId = javaUUID("item_id")
+    val type = text("type")
+    val version = long("version")
+    val ciphertext = binary("ciphertext")
+    val nonce = binary("nonce")
+    val updatedAt = timestampWithTimeZone("updated_at")
+
+    override val primaryKey = PrimaryKey(userId, itemId, version)
+}
