@@ -11,11 +11,14 @@ import com.kwazzar.lockruna.server.sync.domain.ChangeRecord
 import com.kwazzar.lockruna.server.sync.domain.SealedItemRecord
 import com.kwazzar.lockruna.server.sync.domain.VaultItemRepository
 import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.SortOrder
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.greater
 import org.jetbrains.exposed.v1.core.isNull
+import org.jetbrains.exposed.v1.core.less
 import org.jetbrains.exposed.v1.core.plus
+import org.jetbrains.exposed.v1.jdbc.deleteWhere
 import org.jetbrains.exposed.v1.jdbc.insertIgnore
 import org.jetbrains.exposed.v1.jdbc.select
 import org.jetbrains.exposed.v1.jdbc.selectAll
@@ -90,9 +93,10 @@ class ExposedVaultItemRepository(private val transactions: TransactionRunner) : 
         newSyncSeq: Long,
         updatedAt: Instant,
     ): ApplyResult {
-        // Archive previous live row before in-place update (for both updates and deletions)
+        // Archive previous live row before in-place update (for both updates and deletions).
+        // Only the version the server really replaces is archived: a conflict changes nothing.
         val previous = findItem(userId, change.id)
-        if (previous != null && previous.ciphertext != null && previous.nonce != null) {
+        if (previous != null && previous.isArchivedBy(change.baseVersion)) {
             archiveItemHistory(
                 userId,
                 change.id,
@@ -102,8 +106,7 @@ class ExposedVaultItemRepository(private val transactions: TransactionRunner) : 
                 previous.nonce!!,
                 previous.updatedAt,
             )
-            // Trim history to ten versions is deferred (requires Exposed raw SQL execution)
-            // Trim history to 10 versions
+            trimItemHistory(userId, change.id)
         }
 
         val updated = VaultItems.update({
@@ -159,6 +162,12 @@ class ExposedVaultItemRepository(private val transactions: TransactionRunner) : 
         updatedAt = this[VaultItems.updatedAt].toInstant(),
     )
 
+    /**
+     * The row is archived only when the change really replaces it and it still holds ciphertext.
+     */
+    private fun SealedItemRecord.isArchivedBy(baseVersion: Long): Boolean =
+        version == baseVersion && ciphertext != null && nonce != null
+
     private fun archiveItemHistory(
         userId: String,
         itemId: String,
@@ -177,5 +186,26 @@ class ExposedVaultItemRepository(private val transactions: TransactionRunner) : 
             it[ItemHistory.nonce] = nonce
             it[ItemHistory.updatedAt] = updatedAt.toColumn()
         }
+    }
+
+    /**
+     * Keeps the ten newest archived versions of an item and drops the older ones.
+     */
+    private fun trimItemHistory(userId: String, itemId: String) {
+        val oldestKept = ItemHistory.select(ItemHistory.version)
+            .where { (ItemHistory.userId eq userId.toUuid()) and (ItemHistory.itemId eq itemId.toUuid()) }
+            .orderBy(ItemHistory.version, SortOrder.DESC)
+            .limit(HISTORY_LIMIT)
+            .map { it[ItemHistory.version] }
+            .lastOrNull() ?: return
+        ItemHistory.deleteWhere {
+            (ItemHistory.userId eq userId.toUuid()) and
+                (ItemHistory.itemId eq itemId.toUuid()) and
+                (ItemHistory.version less oldestKept)
+        }
+    }
+
+    private companion object {
+        const val HISTORY_LIMIT = 10
     }
 }
