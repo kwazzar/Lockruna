@@ -33,10 +33,10 @@ import com.kwazzar.lockruna.server.sync.domain.IdempotencyRepository
 import com.kwazzar.lockruna.server.sync.domain.VaultItemRepository
 import com.kwazzar.lockruna.server.sync.infrastructure.ExposedIdempotencyRepository
 import com.kwazzar.lockruna.server.sync.infrastructure.ExposedVaultItemRepository
+import com.mongodb.kotlin.client.coroutine.MongoClient
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.koin.core.module.Module
 import org.koin.dsl.module
-import com.mongodb.kotlin.client.coroutine.MongoClient
 import javax.sql.DataSource
 
 fun serverModule(

@@ -28,7 +28,7 @@ class AuditEventTest {
             action = AuditAction.LOGIN,
             ip = "192.168.1.1",
             ts = 1_700_000_000_000L,
-            meta = mapOf("key" to "value")
+            meta = mapOf("key" to "value"),
         )
         assertEquals("user-123", event.userId)
         assertEquals("device-456", event.deviceId)

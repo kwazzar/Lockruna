@@ -1,9 +1,9 @@
 package com.kwazzar.lockruna.server.identity.application
 
+import com.kwazzar.lockruna.contract.KdfParamsDto
 import com.kwazzar.lockruna.server.audit.domain.AuditAction
 import com.kwazzar.lockruna.server.audit.domain.AuditEvent
 import com.kwazzar.lockruna.server.audit.domain.AuditEventRepository
-import com.kwazzar.lockruna.contract.KdfParamsDto
 import com.kwazzar.lockruna.server.identity.domain.ACCESS_TOKEN_SECONDS
 import com.kwazzar.lockruna.server.identity.domain.AuthKeys
 import com.kwazzar.lockruna.server.identity.domain.DeviceRecord
@@ -38,13 +38,15 @@ class LoginUser(
         val authHash = AuthKeys.hash(settings.pepper, command.authKey)
         val matches = AuthKeys.constantTimeEquals(authHash, user?.authHash ?: ByteArray(SHA_256_BYTES))
         if (user == null || !matches) {
-            audit.record(AuditEvent(
-                userId = null,
-                deviceId = command.deviceId,
-                action = AuditAction.LOGIN_FAILED,
-                ip = command.clientIp,
-                ts = clock.instant().toEpochMilli(),
-            ))
+            audit.record(
+                AuditEvent(
+                    userId = null,
+                    deviceId = command.deviceId,
+                    action = AuditAction.LOGIN_FAILED,
+                    ip = command.clientIp,
+                    ts = clock.instant().toEpochMilli(),
+                ),
+            )
             rateLimiter.requireAllowed("login:email", AuthKeys.emailKey(email), LOGIN_LIMIT, LOGIN_WINDOW)
             rateLimiter.requireAllowed("login:ip", command.clientIp, LOGIN_LIMIT, LOGIN_WINDOW)
             throw ProblemException(
@@ -66,13 +68,15 @@ class LoginUser(
             kdfParams = Json.decodeFromString(KdfParamsDto.serializer(), user.kdfParams),
             wrappedVaultKey = user.wrappedVaultKey,
         )
-        audit.record(AuditEvent(
-            userId = session.userId,
-            deviceId = session.deviceId,
-            action = AuditAction.LOGIN,
-            ip = command.clientIp,
-            ts = clock.instant().toEpochMilli(),
-        ))
+        audit.record(
+            AuditEvent(
+                userId = session.userId,
+                deviceId = session.deviceId,
+                action = AuditAction.LOGIN,
+                ip = command.clientIp,
+                ts = clock.instant().toEpochMilli(),
+            ),
+        )
         return session
     }
 

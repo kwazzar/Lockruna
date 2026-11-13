@@ -29,14 +29,16 @@ class RefreshSession(
             is Rotation.Issued -> outcome.pair
             is Rotation.Reused -> {
                 // The revocation is committed on its own: a failed refresh must not roll the family back alive.
-                audit.record(AuditEvent(
-                    userId = outcome.userId,
-                    deviceId = null,
-                    action = AuditAction.TOKEN_REUSE,
-                    ip = null,
-                    ts = clock.instant().toEpochMilli(),
-                    meta = mapOf("familyId" to outcome.familyId),
-                ))
+                audit.record(
+                    AuditEvent(
+                        userId = outcome.userId,
+                        deviceId = null,
+                        action = AuditAction.TOKEN_REUSE,
+                        ip = null,
+                        ts = clock.instant().toEpochMilli(),
+                        meta = mapOf("familyId" to outcome.familyId),
+                    ),
+                )
                 refreshTokens.revokeFamily(outcome.userId, outcome.familyId, clock.instant())
                 throw unauthorized()
             }

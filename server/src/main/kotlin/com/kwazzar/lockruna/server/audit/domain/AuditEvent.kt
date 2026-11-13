@@ -14,7 +14,7 @@ enum class AuditAction {
     DEVICE_REVOKE,
     TOKEN_REUSE,
     SYNC_PUSH,
-    ACCOUNT_DELETE
+    ACCOUNT_DELETE,
 }
 
 @Serializable

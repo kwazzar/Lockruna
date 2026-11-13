@@ -34,13 +34,15 @@ class DeleteAccount(
         }
         val accessTtl = Duration.ofSeconds(ACCESS_TOKEN_SECONDS.toLong())
         knownDevices.forEach { denylist.revoke(it, accessTtl) }
-        audit.record(AuditEvent(
-            userId = userId,
-            deviceId = null,
-            action = AuditAction.ACCOUNT_DELETE,
-            ip = null,
-            ts = java.time.Instant.now().toEpochMilli(),
-        ))
+        audit.record(
+            AuditEvent(
+                userId = userId,
+                deviceId = null,
+                action = AuditAction.ACCOUNT_DELETE,
+                ip = null,
+                ts = java.time.Instant.now().toEpochMilli(),
+            ),
+        )
     }
 
     private suspend fun verifyAuthKey(userId: String, authKey: ByteArray): UserRecord {

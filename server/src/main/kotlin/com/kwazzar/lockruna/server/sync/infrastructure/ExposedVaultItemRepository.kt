@@ -1,9 +1,9 @@
 package com.kwazzar.lockruna.server.sync.infrastructure
 
+import com.kwazzar.lockruna.server.platform.db.ItemHistory
 import com.kwazzar.lockruna.server.platform.db.TransactionRunner
 import com.kwazzar.lockruna.server.platform.db.Users
 import com.kwazzar.lockruna.server.platform.db.VaultItems
-import com.kwazzar.lockruna.server.platform.db.ItemHistory
 import com.kwazzar.lockruna.server.platform.db.toColumn
 import com.kwazzar.lockruna.server.platform.db.toUuid
 import com.kwazzar.lockruna.server.sync.domain.ApplyResult
@@ -93,8 +93,16 @@ class ExposedVaultItemRepository(private val transactions: TransactionRunner) : 
         // Archive previous live row before in-place update (for both updates and deletions)
         val previous = findItem(userId, change.id)
         if (previous != null && previous.ciphertext != null && previous.nonce != null) {
-            archiveItemHistory(userId, change.id, previous.type, previous.version, previous.ciphertext!!, previous.nonce!!, previous.updatedAt)
-            // TODO: Trim history to 10 versions (requires Exposed raw SQL execution)
+            archiveItemHistory(
+                userId,
+                change.id,
+                previous.type,
+                previous.version,
+                previous.ciphertext!!,
+                previous.nonce!!,
+                previous.updatedAt,
+            )
+            // Trim history to ten versions is deferred (requires Exposed raw SQL execution)
             // Trim history to 10 versions
         }
 

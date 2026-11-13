@@ -1,9 +1,9 @@
 package com.kwazzar.lockruna.server.identity.application
 
+import com.kwazzar.lockruna.contract.KdfParamsDto
 import com.kwazzar.lockruna.server.audit.domain.AuditAction
 import com.kwazzar.lockruna.server.audit.domain.AuditEvent
 import com.kwazzar.lockruna.server.audit.domain.AuditEventRepository
-import com.kwazzar.lockruna.contract.KdfParamsDto
 import com.kwazzar.lockruna.server.identity.domain.ACCESS_TOKEN_SECONDS
 import com.kwazzar.lockruna.server.identity.domain.AuthKeys
 import com.kwazzar.lockruna.server.identity.domain.DeviceDenylist
@@ -76,13 +76,15 @@ class CompleteRecovery(
             kdfParams = command.newKdfParams,
             wrappedVaultKey = command.newWrappedVaultKey,
         )
-        audit.record(AuditEvent(
-            userId = session.userId,
-            deviceId = session.deviceId,
-            action = AuditAction.RECOVERY,
-            ip = command.clientIp,
-            ts = clock.instant().toEpochMilli(),
-        ))
+        audit.record(
+            AuditEvent(
+                userId = session.userId,
+                deviceId = session.deviceId,
+                action = AuditAction.RECOVERY,
+                ip = command.clientIp,
+                ts = clock.instant().toEpochMilli(),
+            ),
+        )
         return session
     }
 

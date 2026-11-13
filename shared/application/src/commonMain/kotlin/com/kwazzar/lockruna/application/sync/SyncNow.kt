@@ -6,7 +6,6 @@ import com.kwazzar.lockruna.domain.crypto.GcmCiphertext
 import com.kwazzar.lockruna.domain.error.AppError
 import com.kwazzar.lockruna.domain.session.Clock
 import com.kwazzar.lockruna.domain.session.IdGenerator
-import com.kwazzar.lockruna.domain.session.VaultKey
 import com.kwazzar.lockruna.domain.session.VaultSession
 import com.kwazzar.lockruna.domain.sync.AccessTokenProvider
 import com.kwazzar.lockruna.domain.sync.Conflict
@@ -134,6 +133,55 @@ class SyncNow(
         return Batch(key, dirty)
     }
 
+    private fun resealChange(change: PendingChange, conflict: Conflict): PendingChange? {
+        val stored = change.ciphertext ?: return null
+        val nonce = change.nonce ?: return null
+        val vaultKey = session.currentVaultKey() ?: return null
+
+        val oldAadVersion = change.baseVersion + 1
+        val newAadVersion = conflict.server.version + 1
+        val oldAad = "${change.id}|${change.type.name}|$oldAadVersion".encodeToByteArray()
+        val newAad = "${change.id}|${change.type.name}|$newAadVersion".encodeToByteArray()
+
+        val tagSize = 16
+        val ciphertext = stored.copyOf(stored.size - tagSize)
+        val tag = stored.copyOfRange(stored.size - tagSize, stored.size)
+
+        val gcmCiphertext = GcmCiphertext(ciphertext = ciphertext, nonce = nonce, tag = tag)
+        val plaintext = cryptoService.decryptGcm(vaultKey.bytes, gcmCiphertext, oldAad)
+        val resealed = cryptoService.encryptGcm(vaultKey.bytes, plaintext, newAad)
+
+        return change.copy(
+            baseVersion = conflict.server.version,
+            ciphertext = resealed.ciphertext + resealed.tag,
+            nonce = resealed.nonce,
+        )
+    }
+
+    private suspend fun handleSingleConflict(
+        conflict: Conflict,
+        batch: List<PendingChange>,
+        repushes: MutableMap<String, Int>,
+    ): Pair<PendingChange?, Boolean> {
+        val local = store.peek(conflict.id)
+        val localUpdatedAt = local?.updatedAtMillis ?: 0L
+        // Rollback protection: a stale server version must not overwrite the local row.
+        if (conflict.server.version < (local?.maxSeenVersion ?: 0)) return null to false
+        val serverWins = conflict.server.updatedAtMillis >= localUpdatedAt
+        if (serverWins) {
+            store.applyRemote(conflict.server)
+            return null to false
+        }
+        val attempts = (repushes[conflict.id] ?: 0) + 1
+        repushes[conflict.id] = attempts
+        if (attempts > MAX_REPUSHES) return null to true
+        // Rebuild the retry from the current dirty row, not the stale snapshot,
+        // so an edit made while the request was in flight is not lost.
+        val current = store.dirtyChanges(BATCH_LIMIT).firstOrNull { it.id == conflict.id }
+        val change = current ?: batch.firstOrNull { it.id == conflict.id }
+        return if (change != null) resealChange(change, conflict) to false else null to false
+    }
+
     /** Applies the server record when it wins and collects the changes that must be pushed again. */
     private suspend fun resolveConflicts(
         conflicts: List<Conflict>,
@@ -144,52 +192,9 @@ class SyncNow(
         val retry = mutableListOf<PendingChange>()
         var exhausted = false
         for (conflict in conflicts) {
-            val local = store.peek(conflict.id)
-            val localUpdatedAt = local?.updatedAtMillis ?: 0L
-            // Rollback protection: a stale server version must not overwrite the local row.
-            if (conflict.server.version < (local?.maxSeenVersion ?: 0)) continue
-            val serverWins = conflict.server.updatedAtMillis >= localUpdatedAt
-            if (serverWins) {
-                store.applyRemote(conflict.server)
-            } else {
-                val attempts = (repushes[conflict.id] ?: 0) + 1
-                repushes[conflict.id] = attempts
-                if (attempts > MAX_REPUSHES) {
-                    exhausted = true
-                } else {
-                    // Rebuild the retry from the current dirty row, not the stale snapshot,
-                    // so an edit made while the request was in flight is not lost.
-                    val current = store.dirtyChanges(BATCH_LIMIT).firstOrNull { it.id == conflict.id }
-                    val change = current ?: batch.firstOrNull { it.id == conflict.id }
-                    if (change != null) {
-                        val stored = change.ciphertext
-                        val nonce = change.nonce
-                        if (stored != null && nonce != null) {
-                            // Re-seal: decrypt with old AAD (baseVersion+1), re-encrypt with new AAD (server.version+1)
-                            val vaultKey = session.currentVaultKey() ?: return ConflictOutcome(retry, exhausted = true)
-                            val oldAadVersion = change.baseVersion + 1
-                            val newAadVersion = conflict.server.version + 1
-                            val oldAad = "${change.id}|${change.type.name}|$oldAadVersion".encodeToByteArray()
-                            val newAad = "${change.id}|${change.type.name}|$newAadVersion".encodeToByteArray()
-                            
-                            // Extract ciphertext, nonce, tag from stored format (ciphertext + tag)
-                            val tagSize = 16
-                            val ciphertext = stored.copyOf(stored.size - tagSize)
-                            val tag = stored.copyOfRange(stored.size - tagSize, stored.size)
-                            
-                            val gcmCiphertext = GcmCiphertext(ciphertext = ciphertext, nonce = nonce, tag = tag)
-                            val plaintext = cryptoService.decryptGcm(vaultKey.bytes, gcmCiphertext, oldAad)
-                            val resealed = cryptoService.encryptGcm(vaultKey.bytes, plaintext, newAad)
-                            
-                            retry += change.copy(
-                                baseVersion = conflict.server.version,
-                                ciphertext = resealed.ciphertext + resealed.tag,
-                                nonce = resealed.nonce,
-                            )
-                        }
-                    }
-                }
-            }
+            val (retried, isExhausted) = handleSingleConflict(conflict, batch, repushes)
+            if (retried != null) retry += retried
+            if (isExhausted) exhausted = true
         }
         return ConflictOutcome(retry = retry, exhausted = exhausted)
     }

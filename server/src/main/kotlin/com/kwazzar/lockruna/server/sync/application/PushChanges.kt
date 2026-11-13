@@ -78,14 +78,19 @@ class PushChanges(
         }
         // Only record audit event for newly committed pushes (not idempotent replays)
         if (conflicts.isEmpty() && applied.isNotEmpty()) {
-            audit.record(AuditEvent(
-                userId = userId,
-                deviceId = null, // deviceId not available in sync route
-                action = AuditAction.SYNC_PUSH,
-                ip = null,
-                ts = clock.instant().toEpochMilli(),
-                meta = mapOf("appliedCount" to applied.size.toString(), "conflictCount" to conflicts.size.toString()),
-            ))
+            audit.record(
+                AuditEvent(
+                    userId = userId,
+                    deviceId = null, // deviceId not available in sync route
+                    action = AuditAction.SYNC_PUSH,
+                    ip = null,
+                    ts = clock.instant().toEpochMilli(),
+                    meta = mapOf(
+                        "appliedCount" to applied.size.toString(),
+                        "conflictCount" to conflicts.size.toString(),
+                    ),
+                ),
+            )
         }
         return PushOutcome(applied = applied, conflicts = conflicts)
     }

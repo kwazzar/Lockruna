@@ -14,6 +14,7 @@ import com.kwazzar.lockruna.server.platform.logging.installSafeCallLogging
 import com.kwazzar.lockruna.server.platform.redis.RedisDeviceDenylist
 import com.kwazzar.lockruna.server.platform.redis.RedisRateLimiter
 import com.kwazzar.lockruna.server.sync.api.syncRoutes
+import com.mongodb.kotlin.client.coroutine.MongoClient
 import io.ktor.http.ContentType
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
@@ -26,7 +27,6 @@ import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
 import org.koin.ktor.plugin.Koin
-import com.mongodb.kotlin.client.coroutine.MongoClient
 import javax.sql.DataSource
 
 fun main() {

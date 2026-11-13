@@ -31,13 +31,15 @@ class RevokeDevice(
         }
         refreshTokens.revokeDeviceTokens(userId, deviceId, now)
         denylist.revoke(deviceId, Duration.ofSeconds(ACCESS_TOKEN_SECONDS.toLong()))
-        audit.record(AuditEvent(
-            userId = userId,
-            deviceId = deviceId, // actor device
-            action = AuditAction.DEVICE_REVOKE,
-            ip = null,
-            ts = clock.instant().toEpochMilli(),
-            meta = mapOf("targetDeviceId" to deviceId),
-        ))
+        audit.record(
+            AuditEvent(
+                userId = userId,
+                deviceId = deviceId, // actor device
+                action = AuditAction.DEVICE_REVOKE,
+                ip = null,
+                ts = clock.instant().toEpochMilli(),
+                meta = mapOf("targetDeviceId" to deviceId),
+            ),
+        )
     }
 }
