@@ -73,6 +73,7 @@ class VaultCycleTest {
                 secret = null,
                 url = null,
                 folderId = null,
+                noteBody = "note-body",
             ),
         )
         val item = (saved as Result.Success).value

@@ -18,6 +18,10 @@ class UpdateItem(private val repository: VaultItemRepository, private val clock:
         secret: String?,
         url: String?,
         folderId: ItemId?,
+        cardNumber: String? = null,
+        cardExpiry: String? = null,
+        cardCvv: String? = null,
+        noteBody: String? = null,
     ): Result<VaultItem, AppError> {
         val existing = when (val found = findExisting(id)) {
             is Result.Success -> found.value
@@ -28,6 +32,18 @@ class UpdateItem(private val repository: VaultItemRepository, private val clock:
             is Result.Success -> parsed.value
             is Result.Failure -> return Result.Failure(parsed.error)
         }
+        val cardNumberResult = cardNumber?.let { Secret.of(it) }
+        if (cardNumberResult is Result.Failure) {
+            return Result.Failure(cardNumberResult.error)
+        }
+        val cardCvvResult = cardCvv?.let { Secret.of(it) }
+        if (cardCvvResult is Result.Failure) {
+            return Result.Failure(cardCvvResult.error)
+        }
+        val noteBodyResult = noteBody?.let { Secret.of(it) }
+        if (noteBodyResult is Result.Failure) {
+            return Result.Failure(noteBodyResult.error)
+        }
         val updated = when (
             val result = existing.update(
                 title = fields.title,
@@ -36,6 +52,10 @@ class UpdateItem(private val repository: VaultItemRepository, private val clock:
                 url = fields.url,
                 folderId = folderId,
                 nowMillis = clock.nowMillis(),
+                cardNumber = (cardNumberResult as? Result.Success)?.value,
+                cardExpiry = cardExpiry,
+                cardCvv = (cardCvvResult as? Result.Success)?.value,
+                noteBody = (noteBodyResult as? Result.Success)?.value,
             )
         ) {
             is Result.Success -> result.value

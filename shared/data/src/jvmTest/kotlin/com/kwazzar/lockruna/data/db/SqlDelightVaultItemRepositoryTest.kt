@@ -75,6 +75,38 @@ class SqlDelightVaultItemRepositoryTest {
     }
 
     @Test
+    fun `old card ciphertext without typed fields still decrypts`() = runTest {
+        val cryptoService = FakeCryptoService()
+        val session = unlockedSession(cryptoService)
+        val (repo, driver) = createRepo(session)
+        val id = "00000000-0000-4000-8000-000000000001"
+        val plaintext = """{"title":"Legacy card","username":null,"secret":"legacy-value","url":null,"folderId":null}"""
+        val aad = "$id|CARD|1".encodeToByteArray()
+        val key = requireNotNull(session.currentVaultKey())
+        val sealed = cryptoService.encryptGcm(key.bytes, plaintext.encodeToByteArray(), aad)
+
+        PassKeeperDatabase(driver).passKeeperDatabaseQueries.upsertVaultItem(
+            id = id,
+            type = "CARD",
+            ciphertext = sealed.ciphertext + sealed.tag,
+            nonce = sealed.nonce,
+            version = 0,
+            sync_seq = 0,
+            deleted = false,
+            dirty = true,
+            max_seen_version = 0,
+            updated_at = BASE_MILLIS,
+        )
+
+        val parsedId = (ItemId.of(id) as Result.Success).value
+        val retrieved = assertIs<Result.Success<VaultItem?>>(repo.get(parsedId)).value
+        assertNotNull(retrieved)
+        // For legacy CARD, secret is null and cardNumber holds the value
+        assertEquals("legacy-value", retrieved.cardNumber?.value)
+        assertNull(retrieved.secret)
+    }
+
+    @Test
     fun `only sealed columns are filled`() = runTest {
         val (repo, driver) = createRepo(unlockedSession(FakeCryptoService()))
         repo.save(createItem("00000000-0000-4000-8000-000000000001"))

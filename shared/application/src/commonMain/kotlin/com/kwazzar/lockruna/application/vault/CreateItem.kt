@@ -19,6 +19,10 @@ data class CreateItemCommand(
     val secret: String?,
     val url: String?,
     val folderId: ItemId?,
+    val cardNumber: String? = null,
+    val cardExpiry: String? = null,
+    val cardCvv: String? = null,
+    val noteBody: String? = null,
 )
 
 class CreateItem(
@@ -39,6 +43,18 @@ class CreateItem(
         if (urlResult is Result.Failure) {
             return Result.Failure(urlResult.error)
         }
+        val cardNumberResult = command.cardNumber?.let { Secret.of(it) }
+        if (cardNumberResult is Result.Failure) {
+            return Result.Failure(cardNumberResult.error)
+        }
+        val cardCvvResult = command.cardCvv?.let { Secret.of(it) }
+        if (cardCvvResult is Result.Failure) {
+            return Result.Failure(cardCvvResult.error)
+        }
+        val noteBodyResult = command.noteBody?.let { Secret.of(it) }
+        if (noteBodyResult is Result.Failure) {
+            return Result.Failure(noteBodyResult.error)
+        }
         val created = VaultItem.create(
             id = idGenerator.newItemId(),
             type = command.type,
@@ -48,6 +64,10 @@ class CreateItem(
             url = (urlResult as? Result.Success)?.value,
             folderId = command.folderId,
             nowMillis = clock.nowMillis(),
+            cardNumber = (cardNumberResult as? Result.Success)?.value,
+            cardExpiry = command.cardExpiry,
+            cardCvv = (cardCvvResult as? Result.Success)?.value,
+            noteBody = (noteBodyResult as? Result.Success)?.value,
         )
         return when (created) {
             is Result.Success -> repository.save(created.value)

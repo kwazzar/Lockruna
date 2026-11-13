@@ -17,7 +17,17 @@ data class VaultItemContent(
     @SerialName("secret") val secret: String?,
     @SerialName("url") val url: String?,
     @SerialName("folderId") val folderId: String?,
-)
+    @SerialName("cardNumber") val cardNumber: String? = null,
+    @SerialName("cardExpiry") val cardExpiry: String? = null,
+    @SerialName("cardCvv") val cardCvv: String? = null,
+    @SerialName("noteBody") val noteBody: String? = null,
+) {
+    override fun toString(): String =
+        "VaultItemContent(title=len=${title.length}, username=${username?.length}, " +
+            "secret=${secret?.length}, url=${url?.length}, folderId=${folderId?.length}, " +
+            "cardNumber=${cardNumber?.length}, cardExpiry=${cardExpiry?.length}, " +
+            "cardCvv=${cardCvv?.length}, noteBody=${noteBody?.length})"
+}
 
 /** Maps a `vault_item` row to the domain aggregate, sealing the content into JSON for encryption. */
 object VaultItemRowMapper {
@@ -29,6 +39,10 @@ object VaultItemRowMapper {
         secret = item.secret?.value,
         url = item.url?.value,
         folderId = item.folderId?.value,
+        cardNumber = item.cardNumber?.value,
+        cardExpiry = item.cardExpiry,
+        cardCvv = item.cardCvv?.value,
+        noteBody = item.noteBody?.value,
     )
 
     fun serializeContent(content: VaultItemContent): String = json.encodeToString(content)

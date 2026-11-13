@@ -10,6 +10,8 @@ import com.kwazzar.lockruna.domain.error.AppError
  * - dirty = true for any local change that hasn't been synced
  * - deleted = true for soft-deleted items (tombstones)
  * - secret is required for LOGIN type
+ * - cardNumber is required for CARD type
+ * - noteBody is required for NOTE type
  * - updatedAtMillis is epoch millis from Clock.nowMillis()
  */
 data class VaultItem(
@@ -24,6 +26,10 @@ data class VaultItem(
     val dirty: Boolean,
     val deleted: Boolean,
     val updatedAtMillis: Long,
+    val cardNumber: Secret? = null,
+    val cardExpiry: String? = null,
+    val cardCvv: Secret? = null,
+    val noteBody: Secret? = null,
 ) {
     override fun toString(): String {
         val usernameStr = username?.let { "len=${it.length}" }
@@ -32,7 +38,9 @@ data class VaultItem(
         return "VaultItem(id=$id, type=$type, title=$title, " +
             "username=$usernameStr, secret=$secretStr, url=$urlStr, " +
             "folderId=$folderId, version=$version, dirty=$dirty, " +
-            "deleted=$deleted, updatedAtMillis=$updatedAtMillis)"
+            "deleted=$deleted, updatedAtMillis=$updatedAtMillis, " +
+            "cardNumber=${cardNumber?.toString()}, cardExpiry=${cardExpiry?.length}, " +
+            "cardCvv=${cardCvv?.toString()}, noteBody=${noteBody?.toString()})"
     }
 
     companion object {
@@ -45,25 +53,32 @@ data class VaultItem(
             url: Url?,
             folderId: ItemId?,
             nowMillis: Long,
+            cardNumber: Secret? = null,
+            cardExpiry: String? = null,
+            cardCvv: Secret? = null,
+            noteBody: Secret? = null,
         ): Result<VaultItem, AppError> {
-            // LOGIN requires secret
-            if (type == VaultItemType.LOGIN && secret == null) {
-                return Result.Failure(AppError.InvalidItem("LOGIN item requires a secret"))
+            val validationError = requiredDetailsError(type, secret, cardNumber, noteBody)
+            if (validationError != null) {
+                return Result.Failure(validationError)
             }
-            // For other types, secret is optional but if provided must not be empty (validated by Secret.of)
             return Result.Success(
                 VaultItem(
                     id = id,
                     type = type,
                     title = title,
                     username = username,
-                    secret = secret,
+                    secret = secret.takeIf { type == VaultItemType.LOGIN },
                     url = url,
                     folderId = folderId,
                     version = 0,
                     dirty = true,
                     deleted = false,
                     updatedAtMillis = nowMillis,
+                    cardNumber = cardNumber.takeIf { type == VaultItemType.CARD },
+                    cardExpiry = cardExpiry.takeIf { type == VaultItemType.CARD },
+                    cardCvv = cardCvv.takeIf { type == VaultItemType.CARD },
+                    noteBody = noteBody.takeIf { type == VaultItemType.NOTE },
                 ),
             )
         }
@@ -77,7 +92,51 @@ data class VaultItem(
             folderId: ItemId?,
             nowMillis: Long,
             idGenerator: () -> ItemId,
-        ): Result<VaultItem, AppError> = create(idGenerator(), type, title, username, secret, url, folderId, nowMillis)
+            cardNumber: Secret? = null,
+            cardExpiry: String? = null,
+            cardCvv: Secret? = null,
+            noteBody: Secret? = null,
+        ): Result<VaultItem, AppError> = create(
+            id = idGenerator(),
+            type = type,
+            title = title,
+            username = username,
+            secret = secret,
+            url = url,
+            folderId = folderId,
+            nowMillis = nowMillis,
+            cardNumber = cardNumber,
+            cardExpiry = cardExpiry,
+            cardCvv = cardCvv,
+            noteBody = noteBody,
+        )
+
+        private fun requiredDetailsError(
+            type: VaultItemType,
+            secret: Secret?,
+            cardNumber: Secret?,
+            noteBody: Secret?,
+        ): AppError.InvalidItem? = when (type) {
+            VaultItemType.LOGIN -> if (secret == null) {
+                AppError.InvalidItem("LOGIN item requires a secret")
+            } else {
+                null
+            }
+
+            VaultItemType.CARD -> if (cardNumber == null) {
+                AppError.InvalidItem("CARD item requires a card number")
+            } else {
+                null
+            }
+
+            VaultItemType.NOTE -> if (noteBody == null) {
+                AppError.InvalidItem("NOTE item requires a body")
+            } else {
+                null
+            }
+
+            VaultItemType.FOLDER -> null
+        }
     }
 
     fun update(
@@ -87,25 +146,42 @@ data class VaultItem(
         url: Url?,
         folderId: ItemId?,
         nowMillis: Long,
+        cardNumber: Secret? = null,
+        cardExpiry: String? = null,
+        cardCvv: Secret? = null,
+        noteBody: Secret? = null,
     ): Result<VaultItem, AppError> {
         if (deleted) {
             return Result.Failure(AppError.InvalidItem("Cannot update a deleted item"))
         }
-        // LOGIN requires secret
-        if (type == VaultItemType.LOGIN && secret == null) {
-            return Result.Failure(AppError.InvalidItem("LOGIN item requires a secret"))
+        val validationError = requiredDetailsError(type, secret, cardNumber, noteBody)
+        if (validationError != null) {
+            return Result.Failure(validationError)
         }
         return Result.Success(
             copy(
                 title = title,
                 username = username,
-                secret = secret,
+                secret = secret.takeIf { type == VaultItemType.LOGIN },
                 url = url,
                 folderId = folderId,
                 dirty = true,
                 updatedAtMillis = nowMillis,
+                cardNumber = cardNumber.takeIf { type == VaultItemType.CARD },
+                cardExpiry = cardExpiry.takeIf { type == VaultItemType.CARD },
+                cardCvv = cardCvv.takeIf { type == VaultItemType.CARD },
+                noteBody = noteBody.takeIf { type == VaultItemType.NOTE },
             ),
         )
+    }
+
+    fun validate(): Result<VaultItem, AppError> {
+        val validationError = requiredDetailsError(type, secret, cardNumber, noteBody)
+        return if (validationError == null) {
+            Result.Success(this)
+        } else {
+            Result.Failure(validationError)
+        }
     }
 
     fun delete(nowMillis: Long): Result<VaultItem, AppError> {

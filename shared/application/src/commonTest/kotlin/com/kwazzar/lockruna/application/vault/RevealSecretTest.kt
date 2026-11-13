@@ -54,6 +54,7 @@ class RevealSecretTest {
             url = null,
             folderId = null,
             nowMillis = 1_700_000_000_000L,
+            noteBody = if (type == VaultItemType.NOTE) (Secret.of("note-body") as Result.Success).value else null,
         )
         return (result as Result.Success).value
     }

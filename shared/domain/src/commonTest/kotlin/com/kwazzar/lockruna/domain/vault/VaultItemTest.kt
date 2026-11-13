@@ -5,6 +5,7 @@ import com.kwazzar.lockruna.domain.error.AppError
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class VaultItemTest {
@@ -89,15 +90,145 @@ class VaultItemTest {
     }
 
     @Test
-    fun `VaultItem create NOTE without secret succeeds`() {
+    fun `VaultItem create NOTE without body fails`() {
         val id = (ItemId.of(validItemId) as Result.Success).value
         val title = (Title.of(validTitle) as Result.Success).value
         val result = VaultItem.create(id, VaultItemType.NOTE, title, null, null, null, null, nowMillis)
+        assertTrue(result is Result.Failure)
+        assertTrue((result as Result.Failure).error is AppError.InvalidItem)
+    }
+
+    @Test
+    fun `VaultItem create NOTE with body succeeds`() {
+        val id = (ItemId.of(validItemId) as Result.Success).value
+        val title = (Title.of(validTitle) as Result.Success).value
+        val body = (Secret.of("note-value") as Result.Success).value
+        val result = VaultItem.create(
+            id = id,
+            type = VaultItemType.NOTE,
+            title = title,
+            username = null,
+            secret = null,
+            url = null,
+            folderId = null,
+            nowMillis = nowMillis,
+            noteBody = body,
+        )
         assertTrue(result is Result.Success)
         val item = (result as Result.Success).value
+        assertEquals(body, item.noteBody)
         assertEquals(0, item.version)
         assertTrue(item.dirty)
         assertFalse(item.deleted)
+    }
+
+    @Test
+    fun `VaultItem create CARD without number fails`() {
+        val id = (ItemId.of(validItemId) as Result.Success).value
+        val title = (Title.of(validTitle) as Result.Success).value
+        val result = VaultItem.create(
+            id = id,
+            type = VaultItemType.CARD,
+            title = title,
+            username = null,
+            secret = null,
+            url = null,
+            folderId = null,
+            nowMillis = nowMillis,
+        )
+        assertTrue(result is Result.Failure)
+        assertTrue((result as Result.Failure).error is AppError.InvalidItem)
+    }
+
+    @Test
+    fun `VaultItem create CARD stores typed details`() {
+        val id = (ItemId.of(validItemId) as Result.Success).value
+        val title = (Title.of(validTitle) as Result.Success).value
+        val number = (Secret.of("card-number") as Result.Success).value
+        val cvv = (Secret.of("card-cvv") as Result.Success).value
+        val result = VaultItem.create(
+            id = id,
+            type = VaultItemType.CARD,
+            title = title,
+            username = "holder",
+            secret = null,
+            url = null,
+            folderId = null,
+            nowMillis = nowMillis,
+            cardNumber = number,
+            cardExpiry = "12/30",
+            cardCvv = cvv,
+        )
+        assertTrue(result is Result.Success)
+        val item = (result as Result.Success).value
+        assertEquals(number, item.cardNumber)
+        assertEquals("12/30", item.cardExpiry)
+        assertEquals(cvv, item.cardCvv)
+        assertNull(item.secret)
+    }
+
+    @Test
+    fun `VaultItem update CARD without number fails`() {
+        val id = (ItemId.of(validItemId) as Result.Success).value
+        val title = (Title.of(validTitle) as Result.Success).value
+        val number = (Secret.of("card-number") as Result.Success).value
+        val created = (
+            VaultItem.create(
+                id = id,
+                type = VaultItemType.CARD,
+                title = title,
+                username = null,
+                secret = null,
+                url = null,
+                folderId = null,
+                nowMillis = nowMillis,
+                cardNumber = number,
+            ) as Result.Success
+            ).value
+
+        val result = created.update(
+            title = title,
+            username = null,
+            secret = null,
+            url = null,
+            folderId = null,
+            nowMillis = nowMillis + 1,
+        )
+
+        assertTrue(result is Result.Failure)
+        assertTrue((result as Result.Failure).error is AppError.InvalidItem)
+    }
+
+    @Test
+    fun `VaultItem update NOTE without body fails`() {
+        val id = (ItemId.of(validItemId) as Result.Success).value
+        val title = (Title.of(validTitle) as Result.Success).value
+        val body = (Secret.of("note-value") as Result.Success).value
+        val created = (
+            VaultItem.create(
+                id = id,
+                type = VaultItemType.NOTE,
+                title = title,
+                username = null,
+                secret = null,
+                url = null,
+                folderId = null,
+                nowMillis = nowMillis,
+                noteBody = body,
+            ) as Result.Success
+            ).value
+
+        val result = created.update(
+            title = title,
+            username = null,
+            secret = null,
+            url = null,
+            folderId = null,
+            nowMillis = nowMillis + 1,
+        )
+
+        assertTrue(result is Result.Failure)
+        assertTrue((result as Result.Failure).error is AppError.InvalidItem)
     }
 
     @Test

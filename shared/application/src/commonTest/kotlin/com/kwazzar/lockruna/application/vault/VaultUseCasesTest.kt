@@ -26,7 +26,8 @@ class VaultUseCasesTest {
     private fun createCommand(
         type: VaultItemType = VaultItemType.NOTE,
         title: String = "Note",
-        secret: String? = "secret-value",
+        secret: String? = null,
+        noteBody: String? = "note-body",
     ) = CreateItemCommand(
         type = type,
         title = title,
@@ -34,6 +35,7 @@ class VaultUseCasesTest {
         secret = secret,
         url = null,
         folderId = null,
+        noteBody = noteBody,
     )
 
     @Test
@@ -83,7 +85,7 @@ class VaultUseCasesTest {
         val created = createItem(createCommand()) as Result.Success
         val itemId = created.value.id
 
-        val updated = updateItem(itemId, "Renamed", null, "secret-value-2", null, null) as Result.Success
+        val updated = updateItem(itemId, "Renamed", null, null, null, null, noteBody = "updated-note-body") as Result.Success
 
         assertEquals(0L, updated.value.version)
         assertEquals(true, updated.value.dirty)
@@ -92,7 +94,7 @@ class VaultUseCasesTest {
 
     @Test
     fun `update without a secret draft preserves the existing secret`() = runTest {
-        val created = createItem(createCommand(type = VaultItemType.LOGIN)) as Result.Success
+        val created = createItem(createCommand(type = VaultItemType.LOGIN, secret = "secret-value")) as Result.Success
 
         val updated = updateItem(created.value.id, "Renamed", null, null, null, null) as Result.Success
 

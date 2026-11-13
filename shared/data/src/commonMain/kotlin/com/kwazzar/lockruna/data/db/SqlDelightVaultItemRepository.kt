@@ -118,19 +118,41 @@ class SqlDelightVaultItemRepository(
     private fun buildItem(row: Vault_item, plaintext: ByteArray): Result<VaultItem, AppError> {
         val content = (VaultItemRowMapper.deserializeContent(plaintext.decodeToString()) as? Result.Success)?.value
             ?: return Result.Failure(AppError.ItemCorrupted)
+        val type = VaultItemType.valueOf(row.type)
+
+        // Backward compatibility: legacy CARD/NOTE items stored data in "secret"
+        val legacySecret = content.secret?.let { (Secret.of(it) as? Result.Success)?.value }
+        val cardNumber = if (type == VaultItemType.CARD) {
+            content.cardNumber?.let { (Secret.of(it) as? Result.Success)?.value } ?: legacySecret
+        } else {
+            content.cardNumber?.let { (Secret.of(it) as? Result.Success)?.value }
+        }
+        val cardExpiry = content.cardExpiry
+        val cardCvv = content.cardCvv?.let { (Secret.of(it) as? Result.Success)?.value }
+        val noteBody = if (type == VaultItemType.NOTE) {
+            content.noteBody?.let { (Secret.of(it) as? Result.Success)?.value } ?: legacySecret
+        } else {
+            content.noteBody?.let { (Secret.of(it) as? Result.Success)?.value }
+        }
+        val secret = if (type == VaultItemType.LOGIN) legacySecret else null
+
         val item = attempt {
             VaultItem(
                 id = requireNotNull(ItemId.of(row.id) as? Result.Success).value,
-                type = VaultItemType.valueOf(row.type),
+                type = type,
                 title = requireNotNull(Title.of(content.title) as? Result.Success).value,
                 username = content.username,
-                secret = content.secret?.let { (Secret.of(it) as? Result.Success)?.value },
+                secret = secret,
                 url = content.url?.let { (Url.of(it) as? Result.Success)?.value },
                 folderId = content.folderId?.let { (ItemId.of(it) as? Result.Success)?.value },
                 version = row.version,
                 dirty = row.dirty,
                 deleted = row.deleted,
                 updatedAtMillis = row.updated_at,
+                cardNumber = cardNumber,
+                cardExpiry = cardExpiry,
+                cardCvv = cardCvv,
+                noteBody = noteBody,
             )
         } ?: return Result.Failure(AppError.ItemCorrupted)
         return Result.Success(item)

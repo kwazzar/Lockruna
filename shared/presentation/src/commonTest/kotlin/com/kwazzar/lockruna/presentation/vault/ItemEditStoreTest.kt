@@ -255,9 +255,10 @@ class ItemEditTypeTest {
     )
 
     @Test
-    fun `a card is created without a secret`() = runTest {
+    fun `a card is created with a card number`() = runTest {
         store.dispatch(ItemEditIntent.TypeChanged(VaultItemType.CARD))
         store.dispatch(ItemEditIntent.TitleChanged("Visa"))
+        store.dispatch(ItemEditIntent.CardNumberChanged("4111 1111 1111 1111"))
         val effect = async(start = CoroutineStart.UNDISPATCHED) { store.effects.first() }
 
         store.dispatch(ItemEditIntent.Save)
@@ -265,13 +266,14 @@ class ItemEditTypeTest {
         assertEquals(ItemEditEffect.Saved("00000000-0000-4000-8000-000000000001"), effect.await())
         val saved = assertIs<Result.Success<VaultItem>>(repository.get(itemId())).value
         assertEquals(VaultItemType.CARD, saved.type)
+        assertEquals("4111 1111 1111 1111", saved.cardNumber?.value)
     }
 
     @Test
-    fun `a note is created with the note body as the secret`() = runTest {
+    fun `a note is created with a note body`() = runTest {
         store.dispatch(ItemEditIntent.TypeChanged(VaultItemType.NOTE))
         store.dispatch(ItemEditIntent.TitleChanged("Wifi"))
-        store.dispatch(ItemEditIntent.SecretChanged("the password of the guest network"))
+        store.dispatch(ItemEditIntent.NoteBodyChanged("the password of the guest network"))
         val effect = async(start = CoroutineStart.UNDISPATCHED) { store.effects.first() }
 
         store.dispatch(ItemEditIntent.Save)
@@ -279,7 +281,7 @@ class ItemEditTypeTest {
         assertEquals(ItemEditEffect.Saved("00000000-0000-4000-8000-000000000001"), effect.await())
         val saved = assertIs<Result.Success<VaultItem>>(repository.get(itemId())).value
         assertEquals(VaultItemType.NOTE, saved.type)
-        assertEquals("the password of the guest network", saved.secret?.value)
+        assertEquals("the password of the guest network", saved.noteBody?.value)
     }
 
     @Test
@@ -308,6 +310,7 @@ class ItemEditTypeTest {
                     url = null,
                     folderId = null,
                     nowMillis = 1,
+                    noteBody = (Secret.of("note-body") as Result.Success).value,
                 ),
             ).value,
         )
