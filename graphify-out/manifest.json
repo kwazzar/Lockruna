@@ -1435,8 +1435,8 @@
     "semantic_hash": ""
   },
   "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/Theme.kt": {
-    "mtime": 1794527883.736671,
-    "ast_hash": "c89ed0d138243d2d6462cac3a0006bda",
+    "mtime": 1794552086.4048324,
+    "ast_hash": "d0a389a537a7103d45ceab1bae0ddbee",
     "semantic_hash": ""
   },
   "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/UnlockScreen.kt": {
@@ -1697,6 +1697,11 @@
   "docs/superpowers/specs/2026-11-13-dark-zen-ui-design.md": {
     "mtime": 1794540132.5408351,
     "ast_hash": "100ee8ba7973fc9fff104e58e44d810c",
+    "semantic_hash": ""
+  },
+  "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/DarkZenComponents.kt": {
+    "mtime": 1794552430.049169,
+    "ast_hash": "6c58b4698c145bd85f0f249c9f533088",
     "semantic_hash": ""
   }
 }

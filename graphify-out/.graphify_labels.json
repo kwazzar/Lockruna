@@ -201,13 +201,15 @@
   "199": "InMemoryVaultItemRepository",
   "200": ".wireUp",
   "201": "PresentationModuleTest",
+  "202": ".createUser",
+  "203": "._body",
   "204": "FixedBiometricPolicyStore",
   "205": ".invoke",
   "206": "BiometricSettings.kt",
   "207": "SecureStorage",
   "208": "DevicesStoreTest",
+  "209": "androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt",
   "210": "iosMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt",
   "211": "SettingsIntent",
-  "214": "Bip39Words.kt",
-  "217": "AuthTypes.kt"
+  "214": "Bip39Words.kt"
 }
