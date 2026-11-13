@@ -61,9 +61,12 @@ class SqlDelightSyncStore(private val database: PassKeeperDatabase) : SyncStore 
         database.transaction {
             val previous = queries.getVaultItem(item.id).executeAsOneOrNull()
             if (previous?.ciphertext != null && previous.nonce != null) {
+                // Server version is clean, so AAD version = version (not version + 1)
                 queries.insertLosingVersion(
                     item_id = item.id,
                     version = previous.version,
+                    item_type = previous.type,
+                    aad_version = previous.version,
                     ciphertext = previous.ciphertext,
                     nonce = previous.nonce,
                     updated_at = previous.updated_at,

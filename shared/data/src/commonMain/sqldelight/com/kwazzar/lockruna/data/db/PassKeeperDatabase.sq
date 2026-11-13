@@ -16,11 +16,15 @@ CREATE TABLE vault_item (
 CREATE TABLE item_history (
     item_id    TEXT NOT NULL,
     version    INTEGER NOT NULL,
+    item_type  TEXT NOT NULL DEFAULT 'login',
+    aad_version INTEGER NOT NULL DEFAULT 0,
     ciphertext BLOB NOT NULL,
     nonce      BLOB NOT NULL,
     updated_at INTEGER NOT NULL,
     PRIMARY KEY (item_id, version)
 );
+
+CREATE INDEX idx_item_history_item_type ON item_history (item_id, item_type, version DESC);
 
 CREATE TABLE sync_state (
     id           TEXT NOT NULL PRIMARY KEY,
@@ -58,12 +62,12 @@ WHERE deleted = 0;
 
 -- Insert into item history
 insertItemHistory:
-INSERT OR REPLACE INTO item_history (item_id, version, ciphertext, nonce, updated_at)
-VALUES (?, ?, ?, ?, ?);
+INSERT OR REPLACE INTO item_history (item_id, version, item_type, aad_version, ciphertext, nonce, updated_at)
+VALUES (?, ?, ?, ?, ?, ?, ?);
 
 -- Get item history for an item (ordered by version desc)
 getItemHistory:
-SELECT item_id, version, ciphertext, nonce, updated_at
+SELECT item_id, version, item_type, aad_version, ciphertext, nonce, updated_at
 FROM item_history
 WHERE item_id = ?
 ORDER BY version DESC;
@@ -106,8 +110,8 @@ LIMIT ?;
 
 -- Keep the losing version of a conflict.
 insertLosingVersion:
-INSERT OR REPLACE INTO item_history (item_id, version, ciphertext, nonce, updated_at)
-VALUES (?, ?, ?, ?, ?);
+INSERT OR REPLACE INTO item_history (item_id, version, item_type, aad_version, ciphertext, nonce, updated_at)
+VALUES (?, ?, ?, ?, ?, ?, ?);
 
 -- The single sync state row.
 selectSyncState:
