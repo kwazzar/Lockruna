@@ -1,7 +1,7 @@
 # Graph Report - meditate-note-dark-design  (2026-11-13)
 
 ## Corpus Check
-- 335 files · ~110,112 words
+- 335 files · ~110,125 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `94eb6c10`
+- Built from commit: `7d963b07`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -469,8 +469,8 @@ Cohesion: 0.12
 Nodes (7): MockEngine, HttpResponse, T, KtorSyncApi, KtorSyncApiTest, KtorAuthApiHttpTest, KtorRecoveryApiHttpTest
 
 ### Community 99 - ".register"
-Cohesion: 0.20
-Nodes (4): ByteArray, HttpResponse, JsonObject, RecoveryAccountApiTest
+Cohesion: 0.19
+Nodes (5): DeviceInfoDto, ByteArray, HttpResponse, JsonObject, RecoveryAccountApiTest
 
 ### Community 100 - "SyncNowTest"
 Cohesion: 0.27
@@ -490,7 +490,7 @@ Nodes (3): HttpClient, platformHttpClient(), platformIdGenerator()
 
 ### Community 104 - "PendingChange"
 Cohesion: 0.10
-Nodes (19): AuthResponseDto, DeleteAccountRequest, DeviceInfoDto, LoginRequest, PreloginRequest, PreloginResponse, RecoveryCompleteRequest, RecoveryStartResponseDto (+11 more)
+Nodes (18): AuthResponseDto, DeleteAccountRequest, LoginRequest, PreloginRequest, PreloginResponse, RecoveryCompleteRequest, RecoveryStartResponseDto, RefreshRequest (+10 more)
 
 ### Community 105 - ".invoke"
 Cohesion: 0.20
