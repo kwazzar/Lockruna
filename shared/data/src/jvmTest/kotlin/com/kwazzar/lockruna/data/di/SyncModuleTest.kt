@@ -3,10 +3,13 @@ package com.kwazzar.lockruna.data.di
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
 import com.kwazzar.lockruna.application.sync.SyncNow
 import com.kwazzar.lockruna.data.db.FakeClock
+import com.kwazzar.lockruna.data.db.FakeCryptoService
 import com.kwazzar.lockruna.data.db.PassKeeperDatabase
 import com.kwazzar.lockruna.domain.core.Result
 import com.kwazzar.lockruna.domain.session.Clock
 import com.kwazzar.lockruna.domain.session.IdGenerator
+import com.kwazzar.lockruna.domain.session.VaultKey
+import com.kwazzar.lockruna.domain.session.VaultSession
 import com.kwazzar.lockruna.domain.sync.AccessTokenProvider
 import com.kwazzar.lockruna.domain.sync.SyncApi
 import com.kwazzar.lockruna.domain.sync.SyncStore
@@ -36,12 +39,10 @@ class SyncModuleTest {
         val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
         PassKeeperDatabase.Schema.create(driver)
         val database = PassKeeperDatabase(driver)
+        val crypto = FakeCryptoService()
+        val session = VaultSession().apply { unlock(VaultKey.random(crypto)) }
         val application = koinApplication {
             modules(
-                syncModule(
-                    httpClient = HttpClient(MockEngine { error("no request expected") }),
-                    baseUrl = "https://api.test",
-                ),
                 module {
                     single { database }
                     single<IdGenerator> { TestIdGenerator }
@@ -51,7 +52,13 @@ class SyncModuleTest {
                             override suspend fun token(): String? = "token"
                         }
                     }
+                    single<com.kwazzar.lockruna.domain.crypto.CryptoService> { crypto }
+                    single<VaultSession> { session }
                 },
+                syncModule(
+                    httpClient = HttpClient(MockEngine { error("no request expected") }),
+                    baseUrl = "https://api.test",
+                ),
             )
         }
 

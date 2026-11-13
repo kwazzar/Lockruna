@@ -2,11 +2,14 @@ package com.kwazzar.lockruna.application.sync
 
 import com.kwazzar.lockruna.application.support.FakeAccessTokenProvider
 import com.kwazzar.lockruna.application.support.FakeClock
+import com.kwazzar.lockruna.application.support.FakeCryptoService
 import com.kwazzar.lockruna.application.support.FakeIdGenerator
 import com.kwazzar.lockruna.application.support.FakeSyncApi
 import com.kwazzar.lockruna.application.support.FakeSyncStore
 import com.kwazzar.lockruna.domain.core.Result
 import com.kwazzar.lockruna.domain.error.AppError
+import com.kwazzar.lockruna.domain.session.VaultKey
+import com.kwazzar.lockruna.domain.session.VaultSession
 import com.kwazzar.lockruna.domain.sync.AppliedChange
 import com.kwazzar.lockruna.domain.sync.Conflict
 import com.kwazzar.lockruna.domain.sync.LocalRecord
@@ -31,13 +34,16 @@ class SyncNowTest {
     private val store = FakeSyncStore()
     private val clock = FakeClock(wallMillis = NOW)
     private val tokens = FakeAccessTokenProvider()
-    private val sync = SyncNow(api, store, tokens, FakeIdGenerator(), clock)
+    private val crypto = FakeCryptoService()
+    private val session = VaultSession().apply { unlock(VaultKey.random(crypto)) }
+    private val sync = SyncNow(api, store, tokens, FakeIdGenerator(), clock, crypto, session)
 
     private fun change(id: String, baseVersion: Long = 0) = PendingChange(
         id = id,
         type = VaultItemType.LOGIN,
-        ciphertext = byteArrayOf(1, 2, 3),
-        nonce = byteArrayOf(4),
+        // Use 32 bytes plaintext + 16 byte tag = 48 bytes stored (matches real GCM)
+        ciphertext = byteArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48),
+        nonce = byteArrayOf(4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15),
         baseVersion = baseVersion,
     )
 
