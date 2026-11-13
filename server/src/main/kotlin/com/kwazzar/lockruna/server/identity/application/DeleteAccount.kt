@@ -1,5 +1,8 @@
 package com.kwazzar.lockruna.server.identity.application
 
+import com.kwazzar.lockruna.server.audit.domain.AuditAction
+import com.kwazzar.lockruna.server.audit.domain.AuditEvent
+import com.kwazzar.lockruna.server.audit.domain.AuditEventRepository
 import com.kwazzar.lockruna.server.identity.domain.ACCESS_TOKEN_SECONDS
 import com.kwazzar.lockruna.server.identity.domain.AuthKeys
 import com.kwazzar.lockruna.server.identity.domain.DeviceDenylist
@@ -20,6 +23,7 @@ class DeleteAccount(
     private val devices: DeviceRepository,
     private val denylist: DeviceDenylist,
     private val settings: ServerSettings,
+    private val audit: AuditEventRepository,
 ) {
     suspend operator fun invoke(userId: String, authKey: ByteArray) {
         val user = verifyAuthKey(userId, authKey)
@@ -30,6 +34,13 @@ class DeleteAccount(
         }
         val accessTtl = Duration.ofSeconds(ACCESS_TOKEN_SECONDS.toLong())
         knownDevices.forEach { denylist.revoke(it, accessTtl) }
+        audit.record(AuditEvent(
+            userId = userId,
+            deviceId = null,
+            action = AuditAction.ACCOUNT_DELETE,
+            ip = null,
+            ts = java.time.Instant.now().toEpochMilli(),
+        ))
     }
 
     private suspend fun verifyAuthKey(userId: String, authKey: ByteArray): UserRecord {

@@ -19,10 +19,10 @@ enum class AuditAction {
 
 @Serializable
 data class AuditEvent(
-    val userId: String,
-    val deviceId: String,
+    val userId: String?,
+    val deviceId: String?,
     val action: AuditAction,
-    val ip: String,
+    val ip: String?,
     val ts: Long,
     val meta: Map<String, String> = emptyMap(),
 )

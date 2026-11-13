@@ -61,18 +61,18 @@ fun serverModule(
     single<TokenService> { JwtTokenService(get(), settings) }
     single { PreloginUser(get(), get(), settings.authFakeSecret) }
     single { StartRecovery(get(), get(), settings.authFakeSecret) }
-    single { RegisterUser(get(), get(), get(), get(), get(), settings) }
-    single { CompleteRecovery(get(), get(), get(), get(), get(), get(), settings) }
-    single { DeleteAccount(get(), get(), get(), settings) }
-    single { LoginUser(get(), get(), get(), get(), settings) }
+    single { RegisterUser(get(), get(), get(), get(), get(), settings, get()) }
+    single { CompleteRecovery(get(), get(), get(), get(), get(), get(), settings, get()) }
+    single { DeleteAccount(get(), get(), get(), settings, get()) }
+    single { LoginUser(get(), get(), get(), get(), settings, get()) }
     single { AuthenticateSession(get(), get()) }
-    single { RefreshSession(get(), get(), get()) }
-    single { RevokeDevice(get(), get(), get()) }
+    single { RefreshSession(get(), get(), get(), get()) }
+    single { RevokeDevice(get(), get(), get(), get()) }
     single { ListDevices(get()) }
     single { LogoutSession(get()) }
     single<VaultItemRepository> { ExposedVaultItemRepository(get()) }
     single<IdempotencyRepository> { ExposedIdempotencyRepository(get()) }
     single<AuditEventRepository> { MongoAuditEventRepository(get(), get()) }
     single { PullChanges(get()) }
-    single { PushChanges(get(), get(), get(), get()) }
+    single { PushChanges(get(), get(), get(), get(), get()) }
 }

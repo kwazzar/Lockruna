@@ -1,5 +1,8 @@
 package com.kwazzar.lockruna.server.identity.application
 
+import com.kwazzar.lockruna.server.audit.domain.AuditAction
+import com.kwazzar.lockruna.server.audit.domain.AuditEvent
+import com.kwazzar.lockruna.server.audit.domain.AuditEventRepository
 import com.kwazzar.lockruna.server.identity.domain.ACCESS_TOKEN_SECONDS
 import com.kwazzar.lockruna.server.identity.domain.DeviceDenylist
 import com.kwazzar.lockruna.server.identity.domain.DeviceRepository
@@ -16,6 +19,7 @@ class RevokeDevice(
     private val devices: DeviceRepository,
     private val refreshTokens: RefreshTokenRepository,
     private val denylist: DeviceDenylist,
+    private val audit: AuditEventRepository,
     private val clock: Clock = Clock.systemUTC(),
 ) {
     suspend operator fun invoke(userId: String, deviceId: String) {
@@ -27,5 +31,13 @@ class RevokeDevice(
         }
         refreshTokens.revokeDeviceTokens(userId, deviceId, now)
         denylist.revoke(deviceId, Duration.ofSeconds(ACCESS_TOKEN_SECONDS.toLong()))
+        audit.record(AuditEvent(
+            userId = userId,
+            deviceId = deviceId, // actor device
+            action = AuditAction.DEVICE_REVOKE,
+            ip = null,
+            ts = clock.instant().toEpochMilli(),
+            meta = mapOf("targetDeviceId" to deviceId),
+        ))
     }
 }

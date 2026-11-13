@@ -1,5 +1,8 @@
 package com.kwazzar.lockruna.server.identity.application
 
+import com.kwazzar.lockruna.server.audit.domain.AuditAction
+import com.kwazzar.lockruna.server.audit.domain.AuditEvent
+import com.kwazzar.lockruna.server.audit.domain.AuditEventRepository
 import com.kwazzar.lockruna.contract.KdfParamsDto
 import com.kwazzar.lockruna.server.identity.domain.ACCESS_TOKEN_SECONDS
 import com.kwazzar.lockruna.server.identity.domain.AuthKeys
@@ -29,6 +32,7 @@ class RegisterUser(
     private val rateLimiter: RateLimiter,
     private val transactions: TransactionRunner,
     private val settings: ServerSettings,
+    private val audit: AuditEventRepository,
     private val clock: Clock = Clock.systemUTC(),
 ) {
     suspend operator fun invoke(command: RegisterCommand): AuthSession {
@@ -38,7 +42,7 @@ class RegisterUser(
         if (users.findByEmail(email) != null) throw alreadyRegistered()
 
         return try {
-            transactions.transaction {
+            val session = transactions.transaction {
                 val now = clock.instant()
                 val user = users.create(
                     UserRecord(
@@ -78,6 +82,14 @@ class RegisterUser(
                     wrappedVaultKey = user.wrappedVaultKey,
                 )
             }
+            audit.record(AuditEvent(
+                userId = session.userId,
+                deviceId = session.deviceId,
+                action = AuditAction.REGISTER,
+                ip = command.clientIp,
+                ts = clock.instant().toEpochMilli(),
+            ))
+            session
         } catch (ignored: EmailAlreadyRegisteredException) {
             throw alreadyRegistered()
         }

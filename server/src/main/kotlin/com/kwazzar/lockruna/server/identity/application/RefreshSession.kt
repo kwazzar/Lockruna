@@ -1,5 +1,8 @@
 package com.kwazzar.lockruna.server.identity.application
 
+import com.kwazzar.lockruna.server.audit.domain.AuditAction
+import com.kwazzar.lockruna.server.audit.domain.AuditEvent
+import com.kwazzar.lockruna.server.audit.domain.AuditEventRepository
 import com.kwazzar.lockruna.server.identity.domain.ACCESS_TOKEN_SECONDS
 import com.kwazzar.lockruna.server.identity.domain.AuthKeys
 import com.kwazzar.lockruna.server.identity.domain.RefreshTokenRepository
@@ -17,6 +20,7 @@ class RefreshSession(
     private val refreshTokens: RefreshTokenRepository,
     private val tokens: TokenService,
     private val transactions: TransactionRunner,
+    private val audit: AuditEventRepository,
     private val clock: Clock = Clock.systemUTC(),
 ) {
     suspend operator fun invoke(refreshToken: String): TokenPair {
@@ -25,6 +29,14 @@ class RefreshSession(
             is Rotation.Issued -> outcome.pair
             is Rotation.Reused -> {
                 // The revocation is committed on its own: a failed refresh must not roll the family back alive.
+                audit.record(AuditEvent(
+                    userId = outcome.userId,
+                    deviceId = null,
+                    action = AuditAction.TOKEN_REUSE,
+                    ip = null,
+                    ts = clock.instant().toEpochMilli(),
+                    meta = mapOf("familyId" to outcome.familyId),
+                ))
                 refreshTokens.revokeFamily(outcome.userId, outcome.familyId, clock.instant())
                 throw unauthorized()
             }
