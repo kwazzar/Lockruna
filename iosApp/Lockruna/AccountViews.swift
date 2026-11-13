@@ -239,40 +239,49 @@ struct DevicesView: View {
     private var store: PresentationDevicesStore { model.devicesStore }
 
     var body: some View {
-        List {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Devices")
+                .font(.headline)
+                .foregroundColor(DarkZen.textPrimary)
+                .padding(.horizontal, 20)
+            
             if store.state.value.isLoading {
                 ProgressView()
+                    .progressViewStyle(.circular)
+                    .tint(DarkZen.accent)
+                    .padding(20)
             }
+            
             ForEach(store.state.value.devices, id: \.id) { device in
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text(device.name)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(device.name)
+                        .font(.subheadline)
+                        .foregroundColor(DarkZen.textPrimary)
+                    HStack {
                         Text(device.platform).font(.caption)
                         if device.current {
                             Text("This device").font(.caption)
                         }
+                        Spacer()
+                        if !device.current {
+                            Button("Revoke") { revoking = device.id }
+                                .foregroundColor(DarkZen.danger)
+                        }
                     }
-                    Spacer()
-                    if !device.current {
-                        Button("Revoke") { revoking = device.id }
-                    }
+                    .font(.caption)
+                    .foregroundColor(DarkZen.textSecondary)
                 }
+                .padding(.vertical, 8)
+                .padding(.horizontal, 20)
+                .background(DarkZen.card)
+                .cornerRadius(DarkZen.cardRadius)
             }
+            
             if let error = store.state.value.error {
-                // The access token lives 15 minutes; a refresh is a later wave, so an
-                // expired session surfaces as invalid credentials here.
                 Text("Could not load the devices. \(describe(error))")
-                    .foregroundColor(.red)
-            }
-        }
-        .navigationTitle("Devices")
-        .onAppear {
-            Task {
-                do {
-                    try await store.dispatch(intent: PresentationDevicesIntentLoad())
-                } catch {
-                    print("devices load failed: \(error)")
-                }
+                    .foregroundColor(DarkZen.danger)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 4)
             }
         }
         .alert("Revoke this device?", isPresented: Binding(
@@ -289,6 +298,15 @@ struct DevicesView: View {
         } message: {
             Text("Its tokens stop working right away.")
         }
+        .onAppear {
+            Task {
+                do {
+                    try await store.dispatch(intent: PresentationDevicesIntentLoad())
+                } catch {
+                    print("devices load failed: \(error)")
+                }
+            }
+        }
     }
 }
 
@@ -303,48 +321,83 @@ struct SettingsView: View {
     private var state: PresentationSettingsState { store.state.value }
 
     var body: some View {
-        Form {
-            Section("Auto-lock") {
-                ForEach(Array(DomainAutoLockPolicy.companion.ALL.enumerated()), id: \.offset) { _, policy in
-                    Button {
-                        Task { try await store.dispatch(intent: PresentationSettingsIntentPolicyChanged(policy: policy)) }
-                    } label: {
-                        HStack {
-                            Text(label(for: policy))
-                            Spacer()
-                            if state.policy == policy {
-                                Image(systemName: "checkmark")
+        ScrollView {
+            VStack(spacing: 20) {
+                // Auto-lock panel
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Auto-lock")
+                        .font(.headline)
+                        .foregroundColor(DarkZen.textPrimary)
+                    ForEach(Array(DomainAutoLockPolicy.companion.ALL.enumerated()), id: \.offset) { _, policy in
+                        Button {
+                            Task { try await store.dispatch(intent: PresentationSettingsIntentPolicyChanged(policy: policy)) }
+                        } label: {
+                            HStack {
+                                Text(label(for: policy))
+                                Spacer()
+                                if state.policy == policy {
+                                    Image(systemName: "checkmark")
+                                        .foregroundColor(DarkZen.accent)
+                                }
                             }
+                            .padding(20)
+                            .background(DarkZen.panel)
+                            .cornerRadius(DarkZen.panelRadius)
                         }
                     }
                 }
-            }
-            Section("Biometric unlock") {
-                Toggle("Unlock with biometrics", isOn: Binding(
-                    get: { state.biometricsEnabled },
-                    set: { enabled in
-                        Task { try await store.dispatch(intent: PresentationSettingsIntentBiometricsToggled(enabled: enabled)) }
-                    },
-                ))
-                .disabled(!state.biometricsAvailable)
-                if !state.biometricsAvailable {
-                    Text("Not available on this device").font(.caption)
-                }
-            }
-            Section("Delete account") {
-                Text("The account and every record are erased. This cannot be undone.")
-                if showDeleteForm {
-                    SecureField("Master password", text: $deletionPassword)
-                        .textFieldStyle(.roundedBorder)
-                    if state.error != nil {
-                        Text("Something went wrong").foregroundColor(.red)
+                .padding(20)
+                .background(DarkZen.panel)
+                .cornerRadius(DarkZen.panelRadius)
+                
+                // Biometric unlock panel
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Biometric unlock")
+                        .font(.headline)
+                        .foregroundColor(DarkZen.textPrimary)
+                    Toggle("Unlock with biometrics", isOn: Binding(
+                        get: { state.biometricsEnabled },
+                        set: { enabled in
+                            Task { try await store.dispatch(intent: PresentationSettingsIntentBiometricsToggled(enabled: enabled)) }
+                        },
+                    ))
+                    .toggleStyle(SwitchToggleStyle(tint: DarkZen.accent))
+                    .disabled(!state.biometricsAvailable)
+                    if !state.biometricsAvailable {
+                        Text("Not available on this device").font(.caption).foregroundColor(DarkZen.textSecondary)
                     }
-                    Button("Delete forever", role: .destructive) { deleteAccount() }
-                        .disabled(deletionPassword.isEmpty)
-                } else {
-                    Button("Delete account", role: .destructive) { showDeleteForm = true }
                 }
+                .padding(20)
+                .background(DarkZen.panel)
+                .cornerRadius(DarkZen.panelRadius)
+                
+                // Delete account panel
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Delete account")
+                        .font(.headline)
+                        .foregroundColor(DarkZen.textPrimary)
+                    Text("The account and every record are erased. This cannot be undone.")
+                        .font(.caption)
+                        .foregroundColor(DarkZen.textSecondary)
+                    if showDeleteForm {
+                        SecureField("Master password", text: $deletionPassword)
+                            .textFieldStyle(DarkZenTextFieldStyle())
+                        if state.error != nil {
+                            Text("Something went wrong").foregroundColor(DarkZen.danger)
+                        }
+                        Button("Delete forever", role: .destructive) { deleteAccount() }
+                            .foregroundColor(DarkZen.danger)
+                            .disabled(deletionPassword.isEmpty)
+                    } else {
+                        Button("Delete account", role: .destructive) { showDeleteForm = true }
+                            .foregroundColor(DarkZen.danger)
+                    }
+                }
+                .padding(20)
+                .background(DarkZen.panel)
+                .cornerRadius(DarkZen.panelRadius)
             }
+            .padding(.horizontal, 20)
         }
         .onAppear {
             Task { try await store.dispatch(intent: PresentationSettingsIntentLoad()) }
