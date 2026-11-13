@@ -54,6 +54,7 @@ class ServerSettingsTest {
             "JWT_ACTIVE_KEY",
             "AUTH_FAKE_SECRET",
             "PEPPER",
+            "MONGODB_URI",
         ).forEach { key ->
             assertFailsWith<IllegalStateException>("missing $key must stop the server") {
                 ServerSettings.fromEnv(requiredEnvironment - key)
@@ -99,6 +100,7 @@ class ServerSettingsTest {
             "JWT_ACTIVE_KEY" to ACTIVE_KEY,
             "AUTH_FAKE_SECRET" to FAKE_SECRET,
             "PEPPER" to pepperHex,
+            "MONGODB_URI" to "mongodb://localhost:27017",
         )
     }
 }
