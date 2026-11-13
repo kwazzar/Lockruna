@@ -11,6 +11,7 @@ struct ContentView: View {
 
     var body: some View {
         ZStack {
+            DarkZenBackground()
             Group {
                 switch model.screen {
                 case "":
@@ -36,6 +37,7 @@ struct ContentView: View {
                     .overlay(Text("PassKeeper").foregroundColor(.white))
             }
         }
+        .preferredColorScheme(.dark)
         .onChange(of: scenePhase) { _, newPhase in
             if newPhase == .background {
                 model.showBlur = true
