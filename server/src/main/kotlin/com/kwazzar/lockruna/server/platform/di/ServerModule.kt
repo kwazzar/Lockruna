@@ -1,5 +1,7 @@
 package com.kwazzar.lockruna.server.platform.di
 
+import com.kwazzar.lockruna.server.audit.domain.AuditEventRepository
+import com.kwazzar.lockruna.server.audit.infrastructure.MongoAuditEventRepository
 import com.kwazzar.lockruna.server.identity.application.AuthenticateSession
 import com.kwazzar.lockruna.server.identity.application.CompleteRecovery
 import com.kwazzar.lockruna.server.identity.application.DeleteAccount
@@ -70,6 +72,7 @@ fun serverModule(
     single { LogoutSession(get()) }
     single<VaultItemRepository> { ExposedVaultItemRepository(get()) }
     single<IdempotencyRepository> { ExposedIdempotencyRepository(get()) }
+    single<AuditEventRepository> { MongoAuditEventRepository(get(), get()) }
     single { PullChanges(get()) }
     single { PushChanges(get(), get(), get(), get()) }
 }

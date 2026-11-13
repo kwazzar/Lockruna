@@ -1,5 +1,6 @@
 package com.kwazzar.lockruna.server
 
+import com.kwazzar.lockruna.server.audit.infrastructure.MongoAuditEventRepository
 import com.kwazzar.lockruna.server.identity.api.accountRoutes
 import com.kwazzar.lockruna.server.identity.api.deviceRoutes
 import com.kwazzar.lockruna.server.identity.api.identityRoutes
@@ -54,6 +55,8 @@ fun Application.module(
     val mongoClient = MongoClient.create(settings.mongodbUri).also { owned ->
         monitor.subscribe(ApplicationStopped) { owned.close() }
     }
+    // Provision MongoDB audit indexes at startup
+    kotlinx.coroutines.runBlocking { MongoAuditEventRepository.provisionIndexes(mongoClient) }
 
     install(ContentNegotiation) { json() }
     installStatusPages()
