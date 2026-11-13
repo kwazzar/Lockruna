@@ -25,6 +25,8 @@ class RegisterStore(private val register: Register, private val platform: Device
     private val _effects = Channel<RegisterEffect>(Channel.BUFFERED)
     private var draftPassword: String = ""
     private var draftConfirmation: String = ""
+    private var draftPasswordConfirmation: String = ""
+    private var hasPasswordConfirmation: Boolean = false
     private var recoveryWords: List<String> = emptyList()
     private val submitMutex = Mutex()
 
@@ -35,6 +37,8 @@ class RegisterStore(private val register: Register, private val platform: Device
     fun close() {
         draftPassword = ""
         draftConfirmation = ""
+        draftPasswordConfirmation = ""
+        hasPasswordConfirmation = false
         recoveryWords = emptyList()
         _state.value =
             _state.value.copy(hasPassword = false, hasRecoveryWords = false, passwordStrength = null, strength = null)
@@ -56,6 +60,10 @@ class RegisterStore(private val register: Register, private val platform: Device
 
             is RegisterIntent.DeviceNameChanged -> update { copy(deviceName = intent.value) }
             is RegisterIntent.ConfirmationChanged -> draftConfirmation = intent.value
+            is RegisterIntent.PasswordConfirmationChanged -> {
+                draftPasswordConfirmation = intent.value
+                hasPasswordConfirmation = true
+            }
             RegisterIntent.Submit -> submit()
             RegisterIntent.ConfirmRecoveryWords -> confirmRecoveryWords()
             RegisterIntent.ErrorDismissed -> update { copy(error = null) }
@@ -65,6 +73,12 @@ class RegisterStore(private val register: Register, private val platform: Device
     private suspend fun submit() {
         if (!submitMutex.tryLock()) return
         try {
+            // A screen that asks for a repeated master password gets it: the two must match.
+            // A screen that never asks (iOS) keeps the old behaviour.
+            if (hasPasswordConfirmation && draftPasswordConfirmation != draftPassword) {
+                update { copy(isSubmitting = false, error = AppError.InvalidCredentials) }
+                return
+            }
             update { copy(isSubmitting = true, error = null) }
             val result = register(
                 RegisterCommand(
@@ -81,6 +95,8 @@ class RegisterStore(private val register: Register, private val platform: Device
                 is Result.Success -> {
                     recoveryWords = result.value.recoveryWords
                     draftPassword = ""
+                    draftPasswordConfirmation = ""
+                    hasPasswordConfirmation = false
                     _state.value = _state.value.copy(
                         isSubmitting = false,
                         hasPassword = false,
@@ -134,6 +150,11 @@ sealed interface RegisterIntent {
     }
 
     data class DeviceNameChanged(val value: String) : RegisterIntent
+
+    /** The master password typed a second time; it never reaches the observable state. */
+    data class PasswordConfirmationChanged(val value: String) : RegisterIntent {
+        override fun toString(): String = "PasswordConfirmationChanged(value=<redacted>)"
+    }
 
     data class ConfirmationChanged(val value: String) : RegisterIntent {
         override fun toString(): String = "ConfirmationChanged(value=<redacted>)"

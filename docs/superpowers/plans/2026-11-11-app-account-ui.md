@@ -64,7 +64,7 @@
 - Create: `androidApp/.../ui/RegisterScreen.kt`, `RecoveryScreen.kt`
 - Modify: `androidApp/.../ui/AppRoot.kt`
 
-- [ ] **Step 1:** Екран реєстрації: email/password/confirm, валідація (12+ символів), після успіху — показ 12 слів з `Effect.RecoveryKeyReady`, підтвердження повторним введенням, потім перехід у vault.
+- [x] **Step 1:** Екран реєстрації: email/password/confirm, валідація (12+ символів), після успіху — показ 12 слів з `Effect.RecoveryKeyReady`, підтвердження повторним введенням, потім перехід у vault.
 - [x] **Step 2:** Екран відновлення: email + введення 12 слів + новий пароль → `RecoveryStore` → перехід у vault.
 - [x] **Step 3:** Навігація `AppScreen` з урахуванням нових станів.
 - [x] **Step 4:** Commit: `feat(android): add registration and recovery screens`.
