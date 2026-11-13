@@ -85,7 +85,15 @@ class VaultUseCasesTest {
         val created = createItem(createCommand()) as Result.Success
         val itemId = created.value.id
 
-        val updated = updateItem(itemId, "Renamed", null, null, null, null, noteBody = "updated-note-body") as Result.Success
+        val updated = updateItem(
+            itemId,
+            "Renamed",
+            null,
+            null,
+            null,
+            null,
+            noteBody = "updated-note-body",
+        ) as Result.Success
 
         assertEquals(0L, updated.value.version)
         assertEquals(true, updated.value.dirty)

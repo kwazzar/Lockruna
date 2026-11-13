@@ -30,28 +30,29 @@ class CreateItem(
     private val idGenerator: IdGenerator,
     private val clock: Clock,
 ) {
+    @Suppress("ReturnCount")
     suspend operator fun invoke(command: CreateItemCommand): Result<VaultItem, AppError> {
-        val titleResult = Title.of(command.title)
+        val titleResult = validateTitle(command.title)
         if (titleResult is Result.Failure) {
             return Result.Failure(titleResult.error)
         }
-        val secretResult = command.secret?.let { Secret.of(it) }
+        val secretResult = validateOptional(command.secret) { Secret.of(it) }
         if (secretResult is Result.Failure) {
             return Result.Failure(secretResult.error)
         }
-        val urlResult = command.url?.let { Url.of(it) }
+        val urlResult = validateOptional(command.url) { Url.of(it) }
         if (urlResult is Result.Failure) {
             return Result.Failure(urlResult.error)
         }
-        val cardNumberResult = command.cardNumber?.let { Secret.of(it) }
+        val cardNumberResult = validateOptional(command.cardNumber) { Secret.of(it) }
         if (cardNumberResult is Result.Failure) {
             return Result.Failure(cardNumberResult.error)
         }
-        val cardCvvResult = command.cardCvv?.let { Secret.of(it) }
+        val cardCvvResult = validateOptional(command.cardCvv) { Secret.of(it) }
         if (cardCvvResult is Result.Failure) {
             return Result.Failure(cardCvvResult.error)
         }
-        val noteBodyResult = command.noteBody?.let { Secret.of(it) }
+        val noteBodyResult = validateOptional(command.noteBody) { Secret.of(it) }
         if (noteBodyResult is Result.Failure) {
             return Result.Failure(noteBodyResult.error)
         }
@@ -74,4 +75,9 @@ class CreateItem(
             is Result.Failure -> Result.Failure(created.error)
         }
     }
+
+    private fun validateTitle(title: String): Result<Title, AppError> = Title.of(title)
+
+    private fun <T> validateOptional(value: String?, parser: (String) -> Result<T, AppError>): Result<T?, AppError> =
+        value?.let { parser(it).map { it as T? } } ?: Result.Success(null)
 }

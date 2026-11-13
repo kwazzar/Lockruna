@@ -2,10 +2,10 @@ package com.kwazzar.lockruna.data.crypto
 
 import com.kwazzar.lockruna.domain.crypto.KdfParams
 import kotlinx.coroutines.test.runTest
+import kotlin.OptIn
+import kotlin.test.ExperimentalKotlinTestApi
 import kotlin.test.Test
 import kotlin.test.assertTrue
-import kotlin.test.ExperimentalKotlinTestApi
-import kotlin.OptIn
 
 class Argon2PerformanceTest {
 
@@ -30,7 +30,12 @@ class Argon2PerformanceTest {
         val min = times.first()
         val max = times.last()
 
-        println("Argon2id benchmark: alg=${params.alg}, m=${params.memoryKiB} KiB, t=${params.iterations}, p=${params.parallelism}, salt=${params.saltLength}, output=${params.outputLength}; samples=$times; min=$min ms, median=$median ms, max=$max ms")
+        println(
+            "Argon2id benchmark: alg=${params.alg}, m=${params.memoryKiB} KiB, " +
+                "t=${params.iterations}, p=${params.parallelism}, " +
+                "salt=${params.saltLength}, output=${params.outputLength}; " +
+                "samples=$times; min=$min ms, median=$median ms, max=$max ms",
+        )
 
         // Generous ceiling so the test does not flake on slower CI runners.
         // Real NFR is ~1.5 s on a mid-range device; here we just guard against regression.

@@ -119,23 +119,36 @@ class SqlDelightVaultItemRepository(
         val content = (VaultItemRowMapper.deserializeContent(plaintext.decodeToString()) as? Result.Success)?.value
             ?: return Result.Failure(AppError.ItemCorrupted)
         val type = VaultItemType.valueOf(row.type)
-
-        // Backward compatibility: legacy CARD/NOTE items stored data in "secret"
         val legacySecret = content.secret?.let { (Secret.of(it) as? Result.Success)?.value }
-        val cardNumber = if (type == VaultItemType.CARD) {
-            content.cardNumber?.let { (Secret.of(it) as? Result.Success)?.value } ?: legacySecret
-        } else {
-            content.cardNumber?.let { (Secret.of(it) as? Result.Success)?.value }
-        }
+        val cardNumber = resolveCardNumber(type, content, legacySecret)
         val cardExpiry = content.cardExpiry
         val cardCvv = content.cardCvv?.let { (Secret.of(it) as? Result.Success)?.value }
-        val noteBody = if (type == VaultItemType.NOTE) {
-            content.noteBody?.let { (Secret.of(it) as? Result.Success)?.value } ?: legacySecret
-        } else {
-            content.noteBody?.let { (Secret.of(it) as? Result.Success)?.value }
-        }
+        val noteBody = resolveNoteBody(type, content, legacySecret)
         val secret = if (type == VaultItemType.LOGIN) legacySecret else null
 
+        return buildVaultItem(row, content, type, secret, cardNumber, cardExpiry, cardCvv, noteBody)
+    }
+
+    private fun resolveCardNumber(type: VaultItemType, content: VaultItemContent, legacySecret: Secret?): Secret? {
+        val typedNumber = content.cardNumber?.let { (Secret.of(it) as? Result.Success)?.value }
+        return if (type == VaultItemType.CARD) typedNumber ?: legacySecret else typedNumber
+    }
+
+    private fun resolveNoteBody(type: VaultItemType, content: VaultItemContent, legacySecret: Secret?): Secret? {
+        val typedBody = content.noteBody?.let { (Secret.of(it) as? Result.Success)?.value }
+        return if (type == VaultItemType.NOTE) typedBody ?: legacySecret else typedBody
+    }
+
+    private fun buildVaultItem(
+        row: Vault_item,
+        content: VaultItemContent,
+        type: VaultItemType,
+        secret: Secret?,
+        cardNumber: Secret?,
+        cardExpiry: String?,
+        cardCvv: Secret?,
+        noteBody: Secret?,
+    ): Result<VaultItem, AppError> {
         val item = attempt {
             VaultItem(
                 id = requireNotNull(ItemId.of(row.id) as? Result.Success).value,

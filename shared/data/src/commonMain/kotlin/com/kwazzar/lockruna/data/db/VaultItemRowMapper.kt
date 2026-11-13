@@ -22,11 +22,10 @@ data class VaultItemContent(
     @SerialName("cardCvv") val cardCvv: String? = null,
     @SerialName("noteBody") val noteBody: String? = null,
 ) {
-    override fun toString(): String =
-        "VaultItemContent(title=len=${title.length}, username=${username?.length}, " +
-            "secret=${secret?.length}, url=${url?.length}, folderId=${folderId?.length}, " +
-            "cardNumber=${cardNumber?.length}, cardExpiry=${cardExpiry?.length}, " +
-            "cardCvv=${cardCvv?.length}, noteBody=${noteBody?.length})"
+    override fun toString(): String = "VaultItemContent(title=len=${title.length}, username=${username?.length}, " +
+        "secret=${secret?.length}, url=${url?.length}, folderId=${folderId?.length}, " +
+        "cardNumber=${cardNumber?.length}, cardExpiry=${cardExpiry?.length}, " +
+        "cardCvv=${cardCvv?.length}, noteBody=${noteBody?.length})"
 }
 
 /** Maps a `vault_item` row to the domain aggregate, sealing the content into JSON for encryption. */

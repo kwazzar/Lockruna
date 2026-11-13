@@ -137,10 +137,34 @@ class ItemEditStore(
                 secret = if (secretDraftChanged) draftSecret else null,
                 url = _state.value.url.takeIf { it.isNotBlank() },
                 folderId = parseFolderId(),
-                cardNumber = if (_state.value.type == VaultItemType.CARD) draftCardNumber.takeIf { it.isNotBlank() } else null,
-                cardExpiry = if (_state.value.type == VaultItemType.CARD) draftCardExpiry.takeIf { it.isNotBlank() } else null,
-                cardCvv = if (_state.value.type == VaultItemType.CARD) draftCardCvv.takeIf { it.isNotBlank() } else null,
-                noteBody = if (_state.value.type == VaultItemType.NOTE) draftNoteBody.takeIf { it.isNotBlank() } else null,
+                cardNumber = if (_state.value.type ==
+                    VaultItemType.CARD
+                ) {
+                    draftCardNumber.takeIf { it.isNotBlank() }
+                } else {
+                    null
+                },
+                cardExpiry = if (_state.value.type ==
+                    VaultItemType.CARD
+                ) {
+                    draftCardExpiry.takeIf { it.isNotBlank() }
+                } else {
+                    null
+                },
+                cardCvv = if (_state.value.type ==
+                    VaultItemType.CARD
+                ) {
+                    draftCardCvv.takeIf { it.isNotBlank() }
+                } else {
+                    null
+                },
+                noteBody = if (_state.value.type ==
+                    VaultItemType.NOTE
+                ) {
+                    draftNoteBody.takeIf { it.isNotBlank() }
+                } else {
+                    null
+                },
             ),
         )
         return when (result) {
@@ -161,8 +185,20 @@ class ItemEditStore(
             secret = if (secretDraftChanged) draftSecret else null,
             url = _state.value.url.takeIf { it.isNotBlank() },
             folderId = parseFolderId(),
-            cardNumber = if (_state.value.type == VaultItemType.CARD) draftCardNumber.takeIf { it.isNotBlank() } else null,
-            cardExpiry = if (_state.value.type == VaultItemType.CARD) draftCardExpiry.takeIf { it.isNotBlank() } else null,
+            cardNumber = if (_state.value.type ==
+                VaultItemType.CARD
+            ) {
+                draftCardNumber.takeIf { it.isNotBlank() }
+            } else {
+                null
+            },
+            cardExpiry = if (_state.value.type ==
+                VaultItemType.CARD
+            ) {
+                draftCardExpiry.takeIf { it.isNotBlank() }
+            } else {
+                null
+            },
             cardCvv = if (_state.value.type == VaultItemType.CARD) draftCardCvv.takeIf { it.isNotBlank() } else null,
             noteBody = if (_state.value.type == VaultItemType.NOTE) draftNoteBody.takeIf { it.isNotBlank() } else null,
         )
