@@ -5,12 +5,16 @@ import com.kwazzar.lockruna.server.platform.config.ServerSettings
 /**
  * Settings for tests: every value is a throwaway fixture, never a real secret.
  */
-fun testSettings(databaseUrl: String = "jdbc:postgresql://localhost:5432/passkeeper_test"): ServerSettings =
+fun testSettings(
+    databaseUrl: String = "jdbc:postgresql://localhost:5432/passkeeper_test",
+    mongodbUri: String = "mongodb://localhost:27017",
+): ServerSettings =
     ServerSettings(
         host = "127.0.0.1",
         port = 0,
         databaseUrl = databaseUrl,
         redisUrl = "redis://localhost:6379",
+        mongodbUri = mongodbUri,
         jwtIssuer = "passkeeper-test",
         jwtAudience = "passkeeper-test-clients",
         jwtActiveKey = "test-active-key-0123456789abcdef",

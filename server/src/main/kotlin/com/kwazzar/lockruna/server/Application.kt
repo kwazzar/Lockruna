@@ -25,6 +25,7 @@ import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
 import org.koin.ktor.plugin.Koin
+import com.mongodb.kotlin.client.coroutine.MongoClient
 import javax.sql.DataSource
 
 fun main() {
@@ -50,11 +51,14 @@ fun Application.module(
     val blocked = denylist ?: RedisDeviceDenylist(settings.redisUrl).also { owned ->
         monitor.subscribe(ApplicationStopped) { owned.close() }
     }
+    val mongoClient = MongoClient.create(settings.mongodbUri).also { owned ->
+        monitor.subscribe(ApplicationStopped) { owned.close() }
+    }
 
     install(ContentNegotiation) { json() }
     installStatusPages()
     installSafeCallLogging()
-    install(Koin) { modules(serverModule(settings, source, limiter, blocked)) }
+    install(Koin) { modules(serverModule(settings, source, limiter, blocked, mongoClient)) }
 
     routing {
         get("/health") {

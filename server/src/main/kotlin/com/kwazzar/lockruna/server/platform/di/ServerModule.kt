@@ -34,6 +34,7 @@ import com.kwazzar.lockruna.server.sync.infrastructure.ExposedVaultItemRepositor
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.koin.core.module.Module
 import org.koin.dsl.module
+import com.mongodb.kotlin.client.coroutine.MongoClient
 import javax.sql.DataSource
 
 fun serverModule(
@@ -41,9 +42,11 @@ fun serverModule(
     dataSource: DataSource,
     rateLimiter: RateLimiter,
     denylist: DeviceDenylist,
+    mongoClient: MongoClient,
 ): Module = module {
     single { settings }
     single { dataSource }
+    single { mongoClient }
     single<TransactionRunner> {
         DatabaseFactory.migrate(dataSource)
         ExposedTransactionRunner(Database.connect(dataSource))
