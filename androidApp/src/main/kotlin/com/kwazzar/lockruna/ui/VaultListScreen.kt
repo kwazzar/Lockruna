@@ -42,8 +42,6 @@ import com.kwazzar.lockruna.presentation.vault.VaultListIntent
 import com.kwazzar.lockruna.presentation.vault.VaultListStore
 import kotlinx.coroutines.launch
 
-private const val TOP_BAR_ACTIONS_WIDTH_FRACTION = 0.65f
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VaultListScreen(
@@ -80,9 +78,7 @@ fun VaultListScreen(
                 },
                 actions = {
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth(TOP_BAR_ACTIONS_WIDTH_FRACTION)
-                            .horizontalScroll(rememberScrollState()),
+                        modifier = Modifier.horizontalScroll(rememberScrollState()),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         TextButton(
