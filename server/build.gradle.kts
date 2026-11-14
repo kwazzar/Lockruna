@@ -22,6 +22,15 @@ application {
     mainClass.set("com.kwazzar.lockruna.server.ApplicationKt")
 }
 
+tasks.test {
+    environment("TEST_DATABASE_URL", System.getenv("TEST_DATABASE_URL") ?: "jdbc:postgresql://localhost:5432/lockruna_test")
+    environment("TEST_DATABASE_USER", System.getenv("TEST_DATABASE_USER") ?: "lockruna")
+    environment("TEST_DATABASE_PASSWORD", System.getenv("TEST_DATABASE_PASSWORD") ?: "lockruna_password")
+    environment("TEST_MONGODB_URI", System.getenv("TEST_MONGODB_URI") ?: "mongodb://lockruna:lockruna_password@localhost:27017/?authSource=admin")
+    environment("DOCKER_HOST", System.getenv("DOCKER_HOST") ?: "unix:///Users/nazar/.colima/default/docker.sock")
+    environment("TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE", System.getenv("TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE") ?: "/Users/nazar/.colima/default/docker.sock")
+}
+
 dependencies {
     implementation(project(":api-contract"))
 
