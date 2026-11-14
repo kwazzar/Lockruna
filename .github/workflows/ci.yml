@@ -49,7 +49,10 @@ jobs:
         with:
           api-level: 37
           ndk-version: r27c
-          accept-licenses: true
+          cmdline-tools-version: latest
+
+      - name: Accept Android SDK licenses
+        run: yes | sdkmanager --licenses
 
       - uses: gradle/actions/setup-gradle@v4
 
