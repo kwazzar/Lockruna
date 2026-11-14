@@ -18,15 +18,15 @@ struct RegisterView: View {
     private var store: PresentationRegisterStore { model.registerStore }
 
     var body: some View {
-        Group {
-            if recoveryWords.isEmpty {
-                form
-            } else {
-                recovery
+        DarkZenAuthShell(title: "Create account") {
+            VStack(spacing: 12) {
+                if recoveryWords.isEmpty {
+                    form
+                } else {
+                    recovery
+                }
             }
         }
-        // Only when the whole screen leaves: SwiftUI calls onDisappear on the branch it
-        // replaces, so clearing there would throw the words away the moment they appear.
         .onDisappear {
             forget()
             store.close()
@@ -37,50 +37,77 @@ struct RegisterView: View {
                 forget()
                 store.close()
                 model.screen = "vault"
-                Task { await model.sync() }
+                model.sync()
             }
         }
     }
 
     private var form: some View {
         VStack(spacing: 12) {
-            Text("Create account").font(.title)
-            TextField("Email", text: $email).textFieldStyle(.roundedBorder)
-            SecureField("Master password", text: $password).textFieldStyle(.roundedBorder)
+            TextField("Email", text: $email)
+                .textFieldStyle(DarkZenTextFieldStyle())
+            SecureField("Master password", text: $password)
+                .textFieldStyle(DarkZenTextFieldStyle())
             Text("At least 12 characters").font(.caption)
             if let s = store.state.value.strength ?? store.state.value.passwordStrength {
-                Text("Strength: \(s.level)/4").font(.caption)
+                Text("Strength: \(s.level)/4").font(.caption).foregroundColor(DarkZen.textSecondary)
                 if !s.warnings.isEmpty {
-                    Text(s.warnings.joined(separator: ", ")).font(.caption).foregroundColor(.orange)
+                    Text(s.warnings.joined(separator: ", ")).font(.caption).foregroundColor(DarkZen.warning)
                 }
             }
-            TextField("Device name", text: $deviceName).textFieldStyle(.roundedBorder)
+            TextField("Device name", text: $deviceName)
+                .textFieldStyle(DarkZenTextFieldStyle())
             if store.state.value.error != nil {
-                Text("Registration failed").foregroundColor(.red)
+                Text("Registration failed")
+                    .foregroundColor(DarkZen.danger)
             }
             if store.state.value.isSubmitting {
                 ProgressView()
+                    .tint(DarkZen.accent)
             } else {
                 Button("Create account") { submit() }
+                    .buttonStyle(DarkZenPrimaryButtonStyle(cornerRadius: 999))
             }
-        }.padding()
-        .onAppear { watchEffects() }
+        }
     }
 
     private var recovery: some View {
-        Form {
-            Section("Your recovery key") {
+        VStack(spacing: 12) {
+            Text("Your recovery key")
+                .font(.title3)
+                .foregroundColor(DarkZen.textSecondary)
+            VStack(alignment: .leading, spacing: 8) {
                 Text("Write these 12 words down. Without them a forgotten password cannot be restored.")
+                    .font(.caption)
+                    .foregroundColor(DarkZen.textSecondary)
                 ForEach(Array(recoveryWords.enumerated()), id: \.offset) { index, word in
-                    Text("\(index + 1). \(word)")
+                    HStack {
+                        Text("\(index + 1).")
+                            .font(.subheadline)
+                            .foregroundColor(DarkZen.textPrimary)
+                        Text(word)
+                            .font(.subheadline)
+                            .foregroundColor(DarkZen.textPrimary)
+                    }
                 }
             }
-            Section {
+            .padding(DarkZen.cardRadius)
+            .background(DarkZen.panel)
+            .overlay(
+                RoundedRectangle(cornerRadius: DarkZen.cardRadius)
+                    .stroke(DarkZen.divider, lineWidth: 1)
+            )
+            .frame(maxWidth: .infinity, alignment: .center)
+
+            if !recoveryWords.isEmpty {
                 TextField("Type the 12 words back", text: $confirmation)
+                    .textFieldStyle(DarkZenTextFieldStyle())
                 if store.state.value.error != nil {
-                    Text("The words do not match").foregroundColor(.red)
+                    Text("The words do not match")
+                        .foregroundColor(DarkZen.danger)
                 }
                 Button("I saved them") { confirm() }
+                    .buttonStyle(DarkZenPrimaryButtonStyle(cornerRadius: 999))
             }
         }
     }
@@ -141,27 +168,35 @@ struct RecoveryView: View {
     private var store: PresentationRecoveryStore { model.recoveryStore }
 
     var body: some View {
-        VStack(spacing: 12) {
-            Text("Recover access").font(.title)
-            TextField("Email", text: $email).textFieldStyle(.roundedBorder)
-            TextField("Recovery key (12 words)", text: $words).textFieldStyle(.roundedBorder)
-            SecureField("New master password", text: $password).textFieldStyle(.roundedBorder)
-            if let s = store.state.value.strength ?? store.state.value.passwordStrength {
-                Text("Strength: \(s.level)/4").font(.caption)
-                if !s.warnings.isEmpty {
-                    Text(s.warnings.joined(separator: ", ")).font(.caption).foregroundColor(.orange)
+        DarkZenAuthShell(title: "Recover access") {
+            VStack(spacing: 12) {
+                TextField("Email", text: $email)
+                    .textFieldStyle(DarkZenTextFieldStyle())
+                TextField("Recovery key (12 words)", text: $words)
+                    .textFieldStyle(DarkZenTextFieldStyle())
+                SecureField("New master password", text: $password)
+                    .textFieldStyle(DarkZenTextFieldStyle())
+                if let s = store.state.value.strength ?? store.state.value.passwordStrength {
+                    Text("Strength: \(s.level)/4").font(.caption).foregroundColor(DarkZen.textSecondary)
+                    if !s.warnings.isEmpty {
+                        Text(s.warnings.joined(separator: ", ")).font(.caption).foregroundColor(DarkZen.warning)
+                    }
+                }
+                TextField("Device name", text: $deviceName)
+                    .textFieldStyle(DarkZenTextFieldStyle())
+                if store.state.value.error != nil {
+                    Text("Recovery failed")
+                        .foregroundColor(DarkZen.danger)
+                }
+                if store.state.value.isSubmitting {
+                    ProgressView()
+                        .tint(DarkZen.accent)
+                } else {
+                    Button("Restore access") { submit() }
+                        .buttonStyle(DarkZenPrimaryButtonStyle(cornerRadius: 999))
                 }
             }
-            TextField("Device name", text: $deviceName).textFieldStyle(.roundedBorder)
-            if store.state.value.error != nil {
-                Text("Recovery failed").foregroundColor(.red)
-            }
-            if store.state.value.isSubmitting {
-                ProgressView()
-            } else {
-                Button("Restore access") { submit() }
-            }
-        }.padding()
+        }
         .onAppear { watchEffects() }
         .onDisappear {
             words = ""
@@ -204,41 +239,61 @@ struct DevicesView: View {
     private var store: PresentationDevicesStore { model.devicesStore }
 
     var body: some View {
-        List {
-            if store.state.value.isLoading {
-                ProgressView()
-            }
-            ForEach(store.state.value.devices, id: \.id) { device in
-                HStack {
-                    VStack(alignment: .leading) {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Devices")
+                    .font(.headline)
+                    .foregroundColor(DarkZen.textPrimary)
+                    .padding(.horizontal, 20)
+
+                if store.state.value.isLoading {
+                    VStack(alignment: .center, spacing: 4) {
+                        ProgressView()
+                            .progressViewStyle(.circular)
+                            .tint(DarkZen.accent)
+                    }
+                    .background(DarkZen.card)
+                    .cornerRadius(DarkZen.cardRadius)
+                    .padding(20)
+                }
+
+                ForEach(store.state.value.devices, id: \.id) { device in
+                    VStack(alignment: .leading, spacing: 4) {
                         Text(device.name)
-                        Text(device.platform).font(.caption)
-                        if device.current {
-                            Text("This device").font(.caption)
+                            .font(.subheadline)
+                            .foregroundColor(DarkZen.textPrimary)
+                        HStack {
+                            Text(device.platform).font(.caption)
+                            if device.current {
+                                Text("This device").font(.caption)
+                            }
+                            Spacer()
+                            if !device.current {
+                                Button("Revoke") { revoking = device.id }
+                                    .foregroundColor(DarkZen.danger)
+                            }
                         }
+                        .font(.caption)
+                        .foregroundColor(DarkZen.textSecondary)
                     }
-                    Spacer()
-                    if !device.current {
-                        Button("Revoke") { revoking = device.id }
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 20)
+                    .background(DarkZen.card)
+                    .cornerRadius(DarkZen.cardRadius)
+                }
+
+                if let error = store.state.value.error {
+                    VStack {
+                        Text("Could not load the devices. \(describe(error))")
+                            .foregroundColor(DarkZen.danger)
                     }
+                    .background(DarkZen.card)
+                    .cornerRadius(DarkZen.cardRadius)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 4)
                 }
             }
-            if let error = store.state.value.error {
-                // The access token lives 15 minutes; a refresh is a later wave, so an
-                // expired session surfaces as invalid credentials here.
-                Text("Could not load the devices. \(describe(error))")
-                    .foregroundColor(.red)
-            }
-        }
-        .navigationTitle("Devices")
-        .onAppear {
-            Task {
-                do {
-                    try await store.dispatch(intent: PresentationDevicesIntentLoad())
-                } catch {
-                    print("devices load failed: \(error)")
-                }
-            }
+            .padding(.horizontal, 20)
         }
         .alert("Revoke this device?", isPresented: Binding(
             get: { revoking != nil },
@@ -254,6 +309,15 @@ struct DevicesView: View {
         } message: {
             Text("Its tokens stop working right away.")
         }
+        .onAppear {
+            Task {
+                do {
+                    try await store.dispatch(intent: PresentationDevicesIntentLoad())
+                } catch {
+                    print("devices load failed: \(error)")
+                }
+            }
+        }
     }
 }
 
@@ -268,48 +332,80 @@ struct SettingsView: View {
     private var state: PresentationSettingsState { store.state.value }
 
     var body: some View {
-        Form {
-            Section("Auto-lock") {
-                ForEach(Array(DomainAutoLockPolicy.companion.ALL.enumerated()), id: \.offset) { _, policy in
-                    Button {
-                        Task { try await store.dispatch(intent: PresentationSettingsIntentPolicyChanged(policy: policy)) }
-                    } label: {
-                        HStack {
-                            Text(label(for: policy))
-                            Spacer()
-                            if state.policy == policy {
-                                Image(systemName: "checkmark")
+        ScrollView {
+            VStack(spacing: 20) {
+                // Auto-lock panel
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Auto-lock")
+                        .font(.headline)
+                        .foregroundColor(DarkZen.textPrimary)
+                    ForEach(Array(DomainAutoLockPolicy.companion.ALL.enumerated()), id: \.offset) { _, policy in
+                        Button {
+                            Task { try await store.dispatch(intent: PresentationSettingsIntentPolicyChanged(policy: policy)) }
+                        } label: {
+                            HStack {
+                                Text(label(for: policy))
+                                Spacer()
+                                if state.policy == policy {
+                                    Image(systemName: "checkmark")
+                                        .foregroundColor(DarkZen.accent)
+                                }
                             }
                         }
                     }
                 }
-            }
-            Section("Biometric unlock") {
-                Toggle("Unlock with biometrics", isOn: Binding(
-                    get: { state.biometricsEnabled },
-                    set: { enabled in
-                        Task { try await store.dispatch(intent: PresentationSettingsIntentBiometricsToggled(enabled: enabled)) }
-                    },
-                ))
-                .disabled(!state.biometricsAvailable)
-                if !state.biometricsAvailable {
-                    Text("Not available on this device").font(.caption)
-                }
-            }
-            Section("Delete account") {
-                Text("The account and every record are erased. This cannot be undone.")
-                if showDeleteForm {
-                    SecureField("Master password", text: $deletionPassword)
-                        .textFieldStyle(.roundedBorder)
-                    if state.error != nil {
-                        Text("Something went wrong").foregroundColor(.red)
+                .padding(20)
+                .background(DarkZen.panel)
+                .cornerRadius(DarkZen.panelRadius)
+
+                // Biometric unlock panel
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Biometric unlock")
+                        .font(.headline)
+                        .foregroundColor(DarkZen.textPrimary)
+                    Toggle("Unlock with biometrics", isOn: Binding(
+                        get: { state.biometricsEnabled },
+                        set: { enabled in
+                            Task { try await store.dispatch(intent: PresentationSettingsIntentBiometricsToggled(enabled: enabled)) }
+                        },
+                    ))
+                    .toggleStyle(SwitchToggleStyle(tint: DarkZen.accent))
+                    .disabled(!state.biometricsAvailable)
+                    if !state.biometricsAvailable {
+                        Text("Not available on this device").font(.caption).foregroundColor(DarkZen.textSecondary)
                     }
-                    Button("Delete forever", role: .destructive) { deleteAccount() }
-                        .disabled(deletionPassword.isEmpty)
-                } else {
-                    Button("Delete account", role: .destructive) { showDeleteForm = true }
                 }
+                .padding(20)
+                .background(DarkZen.panel)
+                .cornerRadius(DarkZen.panelRadius)
+
+                // Delete account panel
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Delete account")
+                        .font(.headline)
+                        .foregroundColor(DarkZen.textPrimary)
+                    Text("The account and every record are erased. This cannot be undone.")
+                        .font(.caption)
+                        .foregroundColor(DarkZen.textSecondary)
+                    if showDeleteForm {
+                        SecureField("Master password", text: $deletionPassword)
+                            .textFieldStyle(DarkZenTextFieldStyle())
+                        if state.error != nil {
+                            Text("Something went wrong").foregroundColor(DarkZen.danger)
+                        }
+                        Button("Delete forever", role: .destructive) { deleteAccount() }
+                            .foregroundColor(DarkZen.danger)
+                            .disabled(deletionPassword.isEmpty)
+                    } else {
+                        Button("Delete account", role: .destructive) { showDeleteForm = true }
+                            .foregroundColor(DarkZen.danger)
+                    }
+                }
+                .padding(20)
+                .background(DarkZen.panel)
+                .cornerRadius(DarkZen.panelRadius)
             }
+            .padding(.horizontal, 20)
         }
         .onAppear {
             Task { try await store.dispatch(intent: PresentationSettingsIntentLoad()) }

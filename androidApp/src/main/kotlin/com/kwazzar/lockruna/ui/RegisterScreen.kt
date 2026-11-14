@@ -2,19 +2,19 @@
 
 package com.kwazzar.lockruna.ui
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -28,6 +28,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.kwazzar.lockruna.presentation.auth.RecoveryEffect
@@ -50,7 +51,6 @@ fun RegisterScreen(store: RegisterStore, onRegistered: () -> Unit) {
     val state by store.state.collectAsState()
     val scope = rememberCoroutineScope()
     var password by remember { mutableStateOf("") }
-    var passwordConfirmation by remember { mutableStateOf("") }
     var recoveryWords by remember { mutableStateOf<List<String>?>(null) }
     var confirmation by remember { mutableStateOf("") }
 
@@ -70,7 +70,6 @@ fun RegisterScreen(store: RegisterStore, onRegistered: () -> Unit) {
         onDispose {
             recoveryWords = null
             confirmation = ""
-            passwordConfirmation = ""
             store.close()
         }
     }
@@ -78,15 +77,30 @@ fun RegisterScreen(store: RegisterStore, onRegistered: () -> Unit) {
     val words = recoveryWords
     if (words == null) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(24.dp),
-            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .imePadding()
+                .safeDrawingPadding()
+                .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            OutlinedTextField(value = state.email, onValueChange = {
-                scope.launch { store.dispatch(RegisterIntent.EmailChanged(it)) }
-            }, label = { Text("Email") })
+            Text(
+                text = "Create account",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+            )
+            Spacer(Modifier.height(12.dp))
+            DarkZenTextField(
+                value = state.email,
+                onValueChange = {
+                    scope.launch { store.dispatch(RegisterIntent.EmailChanged(it)) }
+                },
+                label = "Email",
+                modifier = Modifier.fillMaxWidth(),
+            )
             Spacer(Modifier.height(8.dp))
-            OutlinedTextField(
+            DarkZenTextField(
                 value = password,
                 onValueChange = {
                     scope.launch {
@@ -94,50 +108,54 @@ fun RegisterScreen(store: RegisterStore, onRegistered: () -> Unit) {
                         store.dispatch(RegisterIntent.PasswordChanged(it))
                     }
                 },
-                label = { Text("Master password") },
-                supportingText = { Text("At least 12 characters") },
+                label = "Master password",
+                modifier = Modifier.fillMaxWidth(),
+                supportingText = {
+                    Text(
+                        text = "At least 12 characters",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = DarkZenPalette.TextSecondary,
+                    )
+                },
                 visualTransformation = PasswordVisualTransformation(),
             )
             val strength = state.strength ?: state.passwordStrength
             if (strength != null && password.isNotEmpty()) {
                 Text(
-                    "Strength: ${strength.level}/4",
-                    style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
+                    text = "Strength: ${strength.level}/4",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = DarkZenPalette.TextSecondary,
                 )
                 if (strength.warnings.isNotEmpty()) {
                     Text(
-                        strength.warnings.joinToString(", "),
-                        color = androidx.compose.material3.MaterialTheme.colorScheme.error,
-                        style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
+                        text = strength.warnings.joinToString(", "),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = DarkZenPalette.Warning,
                     )
                 }
             }
             Spacer(Modifier.height(8.dp))
-            OutlinedTextField(
-                value = passwordConfirmation,
+            DarkZenTextField(
+                value = state.deviceName,
                 onValueChange = {
-                    scope.launch {
-                        passwordConfirmation = it
-                        store.dispatch(RegisterIntent.PasswordConfirmationChanged(it))
-                    }
+                    scope.launch { store.dispatch(RegisterIntent.DeviceNameChanged(it)) }
                 },
-                label = { Text("Repeat master password") },
-                supportingText = { Text("Must match the master password") },
-                visualTransformation = PasswordVisualTransformation(),
+                label = "Device name",
+                modifier = Modifier.fillMaxWidth(),
             )
             Spacer(Modifier.height(8.dp))
-            OutlinedTextField(value = state.deviceName, onValueChange = {
-                scope.launch { store.dispatch(RegisterIntent.DeviceNameChanged(it)) }
-            }, label = { Text("Device name") })
-            Spacer(Modifier.height(8.dp))
             if (state.error != null) {
-                Text("Registration failed", color = androidx.compose.material3.MaterialTheme.colorScheme.error)
+                Text("Registration failed", color = DarkZenPalette.Danger)
             }
             Spacer(Modifier.height(8.dp))
             if (state.isSubmitting) {
-                CircularProgressIndicator()
+                CircularProgressIndicator(color = DarkZenPalette.Accent)
             } else {
-                Button(onClick = { scope.launch { store.dispatch(RegisterIntent.Submit) } }) { Text("Create account") }
+                DarkZenPrimaryButton(
+                    onClick = { scope.launch { store.dispatch(RegisterIntent.Submit) } },
+                ) {
+                    Text("Create account")
+                }
             }
         }
         return
@@ -145,24 +163,37 @@ fun RegisterScreen(store: RegisterStore, onRegistered: () -> Unit) {
 
     AlertDialog(
         onDismissRequest = { },
+        containerColor = DarkZenPalette.Background,
+        titleContentColor = DarkZenPalette.TextPrimary,
+        textContentColor = DarkZenPalette.TextSecondary,
         title = { Text("Your recovery key") },
         text = {
-            Column(Modifier.verticalScroll(rememberScrollState())) {
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .imePadding(),
+            ) {
                 Text("Write these 12 words down. Without them a forgotten password cannot be restored.")
                 Spacer(Modifier.height(12.dp))
                 words.forEachIndexed { index, word ->
-                    Text("${index + 1}. $word")
+                    DarkZenCard(modifier = Modifier.fillMaxWidth()) {
+                        Text(
+                            text = "${index + 1}. $word",
+                            color = DarkZenPalette.TextPrimary,
+                        )
+                    }
                 }
                 Spacer(Modifier.height(12.dp))
-                OutlinedTextField(
+                DarkZenTextField(
                     value = confirmation,
                     onValueChange = { confirmation = it },
-                    label = { Text("Type the 12 words back") },
+                    label = "Type the 12 words back",
+                    modifier = Modifier.fillMaxWidth(),
                 )
                 if (state.error != null) {
                     Text(
-                        "The words do not match",
-                        color = androidx.compose.material3.MaterialTheme.colorScheme.error,
+                        text = "The words do not match",
+                        color = DarkZenPalette.Danger,
                     )
                 }
             }
@@ -173,7 +204,9 @@ fun RegisterScreen(store: RegisterStore, onRegistered: () -> Unit) {
                     store.dispatch(RegisterIntent.ConfirmationChanged(confirmation))
                     store.dispatch(RegisterIntent.ConfirmRecoveryWords)
                 }
-            }) { Text("I saved them") }
+            }) {
+                Text("I saved them", color = DarkZenPalette.Accent)
+            }
         },
     )
 }
@@ -206,17 +239,30 @@ fun RecoveryScreen(store: RecoveryStore, onRecovered: () -> Unit) {
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(24.dp).verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .imePadding()
+            .safeDrawingPadding()
+            .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text("Recover access", style = androidx.compose.material3.MaterialTheme.typography.titleLarge)
+        Text(
+            text = "Recover access",
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold,
+        )
         Spacer(Modifier.height(12.dp))
-        OutlinedTextField(value = state.email, onValueChange = {
-            scope.launch { store.dispatch(RecoveryIntent.EmailChanged(it)) }
-        }, label = { Text("Email") })
+        DarkZenTextField(
+            value = state.email,
+            onValueChange = {
+                scope.launch { store.dispatch(RecoveryIntent.EmailChanged(it)) }
+            },
+            label = "Email",
+            modifier = Modifier.fillMaxWidth(),
+        )
         Spacer(Modifier.height(8.dp))
-        OutlinedTextField(
+        DarkZenTextField(
             value = words,
             onValueChange = {
                 scope.launch {
@@ -228,11 +274,12 @@ fun RecoveryScreen(store: RecoveryStore, onRecovered: () -> Unit) {
                     )
                 }
             },
-            label = { Text("Recovery key (12 words)") },
+            label = "Recovery key (12 words)",
+            modifier = Modifier.fillMaxWidth(),
             minLines = 3,
         )
         Spacer(Modifier.height(8.dp))
-        OutlinedTextField(
+        DarkZenTextField(
             value = password,
             onValueChange = {
                 scope.launch {
@@ -240,41 +287,48 @@ fun RecoveryScreen(store: RecoveryStore, onRecovered: () -> Unit) {
                     store.dispatch(RecoveryIntent.NewPasswordChanged(it))
                 }
             },
-            label = { Text("New master password") },
+            label = "New master password",
+            modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation(),
         )
         val recoveryStrength = state.strength ?: state.passwordStrength
         if (recoveryStrength != null && password.isNotEmpty()) {
             Text(
-                "Strength: ${recoveryStrength.level}/4",
-                style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
+                text = "Strength: ${recoveryStrength.level}/4",
+                style = MaterialTheme.typography.bodySmall,
+                color = DarkZenPalette.TextSecondary,
             )
             if (recoveryStrength.warnings.isNotEmpty()) {
                 Text(
-                    recoveryStrength.warnings.joinToString(", "),
-                    color = androidx.compose.material3.MaterialTheme.colorScheme.error,
-                    style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
+                    text = recoveryStrength.warnings.joinToString(", "),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = DarkZenPalette.Warning,
                 )
             }
         }
         Spacer(Modifier.height(8.dp))
-        OutlinedTextField(value = state.deviceName, onValueChange = {
-            scope.launch {
-                store.dispatch(RecoveryIntent.DeviceNameChanged(it))
-            }
-        }, label = { Text("Device name") })
+        DarkZenTextField(
+            value = state.deviceName,
+            onValueChange = {
+                scope.launch {
+                    store.dispatch(RecoveryIntent.DeviceNameChanged(it))
+                }
+            },
+            label = "Device name",
+            modifier = Modifier.fillMaxWidth(),
+        )
         Spacer(Modifier.height(8.dp))
         if (state.error != null) {
-            Text("Recovery failed", color = androidx.compose.material3.MaterialTheme.colorScheme.error)
+            Text("Recovery failed", color = DarkZenPalette.Danger)
         }
         Spacer(Modifier.height(8.dp))
-        Row {
-            if (state.isSubmitting) {
-                CircularProgressIndicator()
-            } else {
-                Button(onClick = { scope.launch { store.dispatch(RecoveryIntent.Submit) } }) {
-                    Text("Restore access")
-                }
+        if (state.isSubmitting) {
+            CircularProgressIndicator(color = DarkZenPalette.Accent)
+        } else {
+            DarkZenPrimaryButton(
+                onClick = { scope.launch { store.dispatch(RecoveryIntent.Submit) } },
+            ) {
+                Text("Restore access")
             }
         }
     }

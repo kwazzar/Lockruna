@@ -2,24 +2,31 @@
 
 package com.kwazzar.lockruna.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -32,6 +39,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.kwazzar.lockruna.domain.session.AutoLockPolicy
@@ -51,27 +59,56 @@ fun DevicesScreen(store: DevicesStore) {
 
     LaunchedEffect(Unit) { store.dispatch(DevicesIntent.Load) }
 
-    Column(Modifier.fillMaxSize().padding(16.dp)) {
-        Text("Devices", style = MaterialTheme.typography.titleLarge)
+    Column(
+        Modifier
+            .fillMaxSize()
+            .safeDrawingPadding()
+            .padding(16.dp),
+    ) {
+        Text(
+            text = "Devices",
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold,
+        )
         Spacer(Modifier.height(12.dp))
         if (state.isLoading) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(color = DarkZenPalette.Accent)
         } else {
             LazyColumn {
                 items(state.devices) { device ->
-                    Row(
-                        Modifier.padding(vertical = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
+                    DarkZenCard(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 6.dp),
                     ) {
-                        Column(Modifier.weight(1f)) {
-                            Text(device.name)
-                            Text(device.platform, style = MaterialTheme.typography.bodySmall)
-                            if (device.current) {
-                                Text("This device", style = MaterialTheme.typography.bodySmall)
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Column(Modifier.weight(1f)) {
+                                Text(
+                                    text = device.name,
+                                    color = DarkZenPalette.TextPrimary,
+                                    fontWeight = FontWeight.SemiBold,
+                                )
+                                Text(
+                                    text = device.platform,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = DarkZenPalette.TextSecondary,
+                                )
+                                if (device.current) {
+                                    Text(
+                                        text = "This device",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = DarkZenPalette.TextSecondary,
+                                    )
+                                }
                             }
-                        }
-                        if (!device.current) {
-                            TextButton(onClick = { revoking = device.id }) { Text("Revoke") }
+                            if (!device.current) {
+                                TextButton(
+                                    onClick = { revoking = device.id },
+                                    colors = ButtonDefaults.textButtonColors(
+                                        contentColor = DarkZenPalette.Danger,
+                                    ),
+                                ) { Text("Revoke") }
+                            }
                         }
                     }
                 }
@@ -79,7 +116,9 @@ fun DevicesScreen(store: DevicesStore) {
         }
         if (state.error != null) {
             Spacer(Modifier.height(8.dp))
-            Text("Could not load the devices", color = MaterialTheme.colorScheme.error)
+            DarkZenCard(modifier = Modifier.fillMaxWidth()) {
+                Text("Could not load the devices", color = DarkZenPalette.Danger)
+            }
         }
     }
 
@@ -87,15 +126,29 @@ fun DevicesScreen(store: DevicesStore) {
     if (pending != null) {
         AlertDialog(
             onDismissRequest = { revoking = null },
-            title = { Text("Revoke this device?") },
-            text = { Text("Its tokens stop working right away.") },
-            confirmButton = {
-                TextButton(onClick = {
-                    revoking = null
-                    scope.launch { store.dispatch(DevicesIntent.Revoke(pending)) }
-                }) { Text("Revoke") }
+            containerColor = DarkZenPalette.Background,
+            title = { Text("Revoke this device?", color = DarkZenPalette.TextPrimary) },
+            text = {
+                Text(
+                    "Its tokens stop working right away.",
+                    color = DarkZenPalette.TextSecondary,
+                )
             },
-            dismissButton = { TextButton(onClick = { revoking = null }) { Text("Cancel") } },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        revoking = null
+                        scope.launch { store.dispatch(DevicesIntent.Revoke(pending)) }
+                    },
+                    colors = ButtonDefaults.textButtonColors(contentColor = DarkZenPalette.Danger),
+                ) { Text("Revoke") }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { revoking = null },
+                    colors = ButtonDefaults.textButtonColors(contentColor = DarkZenPalette.TextSecondary),
+                ) { Text("Cancel") }
+            },
         )
     }
 }
@@ -120,72 +173,150 @@ fun SettingsScreen(store: SettingsStore, onAccountDeleted: () -> Unit) {
     }
 
     Column(
-        Modifier.fillMaxSize().padding(16.dp).verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .safeDrawingPadding()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
-        Text("Settings", style = MaterialTheme.typography.titleLarge)
+        Text(
+            text = "Settings",
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold,
+        )
 
-        Text("Auto-lock", style = MaterialTheme.typography.titleMedium)
-        state.choices.forEach { policy ->
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                RadioButton(
-                    selected = state.policy == policy,
-                    onClick = { scope.launch { store.dispatch(SettingsIntent.PolicyChanged(policy)) } },
-                )
-                Text(autoLockLabel(policy))
+        SettingsSection {
+            Text(
+                text = "Auto-lock",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+            )
+            Spacer(Modifier.height(8.dp))
+            state.choices.forEach { policy ->
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(
+                        selected = state.policy == policy,
+                        onClick = { scope.launch { store.dispatch(SettingsIntent.PolicyChanged(policy)) } },
+                        colors = RadioButtonDefaults.colors(
+                            selectedColor = DarkZenPalette.Accent,
+                            unselectedColor = DarkZenPalette.TextSecondary,
+                        ),
+                    )
+                    Text(autoLockLabel(policy))
+                }
             }
         }
 
-        Text("Biometric unlock", style = MaterialTheme.typography.titleMedium)
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Switch(
-                checked = state.biometricsEnabled,
-                enabled = state.biometricsAvailable,
-                onCheckedChange = { enabled ->
-                    scope.launch { store.dispatch(SettingsIntent.BiometricsToggled(enabled)) }
-                },
+        SettingsSection {
+            Text(
+                text = "Biometric unlock",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
             )
-            Text(if (state.biometricsAvailable) "Unlock with biometrics" else "Not available on this device")
+            Spacer(Modifier.height(8.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Switch(
+                    checked = state.biometricsEnabled,
+                    enabled = state.biometricsAvailable,
+                    onCheckedChange = { enabled ->
+                        scope.launch { store.dispatch(SettingsIntent.BiometricsToggled(enabled)) }
+                    },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = DarkZenPalette.TextPrimary,
+                        checkedTrackColor = DarkZenPalette.Accent,
+                        checkedBorderColor = DarkZenPalette.Accent,
+                        uncheckedThumbColor = DarkZenPalette.TextSecondary,
+                        uncheckedTrackColor = DarkZenPalette.Panel,
+                        uncheckedBorderColor = DarkZenPalette.TextSecondary,
+                    ),
+                )
+                Text(
+                    text = if (state.biometricsAvailable) {
+                        "Unlock with biometrics"
+                    } else {
+                        "Not available on this device"
+                    },
+                    color = DarkZenPalette.TextSecondary,
+                )
+            }
         }
 
-        Spacer(Modifier.height(16.dp))
-        Text("Delete account", style = MaterialTheme.typography.titleMedium)
-        Text("The account and every record are erased. This cannot be undone.")
-        Button(onClick = { confirmDelete = true }) { Text("Delete account") }
-        if (state.error != null) {
-            Text("Something went wrong", color = MaterialTheme.colorScheme.error)
+        SettingsSection {
+            Text(
+                text = "Delete account",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = DarkZenPalette.Danger,
+            )
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = "The account and every record are erased. This cannot be undone.",
+                color = DarkZenPalette.Danger,
+            )
+            Spacer(Modifier.height(12.dp))
+            DarkZenDangerButton(onClick = { confirmDelete = true }) { Text("Delete account") }
+            if (state.error != null) {
+                Text("Something went wrong", color = DarkZenPalette.Danger)
+            }
         }
     }
 
     if (confirmDelete) {
         AlertDialog(
             onDismissRequest = { confirmDelete = false },
-            title = { Text("Delete this account?") },
+            containerColor = DarkZenPalette.Background,
+            title = { Text("Delete this account?", color = DarkZenPalette.TextPrimary) },
             text = {
                 Column {
-                    Text("Type your master password to confirm.")
+                    Text(
+                        "Type your master password to confirm.",
+                        color = DarkZenPalette.TextSecondary,
+                    )
                     Spacer(Modifier.height(8.dp))
-                    OutlinedTextField(
+                    DarkZenTextField(
                         value = deletionPassword,
                         onValueChange = { deletionPassword = it },
-                        label = { Text("Master password") },
+                        label = "Master password",
                         visualTransformation = PasswordVisualTransformation(),
                     )
                 }
             },
             confirmButton = {
-                TextButton(onClick = {
-                    val password = deletionPassword
-                    confirmDelete = false
-                    deletionPassword = ""
-                    scope.launch {
-                        store.dispatch(SettingsIntent.DeletionPasswordChanged(password))
-                        store.dispatch(SettingsIntent.DeleteAccount)
-                    }
-                }) { Text("Delete forever") }
+                TextButton(
+                    onClick = {
+                        val password = deletionPassword
+                        confirmDelete = false
+                        deletionPassword = ""
+                        scope.launch {
+                            store.dispatch(SettingsIntent.DeletionPasswordChanged(password))
+                            store.dispatch(SettingsIntent.DeleteAccount)
+                        }
+                    },
+                    colors = ButtonDefaults.textButtonColors(contentColor = DarkZenPalette.Danger),
+                ) { Text("Delete forever") }
             },
-            dismissButton = { TextButton(onClick = { confirmDelete = false }) { Text("Cancel") } },
+            dismissButton = {
+                TextButton(
+                    onClick = { confirmDelete = false },
+                    colors = ButtonDefaults.textButtonColors(contentColor = DarkZenPalette.TextSecondary),
+                ) { Text("Cancel") }
+            },
         )
+    }
+}
+
+@Composable
+private fun SettingsSection(content: @Composable ColumnScope.() -> Unit) {
+    Surface(
+        shape = RoundedCornerShape(16.dp),
+        color = DarkZenPalette.Panel,
+        contentColor = DarkZenPalette.TextPrimary,
+        border = BorderStroke(1.dp, DarkZenPalette.Divider),
+        tonalElevation = 0.dp,
+        shadowElevation = 0.dp,
+    ) {
+        Column(modifier = Modifier.padding(20.dp), content = content)
     }
 }
 
