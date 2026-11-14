@@ -5,12 +5,14 @@ package com.kwazzar.lockruna.ui
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -32,10 +34,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.kwazzar.lockruna.presentation.vault.ItemUi
 import com.kwazzar.lockruna.presentation.vault.VaultListIntent
@@ -65,86 +69,101 @@ fun VaultListScreen(
             }
         }
     }
-    Scaffold(
-        containerColor = Color.Transparent,
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "Vault",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                    )
-                },
-                actions = {
-                    Row(
-                        modifier = Modifier.horizontalScroll(rememberScrollState()),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        TextButton(
-                            onClick = onSync,
-                            colors = ButtonDefaults.textButtonColors(contentColor = DarkZenPalette.TextSecondary),
+    BoxWithConstraints {
+        // The action row is measured before the title, so it must be capped to leave the title room.
+        val barWidth = maxWidth
+        val titleRoom = TITLE_WIDTH_DP.dp * LocalDensity.current.fontScale
+        Scaffold(
+            containerColor = Color.Transparent,
+            contentColor = DarkZenPalette.TextPrimary,
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(
+                            text = "Vault",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    },
+                    actions = {
+                        Row(
+                            modifier = Modifier
+                                .horizontalScroll(rememberScrollState())
+                                .widthIn(max = (barWidth - titleRoom).coerceAtLeast(0.dp)),
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            Text("Sync", color = DarkZenPalette.TextSecondary)
+                            TextButton(
+                                onClick = onSync,
+                                colors = ButtonDefaults.textButtonColors(contentColor = DarkZenPalette.TextSecondary),
+                            ) {
+                                Text("Sync", color = DarkZenPalette.TextSecondary)
+                            }
+                            TextButton(
+                                onClick = onDevices,
+                                colors = ButtonDefaults.textButtonColors(contentColor = DarkZenPalette.TextSecondary),
+                            ) {
+                                Text("Devices", color = DarkZenPalette.TextSecondary)
+                            }
+                            TextButton(
+                                onClick = onSettings,
+                                colors = ButtonDefaults.textButtonColors(contentColor = DarkZenPalette.TextSecondary),
+                            ) {
+                                Text("Settings", color = DarkZenPalette.TextSecondary)
+                            }
+                            TextButton(
+                                onClick = { scope.launch { store.dispatch(VaultListIntent.Lock) } },
+                                colors = ButtonDefaults.textButtonColors(contentColor = DarkZenPalette.TextSecondary),
+                            ) {
+                                Text("Lock", color = DarkZenPalette.TextSecondary)
+                            }
                         }
-                        TextButton(
-                            onClick = onDevices,
-                            colors = ButtonDefaults.textButtonColors(contentColor = DarkZenPalette.TextSecondary),
-                        ) {
-                            Text("Devices", color = DarkZenPalette.TextSecondary)
-                        }
-                        TextButton(
-                            onClick = onSettings,
-                            colors = ButtonDefaults.textButtonColors(contentColor = DarkZenPalette.TextSecondary),
-                        ) {
-                            Text("Settings", color = DarkZenPalette.TextSecondary)
-                        }
-                        TextButton(
-                            onClick = { scope.launch { store.dispatch(VaultListIntent.Lock) } },
-                            colors = ButtonDefaults.textButtonColors(contentColor = DarkZenPalette.TextSecondary),
-                        ) {
-                            Text("Lock", color = DarkZenPalette.TextSecondary)
-                        }
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
-            )
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = onNewItem,
-                modifier = Modifier
-                    .sizeIn(minWidth = 48.dp, minHeight = 48.dp)
-                    .border(1.dp, DarkZenPalette.Divider, RoundedCornerShape(16.dp))
-                    .semantics { contentDescription = "Add item" },
-                shape = RoundedCornerShape(16.dp),
-                containerColor = DarkZenPalette.Card,
-                contentColor = DarkZenPalette.TextPrimary,
-            ) {
-                Text("+", fontWeight = FontWeight.Bold)
-            }
-        },
-    ) { padding ->
-        Column(Modifier.fillMaxSize().padding(padding)) {
-            DarkZenTextField(
-                value = state.searchQuery ?: "",
-                onValueChange = { scope.launch { store.dispatch(VaultListIntent.Search(it)) } },
-                label = "Search",
-                modifier = Modifier.fillMaxWidth().padding(8.dp),
-            )
-            if (syncMessage != null) {
-                Text(
-                    text = syncMessage,
-                    color = DarkZenPalette.TextSecondary,
-                    modifier = Modifier.padding(horizontal = 8.dp),
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color.Transparent,
+                        scrolledContainerColor = Color.Transparent,
+                    ),
                 )
-            }
-            LazyColumn {
-                items(state.items) { item -> ItemRow(item, store) }
+            },
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = onNewItem,
+                    modifier = Modifier
+                        .sizeIn(minWidth = 48.dp, minHeight = 48.dp)
+                        .border(1.dp, DarkZenPalette.Divider, RoundedCornerShape(16.dp))
+                        .semantics { contentDescription = "Add item" },
+                    shape = RoundedCornerShape(16.dp),
+                    containerColor = DarkZenPalette.Card,
+                    contentColor = DarkZenPalette.TextPrimary,
+                ) {
+                    Text("+", fontWeight = FontWeight.Bold)
+                }
+            },
+        ) { padding ->
+            Column(Modifier.fillMaxSize().padding(padding)) {
+                DarkZenTextField(
+                    value = state.searchQuery ?: "",
+                    onValueChange = { scope.launch { store.dispatch(VaultListIntent.Search(it)) } },
+                    label = "Search",
+                    modifier = Modifier.fillMaxWidth().padding(8.dp),
+                )
+                if (syncMessage != null) {
+                    Text(
+                        text = syncMessage,
+                        color = DarkZenPalette.TextSecondary,
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                    )
+                }
+                LazyColumn {
+                    items(state.items) { item -> ItemRow(item, store) }
+                }
             }
         }
     }
 }
+
+private const val TITLE_WIDTH_DP = 72
 
 @Composable
 private fun ItemRow(item: ItemUi, store: VaultListStore) {

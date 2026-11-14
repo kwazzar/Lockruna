@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -58,7 +59,12 @@ fun DevicesScreen(store: DevicesStore) {
 
     LaunchedEffect(Unit) { store.dispatch(DevicesIntent.Load) }
 
-    Column(Modifier.fillMaxSize().padding(16.dp)) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .safeDrawingPadding()
+            .padding(16.dp),
+    ) {
         Text(
             text = "Devices",
             style = MaterialTheme.typography.titleLarge,
@@ -170,6 +176,7 @@ fun SettingsScreen(store: SettingsStore, onAccountDeleted: () -> Unit) {
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
+            .safeDrawingPadding()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {

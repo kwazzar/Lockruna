@@ -130,6 +130,7 @@ fun DarkZenCard(modifier: Modifier = Modifier, content: @Composable ColumnScope.
         modifier = modifier,
         shape = RoundedCornerShape(12.dp),
         color = DarkZenPalette.Card,
+        contentColor = DarkZenPalette.TextPrimary,
         border = BorderStroke(1.dp, DarkZenPalette.Divider),
         tonalElevation = 0.dp,
         shadowElevation = 0.dp,
