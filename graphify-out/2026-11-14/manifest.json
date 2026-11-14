@@ -1630,8 +1630,8 @@
     "semantic_hash": ""
   },
   "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/DevicesScreen.kt": {
-    "mtime": 1794527883.7345622,
-    "ast_hash": "b3636ad5ebb756e5a0a87e8a5ceb70fc",
+    "mtime": 1794656699.2983289,
+    "ast_hash": "9ed5e42d4592e2aec2c9eb9cfcf9ac9d",
     "semantic_hash": ""
   },
   "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/RegisterScreen.kt": {

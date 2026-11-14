@@ -1,16 +1,16 @@
 # Graph Report - meditate-note-dark-design  (2026-11-14)
 
 ## Corpus Check
-- 335 files · ~110,884 words
+- 335 files · ~110,996 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2758 nodes · 4878 edges · 221 communities (160 shown, 61 thin omitted)
+- 2758 nodes · 4878 edges · 220 communities (159 shown, 61 thin omitted)
 - Extraction: 85% EXTRACTED · 15% INFERRED · 0% AMBIGUOUS · INFERRED: 708 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `cfc0da48`
+- Built from commit: `7e01f53e`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -213,7 +213,6 @@
 - ItemUi
 - MasterPassword.kt
 - ItemEditTypeTest
-- ._body
 - .aSavedSessionMeansAStoredSession
 - iosMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt
 - jvmMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt
@@ -246,7 +245,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (221 total, 61 thin omitted)
+## Communities (220 total, 61 thin omitted)
 
 ### Community 0 - "AppError"
 Cohesion: 0.10
@@ -489,16 +488,16 @@ Cohesion: 0.20
 Nodes (5): FakeAuthStateStore, ByteArray, com, SettingsStoreTest, user()
 
 ### Community 102 - "toDomain"
-Cohesion: 0.17
-Nodes (10): ButtonStyle, CGFloat, Configuration, DarkZen, DarkZenAuthShell, DarkZenBackground, DarkZenPrimaryButtonStyle, Content (+2 more)
+Cohesion: 0.14
+Nodes (11): ButtonStyle, CGFloat, Configuration, DarkZen, DarkZenBackground, DarkZenPrimaryButtonStyle, DarkZenTextFieldStyle, _Label (+3 more)
 
 ### Community 104 - "PendingChange"
 Cohesion: 0.09
 Nodes (18): AuthResponseDto, DeleteAccountRequest, LoginRequest, PreloginRequest, PreloginResponse, RecoveryCompleteRequest, RecoveryStartResponseDto, RefreshRequest (+10 more)
 
 ### Community 105 - ".invoke"
-Cohesion: 0.20
-Nodes (8): of(), Secret, of(), Title, of(), Url, create(), createWithGeneratedId()
+Cohesion: 0.24
+Nodes (6): ByteArray, Flow, T, VaultItemRepository, SqlDelightVaultItemRepository, Vault_item
 
 ### Community 106 - ".weakPasswordReturnsWeakMasterPassword"
 Cohesion: 0.15
@@ -533,8 +532,8 @@ Cohesion: 0.32
 Nodes (11): accountRoutes(), clientIp(), fromBase64(), identityRoutes(), ByteArray, T, receiveJson(), requirePlatform() (+3 more)
 
 ### Community 117 - "PasswordNormalizer"
-Cohesion: 0.08
-Nodes (15): Flow, VaultItemRepository, LockedAwareInMemoryRepository, ByteArray, Flow, T, VaultItemRepository, SqlDelightVaultItemRepository (+7 more)
+Cohesion: 0.06
+Nodes (21): Fields, UpdateItem, Flow, VaultItemRepository, LockedAwareInMemoryRepository, ItemId, of(), of() (+13 more)
 
 ### Community 118 - ".login"
 Cohesion: 0.06
@@ -674,7 +673,7 @@ Nodes (8): Flow, Lock, Locked, Resumed, SessionEffect, SessionIntent, SessionSta
 
 ### Community 165 - "InMemoryVaultItemRepository"
 Cohesion: 0.06
-Nodes (28): E, Logout, PreLoginData, DeviceApi, DeviceInfo, Failure, T, Result (+20 more)
+Nodes (29): E, Logout, RevealSecret, PreLoginData, DeviceApi, DeviceInfo, Failure, T (+21 more)
 
 ### Community 166 - "authModule"
 Cohesion: 0.15
@@ -785,8 +784,8 @@ Cohesion: 0.50
 Nodes (3): BiometricUnlockState, DisableBiometrics, ObserveBiometricUnlock
 
 ### Community 209 - "androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt"
-Cohesion: 0.14
-Nodes (5): RevealSecret, Fields, UpdateItem, ItemId, of()
+Cohesion: 0.83
+Nodes (3): DarkZenAuthShell, Content, String
 
 ### Community 211 - "ObserveItems"
 Cohesion: 0.12
@@ -799,10 +798,6 @@ Nodes (4): ItemRow(), VaultListScreen(), ItemUi, toItemUi()
 ### Community 213 - "MasterPassword.kt"
 Cohesion: 0.47
 Nodes (4): isCommonPattern(), isSequential(), strength(), PasswordStrength
-
-### Community 216 - "._body"
-Cohesion: 0.40
-Nodes (4): DarkZenTextFieldStyle, _Label, TextField, TextFieldStyle
 
 ### Community 218 - "iosMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt"
 Cohesion: 0.40
@@ -828,7 +823,7 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.224) - this node is a cross-community bridge._
 - **Why does `serverModule()` connect `serverModule` to `AppError`, `PostgresTest`, `StoredResponse`, `StoredResponse`, `RedisDeviceDenylist`, `SyncDtos.kt`, `PasswordNormalizer`, `ServerSettings.kt`, `TokenFlowTest`, `.resolveDevice`, `.spendAndRotate`, `from`, `JwtTokenService`, `.invoke`, `FakeCryptoService`, `UserRecord`?**
   _High betweenness centrality (0.113) - this node is a cross-community bridge._
-- **Why does `Result` connect `InMemoryVaultItemRepository` to `.decode`, `.respond`, `.invoke`, `KdfParams`, `androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt`, `.invoke`, `PasswordNormalizer`, `.login`, `VaultItemContent`, `.invoke`, `AuthDtos.kt`, `VaultUseCasesTest`, `.push`, `ItemUi.kt`, `.invoke`?**
+- **Why does `Result` connect `InMemoryVaultItemRepository` to `.decode`, `.respond`, `.invoke`, `KdfParams`, `.invoke`, `PasswordNormalizer`, `.login`, `VaultItemContent`, `.invoke`, `AuthDtos.kt`, `VaultUseCasesTest`, `.push`, `ItemUi.kt`, `.invoke`?**
   _High betweenness centrality (0.107) - this node is a cross-community bridge._
 - **Are the 67 inferred relationships involving `module()` (e.g. with `deviceRoutes()` and `accountRoutes()`) actually correct?**
   _`module()` has 67 INFERRED edges - model-reasoned connections that need verification._

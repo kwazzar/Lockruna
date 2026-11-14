@@ -403,7 +403,7 @@
       "label": "DarkZenPrimaryButton()",
       "file_type": "code",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/DarkZenComponents.kt",
-      "source_location": "L144",
+      "source_location": "L145",
       "_origin": "ast",
       "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_darkzencomponents_darkzenprimarybutton",
       "community": 21,
@@ -414,7 +414,7 @@
       "label": "DarkZenSecondaryButton()",
       "file_type": "code",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/DarkZenComponents.kt",
-      "source_location": "L172",
+      "source_location": "L173",
       "_origin": "ast",
       "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_darkzencomponents_darkzensecondarybutton",
       "community": 178,
@@ -425,7 +425,7 @@
       "label": "DarkZenDangerButton()",
       "file_type": "code",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/DarkZenComponents.kt",
-      "source_location": "L195",
+      "source_location": "L196",
       "_origin": "ast",
       "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_darkzencomponents_darkzendangerbutton",
       "community": 178,
@@ -447,7 +447,7 @@
       "label": "DevicesScreen()",
       "file_type": "code",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/DevicesScreen.kt",
-      "source_location": "L53",
+      "source_location": "L54",
       "_origin": "ast",
       "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_devicesscreen_devicesscreen",
       "community": 178,
@@ -458,7 +458,7 @@
       "label": "SettingsScreen()",
       "file_type": "code",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/DevicesScreen.kt",
-      "source_location": "L151",
+      "source_location": "L157",
       "_origin": "ast",
       "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_devicesscreen_settingsscreen",
       "community": 178,
@@ -469,7 +469,7 @@
       "label": "SettingsSection()",
       "file_type": "code",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/DevicesScreen.kt",
-      "source_location": "L302",
+      "source_location": "L309",
       "_origin": "ast",
       "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_devicesscreen_settingssection",
       "community": 178,
@@ -480,7 +480,7 @@
       "label": "autoLockLabel()",
       "file_type": "code",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/DevicesScreen.kt",
-      "source_location": "L316",
+      "source_location": "L323",
       "_origin": "ast",
       "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_devicesscreen_autolocklabel",
       "community": 178,
@@ -590,7 +590,7 @@
       "label": "LoginScreen()",
       "file_type": "code",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/LoginScreen.kt",
-      "source_location": "L36",
+      "source_location": "L37",
       "_origin": "ast",
       "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_loginscreen_loginscreen",
       "community": 21,
@@ -612,7 +612,7 @@
       "label": "RegisterScreen()",
       "file_type": "code",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/RegisterScreen.kt",
-      "source_location": "L48",
+      "source_location": "L49",
       "_origin": "ast",
       "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_registerscreen_registerscreen",
       "community": 21,
@@ -623,7 +623,7 @@
       "label": "RecoveryScreen()",
       "file_type": "code",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/RegisterScreen.kt",
-      "source_location": "L213",
+      "source_location": "L215",
       "_origin": "ast",
       "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_registerscreen_recoveryscreen",
       "community": 21,
@@ -645,7 +645,7 @@
       "label": "Theme()",
       "file_type": "code",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/Theme.kt",
-      "source_location": "L56",
+      "source_location": "L58",
       "_origin": "ast",
       "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_theme_theme",
       "community": 178,
@@ -667,7 +667,7 @@
       "label": "UnlockScreen()",
       "file_type": "code",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/UnlockScreen.kt",
-      "source_location": "L36",
+      "source_location": "L37",
       "_origin": "ast",
       "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_unlockscreen_unlockscreen",
       "community": 21,
@@ -689,7 +689,7 @@
       "label": "VaultListScreen()",
       "file_type": "code",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/VaultListScreen.kt",
-      "source_location": "L45",
+      "source_location": "L49",
       "_origin": "ast",
       "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_vaultlistscreen_vaultlistscreen",
       "community": 212,
@@ -700,7 +700,7 @@
       "label": "ItemRow()",
       "file_type": "code",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/VaultListScreen.kt",
-      "source_location": "L149",
+      "source_location": "L168",
       "_origin": "ast",
       "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_vaultlistscreen_itemrow",
       "community": 212,
@@ -2229,8 +2229,8 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "iosapp_lockruna_darkzentheme_darkzentextfieldstyle",
-      "community": 216,
-      "community_name": "._body",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "darkzentextfieldstyle"
     },
     {
@@ -2240,8 +2240,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "textfieldstyle",
-      "community": 216,
-      "community_name": "._body",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "textfieldstyle"
     },
     {
@@ -2251,8 +2251,8 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "iosapp_lockruna_darkzentheme_darkzentextfieldstyle_body",
-      "community": 216,
-      "community_name": "._body",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "._body()"
     },
     {
@@ -2262,8 +2262,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "textfield",
-      "community": 216,
-      "community_name": "._body",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "textfield"
     },
     {
@@ -2273,8 +2273,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "label",
-      "community": 216,
-      "community_name": "._body",
+      "community": 102,
+      "community_name": "toDomain",
       "norm_label": "_label"
     },
     {
@@ -2339,8 +2339,8 @@
       "source_location": "L91",
       "_origin": "ast",
       "id": "iosapp_lockruna_darkzentheme_darkzenauthshell",
-      "community": 102,
-      "community_name": "toDomain",
+      "community": 209,
+      "community_name": "androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt",
       "norm_label": "darkzenauthshell"
     },
     {
@@ -2350,8 +2350,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "iosapp_lockruna_darkzentheme_swift_string",
-      "community": 102,
-      "community_name": "toDomain",
+      "community": 209,
+      "community_name": "androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt",
       "norm_label": "string"
     },
     {
@@ -2361,8 +2361,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "iosapp_lockruna_darkzentheme_swift_content",
-      "community": 102,
-      "community_name": "toDomain",
+      "community": 209,
+      "community_name": "androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt",
       "norm_label": "content"
     },
     {
@@ -2372,8 +2372,8 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "iosapp_lockruna_darkzentheme_darkzenauthshell_init",
-      "community": 102,
-      "community_name": "toDomain",
+      "community": 209,
+      "community_name": "androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt",
       "norm_label": ".init()"
     },
     {
@@ -9696,8 +9696,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_vault_copysecret_copysecret_invoke",
-      "community": 209,
-      "community_name": "androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": ".invoke()"
     },
     {
@@ -9773,8 +9773,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_vault_deleteitem_deleteitem_invoke",
-      "community": 209,
-      "community_name": "androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": ".invoke()"
     },
     {
@@ -9806,8 +9806,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_vault_getitem_getitem_invoke",
-      "community": 209,
-      "community_name": "androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": ".invoke()"
     },
     {
@@ -9861,8 +9861,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_vault_revealsecret",
-      "community": 209,
-      "community_name": "androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt",
+      "community": 165,
+      "community_name": "InMemoryVaultItemRepository",
       "norm_label": "revealsecret.kt"
     },
     {
@@ -9872,8 +9872,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_vault_revealsecret_revealsecret",
-      "community": 209,
-      "community_name": "androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt",
+      "community": 165,
+      "community_name": "InMemoryVaultItemRepository",
       "norm_label": "revealsecret"
     },
     {
@@ -9883,8 +9883,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_vault_revealsecret_revealsecret_invoke",
-      "community": 209,
-      "community_name": "androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt",
+      "community": 165,
+      "community_name": "InMemoryVaultItemRepository",
       "norm_label": ".invoke()"
     },
     {
@@ -9894,8 +9894,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_vault_updateitem",
-      "community": 209,
-      "community_name": "androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": "updateitem.kt"
     },
     {
@@ -9905,8 +9905,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_vault_updateitem_updateitem",
-      "community": 209,
-      "community_name": "androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": "updateitem"
     },
     {
@@ -9916,8 +9916,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_vault_updateitem_updateitem_invoke",
-      "community": 209,
-      "community_name": "androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": ".invoke()"
     },
     {
@@ -9927,8 +9927,8 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_vault_updateitem_fields",
-      "community": 209,
-      "community_name": "androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": "fields"
     },
     {
@@ -9938,8 +9938,8 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_vault_updateitem_updateitem_findexisting",
-      "community": 209,
-      "community_name": "androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": ".findexisting()"
     },
     {
@@ -9949,8 +9949,8 @@
       "source_location": "L58",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_vault_updateitem_updateitem_parsefields",
-      "community": 209,
-      "community_name": "androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": ".parsefields()"
     },
     {
@@ -11555,8 +11555,8 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_support_testfakes_inmemoryvaultitemrepository_get",
-      "community": 209,
-      "community_name": "androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": ".get()"
     },
     {
@@ -13953,8 +13953,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_db_sqldelightvaultitemrepository",
-      "community": 117,
-      "community_name": "PasswordNormalizer",
+      "community": 105,
+      "community_name": ".invoke",
       "norm_label": "sqldelightvaultitemrepository.kt"
     },
     {
@@ -13964,8 +13964,8 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_db_sqldelightvaultitemrepository_sqldelightvaultitemrepository",
-      "community": 117,
-      "community_name": "PasswordNormalizer",
+      "community": 105,
+      "community_name": ".invoke",
       "norm_label": "sqldelightvaultitemrepository"
     },
     {
@@ -13975,8 +13975,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_db_sqldelightvaultitemrepository_kt_vaultitemrepository",
-      "community": 117,
-      "community_name": "PasswordNormalizer",
+      "community": 105,
+      "community_name": ".invoke",
       "norm_label": "vaultitemrepository"
     },
     {
@@ -13986,8 +13986,8 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_db_sqldelightvaultitemrepository_sqldelightvaultitemrepository_save",
-      "community": 117,
-      "community_name": "PasswordNormalizer",
+      "community": 105,
+      "community_name": ".invoke",
       "norm_label": ".save()"
     },
     {
@@ -13997,8 +13997,8 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_db_sqldelightvaultitemrepository_sqldelightvaultitemrepository_get",
-      "community": 117,
-      "community_name": "PasswordNormalizer",
+      "community": 105,
+      "community_name": ".invoke",
       "norm_label": ".get()"
     },
     {
@@ -14008,8 +14008,8 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_db_sqldelightvaultitemrepository_sqldelightvaultitemrepository_observeall",
-      "community": 117,
-      "community_name": "PasswordNormalizer",
+      "community": 105,
+      "community_name": ".invoke",
       "norm_label": ".observeall()"
     },
     {
@@ -14019,8 +14019,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_db_sqldelightvaultitemrepository_kt_flow",
-      "community": 117,
-      "community_name": "PasswordNormalizer",
+      "community": 105,
+      "community_name": ".invoke",
       "norm_label": "flow"
     },
     {
@@ -14030,8 +14030,8 @@
       "source_location": "L86",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_db_sqldelightvaultitemrepository_sqldelightvaultitemrepository_aad",
-      "community": 117,
-      "community_name": "PasswordNormalizer",
+      "community": 105,
+      "community_name": ".invoke",
       "norm_label": ".aad()"
     },
     {
@@ -14041,8 +14041,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_db_sqldelightvaultitemrepository_kt_bytearray",
-      "community": 117,
-      "community_name": "PasswordNormalizer",
+      "community": 105,
+      "community_name": ".invoke",
       "norm_label": "bytearray"
     },
     {
@@ -14052,8 +14052,8 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_db_sqldelightvaultitemrepository_sqldelightvaultitemrepository_encryptrow",
-      "community": 117,
-      "community_name": "PasswordNormalizer",
+      "community": 105,
+      "community_name": ".invoke",
       "norm_label": ".encryptrow()"
     },
     {
@@ -14063,8 +14063,8 @@
       "source_location": "L99",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_db_sqldelightvaultitemrepository_sqldelightvaultitemrepository_decryptrow",
-      "community": 117,
-      "community_name": "PasswordNormalizer",
+      "community": 105,
+      "community_name": ".invoke",
       "norm_label": ".decryptrow()"
     },
     {
@@ -14074,8 +14074,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "vault_item",
-      "community": 117,
-      "community_name": "PasswordNormalizer",
+      "community": 105,
+      "community_name": ".invoke",
       "norm_label": "vault_item"
     },
     {
@@ -14085,8 +14085,8 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_db_sqldelightvaultitemrepository_sqldelightvaultitemrepository_builditem",
-      "community": 117,
-      "community_name": "PasswordNormalizer",
+      "community": 105,
+      "community_name": ".invoke",
       "norm_label": ".builditem()"
     },
     {
@@ -14096,8 +14096,8 @@
       "source_location": "L139",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_db_sqldelightvaultitemrepository_sqldelightvaultitemrepository_attempt",
-      "community": 117,
-      "community_name": "PasswordNormalizer",
+      "community": 105,
+      "community_name": ".invoke",
       "norm_label": ".attempt()"
     },
     {
@@ -14107,8 +14107,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_db_sqldelightvaultitemrepository_kt_t",
-      "community": 117,
-      "community_name": "PasswordNormalizer",
+      "community": 105,
+      "community_name": ".invoke",
       "norm_label": "t"
     },
     {
@@ -20619,8 +20619,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_vault_itemid_itemid",
-      "community": 209,
-      "community_name": "androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": "itemid"
     },
     {
@@ -20630,8 +20630,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_vault_itemid_itemid_tostring",
-      "community": 209,
-      "community_name": "androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": ".tostring()"
     },
     {
@@ -20641,8 +20641,8 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_vault_itemid_of",
-      "community": 209,
-      "community_name": "androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": "of()"
     },
     {
@@ -20707,8 +20707,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_vault_secret",
-      "community": 105,
-      "community_name": ".invoke",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": "secret.kt"
     },
     {
@@ -20718,8 +20718,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_vault_secret_secret",
-      "community": 105,
-      "community_name": ".invoke",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": "secret"
     },
     {
@@ -20729,8 +20729,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_vault_secret_secret_tostring",
-      "community": 105,
-      "community_name": ".invoke",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": ".tostring()"
     },
     {
@@ -20740,8 +20740,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_vault_secret_of",
-      "community": 105,
-      "community_name": ".invoke",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": "of()"
     },
     {
@@ -20751,8 +20751,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_vault_title",
-      "community": 105,
-      "community_name": ".invoke",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": "title.kt"
     },
     {
@@ -20762,8 +20762,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_vault_title_title",
-      "community": 105,
-      "community_name": ".invoke",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": "title"
     },
     {
@@ -20773,8 +20773,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_vault_title_title_tostring",
-      "community": 105,
-      "community_name": ".invoke",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": ".tostring()"
     },
     {
@@ -20784,8 +20784,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_vault_title_of",
-      "community": 105,
-      "community_name": ".invoke",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": "of()"
     },
     {
@@ -20795,8 +20795,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_vault_url",
-      "community": 105,
-      "community_name": ".invoke",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": "url.kt"
     },
     {
@@ -20806,8 +20806,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_vault_url_url",
-      "community": 105,
-      "community_name": ".invoke",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": "url"
     },
     {
@@ -20817,8 +20817,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_vault_url_url_tostring",
-      "community": 105,
-      "community_name": ".invoke",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": ".tostring()"
     },
     {
@@ -20828,8 +20828,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_vault_url_of",
-      "community": 105,
-      "community_name": ".invoke",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": "of()"
     },
     {
@@ -20839,8 +20839,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_vault_vaultitem",
-      "community": 105,
-      "community_name": ".invoke",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": "vaultitem.kt"
     },
     {
@@ -20872,8 +20872,8 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_vault_vaultitem_create",
-      "community": 105,
-      "community_name": ".invoke",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": "create()"
     },
     {
@@ -20883,8 +20883,8 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_vault_vaultitem_createwithgeneratedid",
-      "community": 105,
-      "community_name": ".invoke",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": "createwithgeneratedid()"
     },
     {
@@ -20894,8 +20894,8 @@
       "source_location": "L83",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_vault_vaultitem_vaultitem_update",
-      "community": 105,
-      "community_name": ".invoke",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": ".update()"
     },
     {
@@ -23281,8 +23281,8 @@
       "source_location": "L106",
       "_origin": "ast",
       "id": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_vault_itemeditstore_itemeditstore_create",
-      "community": 209,
-      "community_name": "androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": ".create()"
     },
     {
@@ -23292,8 +23292,8 @@
       "source_location": "L123",
       "_origin": "ast",
       "id": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_vault_itemeditstore_itemeditstore_update",
-      "community": 209,
-      "community_name": "androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": ".update()"
     },
     {
@@ -23303,8 +23303,8 @@
       "source_location": "L142",
       "_origin": "ast",
       "id": "shared_presentation_src_commonmain_kotlin_com_kwazzar_lockruna_presentation_vault_itemeditstore_itemeditstore_parsefolderid",
-      "community": 209,
-      "community_name": "androidMain/kotlin/com/kwazzar/lockruna/data/platform/PlatformFactories.kt",
+      "community": 117,
+      "community_name": "PasswordNormalizer",
       "norm_label": ".parsefolderid()"
     },
     {
@@ -31097,7 +31097,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/DarkZenComponents.kt",
-      "source_location": "L195",
+      "source_location": "L196",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_darkzencomponents",
@@ -31119,7 +31119,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/DarkZenComponents.kt",
-      "source_location": "L144",
+      "source_location": "L145",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_darkzencomponents",
@@ -31130,7 +31130,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/DarkZenComponents.kt",
-      "source_location": "L172",
+      "source_location": "L173",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_darkzencomponents",
@@ -31166,7 +31166,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/Theme.kt",
-      "source_location": "L63",
+      "source_location": "L67",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_theme_theme",
@@ -31188,7 +31188,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/DarkZenComponents.kt",
-      "source_location": "L195",
+      "source_location": "L196",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
@@ -31200,7 +31200,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/DarkZenComponents.kt",
-      "source_location": "L144",
+      "source_location": "L145",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
@@ -31212,7 +31212,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/DarkZenComponents.kt",
-      "source_location": "L172",
+      "source_location": "L173",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
@@ -31262,7 +31262,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/DevicesScreen.kt",
-      "source_location": "L270",
+      "source_location": "L277",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_devicesscreen_settingsscreen",
@@ -31286,7 +31286,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/LoginScreen.kt",
-      "source_location": "L62",
+      "source_location": "L64",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_loginscreen_loginscreen",
@@ -31298,7 +31298,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/RegisterScreen.kt",
-      "source_location": "L253",
+      "source_location": "L256",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_registerscreen_recoveryscreen",
@@ -31310,7 +31310,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/RegisterScreen.kt",
-      "source_location": "L92",
+      "source_location": "L94",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_registerscreen_registerscreen",
@@ -31322,7 +31322,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/UnlockScreen.kt",
-      "source_location": "L63",
+      "source_location": "L65",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_unlockscreen_unlockscreen",
@@ -31334,7 +31334,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/VaultListScreen.kt",
-      "source_location": "L129",
+      "source_location": "L145",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_vaultlistscreen_vaultlistscreen",
@@ -31346,7 +31346,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/DevicesScreen.kt",
-      "source_location": "L73",
+      "source_location": "L79",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_devicesscreen_devicesscreen",
@@ -31370,7 +31370,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/RegisterScreen.kt",
-      "source_location": "L177",
+      "source_location": "L179",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_registerscreen_registerscreen",
@@ -31382,7 +31382,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/VaultListScreen.kt",
-      "source_location": "L152",
+      "source_location": "L171",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_vaultlistscreen_itemrow",
@@ -31418,7 +31418,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/LoginScreen.kt",
-      "source_location": "L100",
+      "source_location": "L102",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_loginscreen_loginscreen",
@@ -31430,7 +31430,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/RegisterScreen.kt",
-      "source_location": "L325",
+      "source_location": "L328",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_registerscreen_recoveryscreen",
@@ -31442,7 +31442,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/RegisterScreen.kt",
-      "source_location": "L152",
+      "source_location": "L154",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_registerscreen_registerscreen",
@@ -31454,7 +31454,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/UnlockScreen.kt",
-      "source_location": "L92",
+      "source_location": "L94",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_unlockscreen_unlockscreen",
@@ -31490,7 +31490,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/DevicesScreen.kt",
-      "source_location": "L251",
+      "source_location": "L258",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_devicesscreen_settingsscreen",
@@ -31512,7 +31512,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/DevicesScreen.kt",
-      "source_location": "L316",
+      "source_location": "L323",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_devicesscreen",
@@ -31523,7 +31523,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/DevicesScreen.kt",
-      "source_location": "L53",
+      "source_location": "L54",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_devicesscreen",
@@ -31534,7 +31534,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/DevicesScreen.kt",
-      "source_location": "L151",
+      "source_location": "L157",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_devicesscreen",
@@ -31545,7 +31545,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/DevicesScreen.kt",
-      "source_location": "L302",
+      "source_location": "L309",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_devicesscreen",
@@ -31556,7 +31556,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/DevicesScreen.kt",
-      "source_location": "L53",
+      "source_location": "L54",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
@@ -31569,7 +31569,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/DevicesScreen.kt",
-      "source_location": "L199",
+      "source_location": "L206",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_devicesscreen_settingsscreen",
@@ -31581,7 +31581,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/DevicesScreen.kt",
-      "source_location": "L182",
+      "source_location": "L189",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_devicesscreen_settingsscreen",
@@ -31592,7 +31592,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/DevicesScreen.kt",
-      "source_location": "L151",
+      "source_location": "L157",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
@@ -31604,7 +31604,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/DevicesScreen.kt",
-      "source_location": "L316",
+      "source_location": "L323",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
@@ -31802,7 +31802,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/LoginScreen.kt",
-      "source_location": "L36",
+      "source_location": "L37",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_loginscreen",
@@ -31813,7 +31813,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/LoginScreen.kt",
-      "source_location": "L36",
+      "source_location": "L37",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
@@ -31825,7 +31825,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/RegisterScreen.kt",
-      "source_location": "L213",
+      "source_location": "L215",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_registerscreen",
@@ -31836,7 +31836,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/RegisterScreen.kt",
-      "source_location": "L48",
+      "source_location": "L49",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_registerscreen",
@@ -31847,7 +31847,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/RegisterScreen.kt",
-      "source_location": "L48",
+      "source_location": "L49",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
@@ -31859,7 +31859,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/RegisterScreen.kt",
-      "source_location": "L213",
+      "source_location": "L215",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
@@ -31871,7 +31871,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/Theme.kt",
-      "source_location": "L56",
+      "source_location": "L58",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_theme",
@@ -31882,7 +31882,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/UnlockScreen.kt",
-      "source_location": "L36",
+      "source_location": "L37",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_unlockscreen",
@@ -31893,7 +31893,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/UnlockScreen.kt",
-      "source_location": "L36",
+      "source_location": "L37",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
@@ -31905,7 +31905,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/VaultListScreen.kt",
-      "source_location": "L149",
+      "source_location": "L168",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_vaultlistscreen",
@@ -31916,7 +31916,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/VaultListScreen.kt",
-      "source_location": "L45",
+      "source_location": "L49",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_vaultlistscreen",
@@ -31928,7 +31928,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/VaultListScreen.kt",
-      "source_location": "L143",
+      "source_location": "L159",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_vaultlistscreen_vaultlistscreen",
@@ -31939,7 +31939,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/VaultListScreen.kt",
-      "source_location": "L45",
+      "source_location": "L49",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
@@ -31951,7 +31951,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/VaultListScreen.kt",
-      "source_location": "L149",
+      "source_location": "L168",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
@@ -31963,7 +31963,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/VaultListScreen.kt",
-      "source_location": "L149",
+      "source_location": "L168",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
@@ -86630,5 +86630,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "cfc0da48e2eb992e05b7e455e39e2b54d76ec2e2"
+  "built_at_commit": "7e01f53e8146c4b5b3c25736c40c2faa7553f144"
 }
