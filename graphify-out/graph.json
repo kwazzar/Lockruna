@@ -678,7 +678,7 @@
       "label": "VaultListScreen()",
       "file_type": "code",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/VaultListScreen.kt",
-      "source_location": "L47",
+      "source_location": "L45",
       "_origin": "ast",
       "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_vaultlistscreen_vaultlistscreen",
       "community": 21,
@@ -689,7 +689,7 @@
       "label": "ItemRow()",
       "file_type": "code",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/VaultListScreen.kt",
-      "source_location": "L153",
+      "source_location": "L149",
       "_origin": "ast",
       "id": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_vaultlistscreen_itemrow",
       "community": 21,
@@ -8838,8 +8838,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_auth_deviceusecases",
-      "community": 199,
-      "community_name": "InMemoryVaultItemRepository",
+      "community": 153,
+      "community_name": ".invoke",
       "norm_label": "deviceusecases.kt"
     },
     {
@@ -8849,8 +8849,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_auth_deviceusecases_listdevices",
-      "community": 199,
-      "community_name": "InMemoryVaultItemRepository",
+      "community": 153,
+      "community_name": ".invoke",
       "norm_label": "listdevices"
     },
     {
@@ -8860,8 +8860,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_auth_deviceusecases_listdevices_invoke",
-      "community": 199,
-      "community_name": "InMemoryVaultItemRepository",
+      "community": 153,
+      "community_name": ".invoke",
       "norm_label": ".invoke()"
     },
     {
@@ -8871,8 +8871,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_auth_deviceusecases_revokedevice",
-      "community": 199,
-      "community_name": "InMemoryVaultItemRepository",
+      "community": 153,
+      "community_name": ".invoke",
       "norm_label": "revokedevice"
     },
     {
@@ -8882,8 +8882,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_auth_deviceusecases_revokedevice_invoke",
-      "community": 199,
-      "community_name": "InMemoryVaultItemRepository",
+      "community": 153,
+      "community_name": ".invoke",
       "norm_label": ".invoke()"
     },
     {
@@ -8893,8 +8893,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_auth_enablebiometrics",
-      "community": 153,
-      "community_name": ".invoke",
+      "community": 165,
+      "community_name": "InMemoryVaultItemRepository",
       "norm_label": "enablebiometrics.kt"
     },
     {
@@ -8904,8 +8904,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_auth_enablebiometrics_enablebiometrics",
-      "community": 153,
-      "community_name": ".invoke",
+      "community": 165,
+      "community_name": "InMemoryVaultItemRepository",
       "norm_label": "enablebiometrics"
     },
     {
@@ -8915,8 +8915,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_auth_enablebiometrics_enablebiometrics_invoke",
-      "community": 153,
-      "community_name": ".invoke",
+      "community": 165,
+      "community_name": "InMemoryVaultItemRepository",
       "norm_label": ".invoke()"
     },
     {
@@ -9850,8 +9850,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_vault_revealsecret",
-      "community": 153,
-      "community_name": ".invoke",
+      "community": 165,
+      "community_name": "InMemoryVaultItemRepository",
       "norm_label": "revealsecret.kt"
     },
     {
@@ -9861,8 +9861,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_vault_revealsecret_revealsecret",
-      "community": 153,
-      "community_name": ".invoke",
+      "community": 165,
+      "community_name": "InMemoryVaultItemRepository",
       "norm_label": "revealsecret"
     },
     {
@@ -9872,8 +9872,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "shared_application_src_commonmain_kotlin_com_kwazzar_lockruna_application_vault_revealsecret_revealsecret_invoke",
-      "community": 153,
-      "community_name": ".invoke",
+      "community": 165,
+      "community_name": "InMemoryVaultItemRepository",
       "norm_label": ".invoke()"
     },
     {
@@ -10323,8 +10323,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_auth_deleteaccounttest",
-      "community": 199,
-      "community_name": "InMemoryVaultItemRepository",
+      "community": 153,
+      "community_name": ".invoke",
       "norm_label": "deleteaccounttest.kt"
     },
     {
@@ -10411,8 +10411,8 @@
       "source_location": "L114",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_auth_deleteaccounttest_deviceusecasestest",
-      "community": 199,
-      "community_name": "InMemoryVaultItemRepository",
+      "community": 153,
+      "community_name": ".invoke",
       "norm_label": "deviceusecasestest"
     },
     {
@@ -10422,8 +10422,8 @@
       "source_location": "L116",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_auth_deleteaccounttest_deviceusecasestest_listdevicesreturnswhattheapireturns",
-      "community": 199,
-      "community_name": "InMemoryVaultItemRepository",
+      "community": 153,
+      "community_name": ".invoke",
       "norm_label": ".listdevicesreturnswhattheapireturns()"
     },
     {
@@ -10433,8 +10433,8 @@
       "source_location": "L128",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_auth_deleteaccounttest_deviceusecasestest_revokedevicepassestheidthrough",
-      "community": 199,
-      "community_name": "InMemoryVaultItemRepository",
+      "community": 153,
+      "community_name": ".invoke",
       "norm_label": ".revokedevicepassestheidthrough()"
     },
     {
@@ -10444,8 +10444,8 @@
       "source_location": "L138",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_auth_deleteaccounttest_deviceusecasestest_afailedlistingsurfacestheapierror",
-      "community": 199,
-      "community_name": "InMemoryVaultItemRepository",
+      "community": 153,
+      "community_name": ".invoke",
       "norm_label": ".afailedlistingsurfacestheapierror()"
     },
     {
@@ -11170,8 +11170,8 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "shared_application_src_commontest_kotlin_com_kwazzar_lockruna_application_support_fakerecoveryapi_fakerecoveryapi_list",
-      "community": 153,
-      "community_name": ".invoke",
+      "community": 43,
+      "community_name": "KdfParams",
       "norm_label": ".list()"
     },
     {
@@ -13634,8 +13634,8 @@
       "source_location": "L100",
       "_origin": "ast",
       "id": "shared_data_src_commonmain_kotlin_com_kwazzar_lockruna_data_auth_ktorrecoveryapi_ktorrecoveryapi_list",
-      "community": 153,
-      "community_name": ".invoke",
+      "community": 43,
+      "community_name": "KdfParams",
       "norm_label": ".list()"
     },
     {
@@ -18892,8 +18892,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_auth_recoveryapi_deviceinfo",
-      "community": 153,
-      "community_name": ".invoke",
+      "community": 43,
+      "community_name": "KdfParams",
       "norm_label": "deviceinfo"
     },
     {
@@ -18947,8 +18947,8 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_auth_recoveryapi_deviceapi",
-      "community": 153,
-      "community_name": ".invoke",
+      "community": 43,
+      "community_name": "KdfParams",
       "norm_label": "deviceapi"
     },
     {
@@ -18958,8 +18958,8 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_auth_recoveryapi_deviceapi_list",
-      "community": 153,
-      "community_name": ".invoke",
+      "community": 43,
+      "community_name": "KdfParams",
       "norm_label": ".list()"
     },
     {
@@ -18969,8 +18969,8 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_auth_recoveryapi_deviceapi_revoke",
-      "community": 153,
-      "community_name": ".invoke",
+      "community": 43,
+      "community_name": "KdfParams",
       "norm_label": ".revoke()"
     },
     {
@@ -19002,8 +19002,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_core_result",
-      "community": 153,
-      "community_name": ".invoke",
+      "community": 43,
+      "community_name": "KdfParams",
       "norm_label": "result.kt"
     },
     {
@@ -19013,8 +19013,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_core_result_result",
-      "community": 153,
-      "community_name": ".invoke",
+      "community": 43,
+      "community_name": "KdfParams",
       "norm_label": "result"
     },
     {
@@ -19024,8 +19024,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_core_result_success",
-      "community": 153,
-      "community_name": ".invoke",
+      "community": 43,
+      "community_name": "KdfParams",
       "norm_label": "success"
     },
     {
@@ -19035,8 +19035,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_core_result_kt_t",
-      "community": 153,
-      "community_name": ".invoke",
+      "community": 43,
+      "community_name": "KdfParams",
       "norm_label": "t"
     },
     {
@@ -19046,8 +19046,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_core_result_failure",
-      "community": 153,
-      "community_name": ".invoke",
+      "community": 43,
+      "community_name": "KdfParams",
       "norm_label": "failure"
     },
     {
@@ -19057,8 +19057,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "e",
-      "community": 153,
-      "community_name": ".invoke",
+      "community": 43,
+      "community_name": "KdfParams",
       "norm_label": "e"
     },
     {
@@ -19431,7 +19431,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_error_apperror",
-      "community": 165,
+      "community": 199,
       "community_name": "InMemoryVaultItemRepository",
       "norm_label": "apperror.kt"
     },
@@ -19618,7 +19618,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_error_apperror_weakpasswordreason",
-      "community": 165,
+      "community": 199,
       "community_name": "InMemoryVaultItemRepository",
       "norm_label": "weakpasswordreason"
     },
@@ -19629,7 +19629,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_error_apperror_weakpasswordreason_too_short",
-      "community": 165,
+      "community": 199,
       "community_name": "InMemoryVaultItemRepository",
       "norm_label": "too_short"
     },
@@ -19640,7 +19640,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "shared_domain_src_commonmain_kotlin_com_kwazzar_lockruna_domain_error_apperror_weakpasswordreason_too_weak",
-      "community": 165,
+      "community": 199,
       "community_name": "InMemoryVaultItemRepository",
       "norm_label": "too_weak"
     },
@@ -24854,8 +24854,8 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "shared_presentation_src_commontest_kotlin_com_kwazzar_lockruna_presentation_support_authtestsupport_fakeauthapi_prelogin",
-      "community": 95,
-      "community_name": ".invoke",
+      "community": 43,
+      "community_name": "KdfParams",
       "norm_label": ".prelogin()"
     },
     {
@@ -25294,8 +25294,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "shared_presentation_src_commontest_kotlin_com_kwazzar_lockruna_presentation_vault_devicesstoretest",
-      "community": 208,
-      "community_name": "DevicesStoreTest",
+      "community": 43,
+      "community_name": "KdfParams",
       "norm_label": "devicesstoretest.kt"
     },
     {
@@ -25371,8 +25371,8 @@
       "source_location": "L86",
       "_origin": "ast",
       "id": "shared_presentation_src_commontest_kotlin_com_kwazzar_lockruna_presentation_vault_devicesstoretest_fakedeviceapi",
-      "community": 153,
-      "community_name": ".invoke",
+      "community": 43,
+      "community_name": "KdfParams",
       "norm_label": "fakedeviceapi"
     },
     {
@@ -25382,8 +25382,8 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "shared_presentation_src_commontest_kotlin_com_kwazzar_lockruna_presentation_vault_devicesstoretest_fakedeviceapi_list",
-      "community": 153,
-      "community_name": ".invoke",
+      "community": 43,
+      "community_name": "KdfParams",
       "norm_label": ".list()"
     },
     {
@@ -25393,8 +25393,8 @@
       "source_location": "L97",
       "_origin": "ast",
       "id": "shared_presentation_src_commontest_kotlin_com_kwazzar_lockruna_presentation_vault_devicesstoretest_fakedeviceapi_revoke",
-      "community": 153,
-      "community_name": ".invoke",
+      "community": 43,
+      "community_name": "KdfParams",
       "norm_label": ".revoke()"
     },
     {
@@ -31311,7 +31311,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/VaultListScreen.kt",
-      "source_location": "L133",
+      "source_location": "L129",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_vaultlistscreen_vaultlistscreen",
@@ -31347,7 +31347,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/VaultListScreen.kt",
-      "source_location": "L156",
+      "source_location": "L152",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_vaultlistscreen_itemrow",
@@ -31835,7 +31835,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/VaultListScreen.kt",
-      "source_location": "L153",
+      "source_location": "L149",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_vaultlistscreen",
@@ -31846,7 +31846,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/VaultListScreen.kt",
-      "source_location": "L47",
+      "source_location": "L45",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_vaultlistscreen",
@@ -31858,7 +31858,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/VaultListScreen.kt",
-      "source_location": "L147",
+      "source_location": "L143",
       "weight": 1.0,
       "_origin": "ast",
       "source": "androidapp_src_main_kotlin_com_kwazzar_lockruna_ui_vaultlistscreen_vaultlistscreen",
@@ -31869,7 +31869,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/VaultListScreen.kt",
-      "source_location": "L47",
+      "source_location": "L45",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
@@ -31881,7 +31881,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/VaultListScreen.kt",
-      "source_location": "L153",
+      "source_location": "L149",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
@@ -31893,7 +31893,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "androidApp/src/main/kotlin/com/kwazzar/lockruna/ui/VaultListScreen.kt",
-      "source_location": "L153",
+      "source_location": "L149",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
@@ -86560,5 +86560,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "3dae165b86d55d3f4a7d4d441ea3689097cea2cc"
+  "built_at_commit": "8b84a68d10494ebdbf89c979cea9890b579baa72"
 }
