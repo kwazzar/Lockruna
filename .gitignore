@@ -100,3 +100,4 @@ coverage/
 *.swp
 *~
 .vercel
+iosApp/Lockruna.xcodeproj/project.xcworkspace/
