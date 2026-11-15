@@ -37,7 +37,7 @@ struct RegisterView: View {
                 forget()
                 store.close()
                 model.screen = "vault"
-                model.sync()
+                Task { await model.sync() }
             }
         }
     }

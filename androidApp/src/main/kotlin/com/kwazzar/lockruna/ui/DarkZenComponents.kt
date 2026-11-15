@@ -2,8 +2,8 @@
 
 package com.kwazzar.lockruna.ui
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,7 +23,9 @@ import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -96,16 +98,16 @@ fun DarkZenTextField(
         visualTransformation = visualTransformation,
         trailingIcon = trailingIcon,
         minLines = minLines,
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(8.dp),
         colors = OutlinedTextFieldDefaults.colors(
             focusedTextColor = DarkZenPalette.TextPrimary,
             unfocusedTextColor = DarkZenPalette.TextPrimary,
             disabledTextColor = DarkZenPalette.TextSecondary,
             errorTextColor = DarkZenPalette.TextPrimary,
-            focusedContainerColor = DarkZenPalette.Card,
-            unfocusedContainerColor = DarkZenPalette.Card,
-            disabledContainerColor = DarkZenPalette.Card,
-            errorContainerColor = DarkZenPalette.Card,
+            focusedContainerColor = Color.Transparent,
+            unfocusedContainerColor = Color.Transparent,
+            disabledContainerColor = Color.Transparent,
+            errorContainerColor = Color.Transparent,
             cursorColor = DarkZenPalette.Accent,
             errorCursorColor = DarkZenPalette.Danger,
             focusedBorderColor = DarkZenPalette.Accent,
